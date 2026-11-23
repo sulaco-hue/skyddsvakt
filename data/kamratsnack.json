@@ -302,31 +302,9 @@
       "nar": [
         "regn"
       ],
-      "kamrat": "Min kusin bor i Borås. Hon har inte sett solen sedan 2019. Hon har slutat fråga.",
+      "kamrat": "Min kusin bor i Borås. Hon har inte sett solen sedan 2019.",
       "svar": [
         "Stackarn."
-      ]
-    },
-    {
-      "amne": "väder",
-      "nar": [
-        "regn"
-      ],
-      "kamrat": "Om det här regnet fortsätter får vi söka vänort. Borås kanske tar oss.",
-      "svar": [
-        "De har säkert ett paraply över.",
-        "De har redan för mycket eget regn."
-      ]
-    },
-    {
-      "amne": "väder",
-      "nar": [
-        "regn",
-        "kallt"
-      ],
-      "kamrat": "Det är så blött att mina strumpor har egna strumpor. Fyra grader, sa de. Fyra grader och Borås-läge.",
-      "svar": [
-        "Torra strumpor i fickan nästa gång."
       ]
     },
     {
@@ -343,8 +321,7 @@
       "amne": "utrustning",
       "kamrat": "När tror du vi får nya bössan då?",
       "svar": [
-        "Den heter ju Ak 24, men det kan nog bli år 2124.",
-        "Den heter Ak 24. Gissa vilket år."
+        "Den heter ju Ak 24, så troligen år 2124."
       ]
     }
   ],
