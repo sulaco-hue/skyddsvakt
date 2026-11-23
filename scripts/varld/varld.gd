@@ -17,8 +17,9 @@ const MARKRUTOR := {".": [0, 1], "i": [2, 3], "g": [4, 5], "a": [6, 6], "d": [7,
 const MARK_HINDER := ["w"]
 ## Objekt: tecken -> sprite (ankare). Blockerade rutor utan egen bild listas i OBJEKT_HINDER.
 const OBJEKT_SPRITES := {"K": "vaktkur", "T": "gran", "t": "gran_liten", "L": "lykta", "C": "bil",
-	"H": "hus_rod", "I": "hus_gul", "A": "lada", "R": "sten", "U": "buske", "M": "brevlada"}
-const OBJEKT_HINDER := ["F", "S", "B", "K", "T", "t", "L", "C", "H", "h", "I", "i", "A", "j", "R", "U", "M"]
+	"H": "hus_rod", "I": "hus_gul", "A": "lada", "R": "sten", "U": "buske", "M": "brevlada", "Q": "lastbil"}
+const OBJEKT_HINDER := ["F", "S", "B", "K", "T", "t", "L", "C", "H", "h", "I", "i", "A", "j", "R", "U", "M",
+	"Q", "q"]
 const RIKTNINGAR := [[Vector2i(1, 0), "xp"], [Vector2i(-1, 0), "xn"], [Vector2i(0, 1), "yp"], [Vector2i(0, -1), "yn"]]
 
 var mark: TileMapLayer
@@ -33,6 +34,7 @@ var invid_avstand := 3
 var kamrat_folj := false
 var _spar: Array[Vector2i] = []
 var anchors: Dictionary = {}
+var punkter: Dictionary = {}
 var spelare: Aktor
 var kollega: Aktor
 var npcer: Dictionary = {}
@@ -57,6 +59,7 @@ const GRIND_AVSTAND := 2  ## grinden öppnas när spelaren är så här nära (r
 
 func bygg(karta: Dictionary) -> void:
 	anchors = Datafil.las_json("res://assets/gfx/anchors.json")
+	punkter = karta.get("punkter", {})
 	var mark_rader: Array = karta.get("mark", [])
 	var obj_rader: Array = karta.get("objekt", [])
 	storlek = Vector2i(str(mark_rader[0]).length(), mark_rader.size())
@@ -245,8 +248,8 @@ func _ny_aktor(bas: String, start: Vector2i) -> Aktor:
 
 
 func skapa_npc(npc_id: String, data: Dictionary) -> Aktor:
-	var a := _ny_aktor(str(data.get("sprite", "civil")), Datafil.cell(data.get("start", [0, 0])))
-	a.visible = false
+	var a := _ny_aktor(str(data.get("sprite", "civil")), punkt(data.get("start", [0, 0])))
+	a.visible = bool(data.get("synlig_fran_start", false))
 	npcer[npc_id] = a
 	return a
 
@@ -292,6 +295,18 @@ func _skapa_kamera() -> void:
 
 func cell_pos(c: Vector2i) -> Vector2:
 	return mark.position + mark.map_to_local(c)
+
+
+## En plats: namn på en punkt i kartfilen ("sjo_pilot") eller [x, y].
+func punkt(v: Variant) -> Vector2i:
+	if v is String:
+		return Datafil.cell(punkter.get(v, [0, 0]))
+	return Datafil.cell(v)
+
+
+## Rutan under en position i världen.
+func cell_av(pos: Vector2) -> Vector2i:
+	return mark.local_to_map(mark.to_local(pos))
 
 
 func cell_vid_mus() -> Vector2i:

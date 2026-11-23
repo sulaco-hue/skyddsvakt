@@ -4,6 +4,8 @@ extends Control
 
 signal forcera_handelse(handelse_id: String)
 signal tysta_kamrat
+## Situationsknappen (t.ex. "Bekämpa drönaren") trycktes.
+signal situation
 signal handling(handling_id: String, beskrivning: String)
 signal avsluta_pass
 
@@ -28,6 +30,7 @@ var _sambandsmeny: PanelContainer
 var _instruktion: PanelContainer
 var _meddelande: Label
 var _ljudknapp: Button
+var _situationsknapp: Button
 const IKON_PA := preload("res://assets/gfx/hogtalare_pa.png")
 const IKON_AV := preload("res://assets/gfx/hogtalare_av.png")
 var _meddelande_t := 0.0
@@ -39,7 +42,7 @@ func bygg(p_scenario: Dictionary, p_varld: Varld) -> void:
 	UiKit.helskarm(self)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_bygg_toppfalt()
-	_bygg_uppdrag()
+	# Uppdragsrutan är borttagen tills vidare (ersätts av något bättre).
 	_bygg_debug()
 	_bygg_debug_info()
 	_bygg_samband()
@@ -163,13 +166,20 @@ func _bygg_debug() -> void:
 	h.add_child(rub)
 	for hd in scenario.get("handelser", []):
 		var id := str(hd.get("id", "?"))
-		var b := UiKit.knapp("%s · %s" % [id, hd.get("namn", "")])
-		b.custom_minimum_size = Vector2(0, 30)
-		b.add_theme_font_size_override("font_size", 18)
-		b.tooltip_text = "Starta händelse %s nu" % id
-		b.pressed.connect(_pa_debug_knapp.bind(id))
-		_debug_knappar[id] = b
-		h.add_child(b)
+		var varianter: Array = hd.get("varianter", [])
+		var val: Array = [[id, str(hd.get("namn", ""))]]
+		if not varianter.is_empty():
+			val = []
+			for v in varianter:
+				val.append(["%s:%s" % [id, v], "%s (%s)" % [hd.get("namn", ""), str(v).replace("_", " ")]])
+		for par in val:
+			var b := UiKit.knapp("%s · %s" % [id, par[1]])
+			b.custom_minimum_size = Vector2(0, 30)
+			b.add_theme_font_size_override("font_size", 18)
+			b.tooltip_text = "Starta händelse %s nu" % par[0]
+			b.pressed.connect(_pa_debug_knapp.bind(str(par[0])))
+			_debug_knappar[str(par[0])] = b
+			h.add_child(b)
 	var info := UiKit.knapp("INFO")
 	info.custom_minimum_size = Vector2(0, 30)
 	info.add_theme_font_size_override("font_size", 18)
@@ -221,14 +231,14 @@ func visa_bubbla(mal: Node2D, text: String, sek := 4.5) -> void:
 
 
 ## Ljud som text ovanför en figur, t.ex. "klick klick", "klipp klipp", "brak".
-func visa_ljud(mal: Node2D, text: String, sek := 1.3) -> void:
+func visa_ljud(mal: Node2D, text: String, sek := 1.3, hojd := 40.0) -> void:
 	_ta_bort_bubbla(mal, "ljud")
 	var l := UiKit.rubrik(text.to_upper(), 14, UiKit.BARNSTEN)
 	l.add_theme_color_override("font_outline_color", UiKit.MORK)
 	l.add_theme_constant_override("outline_size", 5)
 	l.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(l)
-	_bubblor.append({"nod": l, "mal": mal, "t": sek, "hojd": 40.0, "stig": true, "typ": "ljud", "start": sek})
+	_bubblor.append({"nod": l, "mal": mal, "t": sek, "hojd": hojd, "stig": true, "typ": "ljud", "start": sek})
 
 
 func _ta_bort_bubbla(mal: Node2D, typ: String) -> void:
@@ -253,6 +263,36 @@ func _uppdatera_bubblor(delta: float) -> void:
 		if b["stig"]:
 			pos.y -= (float(b["start"]) - float(b["t"])) * 18.0
 		nod.position = (pos - Vector2(nod.size.x / 2.0, nod.size.y)).round()
+	_undvik_overlapp()
+
+
+## Flyttar bubblor som överlappar: äldre bubblor ligger kvar, nyare staplas
+## ovanför (eller nedanför om de skulle hamna utanför skärmen).
+func _undvik_overlapp() -> void:
+	var placerade: Array[Rect2] = []
+	var skarm := get_viewport_rect().size
+	for b in _bubblor:
+		var nod: Control = b["nod"]
+		if not is_instance_valid(nod) or nod.size == Vector2.ZERO:
+			continue
+		var r := Rect2(nod.position, nod.size).grow(3.0)
+		var varv := 0
+		var krock := true
+		while krock and varv < 8:
+			krock = false
+			for p in placerade:
+				if r.intersects(p):
+					r.position.y = p.position.y - r.size.y - 1.0
+					krock = true
+			varv += 1
+		if r.position.y < 70.0:
+			r.position.y = 70.0
+			for p in placerade:
+				if r.intersects(p):
+					r.position.y = p.end.y + 1.0
+		r.position.x = clampf(r.position.x, 4.0, skarm.x - r.size.x - 4.0)
+		placerade.append(r)
+		nod.position = (r.position + Vector2(3.0, 3.0)).round()
 
 
 func _pa_debug_knapp(id: String) -> void:
@@ -264,9 +304,9 @@ func satt_debug_status(text: String) -> void:
 
 
 func markera_handelse_startad(id: String) -> void:
-	var b: Button = _debug_knappar.get(id)
-	if b:
-		b.disabled = true
+	for nyckel: String in _debug_knappar:
+		if nyckel == id or nyckel.begins_with(id + ":"):
+			(_debug_knappar[nyckel] as Button).disabled = true
 
 
 func _bygg_samband() -> void:
@@ -332,6 +372,11 @@ func _bygg_handlingar() -> void:
 		b.add_theme_font_size_override("font_size", 19)
 		b.pressed.connect(k[2])
 		h.add_child(b)
+	_situationsknapp = UiKit.knapp("", true, UiKit.ROSA)
+	_situationsknapp.custom_minimum_size = Vector2(120, 60)
+	_situationsknapp.visible = false
+	_situationsknapp.pressed.connect(func() -> void: situation.emit())
+	h.add_child(_situationsknapp)
 
 
 func _bygg_sambandsmeny() -> void:
@@ -387,6 +432,12 @@ func _bygg_instruktion() -> void:
 func visa_meddelande(text: String, sek := 3.0) -> void:
 	_meddelande.text = text
 	_meddelande_t = sek
+
+
+## Visar/döljer en extra knapp för det som händer just nu (tangent B).
+func satt_situation(text: String, synlig: bool) -> void:
+	_situationsknapp.text = text + "\n[B]"
+	_situationsknapp.visible = synlig
 
 
 func _tysta() -> void:
@@ -471,6 +522,9 @@ func _unhandled_input(event: InputEvent) -> void:
 			_vaxla_instruktion()
 		KEY_T:
 			_tysta()
+		KEY_B:
+			if _situationsknapp.visible:
+				situation.emit()
 		KEY_F3:
 			_debug.visible = not _debug.visible
 		KEY_ESCAPE:

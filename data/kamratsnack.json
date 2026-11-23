@@ -1,5 +1,5 @@
 {
-  "kommentar": "Stridsparskamratens småprat. Lägg till, ta bort eller ändra repliker fritt. 'svar' är valfritt: Grindpostens möjliga svar på just den repliken. Tider i sekunder (realtid).",
+  "kommentar": "Stridsparskamratens småprat. Lägg till, ta bort eller ändra repliker fritt. 'svar' är valfritt: Grindpostens möjliga svar. 'nar' är valfritt: repliken används bara när scenariots 'vaderlag' innehåller alla villkoren (t.ex. [\"regn\"]). Tider i sekunder.",
   "installningar": {
     "forsta_efter_s": 4,
     "intervall_min_s": 8,
@@ -8,7 +8,8 @@
     "chans_suck": 0.3,
     "chans_svar": 0.4,
     "tystnad_s": 120,
-    "paus_efter_handelse_s": 60
+    "paus_efter_handelse_s": 60,
+    "chans_vaderreplik": 0.4
   },
   "snack": [
     {
@@ -273,6 +274,77 @@
       "kamrat": "Fun fact: man kan värma en ration under armen. Det tar fyra timmar, men det går.",
       "svar": [
         "Det där är inte ett fun fact."
+      ]
+    },
+    {
+      "amne": "väder",
+      "nar": [
+        "regn"
+      ],
+      "kamrat": "Fyra grader och regn. Vet du vad de kallar det här i Borås? Sommar.",
+      "svar": [
+        "Borås har inget annat väder.",
+        "Där regnar det inomhus också."
+      ]
+    },
+    {
+      "amne": "väder",
+      "nar": [
+        "regn"
+      ],
+      "kamrat": "Jag läste att Borås är Sveriges regnigaste stad. Jag tror inte på det. Det här är Sveriges regnigaste stad. Just här. Just nu.",
+      "svar": [
+        "Ring Borås och säg att de förlorat titeln."
+      ]
+    },
+    {
+      "amne": "väder",
+      "nar": [
+        "regn"
+      ],
+      "kamrat": "Min kusin bor i Borås. Hon har inte sett solen sedan 2019. Hon har slutat fråga.",
+      "svar": [
+        "Stackarn."
+      ]
+    },
+    {
+      "amne": "väder",
+      "nar": [
+        "regn"
+      ],
+      "kamrat": "Om det här regnet fortsätter får vi söka vänort. Borås kanske tar oss.",
+      "svar": [
+        "De har säkert ett paraply över.",
+        "De har redan för mycket eget regn."
+      ]
+    },
+    {
+      "amne": "väder",
+      "nar": [
+        "regn",
+        "kallt"
+      ],
+      "kamrat": "Det är så blött att mina strumpor har egna strumpor. Fyra grader, sa de. Fyra grader och Borås-läge.",
+      "svar": [
+        "Torra strumpor i fickan nästa gång."
+      ]
+    },
+    {
+      "amne": "väder",
+      "nar": [
+        "regn"
+      ],
+      "kamrat": "I Borås säger de inte ’det regnar’. De säger ’det är tisdag’.",
+      "svar": [
+        "Och på onsdag?"
+      ]
+    },
+    {
+      "amne": "utrustning",
+      "kamrat": "När tror du vi får nya bössan då?",
+      "svar": [
+        "Den heter ju Ak 24, men det kan nog bli år 2124.",
+        "Den heter Ak 24. Gissa vilket år."
       ]
     }
   ],

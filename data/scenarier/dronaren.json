@@ -1,0 +1,471 @@
+{
+  "id": "dronaren",
+  "namn": "Drönaren vid sjön",
+  "ingress": "Ett surr över förrådet. Någon flyger drönare över skyddsobjektet – men var är piloten? Tillträdesförbud i luften och när våld mot en farkost är tillåtet.",
+  "objekt": "Förråd Granåsen",
+  "pass": "Pass 3",
+  "passtid": "19:00–23:00",
+  "starttid": "19:12",
+  "tidsfaktor": 6,
+  "vader": "Mulet · Uppehåll 6°C",
+  "vaderlag": [
+    "mulet"
+  ],
+  "beredskap": "FÖRHÖJD",
+  "karta": "res://data/kartor/granasen.json",
+  "omvarldslage": [
+    {
+      "tid": "06:10",
+      "kalla": "Regional lägesbild",
+      "text": "Drönare observerade nattetid över två militära områden i regionen. Inga piloter anträffade."
+    },
+    {
+      "tid": "12:40",
+      "kalla": "Lokal nyhet",
+      "text": "Elektronikkedja rapporterar rekordförsäljning av hobbydrönare inför jul."
+    },
+    {
+      "tid": "16:05",
+      "kalla": "Vaktchef",
+      "text": "Vid drönarobservation: rapportera omgående till AQ."
+    }
+  ],
+  "briefing": {
+    "uppdrag": "Bevaka grind och staket. Var uppmärksam på drönare. Rapportera avvikelser till AQ.",
+    "objektinfo": "Skyddsobjektet omfattar området innanför staketet. Tillträdesförbudet gäller även obemannade farkoster. Skyltat: tillträdesförbud och avbildningsförbud.",
+    "samband": "Vi: Grindposten (stridspar, två skyddsvakter). Vaktchef: AQ (Adam Qvintus) – på annan plats, ser inte objektet. Det är vi som larmar.",
+    "lagstod_fokus": [
+      "Tillträdesförbud – även drönare",
+      "Identitet 10 §",
+      "Våld mot farkost 11 §",
+      "Anmälan 17 §"
+    ],
+    "mal": []
+  },
+  "anropssignaler": {
+    "vaktchef": "AQ",
+    "du": "Grindposten"
+  },
+  "fakta": {
+    "skyltat_avbildningsforbud": true,
+    "motpart_invid": false,
+    "overtratt_forbud": true,
+    "vagrat_id": false,
+    "dronare_inom_objekt": true,
+    "andra_medel_otillrackliga": false,
+    "omhandertagande_nodvandigt": false,
+    "skal_att_anhalla": false,
+    "grund_for_beslag": false,
+    "anmalan_polis": false
+  },
+  "bedomning": {
+    "begara_identitet": {
+      "vid_brist": "warn",
+      "text_brist": "Piloten stod vid sjön, en bra bit från objektet – uppehåller han sig ”invid”? Hans drönare befann sig över objektet. Att fråga frivilligt går alltid; att kräva uppgifterna med stöd av 10 § är en bedömningsfråga. [Jurist]",
+      "diskutera": "Räcker det att drönaren är över objektet för att piloten ska anses vara ”invid”?"
+    }
+  },
+  "varianter": {
+    "med_pilot": {
+      "fakta": {
+        "pilot_antraffbar": true
+      }
+    },
+    "utan_pilot": {
+      "fakta": {
+        "pilot_antraffbar": false
+      },
+      "bedomning": {
+        "vald_mot_farkost": {
+          "vid_brist": "warn",
+          "text_brist": "Utan pilot på plats kan andra medel vara otillräckliga – men en vapeninsats med automatkarbin mot ett luftmål innebär stora risker (rikoschetter, nedfall över bostäder och vägar). Vem fattar ett sådant beslut? [Bedömning – jurist]",
+          "diskutera": "Vad hade varit rätt ordning: observera, rapportera, invänta order?"
+        }
+      }
+    }
+  },
+  "npc": {
+    "piloten": {
+      "namn": "Mats, ca 45 år",
+      "beskrivning": "Handkontroll, glad",
+      "sprite": "pappa",
+      "portratt": "portratt_pappa",
+      "start": "sjo_pilot",
+      "synlig_fran_start": false,
+      "stamning": 1,
+      "dialog_start": "start",
+      "kontakt_info": [
+        "Motparten: vid sjön, en bra bit från objektet",
+        "Drönaren: över skyddsobjektet",
+        "Stridsparskamrat: skyddar"
+      ],
+      "efter_skott": "Vad gör ni?! Det står ett barn här!"
+    },
+    "dottern": {
+      "namn": "Elsa, 10 år",
+      "beskrivning": "Födelsedagsbarn",
+      "sprite": "barn",
+      "portratt": "portratt_pappa",
+      "start": "sjo_dotter",
+      "synlig_fran_start": false,
+      "stamning": 0,
+      "dialog_start": "elsa",
+      "kontakt_info": [
+        "Ett barn, 10 år",
+        "Stridsparskamrat: skyddar"
+      ],
+      "efter_skott": "BUHUUU! Min drönare!"
+    }
+  },
+  "handelser": [
+    {
+      "id": "1",
+      "namn": "Drönare",
+      "typ": "dronare",
+      "tid": "19:15",
+      "varianter": [
+        "med_pilot",
+        "utan_pilot"
+      ],
+      "chans_utan_pilot": 0.3,
+      "start_med_pilot": "sjo_pilot",
+      "start_utan_pilot": "kant_nordost",
+      "mal": "objekt_mitt",
+      "bort_utan_pilot": "kant_sydvast",
+      "utan_pilot_flyger_s": 60,
+      "visa_npc_med_pilot": [
+        "piloten",
+        "dottern"
+      ],
+      "upptackt": {
+        "min_s": 1.5,
+        "max_s": 6,
+        "referensavstand": 6,
+        "paus_snack_s": 60,
+        "kommentar": "Drönaren hörs, så kamraten reagerar snabbare än på fotografen."
+      },
+      "kamrat": "Hör du surret? Drönare – rakt över förrådet!",
+      "kamrat_ledtrad": {
+        "med_pilot": "Den kom från sjöhållet. Det står folk nere vid stranden.",
+        "utan_pilot": "Jag ser ingen pilot någonstans. Den kom från nordost."
+      },
+      "kamrat_efter_skott": "…Det där kommer AQ inte gilla. Alls.",
+      "situationsknapp": "Bekämpa drönaren"
+    }
+  ],
+  "samband": [
+    {
+      "tid": "19:00",
+      "fran": "AQ",
+      "text": "Grindposten, Grindposten."
+    },
+    {
+      "tid": "19:00",
+      "fran": "Grindposten",
+      "text": "Grindposten kom."
+    },
+    {
+      "tid": "19:00",
+      "fran": "AQ",
+      "text": "Från AQ, förbindelsen provas, kom."
+    },
+    {
+      "tid": "19:00",
+      "fran": "Grindposten",
+      "text": "Hörbarhet femma, kom."
+    },
+    {
+      "tid": "19:00",
+      "fran": "AQ",
+      "text": "Hörbarhet femma, klart slut."
+    }
+  ],
+  "sambandsval": [
+    {
+      "etikett": "Prova förbindelsen med AQ",
+      "handling": "",
+      "meddelanden": [
+        {
+          "fran": "Grindposten",
+          "text": "AQ, AQ.",
+          "efter": 0
+        },
+        {
+          "fran": "AQ",
+          "text": "AQ kom.",
+          "efter": 1.5
+        },
+        {
+          "fran": "Grindposten",
+          "text": "Från Grindposten, sambandsprov, kom.",
+          "efter": 3.0
+        },
+        {
+          "fran": "AQ",
+          "text": "Hörbarhet femma, kom.",
+          "efter": 4.5
+        },
+        {
+          "fran": "Grindposten",
+          "text": "Hörbarhet femma, klart slut.",
+          "efter": 6.0
+        }
+      ]
+    },
+    {
+      "etikett": "Lägesrapport till AQ",
+      "handling": "rapportera_vaktchef",
+      "meddelanden": [
+        {
+          "fran": "Grindposten",
+          "text": "AQ, AQ.",
+          "efter": 0
+        },
+        {
+          "fran": "AQ",
+          "text": "AQ kom.",
+          "efter": 1.5
+        },
+        {
+          "fran": "Grindposten",
+          "text": "Från Grindposten, lägesrapport: {lage}, kom.",
+          "efter": 3.0
+        },
+        {
+          "fran": "AQ",
+          "text": "Uppfattat. Lokalisera piloten om möjligt. Ingen vapeninsats utan order, kom.",
+          "efter": 5.0
+        },
+        {
+          "fran": "Grindposten",
+          "text": "Uppfattat, slut kom.",
+          "efter": 6.5
+        },
+        {
+          "fran": "AQ",
+          "text": "Klart slut.",
+          "efter": 8.0
+        }
+      ]
+    },
+    {
+      "etikett": "Begär att AQ underrättar polis",
+      "handling": "anmala_polis",
+      "meddelanden": [
+        {
+          "fran": "Grindposten",
+          "text": "AQ, AQ.",
+          "efter": 0
+        },
+        {
+          "fran": "AQ",
+          "text": "AQ kom.",
+          "efter": 1.5
+        },
+        {
+          "fran": "Grindposten",
+          "text": "Från Grindposten, begär att polis underrättas om drönare över objektet, kom.",
+          "efter": 3.0
+        },
+        {
+          "fran": "AQ",
+          "text": "Uppfattat, polis underrättas, kom.",
+          "efter": 5.0
+        },
+        {
+          "fran": "Grindposten",
+          "text": "Uppfattat, slut kom.",
+          "efter": 6.5
+        },
+        {
+          "fran": "AQ",
+          "text": "Klart slut.",
+          "efter": 8.0
+        }
+      ]
+    }
+  ],
+  "lagestext": {
+    "fore": "inga avvikelser",
+    "efter": "drönare över skyddsobjektet, cirklar över förrådet"
+  },
+  "slutkrav": [
+    {
+      "handling": "rapportera_vaktchef",
+      "lagrum": "Bevakningsinstruktion – rapportering",
+      "text": "Drönaren rapporterades aldrig till AQ.",
+      "diskutera": "Varför ska en drönare alltid rapporteras, även om piloten verkar ofarlig?"
+    }
+  ],
+  "dialog": {
+    "start": {
+      "replik": "MATS: – Hej hej! Vi testar bara kameran, Elsa fyllde tio i går. Visst flyger den fint?\n\nELSA: – Pappa, de har gevär!",
+      "alternativ": [
+        {
+          "text": "Be honom landa drönaren direkt – den flyger över ett skyddsobjekt.",
+          "handling": "be_landa",
+          "nasta": "landar",
+          "npc_beteende": "landa_dronare"
+        },
+        {
+          "text": "Begär att han uppger namn, födelsetid och hemvist.",
+          "handling": "begara_identitet",
+          "stamning": 1,
+          "nasta": "id"
+        },
+        {
+          "text": "”Ta ner den där NU, annars skjuter vi ner den.”",
+          "handling": "hota_vald",
+          "stamning": 4,
+          "nasta": "radd",
+          "npc_beteende": "landa_dronare"
+        },
+        {
+          "text": "Fråga Elsa om hon vill visa vad drönaren har filmat.",
+          "handling": "fraga_frivilligt",
+          "nasta": "visar"
+        }
+      ]
+    },
+    "landar": {
+      "replik": "MATS: – Oj! Förlåt, det visste vi inte. Elsa, vi landar. Nu.\n\nDrönaren svänger tillbaka mot sjön.",
+      "alternativ": [
+        {
+          "text": "Begär att han uppger namn, födelsetid och hemvist.",
+          "handling": "begara_identitet",
+          "nasta": "id"
+        },
+        {
+          "text": "Fråga om ni får se vad drönaren har filmat.",
+          "handling": "fraga_frivilligt",
+          "nasta": "visar"
+        },
+        {
+          "text": "Notera vad som hänt, förklara förbudet och låt dem gå.",
+          "handling": "dokumentera",
+          "nasta": "avslut"
+        }
+      ]
+    },
+    "id": {
+      "replik": "MATS: – Visst. Mats Lindqvist, född -81, vi bor i gula huset vid vägen. Är det något fel?",
+      "alternativ": [
+        {
+          "text": "Be honom landa drönaren.",
+          "handling": "be_landa",
+          "nasta": "landar",
+          "npc_beteende": "landa_dronare"
+        },
+        {
+          "text": "Fråga om ni får se vad drönaren har filmat.",
+          "handling": "fraga_frivilligt",
+          "nasta": "visar"
+        },
+        {
+          "text": "Anropa AQ, rapportera och begär order.",
+          "handling": "rapportera_vaktchef",
+          "nasta": "vaktchef"
+        }
+      ]
+    },
+    "visar": {
+      "replik": "ELSA: – Kolla! Där är taket, och där är ni! Ni ser jättesmå ut.\n\nPå skärmen syns hela förrådet, staketet och lastbilen.",
+      "satt_fakta": {
+        "bilder_visar_objekt": true
+      },
+      "alternativ": [
+        {
+          "text": "Be dem radera bilderna på objektet – frivilligt.",
+          "handling": "be_radera_frivilligt",
+          "nasta": "raderat",
+          "npc_beteende": "landa_dronare"
+        },
+        {
+          "text": "Ta drönaren i beslag.",
+          "handling": "beslag",
+          "stamning": 3,
+          "nasta": "beslag"
+        },
+        {
+          "text": "Anropa AQ, rapportera och begär order.",
+          "handling": "rapportera_vaktchef",
+          "nasta": "vaktchef"
+        }
+      ]
+    },
+    "raderat": {
+      "replik": "MATS: – Självklart. Kolla, nu är de borta. Vi flyger vid fotbollsplanen i stället.",
+      "alternativ": [
+        {
+          "text": "Anteckna uppgifterna och tacka för samarbetet.",
+          "handling": "dokumentera",
+          "nasta": "avslut"
+        },
+        {
+          "text": "Anropa AQ och rapportera.",
+          "handling": "rapportera_vaktchef",
+          "nasta": "vaktchef"
+        }
+      ]
+    },
+    "vaktchef": {
+      "replik": "DU (radio): ”AQ, AQ.” – AQ: ”AQ kom.”\nDU: ”Från Grindposten, drönare över objektet, pilot anträffad vid sjön, kom.”\nAQ: ”Uppfattat. Be dem landa och radera bilderna om de medger det. Notera uppgifterna, slut kom.” – DU: ”Klart slut.”",
+      "alternativ": [
+        {
+          "text": "Be dem landa och radera bilderna frivilligt, och anteckna uppgifterna.",
+          "handling": "be_radera_frivilligt",
+          "nasta": "raderat",
+          "npc_beteende": "landa_dronare"
+        }
+      ]
+    },
+    "radd": {
+      "replik": "ELSA: – BUHUUU!\n\nMATS: – Lugna ner dig! Vi landar ju! Hon är tio år…",
+      "alternativ": [
+        {
+          "text": "Be om ursäkt för tonen och förklara varför den måste landa.",
+          "nasta": "landar"
+        },
+        {
+          "text": "Begär att han uppger namn, födelsetid och hemvist.",
+          "handling": "begara_identitet",
+          "nasta": "id"
+        }
+      ]
+    },
+    "beslag": {
+      "replik": "MATS: – Va? Det är hennes födelsedagspresent! Det tänker jag inte gå med på.",
+      "alternativ": [
+        {
+          "text": "Släpp det. Be dem radera bilderna frivilligt i stället.",
+          "handling": "be_radera_frivilligt",
+          "stamning": -2,
+          "nasta": "raderat",
+          "npc_beteende": "landa_dronare"
+        },
+        {
+          "text": "Anropa AQ och begär order.",
+          "handling": "rapportera_vaktchef",
+          "nasta": "vaktchef"
+        }
+      ]
+    },
+    "avslut": {
+      "replik": "MATS: – Tack, och förlåt igen. Elsa, säg hej då.\n\nELSA: – Hej då! Kan jag få en sån där hjälm?",
+      "slut": true
+    },
+    "elsa": {
+      "replik": "ELSA: – Är det där ett riktigt gevär? Får jag hålla i det?",
+      "alternativ": [
+        {
+          "text": "”Nej, men det är bra att du frågar. Var är din pappa?”",
+          "nasta": "elsa_slut"
+        }
+      ]
+    },
+    "elsa_slut": {
+      "replik": "ELSA: – Där! Han flyger drönaren. Fast den är min egentligen.",
+      "slut": true
+    }
+  }
+}

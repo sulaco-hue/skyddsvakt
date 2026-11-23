@@ -7,6 +7,20 @@ Detta är en första spelbar prototyp med ett scenario: **Fotografen vid stakete
 > Lagrum markerade `[§ – jurist]` ska fastställas av jurist. Spelet visar detta i debriefingen
 > tills `"granskad": true` sätts i filen.
 
+## Scenarier
+
+Spelet startar med ett scenarioval (listan i `data/scenarier/index.json`):
+
+1. **Fotografen vid staketet** – avbildningsförbud, identitet (10 §), avlägsnande/omhändertagande (12 §), gripande (13 §).
+2. **Drönaren vid sjön** – tillträdesförbud i luften, identitet när piloten står långt bort, våld mot
+   obemannad farkost (11 §). Två varianter: *med pilot* (pappa med dottern Elsa vid sjön) och
+   *utan pilot* (drönaren kommer från nordost och försvinner). Situationsknappen **Bekämpa drönaren [B]**
+   finns för att träna bedömningen.
+
+Scenarierna delar kartan `data/kartor/granasen.json` och använder namngivna platser (`punkter`).
+Varje scenario kan ha `varianter` (egna fakta och bedömningar), `bedomning` (scenariospecifik
+bedömning av en handling) och `slutkrav` (t.ex. att händelsen måste rapporteras till AQ).
+
 ## Spela i webbläsaren
 
 **https://sulaco-hue.github.io/skyddsvakt/**

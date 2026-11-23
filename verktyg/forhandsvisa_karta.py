@@ -13,10 +13,10 @@ OUT = sys.argv[2]
 SCALE = int(sys.argv[3]) if len(sys.argv) > 3 else 1
 UTBREDD = int(sys.argv[4]) if len(sys.argv) > 4 else 0  # skala ner till denna bredd (t.ex. briefingkartan)
 GFX = ROOT + "/assets/gfx/"
-sc = json.load(open(ROOT + "/data/scenarier/fotografen.json"))
+karta = json.load(open(ROOT + "/data/kartor/granasen.json"))
 anchors = json.load(open(GFX + "anchors.json"))
-mark = sc["karta"]["mark"]
-obj = sc["karta"]["objekt"]
+mark = karta["mark"]
+obj = karta["objekt"]
 W, H = len(mark[0]), len(mark)
 
 TW, TH = 32, 16
@@ -42,7 +42,7 @@ d.polygon([n, h, (h[0], h[1] + 14), (n[0], n[1] + 14)], fill=(52, 38, 28))
 atlas = Image.open(GFX + "rutor.png").convert("RGBA")
 MR = {".": [0, 1], "i": [2, 3], "g": [4, 5], "a": [6, 6], "d": [7, 7], "p": [8, 9], "w": [10, 11]}
 SPRITES = {"K": "vaktkur", "T": "gran", "t": "gran_liten", "C": "bil", "H": "hus_rod", "I": "hus_gul",
-           "A": "lada", "R": "sten", "U": "buske", "M": "brevlada"}
+           "A": "lada", "R": "sten", "U": "buske", "M": "brevlada", "Q": "lastbil"}
 for y in range(H):
     for x in range(W):
         idx = MR.get(mark[y][x], [0, 1])[(x + y) % 2]
@@ -100,7 +100,7 @@ if bygg:
     add("byggnad", a)
 add("vakt_0", start["P"])
 add("vakt_0", start["V"])
-add("civil_0", tuple(sc["handelser"][0]["mal"]))
+add("civil_0", tuple(karta["punkter"]["fotograf_mal"]))
 
 
 def blit(name, c):

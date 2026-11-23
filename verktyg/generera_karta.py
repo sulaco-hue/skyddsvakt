@@ -1,6 +1,9 @@
-"""Genererar kartan för scenariot "Fotografen" och skriver in den i scenariofilen.
+"""Genererar kartan Granåsen och skriver den till data/kartor/granasen.json.
 
 Användning:  python3 verktyg/generera_karta.py [storlek]   (standard 52)
+
+Scenarierna pekar på kartfilen och använder namngivna platser ("punkter"),
+så kartan kan genereras om utan att scenarierna behöver ändras.
 
 Skyddsobjektet (staket, byggnad, grind) placeras som en mall nära mitten.
 Runt det genereras skog, väg, stigar, stugor, en lada, en sjö, stenar och buskar.
@@ -14,7 +17,7 @@ import sys
 from collections import OrderedDict
 
 N = int(sys.argv[1]) if len(sys.argv) > 1 else 52
-SCENARIO = "data/scenarier/fotografen.json"
+KARTFIL = "data/kartor/granasen.json"
 rng = random.Random(2026)
 
 # Mall: skyddsobjektet med närmaste omgivning (18x18, staket 3..12).
@@ -28,7 +31,7 @@ MALL_MARK = [
 MALL_OBJ = [
     "..................", "..................", "..................",
     "...FFFFFSFFFF...C.", "...FL.....PLF.....", "...F..BBBB..F.....", "...F..BBBB..F.....",
-    "...F..BBBB..F.....", "...F........FL....", "...F.......VG.....", "...F........G.....",
+    "...F..BBBB..F.....", "...F........FL....", "...F.qqqQ..VG.....", "...F........G.....",
     "...F......K.FL....", "...FFFFFFFFFF.....", "..................", "..................",
     "..................", "..................", "..................",
 ]
@@ -190,13 +193,35 @@ for y in range(N):
 
 # Mallens gamla granar utanför objektet får ligga kvar (de finns redan i obj).
 
-# ------------------------------------------------ Skriv till scenariot --
-sc = json.load(open(SCENARIO), object_pairs_hook=OrderedDict)
-k = sc["karta"]
+# --- Pilotens plats vid sjön (fri yta)
+STRAND = (SX + RX // 2, SY - RY - 1)
+for (x, y) in [STRAND, (STRAND[0] + 1, STRAND[1]), (STRAND[0], STRAND[1] - 1), (STRAND[0] + 1, STRAND[1] - 1)]:
+    if inne(x, y):
+        obj[y][x] = "."
+        if mark[y][x] == "w":
+            mark[y][x] = "p"
+
+# ------------------------------------------------- Skriv kartfilen --
+import os
+os.makedirs(os.path.dirname(KARTFIL), exist_ok=True)
+DX, DY = OX, OY  # mallens koordinater -> kartans
+k = OrderedDict()
+k["namn"] = "Förråd Granåsen med omgivning"
+k["storlek"] = N
+k["skyddsomrade"] = [FENCE0[0], FENCE0[1], FENCE1[0], FENCE1[1]]
+k["invid_avstand"] = 3
+k["punkter"] = OrderedDict([
+    ("fotograf_start", [15 + DX, 4 + DY]),
+    ("fotograf_mal", [9 + DX, 1 + DY]),
+    ("objekt_mitt", [8 + DX, 6 + DY]),
+    ("grind", [12 + DX, 9 + DY]),
+    ("sjo_pilot", [STRAND[0], STRAND[1]]),
+    ("sjo_dotter", [STRAND[0] + 1, STRAND[1]]),
+    ("kant_nordost", [N - 1, 0]),
+    ("kant_sydvast", [0, N - 1]),
+])
 k["mark"] = ["".join(r) for r in mark]
 k["objekt"] = ["".join(r) for r in obj]
-k["skyddsomrade"] = [FENCE0[0], FENCE0[1], FENCE1[0], FENCE1[1]]
-k["storlek"] = N
 k["teckenforklaring"] = OrderedDict([
     ("mark", OrderedDict([(".", "gräs"), ("i", "gräs innanför staket"), ("g", "grus"), ("a", "asfalt"),
                           ("d", "asfalt med mittlinje"), ("p", "stig"), ("w", "vatten (går ej att gå i)")])),
@@ -205,10 +230,8 @@ k["teckenforklaring"] = OrderedDict([
                             ("C", "bil"), ("P", "spelarens start"), ("V", "stridsparskamrat"),
                             ("H", "röd stuga (ankare)"), ("h", "röd stuga"), ("I", "gul stuga (ankare)"),
                             ("i", "gul stuga"), ("A", "lada (ankare)"), ("j", "lada"), ("R", "sten"),
-                            ("U", "buske"), ("M", "brevlåda")])),
+                            ("U", "buske"), ("M", "brevlåda"), ("Q", "lastbil HELIKOPTER (ankare)"),
+                            ("q", "lastbil")])),
 ])
-DX, DY = OX, OY  # mallens koordinater -> kartans
-sc["npc"]["fotografen"]["start"] = [15 + DX, 4 + DY]
-sc["handelser"][0]["mal"] = [9 + DX, 1 + DY]
-json.dump(sc, open(SCENARIO, "w"), ensure_ascii=False, indent=2)
-print(f"karta {N}x{N}, skyddsobjekt {FENCE0}-{FENCE1}, byggnader {len(byggnader)}")
+json.dump(k, open(KARTFIL, "w"), ensure_ascii=False, indent=1)
+print(f"karta {N}x{N}, skyddsobjekt {FENCE0}-{FENCE1}, byggnader {len(byggnader)}, strand {STRAND}")

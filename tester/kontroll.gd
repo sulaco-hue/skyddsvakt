@@ -18,6 +18,8 @@ func _ready() -> void:
 	_kontrollera_skript()
 	_kontrollera_data()
 	await _spela_scenario_1()
+	await _spela_dronaren_med_pilot()
+	await _spela_dronaren_utan_pilot()
 	Engine.time_scale = 1.0
 	if fel == 0:
 		print("=== RESULTAT: OK ===")
@@ -46,12 +48,28 @@ func _kontrollera_skript() -> void:
 
 func _kontrollera_data() -> void:
 	var lagrum := Datafil.las_json("res://data/lagrum.json")
-	var scenario := Datafil.las_json("res://data/scenarier/fotografen.json")
 	var snack := Datafil.las_json("res://data/kamratsnack.json")
-	for par in [["lagrum.json", lagrum], ["fotografen.json", scenario], ["kamratsnack.json", snack]]:
+	var karta := Datafil.las_json("res://data/kartor/granasen.json")
+	for par in [["lagrum.json", lagrum], ["kamratsnack.json", snack], ["granasen.json", karta]]:
 		if (par[1] as Dictionary).is_empty():
 			_fel("tom eller ogiltig JSON: " + str(par[0]))
 	var handlingar: Dictionary = lagrum.get("handlingar", {})
+	for sc in Spel.scenarier():
+		_kontrollera_scenario(str(sc["sokvag"]), handlingar, karta)
+	if Spel.scenarier().size() < 2:
+		_fel("färre än två scenarier i index.json")
+
+
+func _kontrollera_scenario(sokvag: String, handlingar: Dictionary, karta: Dictionary) -> void:
+	var scenario := Datafil.las_json(sokvag)
+	if scenario.is_empty():
+		_fel("tom eller ogiltig JSON: " + sokvag)
+		return
+	var punkter: Dictionary = karta.get("punkter", {})
+	for id in scenario.get("npc", {}):
+		var start: Variant = scenario["npc"][id].get("start", [])
+		if start is String and not punkter.has(start):
+			_fel("%s: npc %s har okänd startpunkt '%s'" % [sokvag, id, start])
 	var dialog: Dictionary = scenario.get("dialog", {})
 	for nod_id in dialog:
 		for alt in dialog[nod_id].get("alternativ", []):
@@ -65,11 +83,12 @@ func _kontrollera_data() -> void:
 		var h := str(val.get("handling", ""))
 		if h != "" and not handlingar.has(h):
 			_fel("sambandsval pekar på okänd handling '%s'" % h)
-	_ok("data och dialogkopplingar")
+	_ok("data och dialogkopplingar: " + sokvag.get_file())
 
 
 func _spela_scenario_1() -> void:
-	Spel.nollstall()
+	print("--- Scenario: Fotografen ---")
+	Spel.nollstall("res://data/scenarier/fotografen.json")
 	var main = load("res://scenes/main.tscn").instantiate()
 	add_child(main)
 	await _vanta(5)
@@ -129,6 +148,92 @@ func _spela_scenario_1() -> void:
 			_fel("kunde inte spara logg")
 		else:
 			_ok("logg sparad")
+	main.queue_free()
+	await _vanta(3)
+
+
+func _starta_dronaren(variant: String) -> Variant:
+	Spel.nollstall("res://data/scenarier/dronaren.json")
+	var main = load("res://scenes/main.tscn").instantiate()
+	add_child(main)
+	await _vanta(5)
+	main.call("_starta_pass")
+	await _vanta(5)
+	main.call("_forcera_handelse", "1:" + variant)
+	await _vanta(2)
+	if main.dronare == null:
+		_fel("ingen drönare efter forcerad händelse (%s)" % variant)
+		return main
+	var t := 0
+	while main.dronare.lage != "cirklar" and t < 900:
+		await get_tree().process_frame
+		t += 1
+	if main.dronare.lage != "cirklar":
+		_fel("drönaren började aldrig cirkla (läge %s)" % main.dronare.lage)
+	else:
+		_ok("drönaren cirklar över objektet (%s)" % variant)
+	return main
+
+
+func _forvanta(forvantat: Dictionary) -> void:
+	var logg: Array = Spel.slutlogg()
+	for handling in forvantat:
+		var hittad := false
+		for post in logg:
+			if post.get("handling", "") == handling:
+				hittad = true
+				if post.get("utfall", "") != forvantat[handling]:
+					_fel("%s bedömdes '%s', väntat '%s'" % [handling, post.get("utfall"), forvantat[handling]])
+				else:
+					_ok("%s bedömd '%s'" % [handling, forvantat[handling]])
+		if not hittad:
+			_fel("hittade inte %s i debriefingen" % handling)
+
+
+func _spela_dronaren_med_pilot() -> void:
+	print("--- Scenario: Drönaren (med pilot) ---")
+	var main = await _starta_dronaren("med_pilot")
+	var pilot: Aktor = main.varld.npcer.get("piloten")
+	if pilot == null or not pilot.visible:
+		_fel("piloten syns inte")
+	main.call("_oppna_kontakt", "piloten")
+	await _vanta(3)
+	var kontakt: Kontakt = main.kontakt
+	kontakt.call("_valj", 0)  # Be honom landa
+	await _vanta(2)
+	if main.dronare and main.dronare.lage == "cirklar":
+		_fel("drönaren landade inte efter uppmaning")
+	kontakt.call("_valj", 2)  # Notera och låt gå
+	await _vanta(2)
+	kontakt.call("_stang")
+	await _vanta(3)
+	main.call("_visa_debriefing")
+	await _vanta(3)
+	_forvanta({"be_landa": "ok", "dokumentera": "ok", "slutkrav_rapportera_vaktchef": "bad"})
+	main.queue_free()
+	await _vanta(3)
+
+
+func _spela_dronaren_utan_pilot() -> void:
+	print("--- Scenario: Drönaren (utan pilot) ---")
+	var main = await _starta_dronaren("utan_pilot")
+	var pilot: Aktor = main.varld.npcer.get("piloten")
+	if pilot and pilot.visible:
+		_fel("piloten syns trots variant utan pilot")
+	main.call("_bekampa_dronare")
+	var t := 0
+	while main.dronare and main.dronare.lage != "vrak" and t < 300:
+		await get_tree().process_frame
+		t += 1
+	if main.dronare == null or main.dronare.lage != "vrak":
+		_fel("drönaren kraschade inte efter bekämpning")
+	else:
+		_ok("drönaren nedskjuten och kraschad")
+	main.call("_visa_debriefing")
+	await _vanta(3)
+	_forvanta({"vald_mot_farkost": "warn"})
+	main.queue_free()
+	await _vanta(3)
 
 
 func _vanta(rutor: int) -> void:

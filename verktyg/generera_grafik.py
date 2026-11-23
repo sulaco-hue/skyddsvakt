@@ -416,6 +416,72 @@ def mailbox(d, im):
 save_obj("brevlada", mailbox, (0.5, 0.5))
 
 
+# ========================================================= Lastbil ==
+# Olivgrön lastbil med kapell och "HELIKOPTER" handmålat på sidan.
+GLYFER = {
+    "H": ["101", "101", "111", "101", "101"], "E": ["111", "100", "110", "100", "111"],
+    "L": ["100", "100", "100", "100", "111"], "I": ["111", "010", "010", "010", "111"],
+    "K": ["101", "101", "110", "101", "101"], "O": ["111", "101", "101", "101", "111"],
+    "P": ["110", "101", "110", "100", "100"], "T": ["111", "010", "010", "010", "010"],
+    "R": ["110", "101", "110", "101", "101"],
+}
+
+
+def lastbil(d, im):
+    rnd = random.Random(79)
+    y0, y1 = 0.24, 0.76
+    oliv, oliv_m, kapell, kapell_m = (98, 102, 78), (74, 78, 60), (114, 116, 100), (88, 90, 76)
+
+    def lada(x0, x1, ya, yb, h0, h1, top, vanster, hoger):
+        d.polygon(face_quad(x0, yb, x1, yb, h0, h1), fill=vanster)
+        d.polygon(face_quad(x1, ya, x1, yb, h0, h1), fill=hoger)
+        d.polygon([iso(x0, ya, h1), iso(x1, ya, h1), iso(x1, yb, h1), iso(x0, yb, h1)], fill=top)
+
+    # chassi och stötfångare
+    lada(0.15, 4.2, y0 + 0.08, y1 - 0.08, 3, 6, (44, 46, 40), (40, 42, 36), (32, 34, 30))
+    # flak (öppet nedtill mot hjulen)
+    lada(0.1, 2.85, y0, y1, 6, 13, oliv, oliv, oliv_m)
+    d.line([iso(0.1, y1, 13), iso(2.85, y1, 13)], fill=shade(oliv, 1.2))
+    d.line([iso(0.1, y1, 6), iso(2.85, y1, 6)], fill=shade(oliv, 0.7))
+    # kapell ovanpå flaket
+    lada(0.12, 2.83, y0 + 0.02, y1 - 0.02, 13, 27, shade(kapell, 1.1), kapell, kapell_m)
+    for gx in (0.8, 1.5, 2.2):
+        d.line([iso(gx, y1 - 0.02, 14), iso(gx, y1 - 0.02, 27)], fill=shade(kapell, 0.92))
+    d.line([iso(0.12, y1 - 0.02, 27), iso(2.83, y1 - 0.02, 27)], fill=shade(kapell, 1.2))
+    # hytt med vindruta och sidoruta
+    lada(2.9, 3.85, y0, y1, 6, 22, oliv, oliv, oliv_m)
+    q = face_quad(3.1, y1, 3.6, y1, 13, 19)
+    d.polygon(q, fill=(52, 64, 74))
+    d.line([q[3], q[2]], fill=(130, 150, 160))
+    q = face_quad(3.85, y0 + 0.07, 3.85, y1 - 0.07, 13, 20)
+    d.polygon(q, fill=(52, 64, 74))
+    d.line([iso(3.85, y0 + 0.5 * (y1 - y0), 13), iso(3.85, y0 + 0.5 * (y1 - y0), 20)], fill=oliv_m)
+    # motorhuv och skärmar
+    lada(3.85, 4.3, y0 + 0.05, y1 - 0.05, 6, 13, shade(oliv, 1.05), oliv, oliv_m)
+    for gy in (y0 + 0.13, y1 - 0.13):
+        x, y = iso(4.3, gy, 9)
+        d.rectangle([x, y - 1, x + 1, y], fill=(236, 226, 176))
+    # hjul (framför chassit)
+    for gx in (0.6, 1.35, 3.55):
+        x, y = iso(gx, y1, 0)
+        d.ellipse([x - 5, y - 9, x + 4, y + 1], fill=(28, 28, 28))
+        d.ellipse([x - 2, y - 6, x + 1, y - 2], fill=(92, 94, 76))
+    # "HELIKOPTER" handmålat: förskjuts bokstav för bokstav längs kapellets lutning
+    text = "HELIKOPTER"
+    bx, by = iso(0.3, y1 - 0.02, 23)
+    px = 0
+    for bokstav in text:
+        dy = px // 2 + rnd.choice([0, 0, 0, 1])
+        for r, rad in enumerate(GLYFER[bokstav]):
+            for c, tecken in enumerate(rad):
+                if tecken == "1":
+                    d.point((bx + px + c, by + dy + r), fill=(244, 244, 238))
+        px += 4
+
+
+save_obj("lastbil", lastbil, (3.5, 0.5), size=(CW, CH))
+
+
 # =============================================================== Staket ==
 POST, POST_HI = (150, 156, 162), (196, 200, 206)
 RAIL, MESH, WIRE = (132, 138, 146), (118, 124, 132, 150), (172, 176, 182)
@@ -513,6 +579,8 @@ PAL = {
     "n": (62, 84, 128), "N": (46, 62, 98), "K": (22, 22, 24),
     "A": (16, 16, 18), "a": (58, 60, 64), "E": (64, 96, 52), "p": (18, 18, 20), "P": (232, 196, 40),
     "W": (236, 232, 220), "X": (255, 140, 40),
+    "Y": (62, 96, 150), "y": (46, 72, 116), "Z": (78, 80, 66), "z": (152, 140, 108), "O": (28, 28, 30),
+    "Q": (60, 62, 66), "u": (222, 192, 112), "m": (222, 112, 152),
 }
 # ---- M/90-mönster (kantiga splitterfält i fyra färger) ------------------
 M90 = [(124, 138, 92), (84, 104, 62), (50, 68, 42), (26, 28, 24)]
@@ -647,6 +715,84 @@ anchors["anga"] = [1, 1]
 for i in range(2):
     figure(f"civil_{i}", CIV_TOP, CIV_LEGS[i])
 
+# Piloten (pappa med keps, glasögon och handkontroll) och dottern Elsa
+PAPPA_TOP = [
+    "....ZZZZ....",
+    "...ZZZZZZZ..",
+    "...ssssss...",
+    "..sOOsOOs...",
+    "...ssssss...",
+    "...SsssS....",
+    "....SSSS....",
+    "..YYYYYYYY..",
+    ".YYyYYYYyYY.",
+    ".YYyYYYYyYY.",
+    ".YYsQQQsYYY.",
+    ".YYyYYYYyYY.",
+    ".yYYYYYYYYy.",
+    "..yyyyyyyy..",
+]
+PAPPA_LEGS = [
+    ["...zzzzzz...", "...zzz.zzz..", "...zzz.zzz..", "...zzz.zzz..", "...zzz.zzz..", "...zzz.zzz..",
+     "...bbb.bbb..", "..bbbb.bbbb."],
+    ["...zzzzzz...", "..zzz..zzz..", "..zzz...zzz.", ".zzz....zzz.", ".zzz....zzz.", ".zzz....zzz.",
+     ".bbb....bbb.", "bbbb.....bbb"],
+]
+BARN_TOP = [
+    "....uuuu....",
+    "...uuuuuu...",
+    "...ussssu...",
+    "...sesses...",
+    "...ussssu...",
+    "....SSSS....",
+    "...mmmmmm...",
+    "..mmmmmmmm..",
+    "..smmmmmms..",
+    "...mmmmmm...",
+]
+BARN_LEGS = [
+    ["...nn..nn...", "...nn..nn...", "...bb..bb...", "..bbb..bbb.."],
+    ["...nn..nn...", "..nn....nn..", "..bb....bb..", ".bbb....bbb."],
+]
+for i in range(2):
+    figure(f"pappa_{i}", PAPPA_TOP, PAPPA_LEGS[i])
+    figure(f"barn_{i}", BARN_TOP, BARN_LEGS[i])
+
+
+# Drönare (två bilder för blinkande lampa), skugga och vrak
+def dronare(namn, lampa):
+    im = Image.new("RGBA", (15, 7), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    for (x0, y0, x1, y1) in [(2, 1, 6, 3), (12, 1, 8, 3), (2, 5, 6, 3), (12, 5, 8, 3)]:
+        d.line([(x0, y0), (x1, y1)], fill=(70, 72, 76))
+    for (cx, cy) in [(2, 1), (12, 1), (2, 5), (12, 5)]:
+        d.line([(cx - 2, cy), (cx + 2, cy)], fill=(180, 184, 188, 200))
+    d.rectangle([5, 2, 9, 4], fill=(40, 42, 46))
+    d.rectangle([6, 2, 8, 2], fill=(90, 94, 100))
+    d.point((7, 5), fill=(20, 20, 22))
+    if lampa:
+        d.point((5, 4), fill=(255, 60, 50))
+        d.point((9, 4), fill=(80, 255, 90))
+    im.save(os.path.join(OUT, namn + ".png"))
+    anchors[namn] = [7, 4]
+
+dronare("dronare_0", True)
+dronare("dronare_1", False)
+sk = Image.new("RGBA", (13, 5), (0, 0, 0, 0))
+ImageDraw.Draw(sk).ellipse([0, 0, 12, 4], fill=(10, 16, 12, 110))
+sk.save(os.path.join(OUT, "dronare_skugga.png"))
+anchors["dronare_skugga"] = [6, 2]
+vr = Image.new("RGBA", (15, 6), (0, 0, 0, 0))
+vd = ImageDraw.Draw(vr)
+vd.rectangle([5, 2, 9, 4], fill=(40, 42, 46))
+vd.line([(1, 4), (4, 3)], fill=(70, 72, 76))
+vd.line([(10, 2), (13, 0)], fill=(70, 72, 76))
+vd.line([(11, 5), (14, 5)], fill=(160, 164, 168))
+vd.point((3, 1), fill=(160, 164, 168))
+vd.point((7, 1), fill=(255, 150, 40))
+vr.save(os.path.join(OUT, "dronare_vrak.png"))
+anchors["dronare_vrak"] = [7, 4]
+
 
 # ============================================================= Markörer ==
 def diamond_outline(name, col, thick=1):
@@ -695,7 +841,9 @@ def portrait(kind):
         p.polygon([(x, 62), (x + 14, 62), (x + 7, 62 - hgt)], fill=(28, 40, 44))
     p.rectangle([0, 60, S, S], fill=(26, 36, 44))
     skin, skin_d, skin_l = (224, 180, 140), (196, 150, 112), (238, 200, 162)
-    if kind == "civil":
+    if kind == "pappa":
+        jacket, jacket_d, jacket_l = (62, 96, 150), (46, 72, 116), (84, 118, 172)
+    elif kind == "civil":
         jacket, jacket_d, jacket_l = (176, 114, 58), (136, 86, 42), (198, 136, 74)
     else:
         jacket, jacket_d, jacket_l = M90[0], M90[2], M90[0]
@@ -703,7 +851,15 @@ def portrait(kind):
     p.polygon([(8, S), (14, 62), (30, 56), (50, 56), (66, 62), (72, S)], fill=jacket)
     p.polygon([(8, S), (14, 62), (30, 56), (34, S)], fill=jacket_d)
     p.line([(50, 56), (66, 62)], fill=jacket_l)
-    if kind == "civil":
+    if kind == "pappa":
+        p.polygon([(30, 56), (40, 66), (50, 56)], fill=(220, 220, 210))  # krage
+        p.rectangle([26, 70, 54, 79], fill=(60, 62, 66))  # handkontroll
+        p.line([(30, 70), (28, 62)], fill=(140, 140, 144))
+        p.line([(50, 70), (52, 62)], fill=(140, 140, 144))
+        p.rectangle([36, 72, 44, 77], fill=(90, 150, 200))
+        p.rectangle([22, 74, 27, 79], fill=skin_d)
+        p.rectangle([53, 74, 58, 79], fill=skin_d)
+    elif kind == "civil":
         p.polygon([(30, 56), (40, 68), (50, 56)], fill=(110, 70, 34))
         p.line([(40, 68), (40, S)], fill=(110, 70, 34))
         p.line([(39, 70), (39, S)], fill=(150, 150, 140))  # dragkedja
@@ -751,7 +907,15 @@ def portrait(kind):
     p.rectangle([56, 30, 59, 39], fill=skin_d)
     p.point((21, 34), fill=(170, 124, 90))
     p.point((58, 34), fill=(170, 124, 90))
-    if kind == "civil":
+    if kind == "pappa":
+        # keps
+        p.rectangle([22, 10, 57, 23], fill=(78, 80, 66))
+        p.rectangle([22, 10, 57, 12], fill=(96, 98, 82))
+        p.rectangle([40, 21, 66, 25], fill=(64, 66, 54))
+        p.line([(29, 30), (35, 29)], fill=(110, 80, 50), width=2)
+        p.line([(44, 29), (50, 30)], fill=(110, 80, 50), width=2)
+        brow_y = 33
+    elif kind == "civil":
         # mössa (stickad)
         p.rectangle([22, 6, 57, 22], fill=(180, 58, 48))
         for y in range(8, 20, 2):
@@ -797,8 +961,16 @@ def portrait(kind):
     p.line([(39, 34), (39, 41)], fill=skin_d)
     p.line([(37, 42), (41, 42)], fill=skin_d)
     p.point((42, 41), fill=skin_d)
+    if kind == "pappa":
+        for gx in (28, 43):
+            p.rectangle([gx, brow_y - 2, gx + 8, brow_y + 4], outline=(28, 28, 30))
+        p.line([(36, brow_y), (43, brow_y)], fill=(28, 28, 30))
     # mun
-    if kind == "civil":
+    if kind == "pappa":
+        p.line([(34, 46), (45, 46)], fill=(140, 84, 70))
+        p.point((33, 45), fill=(140, 84, 70))
+        p.point((46, 45), fill=(140, 84, 70))
+    elif kind == "civil":
         p.line([(34, 46), (45, 46)], fill=(130, 74, 62), width=1)
         p.point((33, 47), fill=(130, 74, 62))
         p.point((46, 47), fill=(130, 74, 62))
@@ -812,6 +984,7 @@ def portrait(kind):
 
 portrait("civil").save(os.path.join(OUT, "portratt_civil.png"))
 portrait("vakt").save(os.path.join(OUT, "portratt_vakt.png"))
+portrait("pappa").save(os.path.join(OUT, "portratt_pappa.png"))
 
 # ============================================================ Ikoner ==
 def hogtalare(namn, extra):

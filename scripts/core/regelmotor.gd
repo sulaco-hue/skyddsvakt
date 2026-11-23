@@ -30,8 +30,14 @@ func ar_granskad() -> bool:
 	return bool(meta.get("granskad", false))
 
 
-func bedom(handling_id: String, fakta: Dictionary) -> Dictionary:
+## override: scenariots/variantens ändringar per handling (t.ex. annan vid_brist eller text).
+func bedom(handling_id: String, fakta: Dictionary, override: Dictionary = {}) -> Dictionary:
 	var h: Dictionary = handlingar.get(handling_id, {})
+	if override.has(handling_id) and not h.is_empty():
+		h = h.duplicate(true)
+		var andring: Dictionary = override[handling_id]
+		for k in andring:
+			h[k] = andring[k]
 	if h.is_empty():
 		return {
 			"handling": handling_id,

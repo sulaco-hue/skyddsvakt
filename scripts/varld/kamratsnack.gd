@@ -18,9 +18,13 @@ var _rng := RandomNumberGenerator.new()
 var _timer := 0.0
 var _tyst_kvar := 0.0
 var _senaste: Array[int] = []
+## Scenariots väderläge, t.ex. ["regn", "kallt"]. Repliker med "nar" kräver att
+## alla deras villkor finns här.
+var _vader: Array = []
 
 
-func setup(p_hud: Hud, p_varld: Varld) -> void:
+func setup(p_hud: Hud, p_varld: Varld, scenario: Dictionary = {}) -> void:
+	_vader = scenario.get("vaderlag", [])
 	hud = p_hud
 	varld = p_varld
 	_rng.randomize()
@@ -72,10 +76,29 @@ func _prata() -> void:
 	var lista: Array = _data.get("snack", [])
 	if lista.is_empty():
 		return
-	var idx := _rng.randi_range(0, lista.size() - 1)
+	# Repliker som passar vädret prioriteras (40 %); andra med villkor hoppas över.
+	var mojliga: Array[int] = []
+	var vader_rader: Array[int] = []
+	for i in lista.size():
+		var nar: Array = lista[i].get("nar", [])
+		var passar := true
+		for v in nar:
+			if not v in _vader:
+				passar = false
+		if not passar:
+			continue
+		mojliga.append(i)
+		if not nar.is_empty():
+			vader_rader.append(i)
+	if mojliga.is_empty():
+		return
+	var pool := mojliga
+	if not vader_rader.is_empty() and _rng.randf() < float(_inst.get("chans_vaderreplik", 0.4)):
+		pool = vader_rader
+	var idx := pool[_rng.randi_range(0, pool.size() - 1)]
 	var forsok := 0
 	while idx in _senaste and forsok < 10:
-		idx = _rng.randi_range(0, lista.size() - 1)
+		idx = pool[_rng.randi_range(0, pool.size() - 1)]
 		forsok += 1
 	_senaste.append(idx)
 	if _senaste.size() > mini(8, lista.size() - 1):

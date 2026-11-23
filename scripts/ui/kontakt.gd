@@ -24,6 +24,7 @@ var _tid_label: Label
 var _aktuella: Array = []
 var _slut := false
 var _tid := 0.0
+var _chips: HBoxContainer
 
 
 func bygg(scenario: Dictionary) -> void:
@@ -46,15 +47,8 @@ func bygg(scenario: Dictionary) -> void:
 	marg.add_child(kol)
 
 	# Lägesrad
-	var chips := UiKit.hbox(10)
-	var k := UiKit.panel(UiKit.BARNSTEN, UiKit.PANEL, 14, 4)
-	k.add_child(UiKit.rubrik("KONTAKT", 14, UiKit.BARNSTEN))
-	chips.add_child(k)
-	for t in ["Motparten: utanför staketet, invid skyddsobjektet", "Skylt: Tillträdesförbud · Avbildningsförbud", "Stridsparskamrat: skyddar"]:
-		var c := UiKit.panel(UiKit.KANT, UiKit.PANEL, 14, 4)
-		c.add_child(UiKit.etikett(t, 20))
-		chips.add_child(c)
-	kol.add_child(chips)
+	_chips = UiKit.hbox(10)
+	kol.add_child(_chips)
 
 	var mitt := UiKit.hbox(32)
 	mitt.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -128,7 +122,20 @@ func bygg(scenario: Dictionary) -> void:
 	kol.add_child(botten)
 
 
+func _bygg_chips(rader: Array) -> void:
+	for c in _chips.get_children():
+		c.queue_free()
+	var k := UiKit.panel(UiKit.BARNSTEN, UiKit.PANEL, 14, 4)
+	k.add_child(UiKit.rubrik("KONTAKT", 14, UiKit.BARNSTEN))
+	_chips.add_child(k)
+	for t in rader:
+		var c := UiKit.panel(UiKit.KANT, UiKit.PANEL, 14, 4)
+		c.add_child(UiKit.etikett(str(t), 20))
+		_chips.add_child(c)
+
+
 func oppna(npc: Dictionary, start_nod: String) -> void:
+	_bygg_chips(npc.get("kontakt_info", ["Stridsparskamrat: skyddar"]))
 	_namn.text = str(npc.get("namn", "Okänd person"))
 	_beskrivning.text = str(npc.get("beskrivning", ""))
 	_portratt.texture = load("res://assets/gfx/%s.png" % npc.get("portratt", "portratt_civil"))

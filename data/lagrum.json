@@ -169,6 +169,48 @@
           "text": "Ett tillfälligt omhändertagande ska genast anmälas till en polisman."
         }
       ]
+    },
+    "be_landa": {
+      "namn": "Uppmanade piloten att landa drönaren",
+      "lagrum": "Skyddslagen – tillträdesförbudet omfattar även obemannade farkoster [§ – jurist]",
+      "krav": [
+        "dronare_inom_objekt"
+      ],
+      "vid_brist": "warn",
+      "text_ok": "Rätt: en uppmaning är det minst ingripande sättet att få bort drönaren från objektet.",
+      "text_brist": "Drönaren befann sig inte inom objektet.",
+      "diskutera": "Vad gör du om piloten vägrar att landa?"
+    },
+    "vald_mot_farkost": {
+      "namn": "Bekämpade drönaren med vapen",
+      "lagrum": "Skyddslagen 11 § andra stycket (våld mot obemannad farkost)",
+      "krav": [
+        "andra_medel_otillrackliga"
+      ],
+      "vid_brist": "bad",
+      "text_ok": "Andra medel var otillräckliga. Dokumentera och rapportera insatsen direkt.",
+      "text_brist": "Våld mot farkosten får bara användas om andra medel är otillräckliga. Piloten fanns vid sjön och kunde uppmanas att landa. Dessutom innebär eldgivning med automatkarbin mot ett luftmål nära bostäder och människor stor risk för tredje man.",
+      "diskutera": "Vilka andra medel fanns? Vem borde ha fattat beslut om en eventuell vapeninsats?"
+    },
+    "hota_vald": {
+      "namn": "Hotade med att skjuta ner drönaren",
+      "lagrum": "Hot om våld [§ – jurist]",
+      "krav": [
+        "andra_medel_otillrackliga"
+      ],
+      "vid_brist": "warn",
+      "text_ok": "",
+      "text_brist": "En lugn uppmaning hade räckt. Att hota med vapenvåld mot en förälder med barn eskalerar situationen i onödan. [Bedömning – jurist]",
+      "diskutera": "Hur påverkade tonen pappans och dotterns reaktion? Hur hade du formulerat dig i stället?"
+    },
+    "be_radera_frivilligt": {
+      "namn": "Bad dem radera bilderna frivilligt",
+      "lagrum": "Frivillig medverkan – ingen tvångsåtgärd",
+      "krav": [],
+      "vid_brist": "ok",
+      "text_ok": "Frivillig radering kräver inget särskilt lagstöd, så länge det är tydligt att det är frivilligt. Notera vad som raderades.",
+      "text_brist": "",
+      "diskutera": "Vad gör du om de säger nej till att radera?"
     }
   }
 }

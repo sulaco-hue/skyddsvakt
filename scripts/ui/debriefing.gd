@@ -3,6 +3,7 @@ extends Control
 ## Debriefing: tidslinje över beslut med lagrum och bedömning.
 
 signal spela_igen
+signal byt_scenario
 
 var _poster: Array = []
 var _rader: Array[PanelContainer] = []
@@ -124,6 +125,9 @@ func bygg(poster: Array, scenario: Dictionary, granskad: bool, kommentar: String
 	spara.pressed.connect(_spara)
 	knappar.add_child(spara)
 	knappar.add_child(UiKit.fyllnad())
+	var byt := UiKit.knapp("BYT SCENARIO")
+	byt.pressed.connect(func() -> void: byt_scenario.emit())
+	knappar.add_child(byt)
 	var igen := UiKit.knapp("SPELA IGEN", true, UiKit.GRON)
 	igen.pressed.connect(func() -> void: spela_igen.emit())
 	knappar.add_child(igen)

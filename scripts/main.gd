@@ -19,13 +19,18 @@ var _larm_har_skett := false
 var _upptackt: Dictionary = {}
 var _rng := RandomNumberGenerator.new()
 var snack: Kamratsnack
+var dronare: Dronare
+var _dronare_handelse: Dictionary = {}
 
 
 func _ready() -> void:
 	_scenario = Spel.scenario
+	if _scenario.is_empty():
+		_visa_scenarioval()
+		return
 	varld = Varld.new()
 	add_child(varld)
-	varld.bygg(_scenario.get("karta", {}))
+	varld.bygg(Spel.karta)
 	var npcer: Dictionary = _scenario.get("npc", {})
 	for id: String in npcer:
 		varld.skapa_npc(id, npcer[id])
@@ -48,10 +53,11 @@ func _ready() -> void:
 	hud.handling.connect(func(id: String, beskrivning: String) -> void: Spel.utfor(id, beskrivning))
 	hud.avsluta_pass.connect(_visa_debriefing)
 	hud.lagestext = _lagestext
+	hud.situation.connect(_bekampa_dronare)
 
 	snack = Kamratsnack.new()
 	add_child(snack)
-	snack.setup(hud, varld)
+	snack.setup(hud, varld, _scenario)
 	hud.tysta_kamrat.connect(snack.tysta)
 
 	kontakt = Kontakt.new()
@@ -69,6 +75,24 @@ func _ready() -> void:
 	rot.add_child(briefing)
 	briefing.bygg(_scenario)
 	briefing.starta.connect(_starta_pass)
+
+
+func _visa_scenarioval() -> void:
+	var lager := CanvasLayer.new()
+	add_child(lager)
+	rot = Control.new()
+	UiKit.helskarm(rot)
+	rot.theme = UiKit.skapa_tema()
+	lager.add_child(rot)
+	var val := Scenarioval.new()
+	rot.add_child(val)
+	val.bygg(Spel.scenarier())
+	val.valt.connect(_valj_scenario)
+
+
+func _valj_scenario(sokvag: String) -> void:
+	Spel.nollstall(sokvag)
+	get_tree().reload_current_scene()
 
 
 func _lagestext() -> String:
@@ -127,10 +151,14 @@ func _debug_text() -> String:
 	return "\n".join(rader)
 
 
+## id kan vara "1" eller "1:variant" (debugraden).
 func _forcera_handelse(id: String) -> void:
+	var delar := id.split(":")
 	for h in _handelser_kvar.duplicate():
-		if str(h.get("id", "")) == id:
+		if str(h.get("id", "")) == delar[0]:
 			_handelser_kvar.erase(h)
+			if delar.size() > 1:
+				h["vald_variant"] = delar[1]
 			_utlos_handelse(h)
 			return
 	hud.visa_meddelande("Händelse %s har redan startat." % id, 2.0)
@@ -146,29 +174,121 @@ func _utlos_handelse(h: Dictionary) -> void:
 				return
 			n.visible = true
 			n.framme.connect(_pa_npc_framme.bind(h, id), CONNECT_ONE_SHOT)
-			varld.flytta_npc(id, Datafil.cell(h.get("mal", [0, 0])))
+			varld.flytta_npc(id, varld.punkt(h.get("mal", [0, 0])))
+		"dronare":
+			_starta_dronare(h)
 
 
 func _pa_npc_framme(h: Dictionary, id: String) -> void:
 	var n: Aktor = varld.npcer.get(id)
 	if n == null or h.get("vid_framme", "") != "fotograferar" or _samtal_klara.has(id):
 		return
-	n.vand_mot(varld.cell_pos(Vector2i(8, 6)))
+	n.vand_mot(varld.cell_pos(varld.punkt("objekt_mitt")))
 	n.satt_fotograferar(true)
 	if not n.blixt.is_connected(_pa_blixt):
 		n.blixt.connect(_pa_blixt.bind(id))
 	_larm_npc = id
-	# Starta kamratens upptäcktstimer: slumpad grundtid, snabbare ju närmare.
+	_starta_upptackt(h, n, id)
+
+
+## Startar kamratens upptäcktstimer mot en nod (figur eller drönare):
+## slumpad grundtid, snabbare ju närmare.
+func _starta_upptackt(h: Dictionary, nod: Node2D, npc_id: String) -> void:
 	var u: Dictionary = h.get("upptackt", {})
 	_rng.randomize()
 	_upptackt = {
-		"npc": id,
+		"npc": npc_id,
+		"nod": nod,
 		"h": h,
 		"bas": _rng.randf_range(float(u.get("min_s", 6)), float(u.get("max_s", 30))),
 		"ref": float(u.get("referensavstand", 6)),
 		"varde": 0.0,
 		"tid": 0.0,
 	}
+
+
+# ------------------------------------------------------------ Drönare --
+
+func _starta_dronare(h: Dictionary) -> void:
+	_dronare_handelse = h
+	var varianter: Array = h.get("varianter", ["med_pilot"])
+	var variant := str(h.get("vald_variant", ""))
+	if variant == "":
+		_rng.randomize()
+		variant = "utan_pilot" if _rng.randf() < float(h.get("chans_utan_pilot", 0.3)) else str(varianter[0])
+	Spel.satt_variant(variant)
+	var med_pilot := variant != "utan_pilot"
+	for id: String in h.get("visa_npc_med_pilot", []):
+		var n: Aktor = varld.npcer.get(id)
+		if n:
+			n.visible = med_pilot
+	var start := varld.punkt(h.get("start_med_pilot" if med_pilot else "start_utan_pilot", [0, 0]))
+	dronare = Dronare.new()
+	varld.add_child(dronare)
+	dronare.setup(varld.cell_pos(start) + Vector2(10, 0), varld.dekal_lager)
+	dronare.ljud.connect(_pa_dronarljud)
+	dronare.framme.connect(_pa_dronare_framme, CONNECT_ONE_SHOT)
+	dronare.flyg_till(varld.cell_pos(varld.punkt(h.get("mal", "objekt_mitt"))))
+	if not med_pilot:
+		var sek := float(h.get("utan_pilot_flyger_s", 60))
+		get_tree().create_timer(sek).timeout.connect(_dronare_flyger_bort)
+
+
+func _kamrat_sager(text: String) -> void:
+	if hud.visible:
+		hud.visa_bubbla(varld.kollega, text, 5.0)
+
+
+func _pa_dronare_framme() -> void:
+	if dronare == null or not dronare.i_luften():
+		return
+	dronare.cirkla(varld.cell_pos(varld.punkt(_dronare_handelse.get("mal", "objekt_mitt"))))
+	_starta_upptackt(_dronare_handelse, dronare, "")
+
+
+func _pa_dronarljud(text: String) -> void:
+	if hud.visible and dronare:
+		hud.visa_ljud(dronare.ljudpunkt, text, 1.3, 10.0)
+
+
+func _dronare_flyger_bort() -> void:
+	if dronare == null or not dronare.i_luften():
+		return
+	hud.satt_situation("", false)
+	dronare.flyg_till(varld.cell_pos(varld.punkt(_dronare_handelse.get("bort_utan_pilot", "kant_sydvast"))), 60.0)
+	dronare.framme.connect(_ta_bort_dronare, CONNECT_ONE_SHOT)
+
+
+func _ta_bort_dronare() -> void:
+	if dronare:
+		dronare.queue_free()
+		dronare = null
+
+
+func _landa_dronare() -> void:
+	if dronare == null or not dronare.i_luften():
+		return
+	hud.satt_situation("", false)
+	var plats := varld.punkt(_dronare_handelse.get("start_med_pilot", [0, 0]))
+	dronare.landa_vid(varld.cell_pos(plats) + Vector2(10, 4))
+
+
+## Situationsknappen: bekämpa drönaren med vapen (ett beslut som bedöms).
+func _bekampa_dronare() -> void:
+	if dronare == null or not dronare.i_luften():
+		return
+	hud.satt_situation("", false)
+	Spel.utfor("vald_mot_farkost", "Bekämpade drönaren med automatkarbin")
+	hud.visa_ljud(varld.spelare, "PANG PANG", 1.5)
+	dronare.krascha()
+	varld.kollega.vand_mot(dronare.global_position)
+	var efter := str(_dronare_handelse.get("kamrat_efter_skott", "…Det där kommer AQ inte gilla."))
+	get_tree().create_timer(1.8).timeout.connect(_kamrat_sager.bind(efter))
+	for id: String in _dronare_handelse.get("visa_npc_med_pilot", []):
+		var n: Aktor = varld.npcer.get(id)
+		var replik := str(_scenario.get("npc", {}).get(id, {}).get("efter_skott", ""))
+		if n and n.visible and replik != "":
+			hud.visa_bubbla(n, replik, 5.0)
 
 
 func _pa_blixt(id: String) -> void:
@@ -182,10 +302,12 @@ func _uppdatera_upptackt(delta: float) -> void:
 	if _upptackt.is_empty():
 		hud.satt_debug_status("ingen upptäckt pågår")
 		return
-	var n: Aktor = varld.npcer.get(_upptackt["npc"])
-	if n == null:
+	var nod: Node2D = _upptackt["nod"]
+	if not is_instance_valid(nod):
+		_upptackt = {}
 		return
-	var avst := mini(varld.avstand(varld.spelare.cell, n.cell), varld.avstand(varld.kollega.cell, n.cell))
+	var cell := varld.cell_av(nod.global_position)
+	var avst := mini(varld.avstand(varld.spelare.cell, cell), varld.avstand(varld.kollega.cell, cell))
 	var narhet := clampf(float(_upptackt["ref"]) / maxf(float(avst), 1.0), 0.3, 3.0)
 	_upptackt["varde"] = float(_upptackt["varde"]) + delta * narhet / float(_upptackt["bas"])
 	_upptackt["tid"] = float(_upptackt["tid"]) + delta
@@ -198,16 +320,24 @@ func _uppdatera_upptackt(delta: float) -> void:
 func _kamrat_reagerar() -> void:
 	var id := str(_upptackt["npc"])
 	var h: Dictionary = _upptackt["h"]
-	var n: Aktor = varld.npcer.get(id)
+	var nod: Node2D = _upptackt["nod"]
 	_upptackt = {}
 	_larm_har_skett = true
 	snack.pausa(float(h.get("upptackt", {}).get("paus_snack_s", 60)))
-	varld.satt_larm(id)
+	if id != "":
+		varld.satt_larm(id)
 	Spel.spela_samband(h.get("samband", []))
 	if str(h.get("kamrat", "")) != "":
 		hud.visa_bubbla(varld.kollega, str(h.get("kamrat", "")), 5.0)
-	if n:
-		varld.kollega.vand_mot(n.position)
+	if is_instance_valid(nod):
+		varld.kollega.vand_mot(nod.global_position)
+	# Ev. ledtråd från kamraten en stund senare (per variant).
+	var ledtradar: Dictionary = h.get("kamrat_ledtrad", {})
+	var ledtrad := str(ledtradar.get(Spel.variant, ""))
+	if ledtrad != "":
+		get_tree().create_timer(5.5).timeout.connect(_kamrat_sager.bind(ledtrad))
+	if dronare and dronare.i_luften():
+		hud.satt_situation(str(_dronare_handelse.get("situationsknapp", "Bekämpa drönaren")), true)
 
 
 func _dolj_npc(id: String) -> void:
@@ -277,7 +407,9 @@ func _pa_val(alt: Dictionary) -> void:
 	if handling != "":
 		Spel.utfor(handling, str(alt.get("text", "")))
 	var beteende := str(alt.get("npc_beteende", ""))
-	if beteende != "":
+	if beteende == "landa_dronare":
+		_landa_dronare()
+	elif beteende != "":
 		_npc_efter_samtal[str(kontakt.get_meta("npc", ""))] = beteende
 
 
@@ -294,7 +426,7 @@ func _pa_kontakt_stangd() -> void:
 		var n: Aktor = varld.npcer[id]
 		var data: Dictionary = _scenario.get("npc", {}).get(id, {})
 		n.framme.connect(_dolj_npc.bind(id), CONNECT_ONE_SHOT)
-		varld.flytta_npc(id, Datafil.cell(data.get("start", [0, 0])))
+		varld.flytta_npc(id, varld.punkt(data.get("start", [0, 0])))
 
 
 # -------------------------------------------------------- Debriefing --
@@ -312,6 +444,12 @@ func _visa_debriefing() -> void:
 	var meta := Spel.regelmotor.meta
 	debriefing.bygg(Spel.slutlogg(), _scenario, Spel.regelmotor.ar_granskad(), str(meta.get("kommentar", "")))
 	debriefing.spela_igen.connect(_spela_igen)
+	debriefing.byt_scenario.connect(_byt_scenario)
+
+
+func _byt_scenario() -> void:
+	Spel.avsluta_scenario()
+	get_tree().reload_current_scene()
 
 
 func _spela_igen() -> void:

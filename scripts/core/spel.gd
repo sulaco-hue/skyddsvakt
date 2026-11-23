@@ -5,10 +5,15 @@ signal logg_ny(post: Dictionary)
 signal samband_ny(rad: Dictionary)
 
 const LAGRUM_SOKVAG := "res://data/lagrum.json"
-const SCENARIO_SOKVAG := "res://data/scenarier/fotografen.json"
+const SCENARIO_INDEX := "res://data/scenarier/index.json"
 
 var regelmotor := Regelmotor.new()
 var scenario: Dictionary = {}
+var scenario_sokvag := ""
+## Kartan (från scenariots "karta": en sökväg till en kartfil eller kartan direkt).
+var karta: Dictionary = {}
+var variant := ""
+var _bedomning_override: Dictionary = {}
 var fakta: Dictionary = {}
 var logg: Array = []
 var samband: Array = []
@@ -17,12 +22,33 @@ var klocka_igang := false
 
 
 func _ready() -> void:
-	nollstall()
-
-
-func nollstall() -> void:
 	regelmotor.ladda(LAGRUM_SOKVAG)
-	scenario = Datafil.las_json(SCENARIO_SOKVAG)
+
+
+## Alla scenarier i data/scenarier/index.json: [{sokvag, namn, ingress}]
+func scenarier() -> Array:
+	var ut: Array = []
+	var index := Datafil.las_json(SCENARIO_INDEX)
+	for fil in index.get("scenarier", []):
+		var sokvag := "res://data/scenarier/" + str(fil)
+		var sc := Datafil.las_json(sokvag)
+		if not sc.is_empty():
+			ut.append({"sokvag": sokvag, "namn": sc.get("namn", fil), "ingress": sc.get("ingress", "")})
+	return ut
+
+
+## Läser in scenariot på nytt (samma som förut om sokvag är tom). Tom sokvag och
+## inget valt scenario ger ett tomt scenario (scenariovalet visas då).
+func nollstall(sokvag: String = "") -> void:
+	if sokvag != "":
+		scenario_sokvag = sokvag
+	regelmotor.ladda(LAGRUM_SOKVAG)
+	scenario = Datafil.las_json(scenario_sokvag) if scenario_sokvag != "" else {}
+	var k: Variant = scenario.get("karta", {})
+	karta = Datafil.las_json(str(k)) if k is String else (k if k is Dictionary else {})
+	variant = ""
+	var bed: Dictionary = scenario.get("bedomning", {})
+	_bedomning_override = bed.duplicate(true)
 	var start_fakta: Dictionary = scenario.get("fakta", {})
 	fakta = start_fakta.duplicate(true)
 	logg = []
@@ -43,13 +69,30 @@ func klockstrang() -> String:
 
 ## Utför en handling: bedöms av regelmotorn och läggs i beslutsloggen.
 func utfor(handling_id: String, beskrivning: String = "") -> Dictionary:
-	var post := regelmotor.bedom(handling_id, fakta)
+	var post := regelmotor.bedom(handling_id, fakta, _bedomning_override)
 	post["tid"] = klockstrang()
 	post["beskrivning"] = beskrivning if beskrivning != "" else str(post["namn"])
 	logg.append(post)
 	satt_fakta(regelmotor.satter_fakta(handling_id))
 	logg_ny.emit(post)
 	return post
+
+
+## Väljer en variant av scenariot (t.ex. "utan_pilot"): egna fakta och bedömningar.
+func satt_variant(namn: String) -> void:
+	variant = namn
+	var varianter: Dictionary = scenario.get("varianter", {})
+	var v: Dictionary = varianter.get(namn, {})
+	satt_fakta(v.get("fakta", {}))
+	var b: Dictionary = v.get("bedomning", {})
+	for k in b:
+		_bedomning_override[k] = b[k]
+
+
+## Tillbaka till scenariovalet.
+func avsluta_scenario() -> void:
+	scenario_sokvag = ""
+	nollstall()
 
 
 func satt_fakta(nya: Dictionary) -> void:
@@ -87,7 +130,22 @@ func handling_utford(handling_id: String) -> bool:
 
 ## Beslutsloggen plus eventuella uteblivna följdkrav.
 func slutlogg() -> Array:
-	return logg + regelmotor.kontrollera_foljdkrav(logg, fakta)
+	var extra: Array = []
+	for krav in scenario.get("slutkrav", []):
+		var h := str(krav.get("handling", ""))
+		if h != "" and not handling_utford(h):
+			extra.append({
+				"tid": "Efter",
+				"handling": "slutkrav_" + h,
+				"namn": "Uteblivet slutkrav",
+				"beskrivning": "Uteblev: " + str(krav.get("text", h)),
+				"utfall": "bad",
+				"lagrum": str(krav.get("lagrum", "")),
+				"kommentar": str(krav.get("text", "")),
+				"diskutera": str(krav.get("diskutera", "Varför är det viktigt att detta görs?")),
+				"saknade_krav": [],
+			})
+	return logg + regelmotor.kontrollera_foljdkrav(logg, fakta) + extra
 
 
 ## Sparar debriefingen som JSON för instruktören. Returnerar sökvägen.
