@@ -1,0 +1,140 @@
+# Bygger spelet vid varje push: kontrollerar skript, spelar igenom scenario 1
+# automatiskt, exporterar för webb och Windows och publicerar webbversionen
+# på GitHub Pages. Resultatet skrivs också till grenen "ci-status".
+name: Bygg och publicera
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+env:
+  # Tom = senaste stabila Godot. Sätt t.ex. "4.5.1-stable" för att låsa version.
+  GODOT_TAG: ""
+
+jobs:
+  bygg:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Välj Godot-version
+        id: godot
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="$GODOT_TAG"
+          if [ -z "$TAG" ]; then
+            TAG=$(curl -fsSL -H "Authorization: Bearer $GH_TOKEN" \
+              https://api.github.com/repos/godotengine/godot/releases/latest | jq -r .tag_name)
+          fi
+          echo "Godot: $TAG"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "mapp=${TAG/-/.}" >> "$GITHUB_OUTPUT"
+
+      - name: Cache för Godot och exportmallar
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/godot
+            ~/.local/share/godot/export_templates
+          key: godot-${{ steps.godot.outputs.tag }}
+
+      - name: Installera Godot och exportmallar
+        run: |
+          TAG="${{ steps.godot.outputs.tag }}"
+          MAPP="${{ steps.godot.outputs.mapp }}"
+          URL="https://github.com/godotengine/godot/releases/download/$TAG"
+          mkdir -p ~/godot
+          if [ ! -f ~/godot/godot ]; then
+            curl -fsSL -o /tmp/godot.zip "$URL/Godot_v${TAG}_linux.x86_64.zip"
+            unzip -q /tmp/godot.zip -d /tmp/godot
+            mv /tmp/godot/Godot_v${TAG}_linux.x86_64 ~/godot/godot
+            chmod +x ~/godot/godot
+          fi
+          if [ ! -d ~/.local/share/godot/export_templates/$MAPP ]; then
+            curl -fsSL -o /tmp/mallar.tpz "$URL/Godot_v${TAG}_export_templates.tpz"
+            unzip -q /tmp/mallar.tpz -d /tmp/mallar
+            mkdir -p ~/.local/share/godot/export_templates/$MAPP
+            mv /tmp/mallar/templates/* ~/.local/share/godot/export_templates/$MAPP/
+          fi
+          echo "$HOME/godot" >> "$GITHUB_PATH"
+
+      - name: Importera resurser
+        run: |
+          timeout 600 godot --headless --path . --import 2>&1 | tee import.log || true
+
+      - name: Kontroll – skript, data och automatisk genomspelning
+        run: |
+          set -o pipefail
+          timeout 300 godot --headless --path . res://tester/kontroll.tscn 2>&1 | tee test.log
+          if grep -E "SCRIPT ERROR|Parse Error|Failed to load script|Invalid call|Invalid access" test.log; then
+            echo "::error::Skriptfel hittades i loggen"
+            exit 1
+          fi
+
+      - name: Exportera för webb och Windows
+        run: |
+          mkdir -p build/web build/windows
+          godot --headless --path . --export-release "Web" build/web/index.html 2>&1 | tee export.log
+          godot --headless --path . --export-release "Windows Desktop" build/windows/Skyddsvakt.exe 2>&1 | tee -a export.log
+          test -f build/web/index.pck || { echo "::error::Webbexporten saknas"; exit 1; }
+          ls -la build/web build/windows
+
+      - name: Ladda upp Windows-version
+        uses: actions/upload-artifact@v4
+        with:
+          name: skyddsvakt-windows
+          path: build/windows/
+
+      - name: Förbered GitHub Pages
+        if: github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/web
+
+      - name: Skriv status till grenen ci-status
+        if: always()
+        run: |
+          mkdir -p /tmp/status && cd /tmp/status
+          {
+            echo "commit: $GITHUB_SHA"
+            echo "resultat: ${{ job.status }}"
+            echo "godot: ${{ steps.godot.outputs.tag }}"
+            echo "tid: $(date -u '+%Y-%m-%d %H:%M UTC')"
+            echo
+            echo "--- test.log (sista 200 rader) ---"
+            tail -n 200 "$GITHUB_WORKSPACE/test.log" 2>/dev/null || echo "(saknas)"
+            echo
+            echo "--- export.log (sista 80 rader) ---"
+            tail -n 80 "$GITHUB_WORKSPACE/export.log" 2>/dev/null || echo "(saknas)"
+            echo
+            echo "--- import.log (sista 40 rader) ---"
+            tail -n 40 "$GITHUB_WORKSPACE/import.log" 2>/dev/null || echo "(saknas)"
+          } > status.md
+          git init -q -b ci-status
+          git add status.md
+          git -c user.name="github-actions" -c user.email="github-actions@users.noreply.github.com" \
+            commit -qm "CI ${GITHUB_SHA::7}: ${{ job.status }}"
+          git push -qf "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" ci-status
+
+  publicera:
+    if: github.ref == 'refs/heads/main'
+    needs: bygg
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - name: Publicera på GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@v4

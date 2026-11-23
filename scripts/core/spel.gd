@@ -94,15 +94,21 @@ func slutlogg() -> Array:
 func spara_logg() -> String:
 	var tid := Time.get_datetime_string_from_system().replace(":", "-")
 	var sokvag := "user://debriefing_%s_%s.json" % [scenario.get("id", "scenario"), tid]
-	var f := FileAccess.open(sokvag, FileAccess.WRITE)
-	if f == null:
-		return ""
-	f.store_string(JSON.stringify({
+	var innehall := JSON.stringify({
 		"scenario": scenario.get("namn", ""),
 		"objekt": scenario.get("objekt", ""),
 		"sparad": Time.get_datetime_string_from_system(),
 		"lagstod_granskat": regelmotor.ar_granskad(),
 		"fakta_vid_slut": fakta,
 		"beslut": slutlogg(),
-	}, "  "))
+	}, "  ")
+	# I webbläsaren: ladda ner filen i stället för att spara i webbläsarens interna lagring.
+	if OS.has_feature("web"):
+		var filnamn := sokvag.get_file()
+		JavaScriptBridge.download_buffer(innehall.to_utf8_buffer(), filnamn, "application/json")
+		return "nedladdad som " + filnamn
+	var f := FileAccess.open(sokvag, FileAccess.WRITE)
+	if f == null:
+		return ""
+	f.store_string(innehall)
 	return ProjectSettings.globalize_path(sokvag)

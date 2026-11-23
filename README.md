@@ -7,6 +7,27 @@ Detta är en första spelbar prototyp med ett scenario: **Fotografen vid stakete
 > Lagrum markerade `[§ – jurist]` ska fastställas av jurist. Spelet visar detta i debriefingen
 > tills `"granskad": true` sätts i filen.
 
+## Spela i webbläsaren
+
+**https://sulaco-hue.github.io/skyddsvakt/**
+
+Varje push till `main` bygger och publicerar spelet automatiskt (se nedan). Ladda om sidan efter
+några minuter för att få senaste versionen.
+
+## Automatiskt bygge (GitHub Actions)
+
+Arbetsflödet `.github/workflows/bygg-och-publicera.yml` körs vid varje push till `main`:
+
+1. Hämtar senaste stabila Godot och exportmallar (cachas).
+2. **Kontroll** (`tester/kontroll.tscn`): laddar alla skript, kontrollerar JSON-filerna och dialogens
+   kopplingar mot `lagrum.json`, och spelar igenom scenario 1 automatiskt utan grafik.
+   Bygget stoppas om något skriptfel uppstår.
+3. Exporterar för **webb** (publiceras på GitHub Pages) och **Windows** (laddas ner under
+   *Actions → senaste körningen → Artifacts → skyddsvakt-windows*).
+4. Skriver resultatet till grenen `ci-status` (filen `status.md`).
+
+I webbläsaren laddas debriefingloggen ner som en JSON-fil när man trycker *Spara logg*.
+
 ## Kom igång (Windows)
 
 1. Ladda ner **Godot 4.3 eller senare** (standardversionen, inte .NET) från godotengine.org.
