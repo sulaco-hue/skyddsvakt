@@ -1,0 +1,7 @@
+# Godot
+.godot/
+export/
+*.tmp
+
+# Python
+__pycache__/

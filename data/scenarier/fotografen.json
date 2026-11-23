@@ -1,0 +1,515 @@
+{
+  "id": "fotografen",
+  "namn": "Fotografen vid staketet",
+  "objekt": "Förråd Granåsen",
+  "pass": "Pass 2",
+  "passtid": "18:00–22:00",
+  "starttid": "18:36",
+  "tidsfaktor": 6,
+  "vader": "Skymning · Duggregn 4°C",
+  "beredskap": "FÖRHÖJD",
+  "omvarldslage": [
+    {
+      "tid": "06:10",
+      "kalla": "Regional lägesbild",
+      "text": "Drönare observerade nattetid över två militära områden i regionen."
+    },
+    {
+      "tid": "11:30",
+      "kalla": "Lokal nyhet",
+      "text": "Svampsäsongen pågår – mycket folk i skogarna kring Granåsen."
+    },
+    {
+      "tid": "15:45",
+      "kalla": "Vaktchef",
+      "text": "Leverans via grinden ca 20:00. Föranmält fordon, kontroll enligt rutin."
+    }
+  ],
+  "briefing": {
+    "uppdrag": "Bevaka grind och staket. Kontrollera passage. Rapportera avvikelser till vaktchef.",
+    "objektinfo": "Skyddsobjektet omfattar området innanför staketet. Skyltat: tillträdesförbud och avbildningsförbud.",
+    "lagstod_fokus": [
+      "Avvisa / avlägsna",
+      "Gripande 13 § skyddslagen",
+      "Anmälan 17 §",
+      "Nödvärn 24 kap. BrB"
+    ],
+    "mal": [
+      {
+        "text": "Passage vid grind kontrollerad",
+        "klar_fran_start": true
+      },
+      {
+        "text": "Rapportera avvikelser till vaktchef",
+        "handling": "rapportera_vaktchef"
+      },
+      {
+        "text": "Dokumentera händelser",
+        "handling": "dokumentera"
+      }
+    ],
+    "samband": "Vi: Grindposten (stridspar, två skyddsvakter). Vaktchef: AQ (Adam Qvintus) – på annan plats, ser inte objektet. Det är vi som larmar."
+  },
+  "karta": {
+    "skyddsomrade": [
+      3,
+      3,
+      12,
+      12
+    ],
+    "mark": [
+      "..................",
+      "..................",
+      "..................",
+      "...iiiiiiiiii.....",
+      "...iiggggggii.....",
+      "...iiggggggii.....",
+      "...iiggggggii.....",
+      "...iiggggggii.....",
+      "...iiggggggii.....",
+      "...iiiiiiaaaadadad",
+      "...iiiiiiaaaaaaaaa",
+      "...iiiiiiiiii.....",
+      "...iiiiiiiiii.....",
+      "..................",
+      "..................",
+      "..................",
+      "..................",
+      ".................."
+    ],
+    "objekt": [
+      ".T....T....T......",
+      "...t.T........T..t",
+      ".T................",
+      "...FFFFFSFFFF...C.",
+      "T..FL.....PLF.....",
+      "...F..BBBB..F.....",
+      ".T.F..BBBB..F.....",
+      "...F..BBBB..F...T.",
+      "...F........FL....",
+      "...F.......VG.....",
+      "T..F........G.....",
+      "...F......K.FL....",
+      "...FFFFFFFFFF....T",
+      "..................",
+      "..T......t.....T..",
+      ".............t....",
+      "....T...T...T...T.",
+      ".................."
+    ],
+    "teckenforklaring": {
+      "mark": {
+        ".": "gräs",
+        "i": "gräs innanför staket",
+        "g": "grus",
+        "a": "asfalt",
+        "d": "asfalt med mittlinje"
+      },
+      "objekt": {
+        "F": "staket",
+        "S": "staket med skylt",
+        "G": "grind/bom",
+        "B": "byggnad",
+        "K": "vaktkur",
+        "T": "gran",
+        "t": "liten gran",
+        "L": "lyktstolpe",
+        "C": "bil",
+        "P": "spelarens start",
+        "V": "stridsparskamrat (följer spelaren)"
+      }
+    },
+    "invid_avstand": 3
+  },
+  "fakta": {
+    "skyltat_avbildningsforbud": true,
+    "motpart_invid": true,
+    "overtratt_forbud": true,
+    "vagrat_id": false,
+    "omhandertagande_nodvandigt": false,
+    "skal_att_anhalla": false,
+    "grund_for_beslag": false,
+    "anmalan_polis": false
+  },
+  "npc": {
+    "fotografen": {
+      "namn": "Okänd man, ca 40 år",
+      "beskrivning": "Kamera i handen",
+      "sprite": "civil",
+      "portratt": "portratt_civil",
+      "start": [
+        15,
+        4
+      ],
+      "stamning": 3,
+      "dialog_start": "start",
+      "ljud": {
+        "fotograferar": "klick klick"
+      }
+    }
+  },
+  "handelser": [
+    {
+      "id": "1",
+      "namn": "Fotografen",
+      "tid": "18:38",
+      "typ": "npc_gar_till",
+      "npc": "fotografen",
+      "mal": [
+        9,
+        1
+      ],
+      "vid_framme": "fotograferar",
+      "kamrat": "Där, vid staketet! Han fotograferar mot huset.",
+      "upptackt": {
+        "min_s": 2,
+        "max_s": 10,
+        "referensavstand": 6,
+        "kommentar": "Kamraten reagerar efter en slumpad tid (min_s–max_s sekunder vid referensavståndet). Närmare = snabbare, längre bort = långsammare.",
+        "paus_snack_s": 60
+      }
+    }
+  ],
+  "samband": [
+    {
+      "tid": "18:30",
+      "fran": "AQ",
+      "text": "Grindposten, Grindposten."
+    },
+    {
+      "tid": "18:30",
+      "fran": "Grindposten",
+      "text": "Grindposten kom."
+    },
+    {
+      "tid": "18:30",
+      "fran": "AQ",
+      "text": "Från AQ, förbindelsen provas, kom."
+    },
+    {
+      "tid": "18:30",
+      "fran": "Grindposten",
+      "text": "Hörbarhet femma, kom."
+    },
+    {
+      "tid": "18:30",
+      "fran": "AQ",
+      "text": "Hörbarhet femma, klart slut."
+    }
+  ],
+  "dialog": {
+    "start": {
+      "replik": "– Vadå? Jag fotograferar bara höstlöven. Det är väl ändå inte förbjudet att stå på en skogsväg?",
+      "alternativ": [
+        {
+          "text": "Förklara lugnt att området är skyddsobjekt och att skylten anger avbildningsförbud.",
+          "handling": "upplysa_forbud",
+          "stamning": -1,
+          "nasta": "upplyst"
+        },
+        {
+          "text": "Fråga om han frivilligt kan visa bilderna han har tagit.",
+          "handling": "fraga_frivilligt",
+          "stamning": 1,
+          "nasta": "visar"
+        },
+        {
+          "text": "Begär att han uppger namn, födelsetid och hemvist.",
+          "handling": "begara_identitet",
+          "stamning": 1,
+          "nasta": "id_fraga"
+        },
+        {
+          "text": "”Ge mig kameran. Nu.”",
+          "handling": "beslag",
+          "stamning": 3,
+          "nasta": "vagrar"
+        },
+        {
+          "text": "Avsluta kontakten, notera bilens registreringsnummer och rapportera.",
+          "handling": "dokumentera",
+          "nasta": "lamnar",
+          "npc_beteende": "ga_till_start"
+        }
+      ]
+    },
+    "upplyst": {
+      "replik": "– Okej, okej. Det såg jag inte. Men jag har redan tagit några bilder – vad händer nu?",
+      "alternativ": [
+        {
+          "text": "Fråga om han frivilligt kan visa bilderna.",
+          "handling": "fraga_frivilligt",
+          "nasta": "visar"
+        },
+        {
+          "text": "Säg att du tar kameran i beslag.",
+          "handling": "beslag",
+          "stamning": 2,
+          "nasta": "vagrar"
+        },
+        {
+          "text": "Tacka för samarbetet, notera registreringsnumret och rapportera.",
+          "handling": "dokumentera",
+          "stamning": -1,
+          "nasta": "lamnar_lugn",
+          "npc_beteende": "ga_till_start"
+        }
+      ]
+    },
+    "visar": {
+      "replik": "– Här. Lite träd… och ja, staketet och huset syns på några. Nöjd nu?",
+      "alternativ": [
+        {
+          "text": "Anropa AQ, rapportera och begär order.",
+          "handling": "rapportera_vaktchef",
+          "nasta": "vaktchef"
+        },
+        {
+          "text": "Ta kameran i beslag.",
+          "handling": "beslag",
+          "stamning": 2,
+          "nasta": "vagrar"
+        },
+        {
+          "text": "Notera registreringsnumret, tacka och låt honom gå.",
+          "handling": "dokumentera",
+          "nasta": "lamnar_lugn",
+          "npc_beteende": "ga_till_start"
+        }
+      ]
+    },
+    "vaktchef": {
+      "replik": "DU (radio): ”AQ, AQ.” – AQ: ”AQ kom.”\nDU: ”Från Grindposten, person invid objektet har fotograferat det, begär order, kom.”\nAQ: ”Uppfattat. Polis underrättas. Notera hans uppgifter om han medger det, slut kom.” – DU: ”Klart slut.”\n\nMANNEN: – Visst, här är mitt körkort.",
+      "satt_fakta": {
+        "anmalan_polis": true
+      },
+      "alternativ": [
+        {
+          "text": "Notera uppgifterna och tacka för samarbetet.",
+          "handling": "dokumentera",
+          "stamning": -2,
+          "nasta": "lamnar_lugn",
+          "npc_beteende": "ga_till_start"
+        }
+      ]
+    },
+    "vagrar": {
+      "replik": "– Glöm det! Det är min kamera. Jag går nu.",
+      "alternativ": [
+        {
+          "text": "Gå ut genom grinden och håll fast hans arm så att han inte kan gå.",
+          "handling": "gripa_med_vald",
+          "stamning": 3,
+          "nasta": "gripen"
+        },
+        {
+          "text": "Låt honom gå. Notera registreringsnumret och rapportera direkt.",
+          "handling": "lata_ga",
+          "nasta": "lamnar",
+          "npc_beteende": "ga_till_start"
+        }
+      ]
+    },
+    "gripen": {
+      "replik": "– Släpp mig! Du har ingen rätt att göra så här!\n\nKAMRATEN: – Jag täcker! Ska jag ropa upp AQ?",
+      "slut": true
+    },
+    "lamnar": {
+      "replik": "Mannen muttrar något och går tillbaka mot bilen.",
+      "slut": true
+    },
+    "lamnar_lugn": {
+      "replik": "– Okej. Ha en bra kväll då.\n\nMannen går lugnt tillbaka mot bilen.",
+      "slut": true
+    },
+    "id_fraga": {
+      "replik": "– Varför skulle jag det? Jag står ju på en skogsväg!",
+      "alternativ": [
+        {
+          "text": "Förklara att den som uppehåller sig invid ett skyddsobjekt är skyldig att uppge det på begäran.",
+          "handling": "upplysa_skyldighet",
+          "stamning": -1,
+          "nasta": "id_lamnat"
+        },
+        {
+          "text": "”Gör som jag säger.”",
+          "stamning": 2,
+          "nasta": "vagrar_id"
+        }
+      ]
+    },
+    "id_lamnat": {
+      "replik": "– Okej då… Johan Ek, född -85, bor i Granåsen. Nöjd?",
+      "satt_fakta": {
+        "id_lamnat": true
+      },
+      "alternativ": [
+        {
+          "text": "Anropa AQ, rapportera och begär order.",
+          "handling": "rapportera_vaktchef",
+          "nasta": "vaktchef"
+        },
+        {
+          "text": "Uppmana honom att lämna platsen och sluta fotografera.",
+          "handling": "avlagsna",
+          "stamning": 1,
+          "nasta": "lamnar_lugn",
+          "npc_beteende": "ga_till_start"
+        },
+        {
+          "text": "Anteckna uppgifterna och registreringsnumret, låt honom gå.",
+          "handling": "dokumentera",
+          "nasta": "lamnar_lugn",
+          "npc_beteende": "ga_till_start"
+        }
+      ]
+    },
+    "vagrar_id": {
+      "replik": "– Nej. Det ger jag inte ut till någon vakt.",
+      "satt_fakta": {
+        "vagrat_id": true
+      },
+      "alternativ": [
+        {
+          "text": "Avlägsna honom: beordra honom att lämna platsen direkt.",
+          "handling": "avlagsna",
+          "stamning": 1,
+          "nasta": "lamnar",
+          "npc_beteende": "ga_till_start"
+        },
+        {
+          "text": "Omhänderta honom tillfälligt.",
+          "handling": "tillfalligt_omhanderta",
+          "stamning": 3,
+          "satt_fakta": {
+            "omhandertagande_genomfort": true
+          },
+          "nasta": "omhandertagen"
+        },
+        {
+          "text": "Låt honom gå. Notera registreringsnumret och rapportera.",
+          "handling": "lata_ga",
+          "nasta": "lamnar",
+          "npc_beteende": "ga_till_start"
+        }
+      ]
+    },
+    "omhandertagen": {
+      "replik": "– Det här kommer ni att få ångra!\n\nMannen följer motvilligt med mot grinden. Kamraten täcker.",
+      "slut": true
+    }
+  },
+  "anropssignaler": {
+    "vaktchef": "AQ",
+    "du": "Grindposten"
+  },
+  "sambandsval": [
+    {
+      "etikett": "Prova förbindelsen med AQ",
+      "handling": "",
+      "meddelanden": [
+        {
+          "fran": "Grindposten",
+          "text": "AQ, AQ.",
+          "efter": 0
+        },
+        {
+          "fran": "AQ",
+          "text": "AQ kom.",
+          "efter": 1.5
+        },
+        {
+          "fran": "Grindposten",
+          "text": "Från Grindposten, sambandsprov, kom.",
+          "efter": 3.0
+        },
+        {
+          "fran": "AQ",
+          "text": "Hörbarhet femma, kom.",
+          "efter": 4.5
+        },
+        {
+          "fran": "Grindposten",
+          "text": "Hörbarhet femma, klart slut.",
+          "efter": 6.0
+        }
+      ]
+    },
+    {
+      "etikett": "Lägesrapport till AQ",
+      "handling": "rapportera_vaktchef",
+      "meddelanden": [
+        {
+          "fran": "Grindposten",
+          "text": "AQ, AQ.",
+          "efter": 0
+        },
+        {
+          "fran": "AQ",
+          "text": "AQ kom.",
+          "efter": 1.5
+        },
+        {
+          "fran": "Grindposten",
+          "text": "Från Grindposten, lägesrapport: {lage}, kom.",
+          "efter": 3.0
+        },
+        {
+          "fran": "AQ",
+          "text": "Uppfattat. Håll uppsikt och rapportera förändring, kom.",
+          "efter": 5.0
+        },
+        {
+          "fran": "Grindposten",
+          "text": "Uppfattat, slut kom.",
+          "efter": 6.5
+        },
+        {
+          "fran": "AQ",
+          "text": "Klart slut.",
+          "efter": 8.0
+        }
+      ]
+    },
+    {
+      "etikett": "Begär att AQ underrättar polis",
+      "handling": "anmala_polis",
+      "meddelanden": [
+        {
+          "fran": "Grindposten",
+          "text": "AQ, AQ.",
+          "efter": 0
+        },
+        {
+          "fran": "AQ",
+          "text": "AQ kom.",
+          "efter": 1.5
+        },
+        {
+          "fran": "Grindposten",
+          "text": "Från Grindposten, begär att polis underrättas om händelse vid sektor NO, kom.",
+          "efter": 3.0
+        },
+        {
+          "fran": "AQ",
+          "text": "Uppfattat, polis underrättas, kom.",
+          "efter": 5.0
+        },
+        {
+          "fran": "Grindposten",
+          "text": "Uppfattat, slut kom.",
+          "efter": 6.5
+        },
+        {
+          "fran": "AQ",
+          "text": "Klart slut.",
+          "efter": 8.0
+        }
+      ]
+    }
+  ],
+  "lagestext": {
+    "fore": "inga avvikelser vid sektor NO",
+    "efter": "person invid objektet sektor NO har fotograferat objektet, bil parkerad vid skogskanten"
+  }
+}

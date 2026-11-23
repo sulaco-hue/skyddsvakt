@@ -1,0 +1,319 @@
+extends Node
+## Styr spelets flöde: briefing -> patrull (med kontaktläge) -> debriefing.
+
+var varld: Varld
+var rot: Control
+var briefing: Briefing
+var hud: Hud
+var kontakt: Kontakt
+var debriefing: Debriefing
+
+var _handelser_kvar: Array = []
+var _larm_npc := ""
+var _samtal_klara: Dictionary = {}
+var _vantar_samtal := ""
+var _npc_efter_samtal := {}  # npc_id -> beteende
+var _scenario: Dictionary
+var _larm_har_skett := false
+## Pågående upptäckt: {npc, h, bas, varde}. Tom när ingen upptäckt pågår.
+var _upptackt: Dictionary = {}
+var _rng := RandomNumberGenerator.new()
+var snack: Kamratsnack
+
+
+func _ready() -> void:
+	_scenario = Spel.scenario
+	varld = Varld.new()
+	add_child(varld)
+	varld.bygg(_scenario.get("karta", {}))
+	var npcer: Dictionary = _scenario.get("npc", {})
+	for id: String in npcer:
+		varld.skapa_npc(id, npcer[id])
+	varld.npc_klickad.connect(_pa_npc_klickad)
+	varld.spelare_framme.connect(_pa_spelare_framme)
+
+	var lager := CanvasLayer.new()
+	add_child(lager)
+	rot = Control.new()
+	UiKit.helskarm(rot)
+	rot.theme = UiKit.skapa_tema()
+	rot.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	lager.add_child(rot)
+
+	hud = Hud.new()
+	rot.add_child(hud)
+	hud.bygg(_scenario, varld)
+	hud.visible = false
+	hud.forcera_handelse.connect(_forcera_handelse)
+	hud.handling.connect(func(id: String, beskrivning: String) -> void: Spel.utfor(id, beskrivning))
+	hud.avsluta_pass.connect(_visa_debriefing)
+	hud.lagestext = _lagestext
+
+	snack = Kamratsnack.new()
+	add_child(snack)
+	snack.setup(hud, varld)
+	hud.tysta_kamrat.connect(snack.tysta)
+
+	kontakt = Kontakt.new()
+	rot.add_child(kontakt)
+	kontakt.bygg(_scenario)
+	kontakt.visible = false
+	kontakt.val_gjort.connect(_pa_val)
+	kontakt.nod_visad.connect(func(nod: Dictionary) -> void: Spel.satt_fakta(nod.get("satt_fakta", {})))
+	kontakt.stangd.connect(_pa_kontakt_stangd)
+
+	var handelser: Array = _scenario.get("handelser", [])
+	_handelser_kvar = handelser.duplicate(true)
+
+	briefing = Briefing.new()
+	rot.add_child(briefing)
+	briefing.bygg(_scenario)
+	briefing.starta.connect(_starta_pass)
+
+
+func _lagestext() -> String:
+	var lt: Dictionary = _scenario.get("lagestext", {})
+	return str(lt.get("efter" if _larm_har_skett else "fore", ""))
+
+
+func _starta_pass() -> void:
+	briefing.queue_free()
+	briefing = null
+	hud.visible = true
+	varld.interaktion_aktiv = true
+	varld.kamrat_folj = true
+	snack.aktiv = true
+	Spel.klocka_igang = true
+
+
+func _process(delta: float) -> void:
+	if not Spel.klocka_igang:
+		return
+	_uppdatera_upptackt(delta)
+	if hud.debug_info_synlig():
+		hud.satt_debug_info(_debug_text())
+	for h in _handelser_kvar.duplicate():
+		if Spel.klocka_s >= Datafil.tid_till_s(str(h.get("tid", "00:00"))):
+			_handelser_kvar.erase(h)
+			_utlos_handelse(h)
+
+
+func _debug_text() -> String:
+	var rader := PackedStringArray()
+	var kvar := PackedStringArray()
+	for h in _handelser_kvar:
+		kvar.append("%s (%s)" % [h.get("id", "?"), h.get("tid", "")])
+	rader.append("Klocka %s · tidsfaktor x%s · händelser kvar: %s" % [
+		Spel.klockstrang(), _scenario.get("tidsfaktor", 1), ", ".join(kvar) if kvar.size() > 0 else "inga"])
+	var sp := varld.spelare
+	rader.append("Spelare %s zon %s %s · Kamrat %s %s" % [sp.cell, varld.zon(sp.cell),
+		"går" if sp.ar_i_rorelse() else "står", varld.kollega.cell, "går" if varld.kollega.ar_i_rorelse() else "står"])
+	for id: String in varld.npcer:
+		var n: Aktor = varld.npcer[id]
+		rader.append("NPC %s %s synlig:%s %s avstånd %d" % [id, n.cell, "ja" if n.visible else "nej",
+			"går" if n.ar_i_rorelse() else "står", varld.avstand(sp.cell, n.cell)])
+	if _upptackt.is_empty():
+		rader.append("Upptäckt: ingen pågår%s" % (" (händelse upptäckt)" if _larm_har_skett else ""))
+	else:
+		rader.append("Upptäckt: %d %% · grundtid %.1f s · har pågått %.1f s" % [
+			int(float(_upptackt["varde"]) * 100.0), float(_upptackt["bas"]), float(_upptackt["tid"])])
+	var f := PackedStringArray()
+	for k in Spel.fakta:
+		f.append("%s=%s" % [k, "ja" if Spel.fakta[k] else "nej"])
+	rader.append("Fakta: " + ", ".join(f))
+	rader.append("Kamratsnack: " + snack.status())
+	rader.append("Beslut i logg: %d · sambandsrader: %d · musik: %s" % [Spel.logg.size(), Spel.samband.size(),
+		"på" if Musik.ar_pa() else "av"])
+	return "\n".join(rader)
+
+
+func _forcera_handelse(id: String) -> void:
+	for h in _handelser_kvar.duplicate():
+		if str(h.get("id", "")) == id:
+			_handelser_kvar.erase(h)
+			_utlos_handelse(h)
+			return
+	hud.visa_meddelande("Händelse %s har redan startat." % id, 2.0)
+
+
+func _utlos_handelse(h: Dictionary) -> void:
+	hud.markera_handelse_startad(str(h.get("id", "")))
+	match str(h.get("typ", "")):
+		"npc_gar_till":
+			var id := str(h.get("npc", ""))
+			var n: Aktor = varld.npcer.get(id)
+			if n == null:
+				return
+			n.visible = true
+			n.framme.connect(_pa_npc_framme.bind(h, id), CONNECT_ONE_SHOT)
+			varld.flytta_npc(id, Datafil.cell(h.get("mal", [0, 0])))
+
+
+func _pa_npc_framme(h: Dictionary, id: String) -> void:
+	var n: Aktor = varld.npcer.get(id)
+	if n == null or h.get("vid_framme", "") != "fotograferar" or _samtal_klara.has(id):
+		return
+	n.vand_mot(varld.cell_pos(Vector2i(8, 6)))
+	n.satt_fotograferar(true)
+	if not n.blixt.is_connected(_pa_blixt):
+		n.blixt.connect(_pa_blixt.bind(id))
+	_larm_npc = id
+	# Starta kamratens upptäcktstimer: slumpad grundtid, snabbare ju närmare.
+	var u: Dictionary = h.get("upptackt", {})
+	_rng.randomize()
+	_upptackt = {
+		"npc": id,
+		"h": h,
+		"bas": _rng.randf_range(float(u.get("min_s", 6)), float(u.get("max_s", 30))),
+		"ref": float(u.get("referensavstand", 6)),
+		"varde": 0.0,
+		"tid": 0.0,
+	}
+
+
+func _pa_blixt(id: String) -> void:
+	var n: Aktor = varld.npcer.get(id)
+	var ljud: Dictionary = _scenario.get("npc", {}).get(id, {}).get("ljud", {})
+	if n and hud.visible:
+		hud.visa_ljud(n, str(ljud.get("fotograferar", "klick klick")))
+
+
+func _uppdatera_upptackt(delta: float) -> void:
+	if _upptackt.is_empty():
+		hud.satt_debug_status("ingen upptäckt pågår")
+		return
+	var n: Aktor = varld.npcer.get(_upptackt["npc"])
+	if n == null:
+		return
+	var avst := mini(varld.avstand(varld.spelare.cell, n.cell), varld.avstand(varld.kollega.cell, n.cell))
+	var narhet := clampf(float(_upptackt["ref"]) / maxf(float(avst), 1.0), 0.3, 3.0)
+	_upptackt["varde"] = float(_upptackt["varde"]) + delta * narhet / float(_upptackt["bas"])
+	_upptackt["tid"] = float(_upptackt["tid"]) + delta
+	hud.satt_debug_status("kamraten upptäcker: %d %% · avstånd %d · grundtid %.0f s" % [
+		int(float(_upptackt["varde"]) * 100.0), avst, float(_upptackt["bas"])])
+	if float(_upptackt["varde"]) >= 1.0:
+		_kamrat_reagerar()
+
+
+func _kamrat_reagerar() -> void:
+	var id := str(_upptackt["npc"])
+	var h: Dictionary = _upptackt["h"]
+	var n: Aktor = varld.npcer.get(id)
+	_upptackt = {}
+	_larm_har_skett = true
+	snack.pausa(float(h.get("upptackt", {}).get("paus_snack_s", 60)))
+	varld.satt_larm(id)
+	Spel.spela_samband(h.get("samband", []))
+	if str(h.get("kamrat", "")) != "":
+		hud.visa_bubbla(varld.kollega, str(h.get("kamrat", "")), 5.0)
+	if n:
+		varld.kollega.vand_mot(n.position)
+
+
+func _dolj_npc(id: String) -> void:
+	var n: Aktor = varld.npcer.get(id)
+	if n:
+		n.visible = false
+
+
+# ----------------------------------------------------------- Kontakt --
+
+func _pa_npc_klickad(id: String) -> void:
+	if _samtal_klara.has(id):
+		hud.visa_meddelande("Kontakten med personen är redan avslutad.")
+		return
+	_ga_till_samtal(id)
+
+
+func _ga_till_samtal(id: String) -> void:
+	var n: Aktor = varld.npcer.get(id)
+	if n == null or not n.visible:
+		return
+	if varld.avstand(varld.spelare.cell, n.cell) <= 3:
+		_oppna_kontakt(id)
+		return
+	if varld.ga_till(n.cell):
+		_vantar_samtal = id
+		hud.visa_meddelande("Går närmare…", 1.5)
+	else:
+		hud.visa_meddelande("Du kan inte ta dig närmare härifrån.")
+
+
+func _pa_spelare_framme() -> void:
+	if _vantar_samtal == "":
+		return
+	var id := _vantar_samtal
+	_vantar_samtal = ""
+	var n: Aktor = varld.npcer.get(id)
+	if n and varld.avstand(varld.spelare.cell, n.cell) <= 3:
+		_oppna_kontakt(id)
+	else:
+		hud.visa_meddelande("För långt bort för att tilltala personen.")
+
+
+func _oppna_kontakt(id: String) -> void:
+	var n: Aktor = varld.npcer[id]
+	varld.spelare.stanna()
+	varld.spelare.vand_mot(n.position)
+	n.vand_mot(varld.spelare.position)
+	n.satt_fotograferar(false)
+	# Spelaren upptäckte själv personen före kamraten.
+	if not _upptackt.is_empty() and str(_upptackt["npc"]) == id:
+		_upptackt = {}
+		_larm_har_skett = true
+	varld.kollega.stanna()
+	varld.kollega.vand_mot(n.position)
+	varld.interaktion_aktiv = false
+	hud.visible = false
+	snack.aktiv = false
+	var data: Dictionary = _scenario.get("npc", {}).get(id, {})
+	kontakt.set_meta("npc", id)
+	kontakt.oppna(data, str(data.get("dialog_start", "start")))
+
+
+func _pa_val(alt: Dictionary) -> void:
+	Spel.satt_fakta(alt.get("satt_fakta", {}))
+	var handling := str(alt.get("handling", ""))
+	if handling != "":
+		Spel.utfor(handling, str(alt.get("text", "")))
+	var beteende := str(alt.get("npc_beteende", ""))
+	if beteende != "":
+		_npc_efter_samtal[str(kontakt.get_meta("npc", ""))] = beteende
+
+
+func _pa_kontakt_stangd() -> void:
+	var id := str(kontakt.get_meta("npc", ""))
+	_samtal_klara[id] = true
+	hud.visible = true
+	varld.satt_larm("")
+	varld.interaktion_aktiv = true
+	snack.aktiv = true
+	snack.pausa(30.0)
+	hud.visa_meddelande("Kom ihåg: rapportera och dokumentera händelsen.", 4.0)
+	if _npc_efter_samtal.get(id, "") == "ga_till_start":
+		var n: Aktor = varld.npcer[id]
+		var data: Dictionary = _scenario.get("npc", {}).get(id, {})
+		n.framme.connect(_dolj_npc.bind(id), CONNECT_ONE_SHOT)
+		varld.flytta_npc(id, Datafil.cell(data.get("start", [0, 0])))
+
+
+# -------------------------------------------------------- Debriefing --
+
+func _visa_debriefing() -> void:
+	if debriefing:
+		return
+	Spel.klocka_igang = false
+	snack.aktiv = false
+	varld.interaktion_aktiv = false
+	hud.visible = false
+	kontakt.visible = false
+	debriefing = Debriefing.new()
+	rot.add_child(debriefing)
+	var meta := Spel.regelmotor.meta
+	debriefing.bygg(Spel.slutlogg(), _scenario, Spel.regelmotor.ar_granskad(), str(meta.get("kommentar", "")))
+	debriefing.spela_igen.connect(_spela_igen)
+
+
+func _spela_igen() -> void:
+	Spel.nollstall()
+	get_tree().reload_current_scene()
