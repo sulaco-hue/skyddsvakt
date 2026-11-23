@@ -700,6 +700,24 @@ def portrait(kind):
 portrait("civil").save(os.path.join(OUT, "portratt_civil.png"))
 portrait("vakt").save(os.path.join(OUT, "portratt_vakt.png"))
 
+# ============================================================ Ikoner ==
+def hogtalare(namn, extra):
+    T, R = (230, 235, 224, 255), (240, 124, 140, 255)
+    rader = ["......X.....", ".....XX.....", "....XXX.....", "XXXXXXX.....", "XXXXXXX.....",
+             "XXXXXXX.....", "XXXXXXX.....", "....XXX.....", ".....XX.....", "......X....."]
+    im = Image.new("RGBA", (12, 12), (0, 0, 0, 0))
+    for y, rad in enumerate(rader):
+        for x, c in enumerate(rad):
+            if c == "X":
+                im.putpixel((x, y + 1), T)
+    for (x, y, rod) in extra:
+        im.putpixel((x, y), R if rod else T)
+    im.save(os.path.join(OUT, namn + ".png"))
+
+hogtalare("hogtalare_pa", [(8, 4, 0), (8, 5, 0), (8, 6, 0), (8, 7, 0), (9, 2, 0), (10, 3, 0), (10, 4, 0),
+                           (10, 5, 0), (10, 6, 0), (10, 7, 0), (10, 8, 0), (9, 9, 0)])
+hogtalare("hogtalare_av", [(7 + i, 3 + i, 1) for i in range(5)] + [(11 - i, 3 + i, 1) for i in range(5)])
+
 with open(os.path.join(OUT, "anchors.json"), "w") as f:
     json.dump(anchors, f, indent=1, sort_keys=True)
 print("ok", len(anchors))
