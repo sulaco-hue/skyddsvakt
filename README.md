@@ -60,7 +60,7 @@ scripts/
   varld/aktor.gd               Figurer som går längs rutnätet
   ui/                          Briefing, HUD, kontaktläge, debriefing och gemensam stil
 assets/gfx/                    Pixelgrafik (genererad med verktyg/generera_grafik.py)
-assets/fonts/                  VT323 och Pixelify Sans (SIL Open Font License)
+assets/fonts/                  VT323 och Jersey 15 (SIL Open Font License)
 verktyg/                       Python-skript för grafik och förhandsvisning av kartan
 ```
 
@@ -117,7 +117,7 @@ figurernas tillstånd, upptäcktstimern, alla fakta och loggstorlek.
 `data/kamratsnack.json` innehåller kamratens prat (sport, elpriser, datorspel, film, mat, väder …).
 Varje rad kan ha egna `svar` som Grindposten ibland ger; annars används `allmanna_svar`, eller så
 suckar Grindposten (`suckar`). Hur ofta det pratas och chansen för suck/svar styrs under `installningar`.
-**Tyst nu [T]** säger en av `tyst_repliker` och tystar kamraten i `tystnad_s` sekunder.
+**T** (tyst nu) säger en av `tyst_repliker` och tystar kamraten i `tystnad_s` sekunder.
 Pratet pausas under kontakt och en stund efter att kamraten upptäckt en händelse (`paus_snack_s`).
 Kamraten kan alltså vara mitt i en utläggning om elpriser när fotografen dyker upp …
 

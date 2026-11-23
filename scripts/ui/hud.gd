@@ -323,7 +323,6 @@ func _bygg_handlingar() -> void:
 		["Observera", "Q", _observera],
 		["Samband", "R", _vaxla_sambandsmeny],
 		["Anteckna", "N", _anteckna],
-		["Tyst nu", "T", _tysta],
 		["Instruktion", "I", _vaxla_instruktion],
 		["Avsluta pass", "Esc", _avsluta],
 	]

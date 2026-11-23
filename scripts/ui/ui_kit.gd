@@ -36,16 +36,12 @@ static func brodfont() -> Font:
 
 static func rubrikfont(spatierad := false) -> Font:
 	if _rubrik == null:
-		var bas: Font = load("res://assets/fonts/PixelifySans.ttf")
+		var bas: Font = load("res://assets/fonts/Jersey15-Regular.ttf")
+		_rubrik = bas
 		var fv := FontVariation.new()
 		fv.base_font = bas
-		fv.variation_embolden = 0.5
-		_rubrik = fv
-		var fv2 := FontVariation.new()
-		fv2.base_font = bas
-		fv2.variation_embolden = 0.5
-		fv2.spacing_glyph = 2
-		_rubrik_spatierad = fv2
+		fv.spacing_glyph = 1
+		_rubrik_spatierad = fv
 	return _rubrik_spatierad if spatierad else _rubrik
 
 
@@ -99,14 +95,18 @@ static func etikett(text: String, storlek := 22, farg := TEXT, radbryt := false)
 	return l
 
 
+## Rubrikfonten (Jersey 15) är mindre än brödtexten vid samma punktstorlek.
+const RUBRIK_SKALA := 1.35
+
+
 static func rubrik(text: String, storlek := 15, farg := GRON) -> Label:
-	var l := etikett(text, storlek, farg)
+	var l := etikett(text, roundi(storlek * RUBRIK_SKALA), farg)
 	l.add_theme_font_override("font", rubrikfont(true))
 	return l
 
 
 static func titel(text: String, storlek := 26, farg := TEXT) -> Label:
-	var l := etikett(text, storlek, farg)
+	var l := etikett(text, roundi(storlek * RUBRIK_SKALA), farg)
 	l.add_theme_font_override("font", rubrikfont(false))
 	return l
 
@@ -118,7 +118,7 @@ static func knapp(text: String, primar := false, farg := BARNSTEN) -> Button:
 	b.custom_minimum_size = Vector2(0, 44)
 	if primar:
 		b.add_theme_font_override("font", rubrikfont(false))
-		b.add_theme_font_size_override("font_size", 15)
+		b.add_theme_font_size_override("font_size", roundi(15 * RUBRIK_SKALA))
 		b.add_theme_stylebox_override("normal", ruta(farg, farg.darkened(0.35), 3, 18, 6))
 		b.add_theme_stylebox_override("hover", ruta(farg.lightened(0.15), farg.darkened(0.35), 3, 18, 6))
 		b.add_theme_stylebox_override("pressed", ruta(farg.darkened(0.15), farg.darkened(0.35), 3, 18, 6))
