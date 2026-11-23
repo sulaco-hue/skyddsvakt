@@ -1,6 +1,6 @@
 {
-  "kommentar": "Lagstödskortet i spelet (Instruktion [I] → Lagstöd). Sammanfattningar i egna ord av skyddslagen (2010:305) – inte lagtext. Ska granskas av jurist.",
-  "kalla": "Skyddslagen (2010:305), riksdagen.se",
+  "kommentar": "Lagstödskortet i spelet (Instruktion [I] → Lagstöd). Sammanfattningar i egna ord av skyddslagen (2010:305), brottsbalken 24 kap. och skjutvapenreglerna för vakttjänst – inte lagtext. Ska granskas av jurist.",
+  "kalla": "Skyddslagen (2010:305), riksdagen.se · Brottsbalken 24 kap. · Förordning (1992:98) · FFS 2010:7",
   "paragrafer": [
     {
       "paragraf": "10 §",
@@ -41,6 +41,26 @@
       "paragraf": "17 §",
       "rubrik": "Anmälan till polis",
       "text": "Ett tillfälligt omhändertagande, gripande eller beslag ska genast anmälas till en polisman, och beslagtagen egendom lämnas över. Ett omhändertagande ska upphöra så snart syftet inte längre finns och senast efter sex timmar."
+    },
+    {
+      "paragraf": "BrB 24:1",
+      "rubrik": "Nödvärn",
+      "text": "Den som handlar i nödvärn får göra det som är försvarligt – inte uppenbart oförsvarligt – för att avvärja ett påbörjat eller omedelbart förestående brottsligt angrepp på person eller egendom. Nödvärnsrätten upphör när angreppet har upphört."
+    },
+    {
+      "paragraf": "1992:98",
+      "rubrik": "Skjutvapen vid vakttjänst i Försvarsmakten",
+      "text": "I nödvärn får skjutvapen användas för att avvärja svårare våld eller hot som innebär trängande fara för sådant våld (2 §). Risken för utomstående ska beaktas (4 §). Före skott: tydlig varning genom tillrop, och varningsskott först om omständigheterna tillåter (5 §). Målet är att tillfälligt oskadliggöra (6 §)."
+    },
+    {
+      "paragraf": "FFS 2010:7",
+      "rubrik": "Varningsrop, varningsskott, verkanseld",
+      "text": "Ropa högt och tydligt ”Halt eller jag skjuter skarpt!”, om möjligt efter ”Halt” och stopptecken, och säg att du tillhör Försvarsmakten och i vilken egenskap (8 §). Varningsskott bara när förutsättningar för verkanseld finns, riktat så att ingen skadas (9 §). Verkanseld i första hand mot benen (10 §), patronvis eld (11 §). Rapportera skjutvapenanvändning snarast till chef (13 §)."
+    },
+    {
+      "paragraf": "BrB 24:7",
+      "rubrik": "Envarsgripande",
+      "text": "Var och en får gripa den som har begått ett brott med fängelse i straffskalan och påträffas på bar gärning eller flyende fot. Den gripne ska skyndsamt överlämnas till närmaste polisman."
     }
   ]
 }

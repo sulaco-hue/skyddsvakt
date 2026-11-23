@@ -3,7 +3,7 @@
     "version": "0.2",
     "granskad": false,
     "granskad_av": "",
-    "kommentar": "UTKAST. Bygger på skyddslagen (2010:305) 10–17 §§. Rekvisit och följdkrav är modellerade efter lagtexten, men bedömningarna är exempel för diskussion och ska granskas av jurist. Lagrum markerade [jurist] är särskilt osäkra.",
+    "kommentar": "UTKAST. Bygger på skyddslagen (2010:305) 10–17 §§. Rekvisit och följdkrav är modellerade efter lagtexten, men bedömningarna är exempel för diskussion och ska granskas av jurist. Lagrum markerade [jurist] är särskilt osäkra. Nödvärn och skjutvapen (scenario Yxmannen) bygger på brottsbalken 24 kap. 1 och 7 §§, förordningen (1992:98) om användande av skjutvapen vid vakttjänst inom Försvarsmakten och FFS 2010:7. Kontrollera gällande föreskrifter.",
     "rekvisit": {
       "motpart_inom": "personen befann sig inom skyddsobjektet",
       "motpart_invid": "personen befann sig invid skyddsobjektet",
@@ -25,7 +25,18 @@
       "andra_medel_otillrackliga": "andra medel mot drönaren var otillräckliga",
       "anmalan_polis": "anmälan gjordes till polis",
       "protokoll_upprattat": "protokoll upprättades",
-      "behorig": "personen var behörig och föranmäld"
+      "behorig": "personen var behörig och föranmäld",
+      "hot_svarare_vald": "angreppet gällde svårare våld eller hot som innebar trängande fara för sådant våld",
+      "angrepp_pagar": "angreppet pågick fortfarande (hade inte avbrutits eller avvärjts)",
+      "angrepp_overhangande": "angreppet var påbörjat eller omedelbart förestående (angriparen var nära)",
+      "varning_given": "tydlig varning hade getts genom tillrop (”Halt eller jag skjuter skarpt!”)",
+      "varningsskott_foregick": "varningsskott hade avlossats, eller omständigheterna medgav det inte",
+      "sjukvard_larmad": "sjukvård larmades",
+      "forsta_hjalp_given": "första hjälpen gavs",
+      "brott_pa_bar_garning": "personen påträffades på bar gärning för ett brott med fängelse i straffskalan (t.ex. olaga hot)",
+      "skjutning_rapporterad": "skjutningen rapporterades till chef",
+      "angrepp_pagar_ej": "angreppet hade upphört och platsen var säkrad",
+      "handlade_i_tid": "stridsparet avvärjde angreppet innan det nådde fram"
     }
   },
   "handlingar": {
@@ -428,6 +439,165 @@
       "text_ok": "Personen var behörig och föranmäld.",
       "text_brist": "Personen var inte föranmäld eller kontrollerad. Att släppa in en obehörig bryter mot tillträdesförbudet och bevakningsinstruktionen.",
       "diskutera": "Vilka kontroller ska göras innan bommen öppnas?"
+    },
+    "halt_order": {
+      "namn": "Ropade: ”Halt! Militär skyddsvakt! Halt eller jag skjuter skarpt!”",
+      "lagrum": "Förordning (1992:98) 5 § · FFS 2010:7 8 §",
+      "krav": [],
+      "vid_brist": "ok",
+      "satter_fakta": {
+        "varning_given": true
+      },
+      "text_ok": "Rätt. Innan skott avlossas ska tydlig varning ges genom tillrop, och du ska ange att du tillhör Försvarsmakten och i vilken egenskap du handlar. Ropet får kortas eller utelämnas bara om situationen inte medger det.",
+      "text_brist": "",
+      "diskutera": "Varför är det viktigt att ropet hörs tydligt – även för vittnen och din stridsparskamrat?"
+    },
+    "varningsskott": {
+      "namn": "Avlossade varningsskott",
+      "lagrum": "BrB 24 kap. 1 § (nödvärn) · förordning (1992:98) 2, 4, 5 och 6 §§ · FFS 2010:7 8–11 §§",
+      "krav": [
+        "angrepp_pagar",
+        "hot_svarare_vald",
+        "angrepp_overhangande",
+        "varning_given"
+      ],
+      "krav_utfall": {
+        "angrepp_pagar": "bad",
+        "hot_svarare_vald": "bad",
+        "angrepp_overhangande": "warn",
+        "varning_given": "warn"
+      },
+      "vid_brist": "warn",
+      "satter_fakta": {
+        "varningsskott_avlossat": true,
+        "varningsskott_foregick": true
+      },
+      "text_ok": "Förutsättningarna för verkanseld fanns (FFS 2010:7 9 §) och varningsskottet föregick verkanselden, som förordningen kräver när omständigheterna tillåter. Varningsskott ska riktas så att ingen person kan skadas.",
+      "text_brist": "Varningsskott får bara avlossas när förutsättningarna för verkanseld finns (FFS 2010:7 9 §).",
+      "text_krav": {
+        "angrepp_pagar": "Angreppet hade redan upphört. Då finns ingen nödvärnssituation och därmed inga förutsättningar för verkanseld – och inte heller för varningsskott.",
+        "hot_svarare_vald": "Det fanns inget hot om svårare våld. Varningsskott kräver att förutsättningarna för verkanseld finns.",
+        "angrepp_overhangande": "Angriparen var fortfarande långt bort. Var angreppet verkligen omedelbart förestående? Ett varningsskott tidigt kan vara rätt – men tänk på var kulan tar vägen och på risken för tredje man (4 §). [Bedömning – jurist]",
+        "varning_given": "Varningsskottet kom utan föregående tillrop. Förordningen kräver tydlig varning genom tillrop innan skott avlossas, om det inte uppenbart saknar verkan."
+      },
+      "diskutera": "Vart riktade du varningsskottet? Vad finns bakom målområdet – vägar, hus, din kamrat?",
+      "foljdkrav": [
+        {
+          "fakta": "skjutning_rapporterad",
+          "lagrum": "FFS 2010:7 13 §",
+          "text": "Användning av skjutvapen ska snarast rapporteras till chef."
+        }
+      ]
+    },
+    "verkanseld": {
+      "namn": "Avgav verkanseld mot angriparen",
+      "lagrum": "BrB 24 kap. 1 § (nödvärn) · förordning (1992:98) 2, 4, 5 och 6 §§ · FFS 2010:7 8–11 §§",
+      "krav": [
+        "angrepp_pagar",
+        "hot_svarare_vald",
+        "angrepp_overhangande",
+        "varning_given",
+        "varningsskott_foregick"
+      ],
+      "krav_utfall": {
+        "angrepp_pagar": "bad",
+        "hot_svarare_vald": "bad",
+        "angrepp_overhangande": "bad",
+        "varning_given": "warn",
+        "varningsskott_foregick": "warn"
+      },
+      "vid_brist": "bad",
+      "satter_fakta": {
+        "verkanseld_avlossad": true
+      },
+      "text_ok": "Nödvärnssituation: ett pågående och omedelbart förestående angrepp med yxa och dödshot – svårare våld. Varning och varningsskott hade getts. Skjutvapen fick användas för att avvärja angreppet (förordning 1992:98 2 §). Målet är att tillfälligt oskadliggöra: patronvis eld, i första hand mot benen (FFS 2010:7 10–11 §§).",
+      "text_brist": "Verkanseld kräver en nödvärnssituation med svårare våld eller trängande fara för sådant våld.",
+      "text_krav": {
+        "angrepp_pagar": "Angreppet hade upphört – han hade gett upp. Nödvärnsrätten gäller bara så länge angreppet pågår eller är omedelbart förestående. Skottet saknar stöd och kan vara brottsligt.",
+        "hot_svarare_vald": "Det fanns inget hot om svårare våld. Verkanseld saknar stöd.",
+        "angrepp_overhangande": "Angriparen var fortfarande långt bort. Angreppet var inte omedelbart förestående, och ni hade kunnat backa, ropa och varna. Verkanseld på det avståndet är svår att försvara (”uppenbart oförsvarligt”?). [Jurist]",
+        "varning_given": "Angreppet var verkligt och nära – men ingen varning hade getts genom tillrop. Förordningen kräver tillrop om det inte uppenbart saknar verkan. Fanns det tid att ropa?",
+        "varningsskott_foregick": "Verkanseld utan föregående varningsskott. Förordningen kräver varningsskott först om omständigheterna tillåter. Fanns det tid? [Bedömning – jurist]"
+      },
+      "diskutera": "Hur nära var han? Hur lång tid tar det att täcka tio meter med en höjd yxa? Vad gör din stridsparskamrat under tiden?",
+      "foljdkrav": [
+        {
+          "fakta": "sjukvard_larmad",
+          "om_fakta": "verkanseld_avlossad",
+          "lagrum": "Allmän hjälpskyldighet · VaktB",
+          "text": "Efter verkanseld ska sjukvård larmas och första hjälpen ges så snart det är säkert."
+        },
+        {
+          "fakta": "skjutning_rapporterad",
+          "lagrum": "FFS 2010:7 13 §",
+          "text": "Användning av skjutvapen ska snarast rapporteras till chef."
+        },
+        {
+          "fakta": "anmalan_polis",
+          "om_fakta": "verkanseld_avlossad",
+          "lagrum": "Rättsordningen – polisutredning",
+          "text": "Ett skjutvapenvåld mot person ska anmälas till polis, som utreder händelsen."
+        }
+      ]
+    },
+    "larma_sjukvard": {
+      "namn": "Larmade sjukvård (112) via AQ",
+      "lagrum": "Allmän hjälpskyldighet · VaktB",
+      "krav": [],
+      "vid_brist": "ok",
+      "satter_fakta": {
+        "sjukvard_larmad": true
+      },
+      "text_ok": "Rätt. En skadad person ska få vård så snabbt som möjligt – även den som nyss angrep dig.",
+      "text_brist": "",
+      "diskutera": "Vem gör vad: en säkrar, en larmar och ger första hjälpen?"
+    },
+    "forsta_hjalpen": {
+      "namn": "Gav första hjälpen",
+      "lagrum": "Allmän hjälpskyldighet · VaktB",
+      "krav": [
+        "angrepp_pagar_ej"
+      ],
+      "vid_brist": "warn",
+      "satter_fakta": {
+        "forsta_hjalp_given": true
+      },
+      "text_ok": "Rätt när läget är säkert: yxan undanlagd, kamraten skyddar. Stoppa blödning, fria luftvägar.",
+      "text_brist": "Läget var inte säkrat när ni gick fram.",
+      "diskutera": "Hur säkrar ni platsen innan ni går fram till en person som nyss anföll?"
+    },
+    "envarsgripande": {
+      "namn": "Grep honom (envarsgripande)",
+      "lagrum": "BrB 24 kap. 7 §",
+      "krav": [
+        "brott_pa_bar_garning"
+      ],
+      "vid_brist": "bad",
+      "satter_fakta": {
+        "envarsgripande_genomfort": true
+      },
+      "text_ok": "Han påträffades på bar gärning för olaga hot med yxa – ett brott med fängelse i straffskalan. Var och en får då gripa honom. Den gripne ska skyndsamt överlämnas till närmaste polisman.",
+      "text_brist": "Envarsgripande kräver brott med fängelse i straffskalan och bar gärning eller flykt.",
+      "diskutera": "Varför är det här ett envarsgripande och inte ett gripande enligt 13 § skyddslagen?",
+      "foljdkrav": [
+        {
+          "fakta": "anmalan_polis",
+          "om_fakta": "envarsgripande_genomfort",
+          "lagrum": "BrB 24 kap. 7 § tredje stycket",
+          "text": "Den som griper någon ska skyndsamt överlämna honom till närmaste polisman."
+        }
+      ]
+    },
+    "angrepp_nadde_fram": {
+      "namn": "Angreppet nådde fram – brottades ner med kamratens hjälp",
+      "lagrum": "BrB 24 kap. 1 § (nödvärn)",
+      "krav": [
+        "handlade_i_tid"
+      ],
+      "vid_brist": "bad",
+      "text_ok": "",
+      "text_brist": "Angriparen med yxan kom ända fram till stridsparet. Ni klarade er den här gången, men det var tur. Varning, varningsskott och – vid behov – verkanseld finns för att ett sådant angrepp ska avvärjas innan det når fram.",
+      "diskutera": "Vid vilket avstånd borde ni ha agerat? Fanns det utrymme att backa och skapa avstånd?"
     }
   }
 }

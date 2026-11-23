@@ -5,7 +5,8 @@ extends Control
 signal forcera_handelse(handelse_id: String)
 signal tysta_kamrat
 ## Situationsknappen (t.ex. "Bekämpa drönaren") trycktes.
-signal situation
+## En situationsknapp trycktes (id från satt_situationer).
+signal situation(id: String)
 signal handling(handling_id: String, beskrivning: String)
 signal avsluta_pass
 
@@ -34,7 +35,10 @@ var _sambandsmeny: PanelContainer
 var _instruktion: PanelContainer
 var _meddelande: Label
 var _ljudknapp: Button
-var _situationsknapp: Button
+## Situationsknappar för det som händer just nu (t.ex. bekämpa drönare,
+## halt-order, varningsskott). Står i en kolumn vid högerkanten.
+var _situationer: VBoxContainer
+var _situation_tangenter: Dictionary = {}  # keycode -> id
 const IKON_PA := preload("res://assets/gfx/hogtalare_pa.png")
 const IKON_AV := preload("res://assets/gfx/hogtalare_av.png")
 var _meddelande_t := 0.0
@@ -405,11 +409,13 @@ func _bygg_handlingar() -> void:
 		b.add_theme_font_size_override("font_size", 19)
 		b.pressed.connect(k[2])
 		h.add_child(b)
-	_situationsknapp = UiKit.knapp("", true, UiKit.ROSA)
-	_situationsknapp.custom_minimum_size = Vector2(120, 60)
-	_situationsknapp.visible = false
-	_situationsknapp.pressed.connect(func() -> void: situation.emit())
-	h.add_child(_situationsknapp)
+	_situationer = UiKit.vbox(8)
+	_situationer.set_anchors_preset(Control.PRESET_CENTER_RIGHT)
+	_situationer.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+	_situationer.grow_vertical = Control.GROW_DIRECTION_BOTH
+	_situationer.offset_right = -10
+	_situationer.offset_top = 10 if UiKit.kompakt else 0
+	add_child(_situationer)
 
 
 func _bygg_sambandsmeny() -> void:
@@ -459,7 +465,7 @@ func _bygg_instruktion() -> void:
 	var flikar := UiKit.hbox(8)
 	v.add_child(flikar)
 	var f1 := UiKit.knapp("BEVAKNINGSINSTRUKTION")
-	var f2 := UiKit.knapp("LAGSTÖD 10–17 §§")
+	var f2 := UiKit.knapp("LAGSTÖD")
 	flikar.add_child(f1)
 	flikar.add_child(f2)
 	flikar.add_child(UiKit.fyllnad())
@@ -519,10 +525,36 @@ func visa_meddelande(text: String, sek := 3.0) -> void:
 	_meddelande_t = sek
 
 
-## Visar/döljer en extra knapp för det som händer just nu (tangent B).
+## Visar/döljer en extra knapp för det som händer just nu (tangent B, id "dronare").
 func satt_situation(text: String, synlig: bool) -> void:
-	_situationsknapp.text = text + "\n[B]"
-	_situationsknapp.visible = synlig
+	satt_situationer([{"id": "dronare", "text": text, "tangent": "B"}] if synlig else [])
+
+
+## Ersätter situationsknapparna. Varje val: {id, text, tangent ("H"), farg ("rosa"/"barnsten"/"gron")}.
+func satt_situationer(val: Array) -> void:
+	for c in _situationer.get_children():
+		c.queue_free()
+	_situation_tangenter.clear()
+	for v in val:
+		var id := str(v.get("id", ""))
+		var tangent := str(v.get("tangent", ""))
+		var farg: Color = {"barnsten": UiKit.BARNSTEN, "gron": UiKit.GRON}.get(str(v.get("farg", "")), UiKit.ROSA)
+		var b := UiKit.knapp(str(v.get("text", "")) + ("\n[%s]" % tangent if tangent != "" else ""), true, farg)
+		b.custom_minimum_size = Vector2(124, 54) if UiKit.kompakt else Vector2(150, 60)
+		b.add_theme_font_size_override("font_size", 19)
+		b.pressed.connect(_pa_situation.bind(id))
+		_situationer.add_child(b)
+		if tangent != "":
+			_situation_tangenter[OS.find_keycode_from_string(tangent)] = id
+
+
+func _pa_situation(id: String) -> void:
+	situation.emit(id)
+
+
+## Id:n för de situationsknappar som visas just nu (används av testerna).
+func situationer() -> Array:
+	return _situation_tangenter.values()
 
 
 func _tysta() -> void:
@@ -629,9 +661,6 @@ func _unhandled_input(event: InputEvent) -> void:
 			_vaxla_instruktion()
 		KEY_T:
 			_tysta()
-		KEY_B:
-			if _situationsknapp.visible:
-				situation.emit()
 		KEY_F3:
 			_debug.visible = not _debug.visible
 		KEY_ESCAPE:
@@ -641,5 +670,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			else:
 				avsluta_pass.emit()
 		_:
-			return
+			if _situation_tangenter.has(tangent.keycode):
+				situation.emit(str(_situation_tangenter[tangent.keycode]))
+			else:
+				return
 	get_viewport().set_input_as_handled()

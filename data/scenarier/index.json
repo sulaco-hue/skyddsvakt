@@ -3,6 +3,7 @@
   "scenarier": [
     "fotografen.json",
     "dronaren.json",
-    "hantverkaren.json"
+    "hantverkaren.json",
+    "yxmannen.json"
   ]
 }

@@ -62,6 +62,19 @@ func setup(p_varld: Varld, bas: String, start: Vector2i, anchor: Array) -> void:
 				_vila_bilder[bild] = load(sokvag)
 
 
+## Byter figurens bilder (t.ex. "yxman_upp" när personen räcker upp händerna).
+func byt_bilder(bas: String, anchor: Array) -> void:
+	_bilder = [load("res://assets/gfx/%s_0.png" % bas), load("res://assets/gfx/%s_1.png" % bas)]
+	_sprite.texture = _bilder[0]
+	_sprite.offset = -Vector2(float(anchor[0]), float(anchor[1]))
+	_bas = bas
+	_vila_bilder.clear()
+
+
+## Växlar mellan bild 0 och 1 även när figuren står still (darrande händer, andning).
+var vaxla_still := false
+
+
 func ga_langs(vag: Array[Vector2i]) -> void:
 	_vag.assign(vag)
 	if not _vag.is_empty() and _vag[0] == cell:
@@ -107,6 +120,10 @@ func _process(delta: float) -> void:
 			blixt.emit()
 		_blixt.visible = syns
 	if _vag.is_empty():
+		if vaxla_still:
+			_anim_t += delta
+			_sprite.texture = _bilder[int(_anim_t * 2.0) % 2]
+			return
 		_uppdatera_vila(delta)
 		return
 	_vila_steg.clear()

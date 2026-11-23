@@ -94,8 +94,11 @@ func bygg(karta: Dictionary) -> void:
 	_skapa_kamera()
 
 	var skymning := CanvasModulate.new()
-	# Dagsljus i scenarier med "dagsljus": true, annars skymning.
+	# Dagsljus i scenarier med "dagsljus": true, natt med "natt": true, annars skymning.
 	skymning.color = Color(1, 1, 1) if bool(Spel.scenario.get("dagsljus", false)) else Color(0.80, 0.84, 0.97)
+	# Natt: mörkare och blåare.
+	if bool(Spel.scenario.get("natt", false)):
+		skymning.color = Color(0.58, 0.64, 0.86)
 	add_child(skymning)
 
 
@@ -274,6 +277,16 @@ func _ny_aktor(bas: String, start: Vector2i) -> Aktor:
 	a.setup(self, bas, start, anchors.get(bas + "_0", [4, 12]))
 	objekt_lager.add_child(a)
 	return a
+
+
+## Byter en figurs bilder (t.ex. till "yxman_ligger").
+func byt_bilder(a: Aktor, bas: String) -> void:
+	a.byt_bilder(bas, anchors.get(bas + "_0", [4, 12]))
+
+
+## Lägger en lös sprite (t.ex. en tappad yxa) på en ruta.
+func lagg_foremal(namn: String, c: Vector2i) -> Sprite2D:
+	return _sprite(namn, c)
 
 
 func skapa_npc(npc_id: String, data: Dictionary) -> Aktor:

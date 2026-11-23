@@ -878,6 +878,108 @@ for i in range(2):
     figure(f"hantverkare_{i}", HANT_TOP, HANT_LEGS[i])
 
 
+# Yxmannen (scenario 4, nödvärn): röd-svartrutig flanellskjorta, skägg,
+# grön mössa och en yxa höjd över huvudet. F/f = flanell, G = skägg, g = mössa,
+# I = yxans blad. Varianter: händerna uppe (ger upp), liggande och yxan på marken.
+PAL.update({"F": (176, 44, 40), "f": (44, 28, 28), "G": (118, 74, 42), "g": (66, 92, 58), "I": (176, 182, 190)})
+YXMAN_TOP = [
+    "........II..",
+    ".......IIIj.",
+    "...gggg..Ij.",
+    "..gggggg..j.",
+    "..ssssss..j.",
+    "..sesses..j.",
+    "..GsGGsG.ss.",
+    "..GGGGGG.sF.",
+    "...GGGG.FFF.",
+    "..FfFfFfFF..",
+    ".FfFfFfFfF..",
+    ".FFfFfFfF...",
+    ".sfFfFfFf...",
+    "..nnnnnn....",
+]
+YXMAN_UPP_TOP = [
+    ".s........s.",
+    ".s........s.",
+    ".F.gggg...F.",
+    ".FgggggggF..",
+    ".F.ssssss.F.",
+    ".F.sesses.F.",
+    ".F.GsGGsG.F.",
+    ".FFGGGGGGFF.",
+    "..FFGGGGFF..",
+    "..FfFfFfFF..",
+    "..FfFfFfFF..",
+    "..FFfFfFfF..",
+    "..FfFfFfFf..",
+    "...nnnnnn...",
+]
+YXMAN_LEGS = [
+    ["..nnnnnnn...", "..nNn.nNn...", "..nNn.nNn...", "..nNn.nNn...", "..nNn.nNn...", "..nNn.nNn...",
+     "..bbb.bbb...", ".bbbb.bbbb.."],
+    ["..nnnnnnn...", ".nNn...nNn..", ".nNn...nNn..", "nNn.....nNn.", "nNn.....nNn.", "nNn.....nNn.",
+     "bbb.....bbb.", "bbbb....bbbb"],
+]
+for i in range(2):
+    figure(f"yxman_{i}", YXMAN_TOP, YXMAN_LEGS[i])
+    # händerna uppe: ena bilden med lätt darrande händer
+    upp = list(YXMAN_UPP_TOP)
+    if i == 1:
+        upp[0] = "s..........s"
+        upp[1] = ".s........s."
+    figure(f"yxman_upp_{i}", upp, YXMAN_LEGS[0])
+    # utan yxa (går därifrån efter att ha släppts)
+    utan = [r.replace("I", ".").replace("j", ".") for r in YXMAN_TOP]
+    utan[6], utan[7], utan[8] = "..GsGGsG....", "..GGGGGG....", "...GGGG....."
+    utan[10], utan[11], utan[12] = ".FfFfFfFfFF.", ".FFfFfFfFFs.", ".sfFfFfFf..."
+    figure(f"yxman_utan_{i}", utan, YXMAN_LEGS[i])
+
+# Liggande på marken (ingen skada visas): huvud åt vänster, stövlar åt höger.
+LIGGER = [
+    "........................",
+    ".gg.....................",
+    "gggss..FfFfFfFF.........",
+    "gsesGG.FfFfFfFfFnnnnnnbb",
+    "gssGGGsFFfFfFfFfnNnNnNbb",
+    ".ssGG..FfFfFfFF.nnnnnnbb",
+    "........s...............",
+]
+for i in range(2):
+    w, h = 26, len(LIGGER) + 4
+    im = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    d.ellipse([0, h - 6, w - 1, h - 1], fill=(18, 26, 18, 140))
+    for r, row in enumerate(LIGGER):
+        for c, ch in enumerate(row):
+            if ch != ".":
+                d.point((1 + c, r + 1), fill=PAL[ch] + (255,))
+    if i == 1:  # andas: bröstkorgen höjs en pixel
+        for c in range(8, 15):
+            d.point((1 + c, 2), fill=PAL["F"] + (255,))
+    im.save(os.path.join(OUT, f"yxman_ligger_{i}.png"))
+    anchors[f"yxman_ligger_{i}"] = [13, h - 4]
+
+# Yxan på marken
+yxa = Image.new("RGBA", (12, 6), (0, 0, 0, 0))
+yd = ImageDraw.Draw(yxa)
+yd.line([(1, 4), (8, 2)], fill=PAL["j"])
+yd.line([(1, 5), (8, 3)], fill=PAL["J"])
+yd.rectangle([8, 0, 10, 4], fill=PAL["I"])
+yd.point((11, 1), fill=(220, 226, 232))
+yd.point((11, 2), fill=(220, 226, 232))
+yxa.save(os.path.join(OUT, "yxa.png"))
+anchors["yxa"] = [6, 4]
+
+# Mynningsflamma (skott)
+fl = Image.new("RGBA", (7, 7), (0, 0, 0, 0))
+for (x, y, c) in [(3, 3, (255, 250, 210)), (2, 3, (255, 210, 80)), (4, 3, (255, 210, 80)), (3, 2, (255, 210, 80)),
+                  (3, 4, (255, 210, 80)), (1, 3, (255, 150, 40)), (5, 3, (255, 150, 40)), (3, 1, (255, 150, 40)),
+                  (3, 5, (255, 150, 40)), (0, 3, (240, 110, 30)), (6, 3, (240, 110, 30))]:
+    fl.putpixel((x, y), c + (255,))
+fl.save(os.path.join(OUT, "mynningsflamma.png"))
+anchors["mynningsflamma"] = [3, 3]
+
+
 def servicebil(d, im):
     """Vit servicebil med blå rand och orange takljus; fronten mot -x (mot grinden)."""
     x0, x1, y0, y1 = 0.1, 1.9, 0.2, 0.8
@@ -1155,6 +1257,41 @@ def portrait_hantverkare():
     return im
 
 
+def portrait_yxman():
+    im = portrait("civil")
+    p = ImageDraw.Draw(im)
+    S = 80
+    # röd-svartrutig flanellskjorta
+    p.polygon([(8, S), (14, 62), (30, 56), (50, 56), (66, 62), (72, S)], fill=(176, 44, 40))
+    for x in range(8, 74, 8):
+        p.rectangle([x, 56, x + 3, S], fill=(60, 30, 30))
+    for y in range(58, S, 8):
+        p.rectangle([8, y, 72, y + 2], fill=(60, 30, 30))
+    p.polygon([(8, S), (14, 62), (30, 56), (34, S)], fill=(120, 30, 28))
+    # stort skägg
+    beard, beard_d = (118, 74, 42), (92, 56, 30)
+    p.polygon([(24, 40), (55, 40), (54, 56), (46, 64), (34, 64), (25, 56)], fill=beard)
+    for x in range(27, 54, 4):
+        p.line([(x, 46), (x + 1, 62)], fill=beard_d)
+    p.rectangle([34, 47, 46, 50], fill=(40, 20, 20))  # vrålande mun
+    p.rectangle([35, 47, 45, 47], fill=(236, 232, 220))
+    # grön stickad mössa
+    p.rectangle([22, 8, 57, 27], fill=(66, 92, 58))
+    for x in range(24, 57, 3):
+        p.line([(x, 10), (x, 26)], fill=(52, 74, 46))
+    p.rectangle([22, 24, 57, 28], fill=(80, 108, 70))
+    # arga ögonbryn och ögon
+    p.line([(28, 31), (36, 34)], fill=beard_d, width=2)
+    p.line([(43, 34), (51, 31)], fill=beard_d, width=2)
+    for ex in (30, 44):
+        p.rectangle([ex, 35, ex + 5, 38], fill=(250, 246, 240))
+        p.rectangle([ex + 2, 35, ex + 3, 38], fill=(30, 30, 30))
+    # yxskaft över axeln
+    p.line([(62, 80), (74, 8)], fill=(184, 122, 62), width=3)
+    p.polygon([(66, 4), (79, 2), (79, 16), (68, 14)], fill=(176, 182, 190))
+    return im
+
+
 def portrait_barn():
     S = 80
     im = Image.new("RGB", (S, S), (34, 46, 58))
@@ -1209,6 +1346,7 @@ portrait("vakt").save(os.path.join(OUT, "portratt_vakt.png"))
 portrait("pappa").save(os.path.join(OUT, "portratt_pappa.png"))
 portrait_barn().save(os.path.join(OUT, "portratt_barn.png"))
 portrait_hantverkare().save(os.path.join(OUT, "portratt_hantverkare.png"))
+portrait_yxman().save(os.path.join(OUT, "portratt_yxman.png"))
 
 # ============================================================ Ikoner ==
 def hogtalare(namn, extra):

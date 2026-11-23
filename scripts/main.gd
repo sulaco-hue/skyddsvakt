@@ -31,6 +31,9 @@ var _lamnat: Dictionary = {}
 var _fordon: Dictionary = {}
 var _dronare_handelse: Dictionary = {}
 var radio: Radiotrafik
+## Angripare (scenario Yxmannen): {h, id, lage, omvag_t, replik_t, replik_i, kamrat_nara}
+## lage: "anfaller", "gett_upp", "skjuten", "overmannad".
+var _angripare: Dictionary = {}
 
 
 func _ready() -> void:
@@ -63,12 +66,13 @@ func _ready() -> void:
 	hud.handling.connect(_pa_hud_handling)
 	hud.avsluta_pass.connect(_visa_debriefing)
 	hud.lagestext = _lagestext
-	hud.situation.connect(_bekampa_dronare)
+	hud.situation.connect(_pa_situation)
 
 	radio = Radiotrafik.new()
 	add_child(radio)
 	radio.setup(_scenario)
 	radio.ersattningar = _radio_ersattningar
+	Spel.logg_ny.connect(_pa_logg_post)
 
 	snack = Kamratsnack.new()
 	add_child(snack)
@@ -184,6 +188,7 @@ func _process(delta: float) -> void:
 	if not Spel.klocka_igang:
 		return
 	_uppdatera_upptackt(delta)
+	_uppdatera_angripare(delta)
 	radio.vanta = kontakt.visible
 	_uppdatera_brus(delta)
 	if hud.debug_info_synlig():
@@ -279,6 +284,8 @@ func _utlos_handelse(h: Dictionary) -> void:
 			varld.flytta_npc(id, varld.punkt(h.get("mal", [0, 0])))
 		"dronare":
 			_starta_dronare(h)
+		"angripare":
+			_starta_angripare(h)
 
 
 ## Väljer variant för händelser som har "varianter" (om ingen redan valts).
@@ -442,6 +449,22 @@ func _landa_dronare() -> void:
 	radio.krok("dronare_landar")
 
 
+func _pa_situation(id: String) -> void:
+	match id:
+		"dronare":
+			_bekampa_dronare()
+		"halt":
+			_halt_order()
+		"varningsskott":
+			_varningsskott()
+		"verkanseld":
+			_verkanseld()
+		"sjukvard":
+			_larma_sjukvard()
+		"forsta_hjalpen":
+			_forsta_hjalpen()
+
+
 ## Situationsknappen: bekämpa drönaren med vapen (ett beslut som bedöms).
 func _bekampa_dronare() -> void:
 	if dronare == null or not dronare.i_luften():
@@ -462,6 +485,268 @@ func _bekampa_dronare() -> void:
 		var replik := str(_scenario.get("npc", {}).get(id, {}).get("efter_skott", ""))
 		if n and n.visible and replik != "":
 			hud.visa_bubbla(n, replik, 5.0)
+
+
+# ---------------------------------------------------------- Angripare --
+# Scenario Yxmannen: en man med yxa kommer ut ur skogen och går rakt mot
+# stridsparet. Situationsknapparna (halt-order, varningsskott, verkanseld)
+# visas så snart kamraten upptäcker honom. Bedömningen beror på avstånd,
+# varning och om angreppet pågår (fakta uppdateras löpande).
+
+func _starta_angripare(h: Dictionary) -> void:
+	var id := str(h.get("npc", ""))
+	var n: Aktor = varld.npcer.get(id)
+	if n == null:
+		return
+	_valj_variant(h)
+	n.visible = true
+	n.hastighet = float(h.get("fart", 30))
+	n.vila_aktiv = false
+	_angripare = {"h": h, "id": id, "lage": "anfaller", "omvag_t": 0.0, "replik_t": 0.5, "replik_i": 0,
+		"upptackt": false, "kamrat_nara": false}
+	_larm_npc = id
+	Spel.satt_fakta({"hot_svarare_vald": true, "angrepp_pagar": true, "brott_pa_bar_garning": true})
+
+
+func _angripare_nod() -> Aktor:
+	if _angripare.is_empty():
+		return null
+	return varld.npcer.get(str(_angripare["id"]))
+
+
+func _avstand_angripare() -> int:
+	var n := _angripare_nod()
+	if n == null:
+		return 999
+	return varld.avstand(varld.spelare.cell, n.cell)
+
+
+func _uppdatera_angripare(delta: float) -> void:
+	if _angripare.is_empty() or str(_angripare["lage"]) != "anfaller":
+		return
+	var n := _angripare_nod()
+	var h: Dictionary = _angripare["h"]
+	var avst := _avstand_angripare()
+	Spel.satt_fakta({"angrepp_overhangande": avst <= int(h.get("overhangande_avstand", 6))})
+	# Vrålen hörs långt: kamraten reagerar direkt när han är inom hörhåll.
+	if not bool(_angripare["upptackt"]) and avst <= int(h.get("upptacks_avstand", 18)):
+		_angripare_upptackt()
+	# Repliker med jämna mellanrum
+	_angripare["replik_t"] = float(_angripare["replik_t"]) - delta
+	if float(_angripare["replik_t"]) <= 0.0:
+		_angripare["replik_t"] = float(h.get("replik_intervall_s", 3.5))
+		var rep: Array = h.get("repliker", [])
+		if not rep.is_empty() and hud.visible:
+			hud.visa_bubbla(n, str(rep[int(_angripare["replik_i"]) % rep.size()]), 2.6)
+			_angripare["replik_i"] = int(_angripare["replik_i"]) + 1
+	if bool(_angripare["upptackt"]) and not bool(_angripare["kamrat_nara"]) and avst <= 4:
+		_angripare["kamrat_nara"] = true
+		_kamrat_sager(str(h.get("kamrat_nara", "")))
+	# Framme: angreppet når stridsparet.
+	if avst <= 1:
+		_angrepp_nadde_fram()
+		return
+	# Ny väg mot spelaren med jämna mellanrum (spelaren rör sig).
+	_angripare["omvag_t"] = float(_angripare["omvag_t"]) - delta
+	if float(_angripare["omvag_t"]) <= 0.0:
+		_angripare["omvag_t"] = float(h.get("omvag_s", 0.8))
+		n.ga_langs(varld.vag_mot(n.cell, varld.spelare.cell))
+
+
+func _angripare_upptackt() -> void:
+	var h: Dictionary = _angripare["h"]
+	var n := _angripare_nod()
+	_angripare["upptackt"] = true
+	_markera_upptackt(h)
+	_larm_har_skett = true
+	snack.pausa(600.0)
+	varld.satt_larm(str(_angripare["id"]))
+	radio.krok("upptackt")
+	_kamrat_sager(str(h.get("kamrat", "")))
+	varld.kollega.stanna()
+	varld.kollega.vand_mot(n.global_position)
+	_visa_angripar_knappar()
+
+
+## Situationsknapparna följer läget: under angreppet halt/varningsskott/verkanseld,
+## efter verkanseld sjukvård och första hjälpen.
+func _visa_angripar_knappar() -> void:
+	if _angripare.is_empty():
+		return
+	var val: Array = []
+	match str(_angripare["lage"]):
+		"anfaller", "gett_upp":
+			if not bool(Spel.fakta.get("varning_given", false)):
+				val.append({"id": "halt", "text": "Halt-order", "tangent": "H", "farg": "barnsten"})
+			if not bool(Spel.fakta.get("varningsskott_avlossat", false)):
+				val.append({"id": "varningsskott", "text": "Varningsskott", "tangent": "V", "farg": "barnsten"})
+			val.append({"id": "verkanseld", "text": "Verkanseld", "tangent": "F", "farg": "rosa"})
+		"skjuten":
+			if not bool(Spel.fakta.get("sjukvard_larmad", false)):
+				val.append({"id": "sjukvard", "text": "Larma sjukvård", "tangent": "S", "farg": "gron"})
+			if not bool(Spel.fakta.get("forsta_hjalp_given", false)):
+				val.append({"id": "forsta_hjalpen", "text": "Första hjälpen", "tangent": "J", "farg": "gron"})
+	hud.satt_situationer(val)
+
+
+func _variantreplik(h: Dictionary, nyckel: String) -> String:
+	var v: Variant = h.get(nyckel, "")
+	if v is Dictionary:
+		return str((v as Dictionary).get(Spel.variant, ""))
+	return str(v)
+
+
+func _halt_order() -> void:
+	if _angripare.is_empty():
+		return
+	var h: Dictionary = _angripare["h"]
+	Spel.utfor("halt_order", "Ropade: ”Halt! Militär skyddsvakt! Halt eller jag skjuter skarpt!”")
+	hud.visa_bubbla(varld.spelare, "HALT! MILITÄR SKYDDSVAKT! HALT ELLER JAG SKJUTER SKARPT!", 3.5)
+	if str(_angripare["lage"]) == "anfaller":
+		var svar := _variantreplik(h, "svar_halt")
+		if svar != "":
+			get_tree().create_timer(1.2).timeout.connect(_angripare_sager.bind(svar))
+		var kamrat := _variantreplik(h, "kamrat_efter_halt")
+		if kamrat != "":
+			get_tree().create_timer(2.4).timeout.connect(_kamrat_sager.bind(kamrat))
+		if Spel.variant == "ger_upp" and _avstand_angripare() <= int(h.get("ger_upp_inom", 14)):
+			get_tree().create_timer(1.6).timeout.connect(_angripare_ger_upp)
+	_visa_angripar_knappar()
+
+
+func _angripare_sager(text: String) -> void:
+	var n := _angripare_nod()
+	if n and hud.visible and str(_angripare.get("lage", "")) == "anfaller":
+		hud.visa_bubbla(n, text, 2.5)
+		_angripare["replik_t"] = 3.0
+
+
+func _skott(antal: int) -> void:
+	hud.visa_ljud(varld.spelare, "PANG" if antal == 1 else "PANG PANG", 1.4)
+	var flamma := varld.lagg_foremal("mynningsflamma", varld.spelare.cell)
+	flamma.position += Vector2(-8 if varld.spelare.position.x > varld.kollega.position.x else 8, -14)
+	get_tree().create_timer(0.12).timeout.connect(flamma.queue_free)
+
+
+func _varningsskott() -> void:
+	if _angripare.is_empty():
+		return
+	var h: Dictionary = _angripare["h"]
+	Spel.utfor("varningsskott", "Avlossade varningsskott (riktat så att ingen kan skadas)")
+	_skott(1)
+	if str(_angripare["lage"]) == "anfaller":
+		if Spel.variant == "ger_upp":
+			get_tree().create_timer(1.0).timeout.connect(_angripare_ger_upp)
+		else:
+			var svar := _variantreplik(h, "svar_varningsskott")
+			if svar != "":
+				get_tree().create_timer(1.0).timeout.connect(_angripare_sager.bind(svar))
+			# Han ryggar en kort stund.
+			var n := _angripare_nod()
+			n.stanna()
+			_angripare["omvag_t"] = 0.8
+	_visa_angripar_knappar()
+
+
+func _verkanseld() -> void:
+	if _angripare.is_empty() or str(_angripare["lage"]) in ["skjuten"]:
+		return
+	var h: Dictionary = _angripare["h"]
+	var n := _angripare_nod()
+	# Fanns det tid för varningsskott? Inte om han redan är inpå.
+	if _avstand_angripare() <= int(h.get("ingen_tid_avstand", 2)):
+		Spel.satt_fakta({"varningsskott_foregick": true})
+	if str(_angripare["lage"]) == "anfaller":
+		Spel.satt_fakta({"angrepp_overhangande": _avstand_angripare() <= int(h.get("overhangande_avstand", 6))})
+	Spel.utfor("verkanseld", "Avgav verkanseld mot mannen (patronvis, mot benen)")
+	_skott(2)
+	_angripare["lage"] = "skjuten"
+	n.stanna()
+	n.vaxla_still = true
+	varld.byt_bilder(n, "yxman_ligger")
+	_tappa_yxa(n)
+	_angrepp_upphort({"motpart_skjuten": true})
+	get_tree().create_timer(1.4).timeout.connect(_kamrat_sager.bind(str(h.get("kamrat_efter_verkanseld", ""))))
+	radio.krok("motpart_skjuten")
+	_visa_angripar_knappar()
+
+
+func _angripare_ger_upp() -> void:
+	if _angripare.is_empty() or str(_angripare["lage"]) != "anfaller":
+		return
+	var h: Dictionary = _angripare["h"]
+	var n := _angripare_nod()
+	_angripare["lage"] = "gett_upp"
+	n.stanna()
+	n.vaxla_still = true
+	varld.byt_bilder(n, "yxman_upp")
+	n.vand_mot(varld.spelare.position)
+	_tappa_yxa(n)
+	hud.visa_bubbla(n, "OKEJ OKEJ! SKJUT INTE!", 3.0)
+	_angrepp_upphort({"motpart_gett_upp": true})
+	get_tree().create_timer(1.6).timeout.connect(_kamrat_sager.bind(str(h.get("kamrat_ger_upp", ""))))
+	radio.krok("motpart_ger_upp")
+	_visa_angripar_knappar()
+
+
+func _angrepp_nadde_fram() -> void:
+	var h: Dictionary = _angripare["h"]
+	var n := _angripare_nod()
+	_angripare["lage"] = "overmannad"
+	n.stanna()
+	n.vaxla_still = true
+	Spel.utfor("angrepp_nadde_fram", "Angreppet nådde fram – brottade ner honom med kamratens hjälp")
+	hud.visa_ljud(n, "BRAK!", 1.5)
+	_kamrat_sager(str(h.get("kamrat_nadde_fram", "")))
+	varld.byt_bilder(n, "yxman_ligger")
+	_tappa_yxa(n)
+	varld.kollega.stanna()
+	_angrepp_upphort({"motpart_overmannad": true})
+	radio.krok("angrepp_nadde_fram")
+	_visa_angripar_knappar()
+
+
+func _tappa_yxa(n: Aktor) -> void:
+	hud.visa_ljud(n, "KLONK", 1.2, 4.0)
+	var c := n.cell + Vector2i(1, 0)
+	varld.lagg_foremal("yxa", c if varld.ar_fri(c) else n.cell)
+
+
+func _angrepp_upphort(extra: Dictionary) -> void:
+	var f := {"angrepp_pagar": false, "angrepp_overhangande": false, "angrepp_pagar_ej": true}
+	f.merge(extra, true)
+	Spel.satt_fakta(f)
+	varld.satt_larm("")
+	_avsluta_handelse(_angripare["h"])
+
+
+func _larma_sjukvard() -> void:
+	Spel.utfor("larma_sjukvard", "Larmade sjukvård via AQ")
+	Spel.spela_samband([
+		{"fran": "Grindposten", "text": "AQ, AQ.", "efter": 0},
+		{"fran": "AQ", "text": "AQ kom.", "efter": 1.5},
+		{"fran": "Grindposten", "text": "Från Grindposten, en skadad person vid grinden, skottskada i benet, begär ambulans, kom.", "efter": 3.0},
+		{"fran": "AQ", "text": "Uppfattat, ambulans larmas, kom.", "efter": 5.0},
+		{"fran": "Grindposten", "text": "Uppfattat, slut kom.", "efter": 6.5},
+		{"fran": "AQ", "text": "Klart slut.", "efter": 8.0},
+	])
+	_visa_angripar_knappar()
+
+
+func _forsta_hjalpen() -> void:
+	var n := _angripare_nod()
+	Spel.utfor("forsta_hjalpen", "Gav första hjälpen (tryckförband)")
+	if n:
+		varld.ga_till(n.cell)
+		hud.visa_bubbla(varld.spelare, "Tryckförband på! Ligg still.", 3.0)
+	_visa_angripar_knappar()
+
+
+## Rapport till AQ efter skott räknas som rapport om skjutvapenanvändningen.
+func _pa_logg_post(post: Dictionary) -> void:
+	if str(post.get("handling", "")) == "rapportera_vaktchef" and (
+			bool(Spel.fakta.get("varningsskott_avlossat", false)) or bool(Spel.fakta.get("verkanseld_avlossad", false))):
+		Spel.satt_fakta({"skjutning_rapporterad": true})
 
 
 func _pa_blixt(id: String) -> void:
@@ -538,6 +823,9 @@ func _dolj_npc(id: String) -> void:
 # ----------------------------------------------------------- Kontakt --
 
 func _pa_npc_klickad(id: String) -> void:
+	if not _angripare.is_empty() and str(_angripare["id"]) == id and str(_angripare["lage"]) == "anfaller":
+		hud.visa_meddelande("Han anfaller! Halt-order [H], varningsskott [V] eller verkanseld [F].")
+		return
 	if _lamnat.has(id):
 		hud.visa_meddelande("Personen har lämnat platsen.")
 		return
@@ -634,6 +922,10 @@ func _pa_kontakt_stangd() -> void:
 	hud.visa_meddelande("Kom ihåg: rapportera och dokumentera händelsen.", 4.0)
 	if _npc_efter_samtal.get(id, "") == "ga_till_start":
 		var n: Aktor = varld.npcer[id]
+		# Angriparen går därifrån utan yxa.
+		if not _angripare.is_empty() and str(_angripare["id"]) == id:
+			n.vaxla_still = false
+			varld.byt_bilder(n, "yxman_utan")
 		var data: Dictionary = _scenario.get("npc", {}).get(id, {})
 		n.framme.connect(_dolj_npc.bind(id), CONNECT_ONE_SHOT)
 		varld.flytta_npc(id, varld.punkt(data.get("start", [0, 0])))

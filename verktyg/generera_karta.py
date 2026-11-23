@@ -201,6 +201,9 @@ for (x, y) in [STRAND, (STRAND[0] + 1, STRAND[1]), (STRAND[0], STRAND[1] - 1), (
         if mark[y][x] == "w":
             mark[y][x] = "p"
 
+# --- Startpunkt på skogsstigen norrut (yxmannen kommer den vägen)
+STIG_NORD = next((x, 3) for x in range(f0x - 4, f0x + 10) if mark[3][x] == "p")
+
 # ------------------------------------------------- Skriv kartfilen --
 import os
 os.makedirs(os.path.dirname(KARTFIL), exist_ok=True)
@@ -234,6 +237,7 @@ k["punkter"] = OrderedDict([
     ("sjo_dotter", [STRAND[0] + 1, STRAND[1]]),
     ("kant_nordost", [N - 1, 0]),
     ("kant_sydvast", [0, N - 1]),
+    ("stig_nord", [STIG_NORD[0], STIG_NORD[1]]),
 ])
 k["mark"] = ["".join(r) for r in mark]
 k["objekt"] = ["".join(r) for r in obj]

@@ -8,6 +8,12 @@ extends RefCounted
 ## Följdkrav (t.ex. anmälan till polis enligt 17 § skyddslagen) kontrolleras
 ## när passet är slut. Ett följdkrav kan ha "om_fakta": det gäller då bara om
 ## det faktumet är sant (t.ex. att ett beslag faktiskt genomfördes).
+##
+## Graderade krav: "krav_utfall" ({krav: "warn"/"bad"}) och "grupp_utfall"
+## (ett utfall per grupp i krav_grupper) anger hur allvarlig en viss brist är.
+## Det allvarligaste saknade kravet avgör utfallet. "text_krav" ({krav: text})
+## ger en egen kommentar för det allvarligaste saknade kravet (t.ex. att
+## angreppet redan hade upphört när skottet avlossades).
 
 const OK := "ok"
 const DISKUTABELT := "warn"
@@ -51,17 +57,28 @@ func bedom(handling_id: String, fakta: Dictionary, override: Dictionary = {}) ->
 		}
 	var saknas: Array = []
 	var uppfyllda: Array = []
+	var vid_brist := str(h.get("vid_brist", DISKUTABELT))
+	var krav_utfall: Dictionary = h.get("krav_utfall", {})
+	var text_krav: Dictionary = h.get("text_krav", {})
+	var varst := ""
+	var varst_text := ""
 	# "krav": alla måste vara sanna.
 	for krav in h.get("krav", []):
 		if bool(fakta.get(krav, false)):
 			uppfyllda.append(lasbar(krav))
 		else:
 			saknas.append(lasbar(krav))
+			var u := str(krav_utfall.get(krav, vid_brist))
+			if _grad(u) > _grad(varst):
+				varst = u
+				varst_text = str(text_krav.get(krav, ""))
 	# "krav_grupper": i varje grupp måste minst ett vara sant (t.ex. grunderna i 12 §).
 	var grupper: Array = h.get("krav_grupper", [])
 	if h.has("krav_nagon"):
 		grupper = grupper + [h["krav_nagon"]]
-	for grupp in grupper:
+	var grupp_utfall: Array = h.get("grupp_utfall", [])
+	for gi in grupper.size():
+		var grupp: Array = grupper[gi]
 		var sanna: Array = []
 		for k in grupp:
 			if bool(fakta.get(k, false)):
@@ -71,19 +88,27 @@ func bedom(handling_id: String, fakta: Dictionary, override: Dictionary = {}) ->
 			for k in grupp:
 				alla.append(lasbar(k))
 			saknas.append(" ELLER ".join(alla))
+			var u := str(grupp_utfall[gi]) if gi < grupp_utfall.size() else vid_brist
+			if _grad(u) > _grad(varst):
+				varst = u
+				varst_text = str(text_krav.get(str(grupp[0]), ""))
 		else:
 			uppfyllda.append_array(sanna)
 	var uppfyllt := saknas.is_empty()
 	return {
 		"handling": handling_id,
 		"namn": str(h.get("namn", handling_id)),
-		"utfall": OK if uppfyllt else str(h.get("vid_brist", DISKUTABELT)),
+		"utfall": OK if uppfyllt else varst,
 		"lagrum": str(h.get("lagrum", "")),
-		"kommentar": str(h.get("text_ok", "")) if uppfyllt else str(h.get("text_brist", "")),
+		"kommentar": str(h.get("text_ok", "")) if uppfyllt else (varst_text if varst_text != "" else str(h.get("text_brist", ""))),
 		"diskutera": str(h.get("diskutera", "")),
 		"saknade_krav": saknas,
 		"uppfyllda_krav": uppfyllda,
 	}
+
+
+func _grad(utfall: String) -> int:
+	return {DISKUTABELT: 1, SAKNAR_STOD: 2}.get(utfall, 0)
 
 
 ## Rekvisitets namn i klartext (meta.rekvisit i lagrum.json).

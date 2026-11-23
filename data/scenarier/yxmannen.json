@@ -1,0 +1,698 @@
+{
+  "id": "yxmannen",
+  "namn": "Yxmannen vid norra stigen",
+  "ingress": "Mitt i natten kommer en man ut ur skogen med en yxa över huvudet och vrålar att han ska döda er. Osannolikt – men just därför värt att öva. Nödvärn, varning, varningsskott och verkanseld.",
+  "objekt": "Förråd Granåsen",
+  "pass": "Pass 4",
+  "passtid": "01:00–05:00",
+  "starttid": "02:14",
+  "tidsfaktor": 6,
+  "vader": "Natt · Klart 1°C",
+  "vaderlag": [
+    "kallt",
+    "natt"
+  ],
+  "natt": true,
+  "beredskap": "NORMAL",
+  "karta": "res://data/kartor/granasen.json",
+  "omvarldslage": [
+    {
+      "tid": "19:30",
+      "kalla": "Polisen, lokal nyhet",
+      "text": "Polisen söker en man i 50-årsåldern som hotat grannar i en ved- och tomtgränstvist norr om Granåsen. Han beskrivs som upprörd och förvirrad."
+    },
+    {
+      "tid": "23:50",
+      "kalla": "Vaktchef",
+      "text": "Inga avvikelser. Nattpass: patrullera staketet och grinden. Vid hot mot person: larma AQ omedelbart."
+    }
+  ],
+  "briefing": {
+    "uppdrag": "Bevaka grind och staket under natten. Rapportera avvikelser till AQ.",
+    "objektinfo": "Skyddsobjektet omfattar området innanför staketet. Skyltat: tillträdesförbud och avbildningsförbud. En skogsstig leder norrut från staketet.",
+    "samband": "Vi: Grindposten (stridspar, två skyddsvakter). Vaktchef: AQ (Adam Qvintus) – på annan plats, ser inte objektet. Det är vi som larmar.",
+    "lagstod_fokus": [
+      "Nödvärn 24 kap. 1 § BrB",
+      "Varning: ”Halt eller jag skjuter skarpt!”",
+      "Varningsskott före verkanseld",
+      "Envarsgripande 24 kap. 7 § BrB"
+    ],
+    "mal": []
+  },
+  "anropssignaler": {
+    "vaktchef": "AQ",
+    "du": "Grindposten"
+  },
+  "fakta": {
+    "skyltat_avbildningsforbud": true,
+    "motpart_inom": false,
+    "motpart_invid": false,
+    "vill_ha_tilltrade": false,
+    "flyr_fran_objekt": false,
+    "overtratt_forbud": false,
+    "vagrat_id": false,
+    "oriktiga_uppgifter": false,
+    "vagrat_visitation": false,
+    "vagrat_fordon": false,
+    "behov_avvisa": false,
+    "behov_avlagsna": false,
+    "behov_omhanderta": false,
+    "visitation_behovs": false,
+    "misstanke_13": false,
+    "beslag_betydelse": false,
+    "anmalan_polis": false,
+    "protokoll_upprattat": false,
+    "behorig": false,
+    "hot_svarare_vald": false,
+    "angrepp_pagar": false,
+    "angrepp_overhangande": false,
+    "angrepp_pagar_ej": false,
+    "varning_given": false,
+    "varningsskott_avlossat": false,
+    "varningsskott_foregick": false,
+    "verkanseld_avlossad": false,
+    "sjukvard_larmad": false,
+    "forsta_hjalp_given": false,
+    "brott_pa_bar_garning": false,
+    "skjutning_rapporterad": false,
+    "motpart_skjuten": false,
+    "motpart_gett_upp": false,
+    "motpart_overmannad": false,
+    "handlade_i_tid": false,
+    "envarsgripande_genomfort": false,
+    "aldrig": false
+  },
+  "bedomning": {
+    "lata_ga": {
+      "krav": [
+        "aldrig"
+      ],
+      "vid_brist": "warn",
+      "text_brist": "Han hade nyss hotat att döda er med en yxa – olaga hot på bar gärning. Att bara låta honom gå, utan att gripa eller i varje fall larma polis, lämnar en farlig och förvirrad person fri i skogen. [Bedömning]",
+      "diskutera": "Vad är skillnaden mellan att ni får gripa och att ni måste? Vem tar hand om honom om ni låter honom gå?"
+    }
+  },
+  "varianter": {
+    "skarp": {
+      "beskrivning": "Han stannar inte för varning eller varningsskott."
+    },
+    "ger_upp": {
+      "beskrivning": "Han släpper yxan och ger upp efter tydlig varning."
+    }
+  },
+  "npc": {
+    "yxmannen": {
+      "namn": "Man med yxa, ca 50 år",
+      "beskrivning": "Flanellskjorta, skägg, yxa",
+      "sprite": "yxman",
+      "portratt": "portratt_yxman",
+      "start": "stig_nord",
+      "synlig_fran_start": false,
+      "stamning": 4,
+      "dialog_start": "gett_upp",
+      "dialog_start_om": [
+        {
+          "fakta": "motpart_skjuten",
+          "nod": "skjuten"
+        },
+        {
+          "fakta": "motpart_overmannad",
+          "nod": "overmannad"
+        }
+      ],
+      "kontakt_info": [
+        "Motparten: obeväpnad nu, yxan ligger på marken",
+        "Brott: olaga hot med yxa, på bar gärning",
+        "Stridsparskamrat: skyddar"
+      ]
+    }
+  },
+  "handelser": [
+    {
+      "id": "1",
+      "namn": "Yxmannen",
+      "typ": "angripare",
+      "tid": "02:17",
+      "npc": "yxmannen",
+      "varianter": [
+        "skarp",
+        "ger_upp"
+      ],
+      "fart": 30,
+      "omvag_s": 0.8,
+      "upptacks_avstand": 18,
+      "overhangande_avstand": 6,
+      "ingen_tid_avstand": 2,
+      "ger_upp_inom": 14,
+      "repliker": [
+        "JAG SKA DÖDA DIG DIN JÄVEL!",
+        "VRÅÅÅL!",
+        "NI SKA INTE TA MIN VED!",
+        "JAG SKA DÖDA ER!",
+        "DÖ, DIN JÄVEL!"
+      ],
+      "replik_intervall_s": 3.5,
+      "kamrat": "Yxa! Han har en YXA och kommer rakt mot oss!",
+      "kamrat_nara": "Han är nästan här! Gör något!",
+      "kamrat_efter_halt": {
+        "skarp": "Han stannar inte!",
+        "ger_upp": "Han tvekar…"
+      },
+      "svar_halt": {
+        "skarp": "HA! FÖRSÖK BARA!"
+      },
+      "svar_varningsskott": {
+        "skarp": "JAG ÄR INTE RÄDD FÖR ER!"
+      },
+      "kamrat_efter_verkanseld": "Han är nere! Jag tar yxan – larma sjukvård!",
+      "kamrat_ger_upp": "Yxan ligger. Jag har honom. Händerna synliga!",
+      "kamrat_nadde_fram": "NER MED HONOM!",
+      "missad_diskutera": "Det här kan inte missas – han går rakt mot er."
+    }
+  ],
+  "samband": [],
+  "sambandsval": [
+    {
+      "etikett": "Prova förbindelsen med AQ",
+      "handling": "",
+      "meddelanden": [
+        {
+          "fran": "Grindposten",
+          "text": "AQ, AQ.",
+          "efter": 0
+        },
+        {
+          "fran": "AQ",
+          "text": "AQ kom.",
+          "efter": 1.5
+        },
+        {
+          "fran": "Grindposten",
+          "text": "Från Grindposten, sambandsprov, kom.",
+          "efter": 3.0
+        },
+        {
+          "fran": "AQ",
+          "text": "Hörbarhet femma, kom.",
+          "efter": 4.5
+        },
+        {
+          "fran": "Grindposten",
+          "text": "Hörbarhet femma, klart slut.",
+          "efter": 6.0
+        }
+      ]
+    },
+    {
+      "etikett": "Lägesrapport till AQ",
+      "handling": "rapportera_vaktchef",
+      "meddelanden": [
+        {
+          "fran": "Grindposten",
+          "text": "AQ, AQ.",
+          "efter": 0.0
+        },
+        {
+          "fran": "AQ",
+          "text": "AQ kom.",
+          "efter": 1.5
+        },
+        {
+          "fran": "Grindposten",
+          "text": "Från Grindposten, lägesrapport: {lage}, kom.",
+          "efter": 3.0
+        },
+        {
+          "fran": "AQ",
+          "text": "Uppfattat. Håll avstånd, säkra platsen och rapportera förändring, kom.",
+          "efter": 4.5
+        },
+        {
+          "fran": "Grindposten",
+          "text": "Uppfattat, slut kom.",
+          "efter": 6.0
+        },
+        {
+          "fran": "AQ",
+          "text": "Klart slut.",
+          "efter": 7.5
+        }
+      ]
+    },
+    {
+      "etikett": "Larma sjukvård via AQ",
+      "handling": "larma_sjukvard",
+      "meddelanden": [
+        {
+          "fran": "Grindposten",
+          "text": "AQ, AQ.",
+          "efter": 0.0
+        },
+        {
+          "fran": "AQ",
+          "text": "AQ kom.",
+          "efter": 1.5
+        },
+        {
+          "fran": "Grindposten",
+          "text": "Från Grindposten, begär ambulans till grinden, en skadad person, kom.",
+          "efter": 3.0
+        },
+        {
+          "fran": "AQ",
+          "text": "Uppfattat, ambulans larmas, kom.",
+          "efter": 4.5
+        },
+        {
+          "fran": "Grindposten",
+          "text": "Uppfattat, slut kom.",
+          "efter": 6.0
+        },
+        {
+          "fran": "AQ",
+          "text": "Klart slut.",
+          "efter": 7.5
+        }
+      ]
+    },
+    {
+      "etikett": "Begär att AQ underrättar polis",
+      "handling": "anmala_polis",
+      "meddelanden": [
+        {
+          "fran": "Grindposten",
+          "text": "AQ, AQ.",
+          "efter": 0.0
+        },
+        {
+          "fran": "AQ",
+          "text": "AQ kom.",
+          "efter": 1.5
+        },
+        {
+          "fran": "Grindposten",
+          "text": "Från Grindposten, begär polis till grinden, man som hotat med yxa, kom.",
+          "efter": 3.0
+        },
+        {
+          "fran": "AQ",
+          "text": "Uppfattat, polis underrättas, kom.",
+          "efter": 4.5
+        },
+        {
+          "fran": "Grindposten",
+          "text": "Uppfattat, slut kom.",
+          "efter": 6.0
+        },
+        {
+          "fran": "AQ",
+          "text": "Klart slut.",
+          "efter": 7.5
+        }
+      ]
+    }
+  ],
+  "lagestext": {
+    "fakta:motpart_skjuten": "verkanseld avgiven mot man med yxa som anföll vid grinden, mannen skadad i benet, yxan omhändertagen",
+    "fakta:motpart_overmannad": "man med yxa anföll och har brottats ner vid grinden, yxan omhändertagen",
+    "fakta:motpart_gett_upp": "man som hotade att döda oss med yxa har gett upp, yxan ligger på marken, mannen under uppsikt",
+    "fore": "inga avvikelser",
+    "efter": "man med yxa på väg mot grinden från norra stigen, hotar att döda oss"
+  },
+  "radio": {
+    "kommentar": "Levande radiotrafik. Krokar och villkor beskrivs i scripts/core/radiotrafik.gd.",
+    "upptackt": [
+      {
+        "efter_s": 25,
+        "om_ej_handling": "rapportera_vaktchef",
+        "meddelanden": [
+          {
+            "fran": "AQ",
+            "text": "Grindposten, Grindposten!",
+            "efter": 0.0
+          },
+          {
+            "fran": "Grindposten",
+            "text": "Grindposten kom.",
+            "efter": 1.2
+          },
+          {
+            "fran": "AQ",
+            "text": "Från AQ, Västra posten hör skrik från ert håll. Vad händer? Lägesrapport omedelbart. Kom!",
+            "efter": 2.4
+          },
+          {
+            "fran": "Grindposten",
+            "text": "Uppfattat, återkommer, klart slut.",
+            "efter": 3.6
+          }
+        ]
+      }
+    ],
+    "handling:varningsskott": [
+      {
+        "efter_s": 2,
+        "meddelanden": [
+          {
+            "fran": "AQ",
+            "text": "Grindposten, Grindposten!",
+            "efter": 0.0
+          },
+          {
+            "fran": "Grindposten",
+            "text": "Grindposten kom.",
+            "efter": 1.2
+          },
+          {
+            "fran": "AQ",
+            "text": "Från AQ, jag hörde ett skott från er sektor! Rapportera omedelbart. Kom!",
+            "efter": 2.4
+          },
+          {
+            "fran": "Grindposten",
+            "text": "Uppfattat, återkommer, klart slut.",
+            "efter": 3.6
+          }
+        ]
+      }
+    ],
+    "handling:verkanseld": [
+      {
+        "efter_s": 2,
+        "meddelanden": [
+          {
+            "fran": "AQ",
+            "text": "Grindposten, Grindposten!",
+            "efter": 0.0
+          },
+          {
+            "fran": "Grindposten",
+            "text": "Grindposten kom.",
+            "efter": 1.2
+          },
+          {
+            "fran": "AQ",
+            "text": "Från AQ, skott hörda vid grinden! Rapportera läget omedelbart. Kom!",
+            "efter": 2.4
+          },
+          {
+            "fran": "Grindposten",
+            "text": "Uppfattat, återkommer, klart slut.",
+            "efter": 3.6
+          }
+        ]
+      }
+    ],
+    "motpart_skjuten": [
+      {
+        "efter_s": 30,
+        "om_ej_handling": "larma_sjukvard",
+        "meddelanden": [
+          {
+            "fran": "AQ",
+            "text": "Grindposten, Grindposten.",
+            "efter": 0.0
+          },
+          {
+            "fran": "Grindposten",
+            "text": "Grindposten kom.",
+            "efter": 1.5
+          },
+          {
+            "fran": "AQ",
+            "text": "Från AQ, finns det skadade? Begär ambulans via mig omgående. Slut kom.",
+            "efter": 3.0
+          },
+          {
+            "fran": "Grindposten",
+            "text": "Uppfattat, klart slut.",
+            "efter": 4.5
+          }
+        ]
+      }
+    ],
+    "handling:larma_sjukvard": [
+      {
+        "efter_s": 6,
+        "meddelanden": [
+          {
+            "fran": "AQ",
+            "text": "Grindposten, Grindposten.",
+            "efter": 0.0
+          },
+          {
+            "fran": "Grindposten",
+            "text": "Grindposten kom.",
+            "efter": 1.5
+          },
+          {
+            "fran": "AQ",
+            "text": "Från AQ, ambulans och polis är larmade, beräknad ankomst femton minuter. Säkra platsen och ge första hjälpen. Slut kom.",
+            "efter": 3.0
+          },
+          {
+            "fran": "Grindposten",
+            "text": "Uppfattat, klart slut.",
+            "efter": 4.5
+          }
+        ]
+      }
+    ],
+    "motpart_ger_upp": [
+      {
+        "efter_s": 20,
+        "om_ej_handling": "rapportera_vaktchef",
+        "meddelanden": [
+          {
+            "fran": "AQ",
+            "text": "Grindposten, Grindposten.",
+            "efter": 0.0
+          },
+          {
+            "fran": "Grindposten",
+            "text": "Grindposten kom.",
+            "efter": 1.5
+          },
+          {
+            "fran": "AQ",
+            "text": "Från AQ, jag saknar lägesrapport från grinden. Rapportera. Slut kom.",
+            "efter": 3.0
+          },
+          {
+            "fran": "Grindposten",
+            "text": "Uppfattat, klart slut.",
+            "efter": 4.5
+          }
+        ]
+      }
+    ],
+    "handling:envarsgripande": [
+      {
+        "efter_s": 12,
+        "om_ej_handling": "anmala_polis",
+        "meddelanden": [
+          {
+            "fran": "AQ",
+            "text": "Grindposten, Grindposten.",
+            "efter": 0.0
+          },
+          {
+            "fran": "Grindposten",
+            "text": "Grindposten kom.",
+            "efter": 1.5
+          },
+          {
+            "fran": "AQ",
+            "text": "Från AQ, har ni gripit någon ska han överlämnas till polis skyndsamt. Begär polis via mig. Slut kom.",
+            "efter": 3.0
+          },
+          {
+            "fran": "Grindposten",
+            "text": "Uppfattat, klart slut.",
+            "efter": 4.5
+          }
+        ]
+      }
+    ],
+    "handling:anmala_polis": [
+      {
+        "efter_s": 20,
+        "meddelanden": [
+          {
+            "fran": "AQ",
+            "text": "Grindposten, Grindposten.",
+            "efter": 0.0
+          },
+          {
+            "fran": "Grindposten",
+            "text": "Grindposten kom.",
+            "efter": 1.5
+          },
+          {
+            "fran": "AQ",
+            "text": "Från AQ, polispatrull är på väg till grinden, beräknad ankomst tjugo minuter. Håll mannen under uppsikt. Slut kom.",
+            "efter": 3.0
+          },
+          {
+            "fran": "Grindposten",
+            "text": "Uppfattat, klart slut.",
+            "efter": 4.5
+          }
+        ]
+      }
+    ],
+    "angrepp_nadde_fram": [
+      {
+        "efter_s": 3,
+        "meddelanden": [
+          {
+            "fran": "AQ",
+            "text": "Grindposten, Grindposten!",
+            "efter": 0.0
+          },
+          {
+            "fran": "Grindposten",
+            "text": "Grindposten kom.",
+            "efter": 1.2
+          },
+          {
+            "fran": "AQ",
+            "text": "Från AQ, Västra posten hör bråk vid grinden! Vad händer? Kom!",
+            "efter": 2.4
+          },
+          {
+            "fran": "Grindposten",
+            "text": "Uppfattat, återkommer, klart slut.",
+            "efter": 3.6
+          }
+        ]
+      }
+    ]
+  },
+  "slutkrav": [
+    {
+      "handling": "rapportera_vaktchef",
+      "lagrum": "Bevakningsinstruktion – rapportering · FFS 2010:7 13 §",
+      "text": "Händelsen rapporterades aldrig till AQ.",
+      "diskutera": "När ska AQ få veta? Före, under eller efter?"
+    }
+  ],
+  "dialog": {
+    "gett_upp": {
+      "replik": "YXMANNEN: – Okej, okej! Skjut inte! Jag… jag har inte sovit på tre dygn. Grannen tar min ved. Jag trodde ni var med honom…\n\nKamraten håller honom under uppsikt. Yxan ligger i gruset.",
+      "satt_fakta": {
+        "brott_pa_bar_garning": true
+      },
+      "alternativ": [
+        {
+          "text": "Grip honom: ”Du är gripen för olaga hot. Händerna bakom ryggen.”",
+          "handling": "envarsgripande",
+          "nasta": "gripen",
+          "stamning": -1
+        },
+        {
+          "text": "Låt honom gå – yxan är ju borta nu.",
+          "handling": "lata_ga",
+          "nasta": "slapper",
+          "npc_beteende": "ga_till_start"
+        }
+      ]
+    },
+    "overmannad": {
+      "replik": "Ni har brottat ner honom. Yxan ligger i gruset, kamraten har knät på hans rygg.\n\nYXMANNEN: – Släpp mig! Aaah…",
+      "satt_fakta": {
+        "brott_pa_bar_garning": true
+      },
+      "alternativ": [
+        {
+          "text": "Grip honom: ”Du är gripen för olaga hot.”",
+          "handling": "envarsgripande",
+          "nasta": "gripen",
+          "stamning": -1
+        },
+        {
+          "text": "Släpp honom och låt honom gå.",
+          "handling": "lata_ga",
+          "nasta": "slapper",
+          "npc_beteende": "ga_till_start"
+        }
+      ]
+    },
+    "gripen": {
+      "replik": "Han sätter sig på marken och tittar ner i gruset.\n\nYXMANNEN: – Förlåt… jag vet inte vad som hände.",
+      "stamning": 1,
+      "alternativ": [
+        {
+          "text": "Begär polis via AQ – han ska överlämnas till polis.",
+          "handling": "anmala_polis",
+          "nasta": "polis"
+        },
+        {
+          "text": "Låt honom sitta. Vi rapporterar senare.",
+          "handling": "dokumentera",
+          "nasta": "vantar"
+        }
+      ]
+    },
+    "polis": {
+      "replik": "DU (radio): ”AQ, AQ.” – AQ: ”AQ kom.”\nDU: ”Från Grindposten, en man gripen för olaga hot med yxa, begär polis till grinden, kom.”\nAQ: ”Uppfattat, polis underrättas, slut kom.” – DU: ”Klart slut.”",
+      "slut": true
+    },
+    "vantar": {
+      "replik": "KAMRATEN: – Ska vi inte ropa in polisen? Vi kan ju inte sitta här hela natten…",
+      "slut": true
+    },
+    "slapper": {
+      "replik": "Han traskar iväg in i skogen igen, utan yxa.\n\nKAMRATEN: – Öh… ska vi inte… polisen?",
+      "slut": true
+    },
+    "skjuten": {
+      "replik": "Mannen ligger på marken och stönar. Yxan ligger två meter bort – kamraten sparkar undan den och håller honom under uppsikt.\n\nYXMANNEN: – Aaah… benet…",
+      "satt_fakta": {
+        "brott_pa_bar_garning": true
+      },
+      "stamning": 2,
+      "alternativ": [
+        {
+          "text": "Larma sjukvård via AQ.",
+          "handling": "larma_sjukvard",
+          "nasta": "skjuten_larmat"
+        },
+        {
+          "text": "Ge första hjälpen: tryckförband på benet.",
+          "handling": "forsta_hjalpen",
+          "nasta": "skjuten_hjalp"
+        }
+      ]
+    },
+    "skjuten_larmat": {
+      "replik": "AQ: ”Ambulans och polis larmade, slut kom.”\n\nKAMRATEN: – Yxan är säkrad. Jag täcker dig.",
+      "alternativ": [
+        {
+          "text": "Ge första hjälpen: tryckförband på benet.",
+          "handling": "forsta_hjalpen",
+          "nasta": "skjuten_klar"
+        },
+        {
+          "text": "Grip honom för olaga hot (envarsgripande).",
+          "handling": "envarsgripande",
+          "nasta": "skjuten_klar"
+        }
+      ]
+    },
+    "skjuten_hjalp": {
+      "replik": "Förbandet sitter. Blödningen avtar.\n\nYXMANNEN: – Förlåt… förlåt…",
+      "alternativ": [
+        {
+          "text": "Larma sjukvård via AQ.",
+          "handling": "larma_sjukvard",
+          "nasta": "skjuten_klar"
+        }
+      ]
+    },
+    "skjuten_klar": {
+      "replik": "Blåljus syns nere vid vägen.\n\nKAMRATEN: – Det här blir en lång rapport.",
+      "slut": true
+    }
+  }
+}

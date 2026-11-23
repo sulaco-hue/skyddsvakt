@@ -24,6 +24,10 @@ func _ready() -> void:
 	await _spela_missad_handelse()
 	await _spela_hantverkaren("oriktig", [0, 2], {"begara_identitet": "ok", "avvisa": "ok"})
 	await _spela_hantverkaren("arlig", [0, 0, 1], {"rapportera_vaktchef": "ok", "avvisa": "bad"})
+	await _spela_yxmannen_ger_upp()
+	await _spela_yxmannen_skarp()
+	await _spela_yxmannen_for_tidigt()
+	await _spela_yxmannen_nar_fram()
 	await _bygg_alla_objekttyper()
 	print("--- Kompakt läge (pekskärm) ---")
 	UiKit.kompakt = true
@@ -419,3 +423,110 @@ func _spela_hantverkaren(variant: String, val: Array, forvantat: Dictionary) -> 
 	_forvanta(forvantat)
 	main.queue_free()
 	await _vanta(3)
+
+
+# ------------------------------------------------------------ Yxmannen --
+
+## Väntar (högst max_s sekunder speltid) tills villkoret är sant.
+func _vanta_tills(villkor: Callable, max_s := 60.0) -> bool:
+	var t := 0.0
+	while t < max_s:
+		if villkor.call():
+			return true
+		await get_tree().create_timer(0.1).timeout
+		t += 0.1
+	return bool(villkor.call())
+
+
+func _starta_yxmannen(variant: String) -> Variant:
+	print("--- Scenario: Yxmannen (%s) ---" % variant)
+	Spel.nollstall("res://data/scenarier/yxmannen.json")
+	var main = load("res://scenes/main.tscn").instantiate()
+	add_child(main)
+	await _vanta(5)
+	main.call("_starta_pass")
+	await _vanta(3)
+	main.call("_forcera_handelse", "1:" + variant)
+	await _vanta(2)
+	if Spel.variant != variant:
+		_fel("fel variant: %s" % Spel.variant)
+	if not await _vanta_tills(func() -> bool: return "verkanseld" in main.hud.situationer()):
+		_fel("situationsknapparna visades aldrig (avstånd %d)" % main.call("_avstand_angripare"))
+	else:
+		_ok("kamraten upptäcker yxmannen, knappar: %s (avstånd %d)" % [
+			", ".join(PackedStringArray(main.hud.situationer())), main.call("_avstand_angripare")])
+	return main
+
+
+func _avsluta_yxmannen(main: Node, forvantat: Dictionary) -> void:
+	main.call("_visa_debriefing")
+	await _vanta(3)
+	_forvanta(forvantat)
+	main.queue_free()
+	await _vanta(3)
+
+
+func _spela_yxmannen_ger_upp() -> void:
+	var main = await _starta_yxmannen("ger_upp")
+	await _vanta_tills(func() -> bool: return main.call("_avstand_angripare") <= 12)
+	main.call("_halt_order")
+	if not await _vanta_tills(func() -> bool: return str(main._angripare.get("lage", "")) == "gett_upp", 10.0):
+		_fel("yxmannen gav inte upp efter halt-order")
+		main.queue_free()
+		return
+	_ok("yxmannen gav upp efter halt-order")
+	if "halt" in main.hud.situationer():
+		_fel("halt-knappen visas fortfarande efter given varning")
+	main.call("_oppna_kontakt", "yxmannen")
+	await _vanta(3)
+	var kontakt: Kontakt = main.kontakt
+	kontakt.call("_valj", 0)  # Grip honom (envarsgripande)
+	await _vanta(2)
+	kontakt.call("_valj", 0)  # Begär polis via AQ
+	await _vanta(2)
+	kontakt.call("_stang")
+	await _vanta(3)
+	if not str(main.call("_lagestext")).contains("gett upp"):
+		_fel("lägestexten följer inte händelsen: " + str(main.call("_lagestext")))
+	await _avsluta_yxmannen(main, {"halt_order": "ok", "envarsgripande": "ok", "anmala_polis": "ok",
+		"slutkrav_rapportera_vaktchef": "bad"})
+
+
+func _spela_yxmannen_skarp() -> void:
+	var main = await _starta_yxmannen("skarp")
+	main.call("_halt_order")
+	await _vanta_tills(func() -> bool: return main.call("_avstand_angripare") <= 5)
+	main.call("_varningsskott")
+	if str(main._angripare.get("lage", "")) != "anfaller":
+		_fel("yxmannen slutade anfalla trots variant skarp")
+	await _vanta_tills(func() -> bool: return main.call("_avstand_angripare") <= 3)
+	main.call("_verkanseld")
+	if str(main._angripare.get("lage", "")) != "skjuten":
+		_fel("yxmannen föll inte efter verkanseld")
+	elif not "sjukvard" in main.hud.situationer():
+		_fel("knappen Larma sjukvård visas inte efter verkanseld")
+	else:
+		_ok("verkanseld: mannen ligger, sjukvårdsknapp visas")
+	if await _vanta_radio("skott hörda"):
+		_ok("AQ reagerar på skotten")
+	else:
+		_fel("AQ reagerade inte på verkanselden")
+	main.call("_larma_sjukvard")
+	await _avsluta_yxmannen(main, {"halt_order": "ok", "varningsskott": "ok", "verkanseld": "ok",
+		"larma_sjukvard": "ok", "foljdkrav_skjutning_rapporterad": "bad"})
+
+
+func _spela_yxmannen_for_tidigt() -> void:
+	var main = await _starta_yxmannen("skarp")
+	if main.call("_avstand_angripare") <= 6:
+		_fel("yxmannen var redan nära vid upptäckt (%d)" % main.call("_avstand_angripare"))
+	main.call("_verkanseld")
+	await _avsluta_yxmannen(main, {"verkanseld": "bad"})
+
+
+func _spela_yxmannen_nar_fram() -> void:
+	var main = await _starta_yxmannen("skarp")
+	if not await _vanta_tills(func() -> bool: return str(main._angripare.get("lage", "")) == "overmannad", 90.0):
+		_fel("angreppet nådde aldrig fram (avstånd %d)" % main.call("_avstand_angripare"))
+	await _avsluta_yxmannen(main, {"angrepp_nadde_fram": "bad"})
+

@@ -131,6 +131,10 @@
   16,
   8
  ],
+ "mynningsflamma": [
+  3,
+  3
+ ],
  "pappa_0": [
   8,
   22
@@ -234,5 +238,41 @@
  "vapenforrad": [
   62,
   71
+ ],
+ "yxa": [
+  6,
+  4
+ ],
+ "yxman_0": [
+  8,
+  22
+ ],
+ "yxman_1": [
+  8,
+  22
+ ],
+ "yxman_ligger_0": [
+  13,
+  7
+ ],
+ "yxman_ligger_1": [
+  13,
+  7
+ ],
+ "yxman_upp_0": [
+  8,
+  22
+ ],
+ "yxman_upp_1": [
+  8,
+  22
+ ],
+ "yxman_utan_0": [
+  8,
+  22
+ ],
+ "yxman_utan_1": [
+  8,
+  22
  ]
 }

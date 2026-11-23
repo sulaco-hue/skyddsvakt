@@ -3,7 +3,7 @@
 *Utbildningsspel för militära skyddsvakter (prototyp).*
 
 Ett isometriskt pixelspel för att träna militära skyddsvakter på att fatta beslut med rätt lagstöd.
-Detta är en första spelbar prototyp med ett scenario: **Fotografen vid staketet**.
+Prototypen har fyra scenarier (se nedan).
 
 > **Observera:** Lagstödet i `data/lagrum.json` är ett utkast och är **inte juridiskt granskat**.
 > Lagrum markerade `[§ – jurist]` ska fastställas av jurist. Spelet visar detta i debriefingen
@@ -21,6 +21,14 @@ Spelet startar med ett scenarioval (listan i `data/scenarier/index.json`):
 3. **Hantverkaren vid grinden** – passerkontroll i dagsljus: skyldigheterna i 10 § (identitet, fordon)
    och skillnaden mellan att *neka tillträde* och att *avvisa* enligt 12 §. Två varianter: *ärlig*
    (bara inte föranmäld) och *oriktig* (fel legitimation, vägrar undersökning av bilen).
+4. **Yxmannen vid norra stigen** – nödvärn (BrB 24:1) och skjutvapen vid vakttjänst (förordning 1992:98,
+   FFS 2010:7). Mitt i natten kommer en man ut ur skogen med en yxa och vrålar ”Jag ska döda dig din
+   jävel!”. Så fort kamraten upptäcker honom visas situationsknapparna **Halt-order [H]**,
+   **Varningsskott [V]** och **Verkanseld [F]**. Bedömningen beror på om varning getts, om varningsskott
+   föregick verkanselden, hur nära han var (*omedelbart förestående*) och om angreppet fortfarande pågick.
+   Efter verkanseld: **Larma sjukvård [S]** och **Första hjälpen [J]**. Två varianter: *skarp* (stannar
+   inte) och *ger upp* (släpper yxan efter varning). Når han fram brottas han ner – men det bedöms
+   som att ni agerade för sent. Efteråt: envarsgripande (BrB 24:7) och överlämning till polis.
 
 **Skyddsobjektet slumpas** vid varje genomförande: byggnaden, lastbilen "HELIKOPTER", ett vapenförråd
 (lagerbyggnad i plåt) eller en radiomast med teknikbod. Typerna finns under `objekttyper` i kartfilen;
@@ -29,6 +37,19 @@ i scenariotexterna ersätts `{objekt}` med objektets namn och `{objekt_bestamd}`
 Scenarierna delar kartan `data/kartor/granasen.json` och använder namngivna platser (`punkter`).
 Varje scenario kan ha `varianter` (egna fakta och bedömningar), `bedomning` (scenariospecifik
 bedömning av en handling) och `slutkrav` (t.ex. att händelsen måste rapporteras till AQ).
+
+### Levande radiotrafik
+
+`radio` i scenariofilen beskriver vad AQ och andra enheter säger när något händer
+(`scripts/core/radiotrafik.gd`). Krokar: `upptackt`, `kontakt_start`, `kontakt_slut`, `npc_lamnar`,
+`dronare_flyger_bort`, `dronare_landar`, `motpart_ger_upp`, `motpart_skjuten`, `angrepp_nadde_fram`
+och `handling:<id>` för varje beslut. Varje inslag kan ha `efter_s` (fördröjning), `variant`,
+`om_ej_handling` / `om_handling` och `om_fakta`. Villkoren prövas när inslaget ska spelas, så
+”AQ efterfrågar lägesrapport” hörs bara om rapporten fortfarande saknas. Inslagen väntar tills
+kanalen är ledig och tills kontaktläget är stängt.
+
+`lagestext` (det som sägs i lägesrapporten) följer händelsens fas: `fore`, `efter`, `kontakt`,
+`lamnat`, även per variant (`kontakt_oriktig`) och `fakta:<nyckel>` när ett faktum är sant.
 
 ## Spela i webbläsaren
 
@@ -48,7 +69,8 @@ Arbetsflödet `.github/workflows/bygg-och-publicera.yml` körs vid varje push ti
 
 1. Hämtar senaste stabila Godot och exportmallar (cachas).
 2. **Kontroll** (`tester/kontroll.tscn`): laddar alla skript, kontrollerar JSON-filerna och dialogens
-   kopplingar mot `lagrum.json`, och spelar igenom scenario 1 automatiskt utan grafik.
+   kopplingar mot `lagrum.json` och radiokrokarna, och spelar igenom alla scenarier och deras
+   varianter automatiskt utan grafik (bl.a. yxmannen: ger upp, skarp, för tidig verkanseld, når fram).
    Bygget stoppas om något skriptfel uppstår.
 3. Exporterar för **webb** (publiceras på GitHub Pages) och **Windows** (laddas ner under
    *Actions → senaste körningen → Artifacts → skyddsvakt-windows*).
@@ -72,6 +94,7 @@ Om något går fel: titta i panelen **Utdata/Output** längst ner i editorn och 
 | Briefing | Läs omvärldsläge och uppdrag, **Starta pass** (eller Enter) |
 | Patrull | **Klicka** på marken för att gå. Bommen vid grinden fälls upp automatiskt när du närmar dig. **Klicka på en person** för att ta kontakt |
 | | **Q** observera · **R** samband · **N** anteckna · **T** tyst nu · **I** instruktion · **M** musik av/på · **F3** debugrad · **Esc** avsluta pass |
+| | Situationsknappar vid högerkanten när något händer: **B** bekämpa drönaren · **H** halt-order · **V** varningsskott · **F** verkanseld · **S** larma sjukvård · **J** första hjälpen |
 | Kontakt | Välj svar med musen eller **1–4** |
 | Debriefing | Klicka på ett beslut i tidslinjen för lagrum och bedömning. **Spara logg** skriver en JSON-fil för instruktören |
 
@@ -94,8 +117,9 @@ verktyg/                       Python-skript för grafik och förhandsvisning av
 
 ## Lagstödskortet
 
-Under **Instruktion [I]** finns fliken **Lagstöd 10–17 §§** med en sammanfattning i egna ord av
-skyddslagens befogenheter (`data/lagstodskort.json`). Sammanfattningen ersätter inte lagtexten.
+Under **Instruktion [I]** finns fliken **Lagstöd** med en sammanfattning i egna ord av
+skyddslagens befogenheter 10–17 §§, nödvärn och envarsgripande (BrB 24:1 och 24:7) och reglerna för
+skjutvapen vid vakttjänst (`data/lagstodskort.json`). Sammanfattningen ersätter inte lagtexten.
 
 ## Så fungerar regelmotorn
 
@@ -111,6 +135,9 @@ Varje svarsalternativ eller knapp i spelet pekar på en **handling** i `lagrum.j
 ```
 
 - **krav** är fakta som alla måste vara sanna i scenariot (`"fakta"` i scenariofilen), t.ex. behovsrekvisitet `behov_avlagsna`.
+- **krav_utfall** / **grupp_utfall** graderar bristerna: det allvarligaste saknade kravet avgör utfallet,
+  och **text_krav** ger dess förklaring. Exempel: verkanseld när angreppet upphört = *saknar lagstöd*,
+  verkanseld utan föregående varningsskott = *diskutabelt*.
 - **krav_grupper** är grupper där minst ett måste vara sant, t.ex. *inom ELLER invid* och grunderna i 12 §
   (*förbud ELLER identitet ELLER oriktiga uppgifter ELLER visitation ELLER fordon*).
 - Är allt uppfyllt blir utfallet *lagstöd*, annars det som står i `vid_brist` (`warn` = diskutabelt, `bad` = saknar lagstöd).
