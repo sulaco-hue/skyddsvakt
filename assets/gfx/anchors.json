@@ -1,4 +1,8 @@
 {
+ "anga": [
+  1,
+  1
+ ],
  "bil": [
   16,
   20
@@ -71,6 +75,10 @@
   16,
   8
  ],
+ "rok": [
+  2,
+  2
+ ],
  "skylt": [
   5,
   17
@@ -104,6 +112,38 @@
   22
  ],
  "vakt_1": [
+  8,
+  22
+ ],
+ "vakt_vila_fippla_hjalm": [
+  8,
+  22
+ ],
+ "vakt_vila_fippla_radio": [
+  8,
+  22
+ ],
+ "vakt_vila_kaffe_dricker": [
+  8,
+  22
+ ],
+ "vakt_vila_kaffe_lag": [
+  8,
+  22
+ ],
+ "vakt_vila_roka_hand": [
+  8,
+  22
+ ],
+ "vakt_vila_roka_ner": [
+  8,
+  22
+ ],
+ "vakt_vila_titta_h": [
+  8,
+  22
+ ],
+ "vakt_vila_titta_v": [
   8,
   22
  ],

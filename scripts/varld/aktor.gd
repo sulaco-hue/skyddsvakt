@@ -18,6 +18,28 @@ var _blixt: Sprite2D
 var _blixt_t := 0.0
 var _fotograferar := false
 
+## Viloanimationer (bara för figurer som har bilder "<bas>_vila_*.png").
+## Varje steg: [bild ("bas" = grundbilden), sekunder, effekt ("", "rok" eller "anga")]
+const VILA := {
+	"titta": [["titta_v", 1.2, ""], ["bas", 0.4, ""], ["titta_h", 1.2, ""], ["bas", 0.3, ""]],
+	"fippla": [["fippla_radio", 0.7, ""], ["bas", 0.3, ""], ["fippla_radio", 0.7, ""], ["bas", 0.4, ""],
+		["fippla_hjalm", 0.9, ""]],
+	"kaffe": [["kaffe_lag", 1.0, "anga"], ["kaffe_dricker", 1.4, ""], ["kaffe_lag", 1.2, "anga"],
+		["kaffe_dricker", 1.2, ""], ["kaffe_lag", 0.8, "anga"]],
+	"roka": [["roka_ner", 1.2, ""], ["roka_hand", 1.2, ""], ["roka_ner", 1.6, "rok"], ["roka_hand", 1.2, ""],
+		["roka_ner", 1.4, "rok"]],
+}
+## Sannolikhetsvikter för vilken viloanimation som väljs.
+const VILA_VIKT := {"titta": 35, "fippla": 30, "kaffe": 20, "roka": 15}
+
+var vila_aktiv := true
+var _bas := ""
+var _vila_bilder: Dictionary = {}
+var _vila_steg: Array = []
+var _vila_t := 0.0
+var _vila_vant := 0.0
+var _rng := RandomNumberGenerator.new()
+
 
 func setup(p_varld: Varld, bas: String, start: Vector2i, anchor: Array) -> void:
 	varld = p_varld
@@ -29,6 +51,15 @@ func setup(p_varld: Varld, bas: String, start: Vector2i, anchor: Array) -> void:
 	_sprite.offset = -Vector2(float(anchor[0]), float(anchor[1]))
 	add_child(_sprite)
 	position = varld.cell_pos(cell)
+	_bas = bas
+	_rng.randomize()
+	_vila_vant = _rng.randf_range(2.0, 7.0)
+	for namn: String in VILA:
+		for steg in VILA[namn]:
+			var bild := str(steg[0])
+			var sokvag := "res://assets/gfx/%s_vila_%s.png" % [bas, bild]
+			if bild != "bas" and not _vila_bilder.has(bild) and ResourceLoader.exists(sokvag):
+				_vila_bilder[bild] = load(sokvag)
 
 
 func ga_langs(vag: Array[Vector2i]) -> void:
@@ -76,8 +107,9 @@ func _process(delta: float) -> void:
 			blixt.emit()
 		_blixt.visible = syns
 	if _vag.is_empty():
-		_sprite.texture = _bilder[0]
+		_uppdatera_vila(delta)
 		return
+	_vila_steg.clear()
 	var mal := varld.cell_pos(_vag[0])
 	var diff := mal - position
 	var steglangd := hastighet * delta
@@ -90,9 +122,71 @@ func _process(delta: float) -> void:
 		steg.emit(cell)
 		if _vag.is_empty():
 			_sprite.texture = _bilder[0]
+			_vila_vant = _rng.randf_range(2.0, 6.0)
 			framme.emit()
 			return
 	else:
 		position += diff.normalized() * steglangd
 	_anim_t += delta
 	_sprite.texture = _bilder[int(_anim_t * 6.0) % 2]
+
+
+# ------------------------------------------------------------ Vila --
+
+func _uppdatera_vila(delta: float) -> void:
+	if not vila_aktiv or _vila_bilder.is_empty() or _fotograferar:
+		_vila_steg.clear()
+		_sprite.texture = _bilder[0]
+		return
+	if _vila_steg.is_empty():
+		_sprite.texture = _bilder[0]
+		_vila_vant -= delta
+		if _vila_vant <= 0.0:
+			var sekvens: Array = VILA[_valj_vila()]
+			_vila_steg = sekvens.duplicate()
+			_vila_t = 0.0
+		return
+	_vila_t -= delta
+	if _vila_t > 0.0:
+		return
+	var steg: Array = _vila_steg.pop_front()
+	var bild := str(steg[0])
+	_sprite.texture = _bilder[0] if bild == "bas" else _vila_bilder.get(bild, _bilder[0])
+	_vila_t = float(steg[1])
+	_effekt(str(steg[2]))
+	if _vila_steg.is_empty():
+		_vila_vant = _rng.randf_range(3.0, 9.0) + _vila_t
+
+
+func _valj_vila() -> String:
+	var summa := 0
+	for namn: String in VILA_VIKT:
+		summa += int(VILA_VIKT[namn])
+	var r := _rng.randi_range(1, summa)
+	for namn: String in VILA_VIKT:
+		r -= int(VILA_VIKT[namn])
+		if r <= 0:
+			return namn
+	return "titta"
+
+
+## Liten rökpuff eller ånga som stiger och tonar bort.
+func _effekt(typ: String) -> void:
+	if typ == "":
+		return
+	var riktning := -1.0 if _sprite.flip_h else 1.0
+	var antal := 3 if typ == "rok" else 2
+	for i in antal:
+		var s := Sprite2D.new()
+		s.texture = load("res://assets/gfx/%s.png" % ("rok" if typ == "rok" else "anga"))
+		var start := Vector2(3.0 * riktning, -17.0) if typ == "rok" else Vector2(4.0 * riktning, -15.0)
+		s.position = start
+		s.modulate.a = 0.0
+		s.z_index = 1
+		add_child(s)
+		var tw := create_tween()
+		tw.tween_interval(i * 0.35)
+		tw.tween_property(s, "modulate:a", 0.9, 0.15)
+		tw.parallel().tween_property(s, "position", start + Vector2(riktning * (2.0 + i), -14.0), 1.6)
+		tw.tween_property(s, "modulate:a", 0.0, 0.5)
+		tw.tween_callback(s.queue_free)

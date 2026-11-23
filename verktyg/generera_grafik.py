@@ -399,6 +399,7 @@ PAL = {
     "b": (28, 28, 30), "R": (180, 58, 48), "r": (140, 42, 36), "j": (184, 122, 62), "J": (144, 92, 46),
     "n": (62, 84, 128), "N": (46, 62, 98), "K": (22, 22, 24),
     "A": (16, 16, 18), "a": (58, 60, 64), "E": (64, 96, 52), "p": (18, 18, 20), "P": (232, 196, 40),
+    "W": (236, 232, 220), "X": (255, 140, 40),
 }
 # ---- M/90-mönster (kantiga splitterfält i fyra färger) ------------------
 M90 = [(124, 138, 92), (84, 104, 62), (50, 68, 42), (26, 28, 24)]
@@ -496,8 +497,41 @@ def figure(name, top, legs):
     im.save(os.path.join(OUT, name + ".png"))
     anchors[name] = [8, h - 3]
 
+# Viloanimationer: radbyten mot grundfiguren (rad -> ny rad, 12 tecken).
+# W = kopp/cigarett, X = glöd.
+VILA = {
+    "titta_v": {4: "..EessesSE.."},
+    "titta_h": {4: "..EssesseE.."},
+    "kaffe_lag": {9: ".UUppUAAkWW.", 12: ".kAAUUUUUUU."},
+    "kaffe_dricker": {5: "...SsssWWk..", 6: "....SSSWWka.", 12: ".kAAUUUUUUU."},
+    "roka_ner": {11: ".UUAAkaUUUWX", 12: ".kAAUUUUUUU."},
+    "roka_hand": {5: "...SssssSWX.", 6: "....SSSS.ka.", 12: ".kAAUUUUUUU."},
+    "fippla_radio": {7: ".kUUUUUUUAA.", 12: "..AAUUUUUUk.", 13: "...BBBBBB.k."},
+    "fippla_hjalm": {2: "kHHHHHHHHHH.", 3: ".kEssssssE..", 12: "..AAUUUUUUk.", 13: "...BBBBBB.k."},
+}
+
 for i in range(2):
     figure(f"vakt_{i}", GUARD_TOP, GUARD_LEGS[i])
+for namn, byten in VILA.items():
+    topp = list(GUARD_TOP)
+    for rad, text in byten.items():
+        assert len(text) == 12, (namn, rad, text)
+        topp[rad] = text
+    figure(f"vakt_vila_{namn}", topp, GUARD_LEGS[0])
+
+# rök och ånga
+rok = Image.new("RGBA", (5, 4), (0, 0, 0, 0))
+for (x, y, a) in [(1, 0, 120), (2, 0, 150), (3, 0, 110), (0, 1, 110), (1, 1, 170), (2, 1, 190), (3, 1, 160),
+                  (4, 1, 90), (1, 2, 140), (2, 2, 170), (3, 2, 130), (2, 3, 90)]:
+    rok.putpixel((x, y), (200, 204, 208, a))
+rok.save(os.path.join(OUT, "rok.png"))
+anchors["rok"] = [2, 2]
+anga = Image.new("RGBA", (3, 3), (0, 0, 0, 0))
+for (x, y, a) in [(1, 0, 150), (0, 1, 120), (1, 1, 200), (2, 1, 120), (1, 2, 140)]:
+    anga.putpixel((x, y), (240, 244, 248, a))
+anga.save(os.path.join(OUT, "anga.png"))
+anchors["anga"] = [1, 1]
+for i in range(2):
     figure(f"civil_{i}", CIV_TOP, CIV_LEGS[i])
 
 

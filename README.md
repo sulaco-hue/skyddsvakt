@@ -121,6 +121,13 @@ suckar Grindposten (`suckar`). Hur ofta det pratas och chansen för suck/svar st
 Pratet pausas under kontakt och en stund efter att kamraten upptäckt en händelse (`paus_snack_s`).
 Kamraten kan alltså vara mitt i en utläggning om elpriser när fotografen dyker upp …
 
+## Viloanimationer
+
+När en soldat står still spelas då och då en viloanimation upp: tittar åt sidorna, fipplar med
+radion och hjälmen, dricker kaffe (med ånga) eller röker (med rökpuffar). Sekvenser och
+sannolikheter finns i `VILA` och `VILA_VIKT` i `scripts/varld/aktor.gd`; bilderna
+(`vakt_vila_*.png`) genereras av `verktyg/generera_grafik.py` (tabellen `VILA`).
+
 ## Repliker och ljud i världen
 
 Repliker från figurerna visas som pratbubblor ovanför figuren (`hud.visa_bubbla(figur, text)`) och ljud
