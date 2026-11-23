@@ -1,9 +1,9 @@
 {
   "kommentar": "Stridsparskamratens småprat. Lägg till, ta bort eller ändra repliker fritt. 'svar' är valfritt: Grindpostens möjliga svar på just den repliken. Tider i sekunder (realtid).",
   "installningar": {
-    "forsta_efter_s": 12,
-    "intervall_min_s": 25,
-    "intervall_max_s": 60,
+    "forsta_efter_s": 4,
+    "intervall_min_s": 8,
+    "intervall_max_s": 20,
     "reaktion_efter_s": 3.5,
     "chans_suck": 0.3,
     "chans_svar": 0.4,
