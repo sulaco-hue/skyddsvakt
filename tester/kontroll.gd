@@ -299,10 +299,10 @@ func _spela_missad_handelse() -> void:
 	main.call("_starta_pass")
 	await _vanta(3)
 	var sjo: Vector2i = main.varld.punkt("sjo_pilot")
+	main.varld.kamrat_folj = false
 	for a in [main.varld.spelare, main.varld.kollega]:
 		a.cell = sjo
-		a.position = main.varld.cell_pos(sjo)
-	main.varld.kamrat_folj = false
+		a.stanna()
 	main.call("_forcera_handelse", "1")
 	var npc: Aktor = main.varld.npcer.get("fotografen")
 	var t := 0
