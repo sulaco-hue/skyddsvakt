@@ -24,7 +24,7 @@ var _tid_label: Label
 var _aktuella: Array = []
 var _slut := false
 var _tid := 0.0
-var _chips: HBoxContainer
+var _chips: HFlowContainer
 
 
 func bygg(scenario: Dictionary) -> void:
@@ -47,7 +47,11 @@ func bygg(scenario: Dictionary) -> void:
 	marg.add_child(kol)
 
 	# Lägesrad
-	_chips = UiKit.hbox(10)
+	# Lägesraden bryts till flera rader i stället för att bli bredare än skärmen.
+	_chips = HFlowContainer.new()
+	_chips.add_theme_constant_override("h_separation", 8)
+	_chips.add_theme_constant_override("v_separation", 6)
+	_chips.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	kol.add_child(_chips)
 
 	var mitt := UiKit.hbox(32)
@@ -136,8 +140,8 @@ func _bygg_chips(rader: Array) -> void:
 	k.add_child(UiKit.rubrik("KONTAKT", 14, UiKit.BARNSTEN))
 	_chips.add_child(k)
 	for t in rader:
-		var c := UiKit.panel(UiKit.KANT, UiKit.PANEL, 14, 4)
-		c.add_child(UiKit.etikett(str(t), 20))
+		var c := UiKit.panel(UiKit.KANT, UiKit.PANEL, 10 if UiKit.kompakt else 14, 3)
+		c.add_child(UiKit.etikett(str(t), 17 if UiKit.kompakt else 20))
 		_chips.add_child(c)
 
 
