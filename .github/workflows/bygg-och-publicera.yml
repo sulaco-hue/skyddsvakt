@@ -85,6 +85,7 @@ jobs:
       - name: Exportera för webb och Windows
         run: |
           mkdir -p build/web build/windows
+          touch build/.gdignore   # så att Godot inte importerar byggfilerna
           godot --headless --path . --export-release "Web" build/web/index.html 2>&1 | tee export.log
           godot --headless --path . --export-release "Windows Desktop" build/windows/Skyddsvakt.exe 2>&1 | tee -a export.log
           test -f build/web/index.pck || { echo "::error::Webbexporten saknas"; exit 1; }
