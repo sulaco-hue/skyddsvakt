@@ -81,6 +81,15 @@ func bygg(scenario: Dictionary) -> void:
 	info.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	info.add_child(UiKit.rubrik("OBJEKTET", 13, UiKit.DAMPAD))
 	info.add_child(UiKit.etikett(str(b.get("objektinfo", "")), 22, UiKit.LJUS, true))
+	# Skylten som sitter på staketet
+	var skylt := TextureRect.new()
+	skylt.texture = load("res://assets/gfx/skylt_stor.png")
+	skylt.custom_minimum_size = Vector2(160, 104) if UiKit.kompakt else Vector2(240, 156)
+	skylt.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	skylt.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT
+	skylt.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	skylt.tooltip_text = "Skylten på staketet"
+	info.add_child(skylt)
 	info.add_child(UiKit.rubrik("SAMBAND", 13, UiKit.DAMPAD))
 	info.add_child(UiKit.etikett(str(b.get("samband", "")), 20, UiKit.LJUS, true))
 	kartrad.add_child(info)

@@ -652,15 +652,89 @@ save_obj("bom_fot", gate_foot, (0.5, 0.5))
 
 
 def sign(d, im):
+    # Gul skyddsobjektsskylt på två stolpar: svart kant, röda cirklar med hand
+    # och överkryssad kamera, rött STOPP och svarta textrader.
     x, y = iso(0.5, 0.5)
-    d.rectangle([x - 5, y - 17, x + 6, y - 8], fill=(240, 236, 220))
-    d.rectangle([x - 5, y - 17, x + 6, y - 8], outline=(196, 52, 44))
-    d.line([(x - 3, y - 15), (x + 4, y - 15)], fill=(196, 52, 44))
-    for yy in (y - 13, y - 11):
-        d.line([(x - 3, yy), (x + 4, yy)], fill=(60, 60, 64))
-    d.point((x + 4, y - 11), fill=(240, 236, 220))
+    gul, svart, rod = (246, 208, 20), (24, 24, 24), (214, 40, 34)
+    stolpe = (150, 154, 160)
+    d.line([(x - 6, y - 8), (x - 6, y)], fill=stolpe)
+    d.line([(x + 6, y - 8), (x + 6, y)], fill=stolpe)
+    l, t, r, b = x - 10, y - 22, x + 10, y - 8
+    d.rectangle([l, t, r, b], fill=gul, outline=svart)
+    # röda cirklar i övre hörnen: hand (svart) och överkryssad kamera
+    for cx in (l + 4, r - 4):
+        d.ellipse([cx - 2, t + 2, cx + 2, t + 6], outline=rod)
+    d.line([(l + 4, t + 3), (l + 4, t + 5)], fill=svart)
+    d.point((r - 4, t + 4), fill=svart)
+    d.line([(r - 6, t + 2), (r - 2, t + 6)], fill=rod)
+    # STOPP (rött), SKYDDSOBJEKT (svart) och textrader
+    d.line([(x - 2, t + 3), (x + 2, t + 3)], fill=rod)
+    d.line([(x - 2, t + 5), (x + 2, t + 5)], fill=svart)
+    for yy in (t + 8, t + 10, t + 12):
+        d.line([(l + 3, yy), (r - 3, yy)], fill=(110, 96, 30))
 
 save_obj("skylt", sign, (0.5, 0.5))
+
+
+def skylt_stor():
+    # Stor version av skylten för briefingen (pixeltypsnitt, skalas upp i spelet).
+    from PIL import ImageFont
+    W, H = 240, 156
+    im = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    gul, svart, rod = (246, 208, 20), (20, 20, 20), (214, 40, 34)
+    d.rounded_rectangle([0, 0, W - 1, H - 1], radius=6, fill=svart)
+    d.rounded_rectangle([3, 3, W - 4, H - 4], radius=4, fill=gul)
+    for (sx, sy) in ((7, 7), (W - 8, 7), (7, H - 8), (W - 8, H - 8)):
+        d.ellipse([sx - 2, sy - 2, sx + 2, sy + 2], fill=(150, 140, 110))
+    fontdir = os.path.join(os.path.dirname(__file__), "..", "assets", "fonts")
+    rub = ImageFont.truetype(os.path.join(fontdir, "Jersey15-Regular.ttf"), 26)
+    mel = ImageFont.truetype(os.path.join(fontdir, "VT323-Regular.ttf"), 16)
+    lit = ImageFont.truetype(os.path.join(fontdir, "VT323-Regular.ttf"), 13)
+
+    def mitt(text, y, font, fill):
+        w = d.textlength(text, font=font)
+        d.text(((W - w) / 2, y), text, font=font, fill=fill)
+
+    # vänster cirkel: hand
+    cx, cy, rr = 34, 34, 22
+    d.ellipse([cx - rr, cy - rr, cx + rr, cy + rr], fill=rod)
+    d.ellipse([cx - rr + 5, cy - rr + 5, cx + rr - 5, cy + rr - 5], fill=svart)
+    for i, fx in enumerate((-8, -4, 0, 4)):
+        d.rectangle([cx + fx - 1, cy - 12 + (2 if i in (0, 3) else 0), cx + fx + 1, cy], fill=gul)
+    d.rectangle([cx - 9, cy - 2, cx + 6, cy + 10], fill=gul)
+    d.polygon([(cx + 6, cy + 2), (cx + 12, cy - 4), (cx + 13, cy - 1), (cx + 6, cy + 8)], fill=gul)
+    # höger cirkel: överkryssad kamera
+    cx = W - 35
+    d.ellipse([cx - rr, cy - rr, cx + rr, cy + rr], fill=rod)
+    d.ellipse([cx - rr + 5, cy - rr + 5, cx + rr - 5, cy + rr - 5], fill=gul)
+    d.rounded_rectangle([cx - 10, cy - 6, cx + 10, cy + 8], radius=2, fill=svart)
+    d.rectangle([cx - 4, cy - 9, cx + 3, cy - 6], fill=svart)
+    d.ellipse([cx - 5, cy - 4, cx + 5, cy + 6], fill=gul)
+    d.ellipse([cx - 3, cy - 2, cx + 3, cy + 4], fill=svart)
+    d.line([(cx - 13, cy - 13), (cx + 13, cy + 13)], fill=rod, width=4)
+
+    mitt("STOPP", 6, rub, rod)
+    mitt("SKYDDSOBJEKT", 32, mel, svart)
+    mitt("FÖRBUD", 50, mel, svart)
+    mitt("– mot tillträde utan tillstånd", 66, lit, svart)
+    mitt("– att fotografera, avbilda, beskriva", 79, lit, svart)
+    mitt("eller mäta skyddsobjektet", 92, lit, svart)
+    mitt("utan särskilt tillstånd", 105, lit, svart)
+    mitt("Enligt skyddslagen (2010:305)", 119, lit, svart)
+    tw = d.textlength("FÖRSVARSMAKTEN", font=lit)
+    d.rectangle([(W - tw) / 2 - 5, 134, (W + tw) / 2 + 4, 150], outline=svart)
+    mitt("FÖRSVARSMAKTEN", 136, lit, svart)
+    # skarpa pixlar: ta bort halvtransparens från typsnittets kantutjämning
+    px = im.load()
+    for yy in range(H):
+        for xx in range(W):
+            r_, g_, b_, a_ = px[xx, yy]
+            if a_ and a_ < 255:
+                px[xx, yy] = (r_, g_, b_, 255)
+    im.save(os.path.join(OUT, "skylt_stor.png"))
+
+skylt_stor()
 
 # ============================================================== Figurer ==
 PAL = {
