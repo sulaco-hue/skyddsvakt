@@ -31,50 +31,56 @@ func bygg(poster: Array, scenario: Dictionary, granskad: bool, kommentar: String
 	add_child(bg)
 	var marg := MarginContainer.new()
 	UiKit.helskarm(marg)
+	var k := UiKit.kompakt
 	for s in ["margin_left", "margin_right"]:
-		marg.add_theme_constant_override(s, 32)
+		marg.add_theme_constant_override(s, 12 if k else 32)
 	for s in ["margin_top", "margin_bottom"]:
-		marg.add_theme_constant_override(s, 28)
+		marg.add_theme_constant_override(s, 8 if k else 28)
 	marg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(marg)
-	var kol := UiKit.vbox(16)
+	var kol := UiKit.vbox(6 if k else 16)
 	marg.add_child(kol)
 
-	# Rubrikrad med sammanfattning
-	var topp := UiKit.hbox(16)
-	topp.add_child(UiKit.titel("Debriefing · " + str(scenario.get("pass", ""))))
-	var under := UiKit.etikett(str(scenario.get("namn", "")), 22, UiKit.DAMPAD)
-	under.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	topp.add_child(under)
-	topp.add_child(UiKit.fyllnad())
+	# Rubrikrad med sammanfattning. Bryts till flera rader när skärmen är smal.
+	var topp := HFlowContainer.new()
+	topp.add_theme_constant_override("h_separation", 10 if k else 16)
+	topp.add_theme_constant_override("v_separation", 4)
+	topp.add_child(UiKit.titel("Debriefing · " + str(scenario.get("pass", "")), 22 if k else 26))
+	if not k:
+		var under := UiKit.etikett(str(scenario.get("namn", "")), 22, UiKit.DAMPAD)
+		under.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		under.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		topp.add_child(under)
 	var antal := {"ok": 0, "warn": 0, "bad": 0}
 	for p in poster:
 		var u := str(p.get("utfall", "warn"))
 		antal[u] = int(antal.get(u, 0)) + 1
 	for u in ["ok", "warn", "bad"]:
-		var chip := UiKit.panel(UiKit.KANT, Color(0, 0, 0, 0), 12, 4)
+		var chip := UiKit.panel(UiKit.KANT, Color(0, 0, 0, 0), 8 if k else 12, 2 if k else 4)
+		chip.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		var ch := UiKit.hbox(8)
 		chip.add_child(ch)
 		var ik := UiKit.utfallsikon(u, 18)
 		ik.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		ch.add_child(ik)
 		var etikett_text := {"ok": "lagstöd", "warn": "diskutabelt", "bad": "saknar lagstöd"}
-		ch.add_child(UiKit.etikett("%d %s" % [antal[u], etikett_text[u]], 20))
+		ch.add_child(UiKit.etikett("%d %s" % [antal[u], etikett_text[u]], 18 if k else 20))
 		topp.add_child(chip)
 	kol.add_child(topp)
 
 	if not granskad:
-		var varning := UiKit.panel(UiKit.BARNSTEN, Color(0.95, 0.69, 0.2, 0.08), 14, 6)
-		varning.add_child(UiKit.etikett("EJ JURIDISKT GRANSKAT · " + kommentar, 19, UiKit.BARNSTEN, true))
+		var varning := UiKit.panel(UiKit.BARNSTEN, Color(0.95, 0.69, 0.2, 0.08), 10 if k else 14, 3 if k else 6)
+		var vtext := "EJ JURIDISKT GRANSKAT" if k else "EJ JURIDISKT GRANSKAT · " + kommentar
+		varning.add_child(UiKit.etikett(vtext, 17 if k else 19, UiKit.BARNSTEN, true))
 		kol.add_child(varning)
 
-	var mitt := UiKit.hbox(20)
+	var mitt := UiKit.hbox(10 if k else 20)
 	mitt.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	kol.add_child(mitt)
 
 	# Tidslinje
 	var vanster := UiKit.vbox(8)
-	vanster.custom_minimum_size = Vector2(420 if UiKit.kompakt else 580, 0)
+	vanster.custom_minimum_size = Vector2(290 if k else 580, 0)
 	mitt.add_child(vanster)
 	vanster.add_child(UiKit.rubrik("TIDSLINJE – VÄLJ ETT BESLUT", 13, UiKit.DAMPAD))
 	var scroll := ScrollContainer.new()
@@ -92,7 +98,7 @@ func bygg(poster: Array, scenario: Dictionary, granskad: bool, kommentar: String
 		lista.add_child(rad)
 
 	# Analys
-	_analys = UiKit.panel(UiKit.KANT2, UiKit.RUTA, 22, 18)
+	_analys = UiKit.panel(UiKit.KANT2, UiKit.RUTA, 12 if k else 22, 10 if k else 18)
 	_analys.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	mitt.add_child(_analys)
 	var ascroll := ScrollContainer.new()
@@ -112,30 +118,32 @@ func bygg(poster: Array, scenario: Dictionary, granskad: bool, kommentar: String
 	_a_rubrik.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	av.add_child(_a_rubrik)
 	av.add_child(UiKit.rubrik("LAGRUM", 13, UiKit.DAMPAD))
-	_a_lagrum = UiKit.etikett("", 22, UiKit.TEXT, true)
+	_a_lagrum = UiKit.etikett("", 19 if k else 22, UiKit.TEXT, true)
 	av.add_child(_a_lagrum)
 	av.add_child(UiKit.rubrik("BEDÖMNING", 13, UiKit.DAMPAD))
-	_a_kommentar = UiKit.etikett("", 22, UiKit.TEXT, true)
+	_a_kommentar = UiKit.etikett("", 19 if k else 22, UiKit.TEXT, true)
 	av.add_child(_a_kommentar)
 	_a_ok_rubrik = UiKit.rubrik("UPPFYLLDA REKVISIT", 13, UiKit.DAMPAD)
 	av.add_child(_a_ok_rubrik)
-	_a_ok = UiKit.etikett("", 21, UiKit.GRON, true)
+	_a_ok = UiKit.etikett("", 18 if k else 21, UiKit.GRON, true)
 	av.add_child(_a_ok)
 	_a_krav_rubrik = UiKit.rubrik("EJ UPPFYLLDA REKVISIT", 13, UiKit.DAMPAD)
 	av.add_child(_a_krav_rubrik)
-	_a_krav = UiKit.etikett("", 22, UiKit.BARNSTEN, true)
+	_a_krav = UiKit.etikett("", 19 if k else 22, UiKit.BARNSTEN, true)
 	av.add_child(_a_krav)
 	av.add_child(UiKit.rubrik("ATT DISKUTERA", 13, UiKit.DAMPAD))
-	_a_diskutera = UiKit.etikett("", 22, UiKit.LJUS, true)
+	_a_diskutera = UiKit.etikett("", 19 if k else 22, UiKit.LJUS, true)
 	av.add_child(_a_diskutera)
 	av.add_child(UiKit.fyllnad())
 	_status = UiKit.etikett("", 19, UiKit.GRON, true)
 	av.add_child(_status)
-	var knappar := UiKit.hbox(10)
-	var spara := UiKit.knapp("SPARA LOGG FÖR INSTRUKTÖR")
+	# Knapparna bryts till nästa rad om de inte får plats.
+	var knappar := HFlowContainer.new()
+	knappar.add_theme_constant_override("h_separation", 8)
+	knappar.add_theme_constant_override("v_separation", 8)
+	var spara := UiKit.knapp("SPARA LOGG" if k else "SPARA LOGG FÖR INSTRUKTÖR")
 	spara.pressed.connect(_spara)
 	knappar.add_child(spara)
-	knappar.add_child(UiKit.fyllnad())
 	var byt := UiKit.knapp("BYT SCENARIO")
 	byt.pressed.connect(func() -> void: byt_scenario.emit())
 	knappar.add_child(byt)
@@ -160,15 +168,15 @@ func _spara() -> void:
 
 func _tidslinjerad(i: int, post: Dictionary) -> PanelContainer:
 	var ruta := UiKit.klickruta(UiKit.KANT, UiKit.RUTA, UiKit.KANT2)
-	var h := UiKit.hbox(14)
+	var h := UiKit.hbox(8 if UiKit.kompakt else 14)
 	ruta.add_child(h)
-	var tid := UiKit.etikett(str(post.get("tid", "")), 20, UiKit.DAMPAD)
-	tid.custom_minimum_size = Vector2(56, 0)
+	var tid := UiKit.etikett(str(post.get("tid", "")), 18 if UiKit.kompakt else 20, UiKit.DAMPAD)
+	tid.custom_minimum_size = Vector2(44 if UiKit.kompakt else 56, 0)
 	h.add_child(tid)
 	var ik := UiKit.utfallsikon(str(post.get("utfall", "warn")), 22)
 	ik.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	h.add_child(ik)
-	var t := UiKit.etikett(str(post.get("beskrivning", post.get("namn", ""))), 22, UiKit.TEXT, true)
+	var t := UiKit.etikett(str(post.get("beskrivning", post.get("namn", ""))), 19 if UiKit.kompakt else 22, UiKit.TEXT, true)
 	t.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	h.add_child(t)
 	ruta.gui_input.connect(_pa_rad_input.bind(i, ruta))
