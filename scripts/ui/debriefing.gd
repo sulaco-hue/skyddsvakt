@@ -171,12 +171,12 @@ func _tidslinjerad(i: int, post: Dictionary) -> PanelContainer:
 	var t := UiKit.etikett(str(post.get("beskrivning", post.get("namn", ""))), 22, UiKit.TEXT, true)
 	t.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	h.add_child(t)
-	ruta.gui_input.connect(_pa_rad_input.bind(i))
+	ruta.gui_input.connect(_pa_rad_input.bind(i, ruta))
 	return ruta
 
 
-func _pa_rad_input(ev: InputEvent, i: int) -> void:
-	if UiKit.ar_klick(ev):
+func _pa_rad_input(ev: InputEvent, i: int, ruta: Control) -> void:
+	if UiKit.ar_tryck(ev, ruta):
 		_visa(i)
 
 

@@ -183,11 +183,29 @@ static func klickruta(kant := KANT2, bg := KNAPP, hover_kant := BARNSTEN) -> Pan
 	var hov := ruta(KNAPP_HOVER, hover_kant, 3, 16, 10)
 	p.add_theme_stylebox_override("panel", normal)
 	p.set_meta("normal", normal)
-	p.mouse_filter = Control.MOUSE_FILTER_STOP
+	# PASS: händelsen går vidare till en omgivande ScrollContainer, så att man
+	# kan dra/scrolla på pekskärm även när fingret startar på en ruta.
+	p.mouse_filter = Control.MOUSE_FILTER_PASS
 	p.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	p.mouse_entered.connect(func() -> void: p.add_theme_stylebox_override("panel", hov))
 	p.mouse_exited.connect(func() -> void: p.add_theme_stylebox_override("panel", p.get_meta("normal")))
 	return p
+
+
+## Ett "tryck": knappen släpps på rutan utan att fingret/musen dragits iväg
+## (så att scrollning inte räknas som ett val).
+static func ar_tryck(event: InputEvent, c: Control) -> bool:
+	var m := event as InputEventMouseButton
+	if m == null or m.button_index != MOUSE_BUTTON_LEFT:
+		return false
+	if m.pressed:
+		c.set_meta("tryck_start", m.global_position)
+		return false
+	if not c.has_meta("tryck_start"):
+		return false
+	var start: Vector2 = c.get_meta("tryck_start")
+	c.remove_meta("tryck_start")
+	return start.distance_to(m.global_position) < 14.0 and c.get_global_rect().has_point(m.global_position)
 
 
 static func ar_klick(event: InputEvent) -> bool:

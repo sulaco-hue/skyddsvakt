@@ -12,17 +12,23 @@ func bygg(scenarier: Array) -> void:
 	UiKit.helskarm(bg)
 	add_child(bg)
 
+	var scroll := ScrollContainer.new()
+	UiKit.helskarm(scroll)
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	add_child(scroll)
 	var mitt := CenterContainer.new()
-	UiKit.helskarm(mitt)
-	mitt.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(mitt)
-	var kol := UiKit.vbox(16)
+	mitt.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	mitt.mouse_filter = Control.MOUSE_FILTER_PASS
+	scroll.add_child(mitt)
+	var kol := UiKit.vbox(12 if UiKit.kompakt else 16)
 	kol.custom_minimum_size = Vector2(720, 0)
+	kol.mouse_filter = Control.MOUSE_FILTER_PASS
 	mitt.add_child(kol)
+	kol.add_child(UiKit.ruta_farg(Color(0, 0, 0, 0), Vector2(0, 8)))
 
 	var logga := TextureRect.new()
 	logga.texture = load("res://assets/gfx/logga.png")
-	logga.custom_minimum_size = Vector2(220, 64) * 2
+	logga.custom_minimum_size = Vector2(220, 64) * (1.0 if UiKit.kompakt else 2.0)
 	logga.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	logga.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT
 	logga.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -46,10 +52,10 @@ func bygg(scenarier: Array) -> void:
 		var v := UiKit.vbox(2)
 		v.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		v.add_child(UiKit.titel(str(sc.get("namn", "")), 20))
-		var ing := UiKit.etikett(str(sc.get("ingress", "")), 21, UiKit.LJUS, true)
+		var ing := UiKit.etikett(str(sc.get("ingress", "")), 19 if UiKit.kompakt else 21, UiKit.LJUS, true)
 		v.add_child(ing)
 		h.add_child(v)
-		ruta.gui_input.connect(_pa_klick.bind(str(sc.get("sokvag", ""))))
+		ruta.gui_input.connect(_pa_klick.bind(str(sc.get("sokvag", "")), ruta))
 		kol.add_child(ruta)
 
 	kol.add_child(UiKit.etikett("Välj med musen eller med siffertangenterna. Lagstödet är inte juridiskt granskat.", 18,
@@ -57,8 +63,8 @@ func bygg(scenarier: Array) -> void:
 	set_meta("scenarier", scenarier)
 
 
-func _pa_klick(ev: InputEvent, sokvag: String) -> void:
-	if UiKit.ar_klick(ev):
+func _pa_klick(ev: InputEvent, sokvag: String, ruta: Control) -> void:
+	if UiKit.ar_tryck(ev, ruta):
 		valt.emit(sokvag)
 
 
