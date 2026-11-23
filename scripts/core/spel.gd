@@ -16,6 +16,8 @@ var variant := ""
 ## Vilket skyddsobjekt som står innanför staketet (slumpas vid varje genomförande).
 var objekttyp := ""
 var _bedomning_override: Dictionary = {}
+## Händelser som stridsparet aldrig upptäckte (läggs till vid debriefing).
+var missade: Array = []
 var fakta: Dictionary = {}
 var logg: Array = []
 var samband: Array = []
@@ -54,6 +56,7 @@ func nollstall(sokvag: String = "", tvinga_objekttyp: String = "") -> void:
 	karta = Datafil.las_json(str(k)) if k is String else (k if k is Dictionary else {})
 	_valj_objekttyp(tvinga_objekttyp)
 	variant = ""
+	missade = []
 	var bed: Dictionary = scenario.get("bedomning", {})
 	_bedomning_override = bed.duplicate(true)
 	var start_fakta: Dictionary = scenario.get("fakta", {})
@@ -190,7 +193,11 @@ func slutlogg() -> Array:
 				"diskutera": str(krav.get("diskutera", "Varför är det viktigt att detta görs?")),
 				"saknade_krav": [],
 			})
-	return logg + regelmotor.kontrollera_foljdkrav(logg, fakta) + extra
+	return missade + logg + regelmotor.kontrollera_foljdkrav(logg, fakta) + extra
+
+
+func lagg_till_missad(post: Dictionary) -> void:
+	missade.append(post)
 
 
 ## Sparar debriefingen som JSON för instruktören. Returnerar sökvägen.

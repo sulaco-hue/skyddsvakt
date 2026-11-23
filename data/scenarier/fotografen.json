@@ -77,7 +77,8 @@
         "Motparten: utanför staketet, invid skyddsobjektet",
         "Skylt: Tillträdesförbud · Avbildningsförbud",
         "Stridsparskamrat: skyddar"
-      ]
+      ],
+      "lamnar_replik": "Nä, nu får det räcka."
     }
   },
   "handelser": [
@@ -97,7 +98,8 @@
         "kommentar": "Kamraten reagerar efter en slumpad tid (min_s–max_s sekunder vid referensavståndet). Närmare = snabbare, längre bort = långsammare. Längre bort än max_avstand (rutor) står timern still.",
         "paus_snack_s": 60,
         "max_avstand": 14
-      }
+      },
+      "lamnar_efter_s": 30
     }
   ],
   "samband": [],

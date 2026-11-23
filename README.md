@@ -135,6 +135,9 @@ i stället har stridsparskamraten en intern **upptäcktstimer** (`handelser[].up
 - Är ni längre bort än `max_avstand` rutor står timern still (fotografen 14, drönaren 18 – den hörs längre).
 - När den når 100 % reagerar kamraten (repliken i `kamrat`) och personen markeras.
 - Upptäcker du personen själv och tar kontakt innan dess, avbryts timern.
+- **Missade händelser:** en händelse som stridsparet aldrig upptäcker (t.ex. för att ni var för långt
+  bort) visas i debriefingen som *saknar lagstöd* med hur länge den pågick och hur nära ni som närmast var.
+- Fotografen ger sig av efter `lamnar_efter_s` sekunder (30) om ingen kontakt tagits.
 
 **Debugraden** (överst, **F3** visar/döljer) har en knapp per händelse som startar den direkt,
 och visar upptäcktstimerns status. **INFO** öppnar en panel med klocka, händelser, positioner och zoner,

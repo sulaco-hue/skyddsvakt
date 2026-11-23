@@ -23,6 +23,10 @@ var dronare: Dronare
 ## Radiobrus: trafik mellan andra enheter (data/radiobrus.json).
 var _brus: Dictionary = {}
 var _brus_t := 0.0
+## Status per startad händelse: id -> {h, start_s, slut_s, upptackt, narmast}
+var _handelse_status: Dictionary = {}
+## Personer som lämnat platsen innan kontakt togs.
+var _lamnat: Dictionary = {}
 var _dronare_handelse: Dictionary = {}
 
 
@@ -190,6 +194,10 @@ func _forcera_handelse(id: String) -> void:
 
 func _utlos_handelse(h: Dictionary) -> void:
 	hud.markera_handelse_startad(str(h.get("id", "")))
+	_handelse_status[str(h.get("id", ""))] = {
+		"h": h, "start_s": Spel.klocka_s, "start": Spel.klockstrang(), "slut_s": -1.0,
+		"upptackt": false, "narmast": 999,
+	}
 	match str(h.get("typ", "")):
 		"npc_gar_till":
 			var id := str(h.get("npc", ""))
@@ -213,6 +221,45 @@ func _pa_npc_framme(h: Dictionary, id: String) -> void:
 		n.blixt.connect(_pa_blixt.bind(id))
 	_larm_npc = id
 	_starta_upptackt(h, n, id)
+	var lamnar := float(h.get("lamnar_efter_s", 0))
+	if lamnar > 0.0:
+		get_tree().create_timer(lamnar).timeout.connect(_npc_lamnar.bind(id, h))
+
+
+## Personen ger sig av om ingen kontakt tagits (t.ex. fotografen efter 30 s).
+func _npc_lamnar(id: String, h: Dictionary) -> void:
+	var n: Aktor = varld.npcer.get(id)
+	if n == null or not n.visible or _samtal_klara.has(id):
+		return
+	if kontakt.visible and str(kontakt.get_meta("npc", "")) == id:
+		return
+	_lamnat[id] = true
+	_samtal_klara[id] = true
+	n.satt_fotograferar(false)
+	if not _upptackt.is_empty() and str(_upptackt["npc"]) == id:
+		_upptackt = {}
+	if _larm_npc == id:
+		varld.satt_larm("")
+	if _vantar_samtal == id:
+		_vantar_samtal = ""
+	_avsluta_handelse(h)
+	var data: Dictionary = _scenario.get("npc", {}).get(id, {})
+	if str(data.get("lamnar_replik", "")) != "" and hud.visible:
+		hud.visa_bubbla(n, str(data.get("lamnar_replik", "")), 3.0)
+	n.framme.connect(_dolj_npc.bind(id), CONNECT_ONE_SHOT)
+	varld.flytta_npc(id, varld.punkt(data.get("start", [0, 0])))
+
+
+func _markera_upptackt(h: Dictionary) -> void:
+	var hs: Dictionary = _handelse_status.get(str(h.get("id", "")), {})
+	if not hs.is_empty():
+		hs["upptackt"] = true
+
+
+func _avsluta_handelse(h: Dictionary) -> void:
+	var hs: Dictionary = _handelse_status.get(str(h.get("id", "")), {})
+	if not hs.is_empty() and float(hs["slut_s"]) < 0.0:
+		hs["slut_s"] = Spel.klocka_s
 
 
 ## Startar kamratens upptäcktstimer mot en nod (figur eller drönare):
@@ -280,6 +327,9 @@ func _dronare_flyger_bort() -> void:
 	if dronare == null or not dronare.i_luften():
 		return
 	hud.satt_situation("", false)
+	_avsluta_handelse(_dronare_handelse)
+	if not _upptackt.is_empty() and _upptackt["nod"] == dronare:
+		_upptackt = {}
 	dronare.flyg_till(varld.cell_pos(varld.punkt(_dronare_handelse.get("bort_utan_pilot", "kant_sydvast"))), 60.0)
 	dronare.framme.connect(_ta_bort_dronare, CONNECT_ONE_SHOT)
 
@@ -303,6 +353,9 @@ func _bekampa_dronare() -> void:
 	if dronare == null or not dronare.i_luften():
 		return
 	hud.satt_situation("", false)
+	_markera_upptackt(_dronare_handelse)
+	if not _upptackt.is_empty() and _upptackt["nod"] == dronare:
+		_upptackt = {}
 	Spel.utfor("vald_mot_farkost", "Bekämpade drönaren med automatkarbin")
 	hud.visa_ljud(varld.spelare, "PANG PANG", 1.5)
 	dronare.krascha()
@@ -334,6 +387,9 @@ func _uppdatera_upptackt(delta: float) -> void:
 	var cell := varld.cell_av(nod.global_position)
 	var avst := mini(varld.avstand(varld.spelare.cell, cell), varld.avstand(varld.kollega.cell, cell))
 	_upptackt["tid"] = float(_upptackt["tid"]) + delta
+	var hs: Dictionary = _handelse_status.get(str(_upptackt["h"].get("id", "")), {})
+	if not hs.is_empty():
+		hs["narmast"] = mini(int(hs["narmast"]), avst)
 	# För långt bort: timern står still tills ni kommer närmare.
 	if avst > int(_upptackt["max"]):
 		hud.satt_debug_status("kamraten upptäcker: %d %% · PAUSAD, avstånd %d > %d" % [
@@ -352,6 +408,7 @@ func _kamrat_reagerar() -> void:
 	var h: Dictionary = _upptackt["h"]
 	var nod: Node2D = _upptackt["nod"]
 	_upptackt = {}
+	_markera_upptackt(h)
 	_larm_har_skett = true
 	snack.pausa(float(h.get("upptackt", {}).get("paus_snack_s", 60)))
 	if id != "":
@@ -379,6 +436,9 @@ func _dolj_npc(id: String) -> void:
 # ----------------------------------------------------------- Kontakt --
 
 func _pa_npc_klickad(id: String) -> void:
+	if _lamnat.has(id):
+		hud.visa_meddelande("Personen har lämnat platsen.")
+		return
 	if _samtal_klara.has(id):
 		hud.visa_meddelande("Kontakten med personen är redan avslutad.")
 		return
@@ -417,8 +477,14 @@ func _oppna_kontakt(id: String) -> void:
 	varld.spelare.vand_mot(n.position)
 	n.vand_mot(varld.spelare.position)
 	n.satt_fotograferar(false)
-	# Spelaren upptäckte själv personen före kamraten.
-	if not _upptackt.is_empty() and str(_upptackt["npc"]) == id:
+	# Spelaren upptäckte själv händelsen före kamraten (kontakt = upptäckt).
+	for hid: String in _handelse_status:
+		var hs: Dictionary = _handelse_status[hid]
+		var h: Dictionary = hs["h"]
+		var inblandade: Array = h.get("visa_npc_med_pilot", []) + [str(h.get("npc", ""))]
+		if id in inblandade:
+			_markera_upptackt(h)
+	if not _upptackt.is_empty() and str(_upptackt["npc"]) in [id, ""]:
 		_upptackt = {}
 		_larm_har_skett = true
 	varld.kollega.stanna()
@@ -469,6 +535,26 @@ func _visa_debriefing() -> void:
 	varld.interaktion_aktiv = false
 	hud.visible = false
 	kontakt.visible = false
+	for hid: String in _handelse_status:
+		var hs: Dictionary = _handelse_status[hid]
+		if bool(hs["upptackt"]):
+			continue
+		var h: Dictionary = hs["h"]
+		var slut := float(hs["slut_s"]) if float(hs["slut_s"]) >= 0.0 else Spel.klocka_s
+		var speltid := int((slut - float(hs["start_s"])) / 60.0)
+		var narmast := int(hs["narmast"])
+		var var_text := ("Som närmast var ni %d rutor bort." % narmast) if narmast < 999 else ""
+		Spel.lagg_till_missad({
+			"tid": str(hs["start"]),
+			"handling": "missad_" + hid,
+			"namn": "Missad händelse",
+			"beskrivning": "Missad händelse: " + str(h.get("namn", hid)) + (" (%s)" % Spel.variant.replace("_", " ") if Spel.variant != "" else ""),
+			"utfall": "bad",
+			"lagrum": "Bevakningsinstruktion – uppmärksamhet",
+			"kommentar": "Händelsen pågick i cirka %d minuter speltid utan att stridsparet upptäckte den. %s" % [maxi(speltid, 1), var_text],
+			"diskutera": str(h.get("missad_diskutera", "Var borde stridsparet ha befunnit sig? Hur fördelar ni uppmärksamheten under en rond?")),
+			"saknade_krav": [],
+		})
 	debriefing = Debriefing.new()
 	rot.add_child(debriefing)
 	var meta := Spel.regelmotor.meta

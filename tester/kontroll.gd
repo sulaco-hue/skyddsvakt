@@ -20,6 +20,7 @@ func _ready() -> void:
 	await _spela_scenario_1()
 	await _spela_dronaren_med_pilot()
 	await _spela_dronaren_utan_pilot()
+	await _spela_missad_handelse()
 	await _bygg_alla_objekttyper()
 	print("--- Kompakt läge (pekskärm) ---")
 	UiKit.kompakt = true
@@ -285,3 +286,35 @@ func _bygg_alla_objekttyper() -> void:
 			_ok("%s (%s) blockerar %d rutor" % [typ, Spel.scenario.get("objekt", ""), blockerade])
 		main.queue_free()
 		await _vanta(3)
+
+
+## Stridsparet står långt bort (vid sjön) medan fotografen kommer och går:
+## händelsen ska visas som missad i debriefingen.
+func _spela_missad_handelse() -> void:
+	print("--- Missad händelse ---")
+	Spel.nollstall("res://data/scenarier/fotografen.json")
+	var main = load("res://scenes/main.tscn").instantiate()
+	add_child(main)
+	await _vanta(5)
+	main.call("_starta_pass")
+	await _vanta(3)
+	var sjo: Vector2i = main.varld.punkt("sjo_pilot")
+	for a in [main.varld.spelare, main.varld.kollega]:
+		a.cell = sjo
+		a.position = main.varld.cell_pos(sjo)
+	main.varld.kamrat_folj = false
+	main.call("_forcera_handelse", "1")
+	var npc: Aktor = main.varld.npcer.get("fotografen")
+	var t := 0
+	while npc.visible and t < 6000:
+		await get_tree().process_frame
+		t += 1
+	if npc.visible:
+		_fel("fotografen gick aldrig iväg")
+	else:
+		_ok("fotografen gav sig av utan kontakt")
+	main.call("_visa_debriefing")
+	await _vanta(3)
+	_forvanta({"missad_1": "bad"})
+	main.queue_free()
+	await _vanta(3)
