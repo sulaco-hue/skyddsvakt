@@ -72,7 +72,7 @@ func bygg(poster: Array, scenario: Dictionary, granskad: bool, kommentar: String
 
 	# Tidslinje
 	var vanster := UiKit.vbox(8)
-	vanster.custom_minimum_size = Vector2(580, 0)
+	vanster.custom_minimum_size = Vector2(420 if UiKit.kompakt else 580, 0)
 	mitt.add_child(vanster)
 	vanster.add_child(UiKit.rubrik("TIDSLINJE – VÄLJ ETT BESLUT", 13, UiKit.DAMPAD))
 	var scroll := ScrollContainer.new()
@@ -93,8 +93,13 @@ func bygg(poster: Array, scenario: Dictionary, granskad: bool, kommentar: String
 	_analys = UiKit.panel(UiKit.KANT2, UiKit.RUTA, 22, 18)
 	_analys.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	mitt.add_child(_analys)
+	var ascroll := ScrollContainer.new()
+	ascroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_analys.add_child(ascroll)
 	var av := UiKit.vbox(10)
-	_analys.add_child(av)
+	av.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	av.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	ascroll.add_child(av)
 	var ar := UiKit.hbox(12)
 	_a_utfall = UiKit.rubrik("", 14)
 	ar.add_child(_a_utfall)

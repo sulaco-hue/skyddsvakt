@@ -25,6 +25,10 @@ var klocka_igang := false
 
 func _ready() -> void:
 	regelmotor.ladda(LAGRUM_SOKVAG)
+	# Pekskärm (t.ex. iPhone/iPad i Safari): mindre basupplösning = större text och knappar.
+	if DisplayServer.is_touchscreen_available():
+		UiKit.kompakt = true
+		get_tree().root.content_scale_size = Vector2i(960, 540)
 
 
 ## Alla scenarier i data/scenarier/index.json: [{sokvag, namn, ingress}]

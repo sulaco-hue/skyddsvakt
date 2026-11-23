@@ -29,6 +29,11 @@ bedömning av en handling) och `slutkrav` (t.ex. att händelsen måste rapporter
 
 **https://sulaco-hue.github.io/skyddsvakt/**
 
+**På mobil/surfplatta (t.ex. iPhone/iPad i Safari):** spelet går i kompakt läge med större text och
+knappar. Håll enheten liggande. Tryck där du vill gå, på en person för kontakt och på kamraten för
+”tyst nu”. **DBG** i toppraden visar debugraden. Tips: *Dela → Lägg till på hemskärmen* ger helskärm
+utan adressfält.
+
 Varje push till `main` bygger och publicerar spelet automatiskt (se nedan). Ladda om sidan efter
 några minuter för att få senaste versionen.
 

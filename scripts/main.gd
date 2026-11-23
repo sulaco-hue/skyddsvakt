@@ -59,6 +59,7 @@ func _ready() -> void:
 	add_child(snack)
 	snack.setup(hud, varld, _scenario)
 	hud.tysta_kamrat.connect(snack.tysta)
+	varld.kamrat_klickad.connect(snack.tysta)
 
 	kontakt = Kontakt.new()
 	rot.add_child(kontakt)
@@ -75,6 +76,7 @@ func _ready() -> void:
 	rot.add_child(briefing)
 	briefing.bygg(_scenario)
 	briefing.starta.connect(_starta_pass)
+	rot.add_child(VridOverlay.new())
 
 
 func _visa_scenarioval() -> void:
@@ -88,6 +90,7 @@ func _visa_scenarioval() -> void:
 	rot.add_child(val)
 	val.bygg(Spel.scenarier())
 	val.valt.connect(_valj_scenario)
+	rot.add_child(VridOverlay.new())
 
 
 func _valj_scenario(sokvag: String) -> void:

@@ -23,6 +23,9 @@ const UTFALL := {
 	"bad": {"etikett": "SAKNAR LAGSTÖD", "farg": ROSA, "tecken": "x"},
 }
 
+## Kompakt läge för pekskärmar (mobil/surfplatta): större text, mindre ytor.
+static var kompakt := false
+
 static var _brod: Font
 static var _rubrik: Font
 static var _rubrik_spatierad: Font

@@ -21,6 +21,10 @@ func _ready() -> void:
 	await _spela_dronaren_med_pilot()
 	await _spela_dronaren_utan_pilot()
 	await _bygg_alla_objekttyper()
+	print("--- Kompakt läge (pekskärm) ---")
+	UiKit.kompakt = true
+	await _spela_scenario_1()
+	UiKit.kompakt = false
 	Engine.time_scale = 1.0
 	if fel == 0:
 		print("=== RESULTAT: OK ===")

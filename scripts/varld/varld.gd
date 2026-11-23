@@ -8,6 +8,7 @@ extends Node2D
 
 signal npc_klickad(npc_id: String)
 signal spelare_framme
+signal kamrat_klickad
 
 const RUTSTORLEK := Vector2i(32, 16)
 const ZOOM := 2.0
@@ -505,6 +506,10 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif UiKit.ar_klick(event):
 		var c := cell_vid_mus()
 		var mus := get_global_mouse_position()
+		if kollega and (kollega.cell == c or kollega.traffar(mus)):
+			kamrat_klickad.emit()
+			get_viewport().set_input_as_handled()
+			return
 		for id: String in npcer:
 			var n: Aktor = npcer[id]
 			if n.visible and (n.cell == c or n.traffar(mus)):

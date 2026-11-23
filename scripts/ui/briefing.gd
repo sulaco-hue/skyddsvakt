@@ -21,12 +21,17 @@ func bygg(scenario: Dictionary) -> void:
 	marg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(marg)
 
+	var scroll := ScrollContainer.new()
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	marg.add_child(scroll)
 	var rad := UiKit.hbox(24)
-	marg.add_child(rad)
+	rad.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	rad.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.add_child(rad)
 
 	# --- Omvärldsläge
 	var vanster := UiKit.vbox(12)
-	vanster.custom_minimum_size = Vector2(400, 0)
+	vanster.custom_minimum_size = Vector2(300 if UiKit.kompakt else 400, 0)
 	rad.add_child(vanster)
 	vanster.add_child(UiKit.titel("Omvärldsläge"))
 
@@ -64,7 +69,7 @@ func bygg(scenario: Dictionary) -> void:
 	var karta := TextureRect.new()
 	var bild := "res://assets/gfx/objektskarta_%s.png" % Spel.objekttyp
 	karta.texture = load(bild if ResourceLoader.exists(bild) else "res://assets/gfx/objektskarta.png")
-	karta.custom_minimum_size = Vector2(480, 270)
+	karta.custom_minimum_size = Vector2(336, 189) if UiKit.kompakt else Vector2(480, 270)
 	karta.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	karta.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	karta.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR  # kartan visas i 75 % storlek
@@ -77,7 +82,10 @@ func bygg(scenario: Dictionary) -> void:
 	info.add_child(UiKit.rubrik("SAMBAND", 13, UiKit.DAMPAD))
 	info.add_child(UiKit.etikett(str(b.get("samband", "")), 20, UiKit.LJUS, true))
 	info.add_child(UiKit.rubrik("STYRNING", 13, UiKit.DAMPAD))
-	info.add_child(UiKit.etikett("Klicka för att gå – grinden öppnas när du närmar dig. Klicka på en person för kontakt. Q observera · R samband · N anteckna · T tyst nu · I instruktion · M musik av/på · F3 debugrad.", 20, UiKit.LJUS, true))
+	var styr := "Klicka för att gå – grinden öppnas när du närmar dig. Klicka på en person för kontakt, på kamraten för ”tyst nu”. Q observera · R samband · N anteckna · T tyst nu · I instruktion · M musik av/på · F3 debugrad."
+	if UiKit.kompakt:
+		styr = "Tryck där du vill gå – grinden öppnas när du närmar dig. Tryck på en person för kontakt, på kamraten för ”tyst nu”. DBG visar debugraden."
+	info.add_child(UiKit.etikett(styr, 20, UiKit.LJUS, true))
 	kartrad.add_child(info)
 
 	var grid := GridContainer.new()
@@ -89,7 +97,7 @@ func bygg(scenario: Dictionary) -> void:
 	upp.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	var uv := UiKit.vbox(6)
 	upp.add_child(uv)
-	uv.add_child(UiKit.rubrik("UPPDRAG", 13))
+	uv.add_child(UiKit.rubrik("BEVAKNINGSINSTRUKTION", 13))
 	uv.add_child(UiKit.etikett(str(b.get("uppdrag", "")), 22, UiKit.TEXT, true))
 	grid.add_child(upp)
 	var lag := UiKit.panel(UiKit.KANT, UiKit.RUTA)

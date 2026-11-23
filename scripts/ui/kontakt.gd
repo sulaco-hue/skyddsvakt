@@ -56,11 +56,12 @@ func bygg(scenario: Dictionary) -> void:
 
 	# Motpart
 	var vanster := UiKit.vbox(12)
-	vanster.custom_minimum_size = Vector2(326, 0)
+	var portr := 180 if UiKit.kompakt else 320
+	vanster.custom_minimum_size = Vector2(portr + 6, 0)
 	mitt.add_child(vanster)
 	var ram := UiKit.panel(UiKit.KANT2, Color("22303D"), 0, 0)
 	_portratt = TextureRect.new()
-	_portratt.custom_minimum_size = Vector2(320, 320)
+	_portratt.custom_minimum_size = Vector2(portr, portr)
 	_portratt.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	_portratt.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	_portratt.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -97,7 +98,7 @@ func bygg(scenario: Dictionary) -> void:
 	var bv := UiKit.vbox(6)
 	bubbla.add_child(bv)
 	bv.add_child(UiKit.rubrik("MOTPARTEN", 14, Color("5A3B12")))
-	_replik = UiKit.etikett("", 30, UiKit.MORK, true)
+	_replik = UiKit.etikett("", 24 if UiKit.kompakt else 30, UiKit.MORK, true)
 	bv.add_child(_replik)
 	hoger.add_child(bubbla)
 	hoger.add_child(UiKit.rubrik("DITT SVAR", 14, UiKit.GRON))
@@ -120,6 +121,7 @@ func bygg(scenario: Dictionary) -> void:
 	bvv.add_child(_tid_label)
 	botten.add_child(bvv)
 	kol.add_child(botten)
+	botten.visible = not UiKit.kompakt
 
 
 func _bygg_chips(rader: Array) -> void:
@@ -177,7 +179,7 @@ func _alternativrad(i: int, alt: Dictionary) -> Control:
 	nl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	nr.add_child(nl)
 	h.add_child(nr)
-	var t := UiKit.etikett(str(alt.get("text", "")), 24, UiKit.TEXT, true)
+	var t := UiKit.etikett(str(alt.get("text", "")), 21 if UiKit.kompakt else 24, UiKit.TEXT, true)
 	t.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	h.add_child(t)
 	ruta.gui_input.connect(_pa_alternativ_input.bind(i))

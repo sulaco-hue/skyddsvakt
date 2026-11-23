@@ -45,6 +45,7 @@ func bygg(p_scenario: Dictionary, p_varld: Varld) -> void:
 	# Uppdragsrutan är borttagen tills vidare (ersätts av något bättre).
 	_bygg_debug()
 	_bygg_debug_info()
+	_debug.visible = not UiKit.kompakt
 	_bygg_samband()
 	_bygg_position()
 	_bygg_handlingar()
@@ -77,7 +78,9 @@ func _bygg_toppfalt() -> void:
 	th.add_child(UiKit.rubrik(str(scenario.get("pass", "")).to_upper(), 16, UiKit.GRON))
 	_klocka = UiKit.etikett("00:00", 30)
 	th.add_child(_klocka)
-	th.add_child(UiKit.etikett(str(scenario.get("vader", "")), 20, UiKit.DAMPAD))
+	var vader := UiKit.etikett(str(scenario.get("vader", "")), 20, UiKit.DAMPAD)
+	vader.visible = not UiKit.kompakt
+	th.add_child(vader)
 	for c in th.get_children():
 		var lbl := c as Label
 		lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -100,12 +103,20 @@ func _bygg_toppfalt() -> void:
 	var oh := UiKit.hbox(10)
 	obj.add_child(oh)
 	var ol := UiKit.etikett("Skyddsobjekt", 20, UiKit.DAMPAD)
+	ol.visible = not UiKit.kompakt
 	ol.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	oh.add_child(ol)
 	var on := UiKit.rubrik(str(scenario.get("objekt", "")).to_upper(), 15, UiKit.TEXT)
 	on.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	oh.add_child(on)
 	rad.add_child(obj)
+
+	var dbg := UiKit.knapp("DBG")
+	dbg.custom_minimum_size = Vector2(52, 52)
+	dbg.add_theme_font_size_override("font_size", 16)
+	dbg.tooltip_text = "Visa/dölj debugraden [F3]"
+	dbg.pressed.connect(func() -> void: _debug.visible = not _debug.visible)
+	rad.add_child(dbg)
 
 	_ljudknapp = Button.new()
 	_ljudknapp.custom_minimum_size = Vector2(52, 52)
@@ -133,7 +144,7 @@ func _bygg_uppdrag() -> void:
 	var v := UiKit.vbox(6)
 	p.add_child(v)
 	var b: Dictionary = scenario.get("briefing", {})
-	v.add_child(UiKit.rubrik("UPPDRAG", 15))
+	v.add_child(UiKit.rubrik("BEVAKNINGSINSTRUKTION", 15))
 	var upp := UiKit.etikett(str(b.get("uppdrag", "")), 21, UiKit.TEXT, true)
 	upp.custom_minimum_size = Vector2(268, 0)
 	v.add_child(upp)
