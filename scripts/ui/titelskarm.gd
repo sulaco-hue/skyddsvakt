@@ -36,16 +36,6 @@ func bygg() -> void:
 	var rad := UiKit.hbox(48)
 	mitt.add_child(rad)
 
-	var vakt := TextureRect.new()
-	vakt.texture = load("res://assets/gfx/vakt_halt.png")
-	var skala := 10 if not UiKit.kompakt else 8
-	vakt.custom_minimum_size = Vector2(16, 25) * skala
-	vakt.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	vakt.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	vakt.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	vakt.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	rad.add_child(vakt)
-
 	var kol := UiKit.vbox(18)
 	kol.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	rad.add_child(kol)

@@ -1229,19 +1229,6 @@ hogtalare("hogtalare_pa", [(8, 4, 0), (8, 5, 0), (8, 6, 0), (8, 7, 0), (9, 2, 0)
 hogtalare("hogtalare_av", [(7 + i, 3 + i, 1) for i in range(5)] + [(11 - i, 3 + i, 1) for i in range(5)])
 
 # ========================================================= Startskärm ==
-# Vakt som räcker upp handen: "Halt!"
-HALT_TOP = list(GUARD_TOP)
-HALT_TOP[0] = "....HHHH...s"
-HALT_TOP[1] = "...HhhhhH..s"
-HALT_TOP[2] = "..HHHHHHHHHU"
-HALT_TOP[3] = "..EssssssE.U"
-HALT_TOP[4] = "..EsesseSE.U"
-HALT_TOP[5] = "...SssssS..U"
-HALT_TOP[6] = "....SSSS..aU"
-HALT_TOP[7] = "..UUUUUUUAAU"
-figure("vakt_halt", HALT_TOP, GUARD_LEGS[0])
-
-
 def logga():
     """Spelets namn i pixelstil: ritas litet med Jersey 15 och skalas upp utan utjämning."""
     from PIL import ImageFont
