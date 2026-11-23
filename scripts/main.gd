@@ -490,7 +490,7 @@ func _bekampa_dronare() -> void:
 	hud.visa_ljud(varld.spelare, "PANG PANG", 1.5)
 	dronare.krascha()
 	varld.kollega.vand_mot(dronare.global_position)
-	var efter := str(_dronare_handelse.get("kamrat_efter_skott", "…Det där kommer AQ inte gilla."))
+	var efter := str(_dronare_handelse.get("kamrat_efter_skott", "…Det där kommer CQ inte gilla."))
 	get_tree().create_timer(1.8).timeout.connect(_kamrat_sager.bind(efter))
 	for id: String in _dronare_handelse.get("visa_npc_med_pilot", []):
 		var n: Aktor = varld.npcer.get(id)
@@ -733,14 +733,14 @@ func _angrepp_upphort(extra: Dictionary) -> void:
 
 
 func _larma_sjukvard() -> void:
-	Spel.utfor("larma_sjukvard", "Larmade sjukvård via AQ")
+	Spel.utfor("larma_sjukvard", "Larmade sjukvård via CQ")
 	Spel.spela_samband([
-		{"fran": "Grindposten", "text": "AQ, AQ.", "efter": 0},
-		{"fran": "AQ", "text": "AQ kom.", "efter": 1.5},
+		{"fran": "Grindposten", "text": "CQ, CQ.", "efter": 0},
+		{"fran": "CQ", "text": "CQ kom.", "efter": 1.5},
 		{"fran": "Grindposten", "text": "Från Grindposten, en skadad person vid grinden, skottskada i benet, begär ambulans, kom.", "efter": 3.0},
-		{"fran": "AQ", "text": "Uppfattat, ambulans larmas, kom.", "efter": 5.0},
+		{"fran": "CQ", "text": "Uppfattat, ambulans larmas, kom.", "efter": 5.0},
 		{"fran": "Grindposten", "text": "Uppfattat, slut kom.", "efter": 6.5},
-		{"fran": "AQ", "text": "Klart slut.", "efter": 8.0},
+		{"fran": "CQ", "text": "Klart slut.", "efter": 8.0},
 	])
 	_visa_angripar_knappar()
 
@@ -754,7 +754,7 @@ func _forsta_hjalpen() -> void:
 	_visa_angripar_knappar()
 
 
-## Rapport till AQ efter skott räknas som rapport om skjutvapenanvändningen.
+## Rapport till CQ efter skott räknas som rapport om skjutvapenanvändningen.
 func _pa_logg_post(post: Dictionary) -> void:
 	if str(post.get("handling", "")) == "rapportera_vaktchef" and (
 			bool(Spel.fakta.get("varningsskott_avlossat", false)) or bool(Spel.fakta.get("verkanseld_avlossad", false))):

@@ -24,13 +24,13 @@
     {
       "tid": "23:50",
       "kalla": "Vaktchef",
-      "text": "Inga avvikelser. Nattpass: patrullera staketet och grinden. Vid hot mot person: larma AQ omedelbart."
+      "text": "Inga avvikelser. Nattpass: patrullera staketet och grinden. Vid hot mot person: larma CQ omedelbart."
     }
   ],
   "briefing": {
-    "uppdrag": "Bevaka grind och staket under natten. Rapportera avvikelser till AQ.",
+    "uppdrag": "Bevaka grind och staket under natten. Rapportera avvikelser till CQ.",
     "objektinfo": "Skyddsobjektet omfattar området innanför staketet. Skyltat: tillträdesförbud och avbildningsförbud. En skogsstig leder norrut från staketet.",
-    "samband": "Vi: Grindposten (stridspar, två skyddsvakter). Vaktchef: AQ (Adam Qvintus) – på annan plats, ser inte objektet. Det är vi som larmar.",
+    "samband": "Vi: Grindposten (stridspar, två skyddsvakter). Vaktchef: CQ (Caesar Qvintus) – på annan plats, ser inte objektet. Det är vi som larmar.",
     "lagstod_fokus": [
       "Nödvärn 24 kap. 1 § BrB",
       "Varning: ”Halt eller jag skjuter skarpt!”",
@@ -40,7 +40,7 @@
     "mal": []
   },
   "anropssignaler": {
-    "vaktchef": "AQ",
+    "vaktchef": "CQ",
     "du": "Grindposten"
   },
   "fakta": {
@@ -173,17 +173,17 @@
   "samband": [],
   "sambandsval": [
     {
-      "etikett": "Prova förbindelsen med AQ",
+      "etikett": "Prova förbindelsen med CQ",
       "handling": "",
       "meddelanden": [
         {
           "fran": "Grindposten",
-          "text": "AQ, AQ.",
+          "text": "CQ, CQ.",
           "efter": 0
         },
         {
-          "fran": "AQ",
-          "text": "AQ kom.",
+          "fran": "CQ",
+          "text": "CQ kom.",
           "efter": 1.5
         },
         {
@@ -192,7 +192,7 @@
           "efter": 3.0
         },
         {
-          "fran": "AQ",
+          "fran": "CQ",
           "text": "Hörbarhet femma, kom.",
           "efter": 4.5
         },
@@ -204,17 +204,17 @@
       ]
     },
     {
-      "etikett": "Lägesrapport till AQ",
+      "etikett": "Lägesrapport till CQ",
       "handling": "rapportera_vaktchef",
       "meddelanden": [
         {
           "fran": "Grindposten",
-          "text": "AQ, AQ.",
+          "text": "CQ, CQ.",
           "efter": 0.0
         },
         {
-          "fran": "AQ",
-          "text": "AQ kom.",
+          "fran": "CQ",
+          "text": "CQ kom.",
           "efter": 1.5
         },
         {
@@ -223,7 +223,7 @@
           "efter": 3.0
         },
         {
-          "fran": "AQ",
+          "fran": "CQ",
           "text": "{svar}, kom.",
           "efter": 4.5
         },
@@ -233,24 +233,24 @@
           "efter": 6.0
         },
         {
-          "fran": "AQ",
+          "fran": "CQ",
           "text": "Klart slut.",
           "efter": 7.5
         }
       ]
     },
     {
-      "etikett": "Larma sjukvård via AQ",
+      "etikett": "Larma sjukvård via CQ",
       "handling": "larma_sjukvard",
       "meddelanden": [
         {
           "fran": "Grindposten",
-          "text": "AQ, AQ.",
+          "text": "CQ, CQ.",
           "efter": 0.0
         },
         {
-          "fran": "AQ",
-          "text": "AQ kom.",
+          "fran": "CQ",
+          "text": "CQ kom.",
           "efter": 1.5
         },
         {
@@ -259,7 +259,7 @@
           "efter": 3.0
         },
         {
-          "fran": "AQ",
+          "fran": "CQ",
           "text": "Uppfattat, ambulans larmas, kom.",
           "efter": 4.5
         },
@@ -269,24 +269,24 @@
           "efter": 6.0
         },
         {
-          "fran": "AQ",
+          "fran": "CQ",
           "text": "Klart slut.",
           "efter": 7.5
         }
       ]
     },
     {
-      "etikett": "Begär att AQ underrättar polis",
+      "etikett": "Begär att CQ underrättar polis",
       "handling": "anmala_polis",
       "meddelanden": [
         {
           "fran": "Grindposten",
-          "text": "AQ, AQ.",
+          "text": "CQ, CQ.",
           "efter": 0.0
         },
         {
-          "fran": "AQ",
-          "text": "AQ kom.",
+          "fran": "CQ",
+          "text": "CQ kom.",
           "efter": 1.5
         },
         {
@@ -295,7 +295,7 @@
           "efter": 3.0
         },
         {
-          "fran": "AQ",
+          "fran": "CQ",
           "text": "Uppfattat, polis underrättas, kom.",
           "efter": 4.5
         },
@@ -305,7 +305,7 @@
           "efter": 6.0
         },
         {
-          "fran": "AQ",
+          "fran": "CQ",
           "text": "Klart slut.",
           "efter": 7.5
         }
@@ -320,14 +320,14 @@
     "efter": "man med yxa på väg mot grinden från norra stigen, hotar att döda oss"
   },
   "radio": {
-    "kommentar": "Trafik mellan andra enheter som följer händelserna. AQ ropar inte själv upp Grindposten. Krokar och villkor: scripts/core/radiotrafik.gd."
+    "kommentar": "Trafik mellan andra enheter som följer händelserna. CQ ropar inte själv upp Grindposten. Krokar och villkor: scripts/core/radiotrafik.gd."
   },
   "slutkrav": [
     {
       "handling": "rapportera_vaktchef",
       "lagrum": "Bevakningsinstruktion – rapportering · FFS 2010:7 13 §",
-      "text": "Händelsen rapporterades aldrig till AQ.",
-      "diskutera": "När ska AQ få veta? Före, under eller efter?"
+      "text": "Händelsen rapporterades aldrig till CQ.",
+      "diskutera": "När ska CQ få veta? Före, under eller efter?"
     }
   ],
   "dialog": {
@@ -376,7 +376,7 @@
       "stamning": 1,
       "alternativ": [
         {
-          "text": "Begär polis via AQ – han ska överlämnas till polis.",
+          "text": "Begär polis via CQ – han ska överlämnas till polis.",
           "handling": "anmala_polis",
           "nasta": "polis"
         },
@@ -388,7 +388,7 @@
       ]
     },
     "polis": {
-      "replik": "DU (radio): ”AQ, AQ.” – AQ: ”AQ kom.”\nDU: ”Från Grindposten, en man gripen för olaga hot med yxa, begär polis till grinden, kom.”\nAQ: ”Uppfattat, polis underrättas, slut kom.” – DU: ”Klart slut.”",
+      "replik": "DU (radio): ”CQ, CQ.” – CQ: ”CQ kom.”\nDU: ”Från Grindposten, en man gripen för olaga hot med yxa, begär polis till grinden, kom.”\nAQ: ”Uppfattat, polis underrättas, slut kom.” – DU: ”Klart slut.”",
       "slut": true
     },
     "vantar": {
@@ -407,7 +407,7 @@
       "stamning": 2,
       "alternativ": [
         {
-          "text": "Larma sjukvård via AQ.",
+          "text": "Larma sjukvård via CQ.",
           "handling": "larma_sjukvard",
           "nasta": "skjuten_larmat"
         },
@@ -419,7 +419,7 @@
       ]
     },
     "skjuten_larmat": {
-      "replik": "AQ: ”Ambulans och polis larmade, slut kom.”\n\nKAMRATEN: – Yxan är säkrad. Jag täcker dig.",
+      "replik": "CQ: ”Ambulans och polis larmade, slut kom.”\n\nKAMRATEN: – Yxan är säkrad. Jag täcker dig.",
       "alternativ": [
         {
           "text": "Ge första hjälpen: tryckförband på benet.",
@@ -437,7 +437,7 @@
       "replik": "Förbandet sitter. Blödningen avtar.\n\nYXMANNEN: – Förlåt… förlåt…",
       "alternativ": [
         {
-          "text": "Larma sjukvård via AQ.",
+          "text": "Larma sjukvård via CQ.",
           "handling": "larma_sjukvard",
           "nasta": "skjuten_klar"
         }

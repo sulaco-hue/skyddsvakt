@@ -480,7 +480,7 @@ func _spela_yxmannen_ger_upp() -> void:
 	var kontakt: Kontakt = main.kontakt
 	kontakt.call("_valj", 0)  # Grip honom (envarsgripande)
 	await _vanta(2)
-	kontakt.call("_valj", 0)  # Begär polis via AQ
+	kontakt.call("_valj", 0)  # Begär polis via CQ
 	await _vanta(2)
 	kontakt.call("_stang")
 	await _vanta(3)

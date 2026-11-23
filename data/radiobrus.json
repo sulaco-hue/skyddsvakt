@@ -8,7 +8,7 @@
   "vaxlingar": [
     [
       {
-        "fran": "AQ",
+        "fran": "CQ",
         "text": "Rondpatrullen, Rondpatrullen.",
         "efter": 0.0
       },
@@ -18,8 +18,8 @@
         "efter": 1.8
       },
       {
-        "fran": "AQ",
-        "text": "Från AQ, lägesrapport, kom.",
+        "fran": "CQ",
+        "text": "Från CQ, lägesrapport, kom.",
         "efter": 3.6
       },
       {
@@ -28,14 +28,14 @@
         "efter": 5.4
       },
       {
-        "fran": "AQ",
+        "fran": "CQ",
         "text": "Uppfattat, klart slut.",
         "efter": 7.2
       }
     ],
     [
       {
-        "fran": "AQ",
+        "fran": "CQ",
         "text": "Norra grinden, Norra grinden.",
         "efter": 0.0
       },
@@ -45,8 +45,8 @@
         "efter": 1.8
       },
       {
-        "fran": "AQ",
-        "text": "Från AQ, förbindelsen provas, kom.",
+        "fran": "CQ",
+        "text": "Från CQ, förbindelsen provas, kom.",
         "efter": 3.6
       },
       {
@@ -55,14 +55,14 @@
         "efter": 5.4
       },
       {
-        "fran": "AQ",
+        "fran": "CQ",
         "text": "Hörbarhet fyra, klart slut.",
         "efter": 7.2
       }
     ],
     [
       {
-        "fran": "AQ",
+        "fran": "CQ",
         "text": "Kökstjänst, Kökstjänst.",
         "efter": 0.0
       },
@@ -72,8 +72,8 @@
         "efter": 1.8
       },
       {
-        "fran": "AQ",
-        "text": "Från AQ, när kommer kvällsmålet, kom.",
+        "fran": "CQ",
+        "text": "Från CQ, när kommer kvällsmålet, kom.",
         "efter": 3.6
       },
       {
@@ -82,7 +82,7 @@
         "efter": 5.4
       },
       {
-        "fran": "AQ",
+        "fran": "CQ",
         "text": "Uppfattat, klart slut.",
         "efter": 7.2
       }
@@ -90,12 +90,12 @@
     [
       {
         "fran": "BQ",
-        "text": "AQ, AQ.",
+        "text": "CQ, CQ.",
         "efter": 0.0
       },
       {
-        "fran": "AQ",
-        "text": "AQ kom.",
+        "fran": "CQ",
+        "text": "CQ kom.",
         "efter": 1.8
       },
       {
@@ -104,7 +104,7 @@
         "efter": 3.6
       },
       {
-        "fran": "AQ",
+        "fran": "CQ",
         "text": "Uppfattat, slut kom.",
         "efter": 5.4
       },
@@ -116,7 +116,7 @@
     ],
     [
       {
-        "fran": "AQ",
+        "fran": "CQ",
         "text": "Hundpatrullen, Hundpatrullen.",
         "efter": 0.0
       },
@@ -126,8 +126,8 @@
         "efter": 1.8
       },
       {
-        "fran": "AQ",
-        "text": "Från AQ, er position, kom.",
+        "fran": "CQ",
+        "text": "Från CQ, er position, kom.",
         "efter": 3.6
       },
       {
@@ -136,14 +136,14 @@
         "efter": 5.4
       },
       {
-        "fran": "AQ",
+        "fran": "CQ",
         "text": "Uppfattat. Lämna igelkotten, klart slut.",
         "efter": 7.2
       }
     ],
     [
       {
-        "fran": "AQ",
+        "fran": "CQ",
         "text": "Sjukvårdsfordonet, Sjukvårdsfordonet.",
         "efter": 0.0
       },
@@ -153,8 +153,8 @@
         "efter": 1.8
       },
       {
-        "fran": "AQ",
-        "text": "Från AQ, bekräfta beredskap, kom.",
+        "fran": "CQ",
+        "text": "Från CQ, bekräfta beredskap, kom.",
         "efter": 3.6
       },
       {
@@ -163,41 +163,41 @@
         "efter": 5.4
       },
       {
-        "fran": "AQ",
+        "fran": "CQ",
         "text": "Uppfattat, klart slut.",
         "efter": 7.2
       }
     ],
     [
       {
-        "fran": "CQ",
-        "text": "AQ, AQ.",
+        "fran": "AQ",
+        "text": "CQ, CQ.",
         "efter": 0.0
       },
       {
-        "fran": "AQ",
-        "text": "AQ kom.",
+        "fran": "CQ",
+        "text": "CQ kom.",
         "efter": 1.8
       },
       {
-        "fran": "CQ",
-        "text": "Från CQ, hörbarhet trea, upprepa senaste meddelande, kom.",
+        "fran": "AQ",
+        "text": "Från AQ, hörbarhet trea, upprepa senaste meddelande, kom.",
         "efter": 3.6
       },
       {
-        "fran": "AQ",
+        "fran": "CQ",
         "text": "Jag upprepar: avlösning klockan tjugotvå, kom.",
         "efter": 5.4
       },
       {
-        "fran": "CQ",
+        "fran": "AQ",
         "text": "Uppfattat, klart slut.",
         "efter": 7.2
       }
     ],
     [
       {
-        "fran": "AQ",
+        "fran": "CQ",
         "text": "Rondpatrullen, Rondpatrullen.",
         "efter": 0.0
       },
@@ -207,8 +207,8 @@
         "efter": 1.8
       },
       {
-        "fran": "AQ",
-        "text": "Från AQ, har ni sett min termos, kom.",
+        "fran": "CQ",
+        "text": "Från CQ, har ni sett min termos, kom.",
         "efter": 3.6
       },
       {
@@ -217,7 +217,7 @@
         "efter": 5.4
       },
       {
-        "fran": "AQ",
+        "fran": "CQ",
         "text": "Uppfattat. Klart slut.",
         "efter": 7.2
       }
@@ -225,12 +225,12 @@
     [
       {
         "fran": "DQ",
-        "text": "AQ, AQ.",
+        "text": "CQ, CQ.",
         "efter": 0.0
       },
       {
-        "fran": "AQ",
-        "text": "AQ kom.",
+        "fran": "CQ",
+        "text": "CQ kom.",
         "efter": 1.8
       },
       {
@@ -239,7 +239,7 @@
         "efter": 3.6
       },
       {
-        "fran": "AQ",
+        "fran": "CQ",
         "text": "Uppfattat, klart slut.",
         "efter": 5.4
       }

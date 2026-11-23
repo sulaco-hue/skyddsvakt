@@ -27,13 +27,13 @@
     {
       "tid": "16:05",
       "kalla": "Vaktchef",
-      "text": "Vid drönarobservation: rapportera omgående till AQ."
+      "text": "Vid drönarobservation: rapportera omgående till CQ."
     }
   ],
   "briefing": {
-    "uppdrag": "Bevaka grind och staket. Var uppmärksam på drönare. Rapportera avvikelser till AQ.",
+    "uppdrag": "Bevaka grind och staket. Var uppmärksam på drönare. Rapportera avvikelser till CQ.",
     "objektinfo": "Skyddsobjektet omfattar området innanför staketet. Tillträdesförbudet gäller även obemannade farkoster. Skyltat: tillträdesförbud och avbildningsförbud.",
-    "samband": "Vi: Grindposten (stridspar, två skyddsvakter). Vaktchef: AQ (Adam Qvintus) – på annan plats, ser inte objektet. Det är vi som larmar.",
+    "samband": "Vi: Grindposten (stridspar, två skyddsvakter). Vaktchef: CQ (Caesar Qvintus) – på annan plats, ser inte objektet. Det är vi som larmar.",
     "lagstod_fokus": [
       "Tillträdesförbud – även drönare",
       "Identitet 10 §",
@@ -43,7 +43,7 @@
     "mal": []
   },
   "anropssignaler": {
-    "vaktchef": "AQ",
+    "vaktchef": "CQ",
     "du": "Grindposten"
   },
   "fakta": {
@@ -181,17 +181,17 @@
   "samband": [],
   "sambandsval": [
     {
-      "etikett": "Prova förbindelsen med AQ",
+      "etikett": "Prova förbindelsen med CQ",
       "handling": "",
       "meddelanden": [
         {
           "fran": "Grindposten",
-          "text": "AQ, AQ.",
+          "text": "CQ, CQ.",
           "efter": 0
         },
         {
-          "fran": "AQ",
-          "text": "AQ kom.",
+          "fran": "CQ",
+          "text": "CQ kom.",
           "efter": 1.5
         },
         {
@@ -200,7 +200,7 @@
           "efter": 3.0
         },
         {
-          "fran": "AQ",
+          "fran": "CQ",
           "text": "Hörbarhet femma, kom.",
           "efter": 4.5
         },
@@ -212,17 +212,17 @@
       ]
     },
     {
-      "etikett": "Lägesrapport till AQ",
+      "etikett": "Lägesrapport till CQ",
       "handling": "rapportera_vaktchef",
       "meddelanden": [
         {
           "fran": "Grindposten",
-          "text": "AQ, AQ.",
+          "text": "CQ, CQ.",
           "efter": 0
         },
         {
-          "fran": "AQ",
-          "text": "AQ kom.",
+          "fran": "CQ",
+          "text": "CQ kom.",
           "efter": 1.5
         },
         {
@@ -231,7 +231,7 @@
           "efter": 3.0
         },
         {
-          "fran": "AQ",
+          "fran": "CQ",
           "text": "{svar}, kom.",
           "efter": 5.0
         },
@@ -241,24 +241,24 @@
           "efter": 6.5
         },
         {
-          "fran": "AQ",
+          "fran": "CQ",
           "text": "Klart slut.",
           "efter": 8.0
         }
       ]
     },
     {
-      "etikett": "Begär att AQ underrättar polis",
+      "etikett": "Begär att CQ underrättar polis",
       "handling": "anmala_polis",
       "meddelanden": [
         {
           "fran": "Grindposten",
-          "text": "AQ, AQ.",
+          "text": "CQ, CQ.",
           "efter": 0
         },
         {
-          "fran": "AQ",
-          "text": "AQ kom.",
+          "fran": "CQ",
+          "text": "CQ kom.",
           "efter": 1.5
         },
         {
@@ -267,7 +267,7 @@
           "efter": 3.0
         },
         {
-          "fran": "AQ",
+          "fran": "CQ",
           "text": "Uppfattat, polis underrättas, kom.",
           "efter": 5.0
         },
@@ -277,7 +277,7 @@
           "efter": 6.5
         },
         {
-          "fran": "AQ",
+          "fran": "CQ",
           "text": "Klart slut.",
           "efter": 8.0
         }
@@ -296,7 +296,7 @@
     {
       "handling": "rapportera_vaktchef",
       "lagrum": "Bevakningsinstruktion – rapportering",
-      "text": "Drönaren rapporterades aldrig till AQ.",
+      "text": "Drönaren rapporterades aldrig till CQ.",
       "diskutera": "Varför ska en drönare alltid rapporteras, även om piloten verkar ofarlig?"
     }
   ],
@@ -365,7 +365,7 @@
           "nasta": "visar"
         },
         {
-          "text": "Anropa AQ, rapportera och begär order.",
+          "text": "Anropa CQ, rapportera och begär order.",
           "handling": "rapportera_vaktchef",
           "nasta": "vaktchef"
         }
@@ -390,7 +390,7 @@
           "nasta": "beslag"
         },
         {
-          "text": "Anropa AQ, rapportera och begär order.",
+          "text": "Anropa CQ, rapportera och begär order.",
           "handling": "rapportera_vaktchef",
           "nasta": "vaktchef"
         }
@@ -405,14 +405,14 @@
           "nasta": "avslut"
         },
         {
-          "text": "Anropa AQ och rapportera.",
+          "text": "Anropa CQ och rapportera.",
           "handling": "rapportera_vaktchef",
           "nasta": "vaktchef"
         }
       ]
     },
     "vaktchef": {
-      "replik": "DU (radio): ”AQ, AQ.” – AQ: ”AQ kom.”\nDU: ”Från Grindposten, drönare över objektet, pilot anträffad vid sjön, kom.”\nAQ: ”Uppfattat. Be dem landa och radera bilderna om de medger det. Notera uppgifterna, slut kom.” – DU: ”Klart slut.”",
+      "replik": "DU (radio): ”CQ, CQ.” – CQ: ”CQ kom.”\nDU: ”Från Grindposten, drönare över objektet, pilot anträffad vid sjön, kom.”\nAQ: ”Uppfattat. Be dem landa och radera bilderna om de medger det. Notera uppgifterna, slut kom.” – DU: ”Klart slut.”",
       "alternativ": [
         {
           "text": "Be dem landa och radera bilderna frivilligt, och anteckna uppgifterna.",
@@ -447,7 +447,7 @@
           "npc_beteende": "landa_dronare"
         },
         {
-          "text": "Anropa AQ och begär order.",
+          "text": "Anropa CQ och begär order.",
           "handling": "rapportera_vaktchef",
           "nasta": "vaktchef"
         }
@@ -486,7 +486,7 @@
           "nasta": "skjuten_id"
         },
         {
-          "text": "Anropa AQ och rapportera vad som hänt.",
+          "text": "Anropa CQ och rapportera vad som hänt.",
           "handling": "rapportera_vaktchef",
           "nasta": "skjuten_aq"
         }
@@ -501,7 +501,7 @@
           "nasta": "skjuten_slut"
         },
         {
-          "text": "Anropa AQ och rapportera vad som hänt.",
+          "text": "Anropa CQ och rapportera vad som hänt.",
           "handling": "rapportera_vaktchef",
           "nasta": "skjuten_aq"
         }
@@ -511,7 +511,7 @@
       "replik": "MATS: – Mats Lindqvist. Och jag vill ha ERA namn. Det här kommer att få konsekvenser.",
       "alternativ": [
         {
-          "text": "Anropa AQ och rapportera vad som hänt.",
+          "text": "Anropa CQ och rapportera vad som hänt.",
           "handling": "rapportera_vaktchef",
           "nasta": "skjuten_aq"
         },
@@ -523,10 +523,10 @@
       ]
     },
     "skjuten_aq": {
-      "replik": "DU (radio): ”AQ, AQ.” – AQ: ”AQ kom.”\nDU: ”Från Grindposten, drönare nedskjuten över objektet, pilot med barn på plats vid sjön, kom.”\nAQ: ”…Uppfattat. Stanna där. Jag kommer ut. Slut kom.” – DU: ”Klart slut.”",
+      "replik": "DU (radio): ”CQ, CQ.” – CQ: ”CQ kom.”\nDU: ”Från Grindposten, drönare nedskjuten över objektet, pilot med barn på plats vid sjön, kom.”\nAQ: ”…Uppfattat. Stanna där. Jag kommer ut. Slut kom.” – DU: ”Klart slut.”",
       "alternativ": [
         {
-          "text": "Anteckna vad som hänt och invänta AQ.",
+          "text": "Anteckna vad som hänt och invänta CQ.",
           "handling": "dokumentera",
           "nasta": "skjuten_slut"
         }
@@ -552,19 +552,19 @@
     }
   },
   "radio": {
-    "kommentar": "Trafik mellan andra enheter som följer händelserna. AQ ropar inte själv upp Grindposten. Krokar och villkor: scripts/core/radiotrafik.gd.",
+    "kommentar": "Trafik mellan andra enheter som följer händelserna. CQ ropar inte själv upp Grindposten. Krokar och villkor: scripts/core/radiotrafik.gd.",
     "upptackt": [
       {
         "efter_s": 5,
         "meddelanden": [
           {
             "fran": "Norra grinden",
-            "text": "AQ, AQ.",
+            "text": "CQ, CQ.",
             "efter": 0.0
           },
           {
-            "fran": "AQ",
-            "text": "AQ kom.",
+            "fran": "CQ",
+            "text": "CQ kom.",
             "efter": 1.5
           },
           {
@@ -573,7 +573,7 @@
             "efter": 3.0
           },
           {
-            "fran": "AQ",
+            "fran": "CQ",
             "text": "Uppfattat, klart slut.",
             "efter": 4.5
           }
@@ -586,12 +586,12 @@
         "meddelanden": [
           {
             "fran": "Västra posten",
-            "text": "AQ, AQ.",
+            "text": "CQ, CQ.",
             "efter": 0.0
           },
           {
-            "fran": "AQ",
-            "text": "AQ kom.",
+            "fran": "CQ",
+            "text": "CQ kom.",
             "efter": 1.5
           },
           {
@@ -600,7 +600,7 @@
             "efter": 3.0
           },
           {
-            "fran": "AQ",
+            "fran": "CQ",
             "text": "Uppfattat, slut kom.",
             "efter": 4.5
           },

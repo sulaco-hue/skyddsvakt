@@ -48,7 +48,7 @@
         "handling": "dokumentera"
       }
     ],
-    "samband": "Vi: Grindposten (stridspar, två skyddsvakter). Vaktchef: AQ (Adam Qvintus) – på annan plats, ser inte objektet. Det är vi som larmar."
+    "samband": "Vi: Grindposten (stridspar, två skyddsvakter). Vaktchef: CQ (Caesar Qvintus) – på annan plats, ser inte objektet. Det är vi som larmar."
   },
   "karta": "res://data/kartor/granasen.json",
   "fakta": {
@@ -177,7 +177,7 @@
       "replik": "– Här. Lite träd… och ja, staketet och {objekt_bestamd} syns på några. Nöjd nu?",
       "alternativ": [
         {
-          "text": "Anropa AQ, rapportera och begär order.",
+          "text": "Anropa CQ, rapportera och begär order.",
           "handling": "rapportera_vaktchef",
           "nasta": "vaktchef"
         },
@@ -196,7 +196,7 @@
       ]
     },
     "vaktchef": {
-      "replik": "DU (radio): ”AQ, AQ.” – AQ: ”AQ kom.”\nDU: ”Från Grindposten, person invid objektet har fotograferat det, begär order, kom.”\nAQ: ”Uppfattat. Polis underrättas. Notera hans uppgifter om han medger det, slut kom.” – DU: ”Klart slut.”\n\nMANNEN: – Visst, här är mitt körkort.",
+      "replik": "DU (radio): ”CQ, CQ.” – CQ: ”CQ kom.”\nDU: ”Från Grindposten, person invid objektet har fotograferat det, begär order, kom.”\nAQ: ”Uppfattat. Polis underrättas. Notera hans uppgifter om han medger det, slut kom.” – DU: ”Klart slut.”\n\nMANNEN: – Visst, här är mitt körkort.",
       "satt_fakta": {
         "anmalan_polis": true
       },
@@ -228,7 +228,7 @@
       ]
     },
     "gripen": {
-      "replik": "– Släpp mig! Du har ingen rätt att göra så här!\n\nKAMRATEN: – Jag täcker! Ska jag ropa upp AQ?",
+      "replik": "– Släpp mig! Du har ingen rätt att göra så här!\n\nKAMRATEN: – Jag täcker! Ska jag ropa upp CQ?",
       "slut": true
     },
     "lamnar": {
@@ -262,7 +262,7 @@
       },
       "alternativ": [
         {
-          "text": "Anropa AQ, rapportera och begär order.",
+          "text": "Anropa CQ, rapportera och begär order.",
           "handling": "rapportera_vaktchef",
           "nasta": "vaktchef"
         },
@@ -317,22 +317,22 @@
     }
   },
   "anropssignaler": {
-    "vaktchef": "AQ",
+    "vaktchef": "CQ",
     "du": "Grindposten"
   },
   "sambandsval": [
     {
-      "etikett": "Prova förbindelsen med AQ",
+      "etikett": "Prova förbindelsen med CQ",
       "handling": "",
       "meddelanden": [
         {
           "fran": "Grindposten",
-          "text": "AQ, AQ.",
+          "text": "CQ, CQ.",
           "efter": 0
         },
         {
-          "fran": "AQ",
-          "text": "AQ kom.",
+          "fran": "CQ",
+          "text": "CQ kom.",
           "efter": 1.5
         },
         {
@@ -341,7 +341,7 @@
           "efter": 3.0
         },
         {
-          "fran": "AQ",
+          "fran": "CQ",
           "text": "Hörbarhet femma, kom.",
           "efter": 4.5
         },
@@ -353,17 +353,17 @@
       ]
     },
     {
-      "etikett": "Lägesrapport till AQ",
+      "etikett": "Lägesrapport till CQ",
       "handling": "rapportera_vaktchef",
       "meddelanden": [
         {
           "fran": "Grindposten",
-          "text": "AQ, AQ.",
+          "text": "CQ, CQ.",
           "efter": 0
         },
         {
-          "fran": "AQ",
-          "text": "AQ kom.",
+          "fran": "CQ",
+          "text": "CQ kom.",
           "efter": 1.5
         },
         {
@@ -372,7 +372,7 @@
           "efter": 3.0
         },
         {
-          "fran": "AQ",
+          "fran": "CQ",
           "text": "{svar}, kom.",
           "efter": 5.0
         },
@@ -382,24 +382,24 @@
           "efter": 6.5
         },
         {
-          "fran": "AQ",
+          "fran": "CQ",
           "text": "Klart slut.",
           "efter": 8.0
         }
       ]
     },
     {
-      "etikett": "Begär att AQ underrättar polis",
+      "etikett": "Begär att CQ underrättar polis",
       "handling": "anmala_polis",
       "meddelanden": [
         {
           "fran": "Grindposten",
-          "text": "AQ, AQ.",
+          "text": "CQ, CQ.",
           "efter": 0
         },
         {
-          "fran": "AQ",
-          "text": "AQ kom.",
+          "fran": "CQ",
+          "text": "CQ kom.",
           "efter": 1.5
         },
         {
@@ -408,7 +408,7 @@
           "efter": 3.0
         },
         {
-          "fran": "AQ",
+          "fran": "CQ",
           "text": "Uppfattat, polis underrättas, kom.",
           "efter": 5.0
         },
@@ -418,7 +418,7 @@
           "efter": 6.5
         },
         {
-          "fran": "AQ",
+          "fran": "CQ",
           "text": "Klart slut.",
           "efter": 8.0
         }
@@ -436,7 +436,7 @@
     {
       "handling": "rapportera_vaktchef",
       "lagrum": "Bevakningsinstruktion – rapportering",
-      "text": "Händelsen rapporterades aldrig till AQ."
+      "text": "Händelsen rapporterades aldrig till CQ."
     }
   ],
   "vaderlag": [
@@ -445,19 +445,19 @@
     "skymning"
   ],
   "radio": {
-    "kommentar": "Trafik mellan andra enheter som följer händelserna. AQ ropar inte själv upp Grindposten. Krokar och villkor: scripts/core/radiotrafik.gd.",
+    "kommentar": "Trafik mellan andra enheter som följer händelserna. CQ ropar inte själv upp Grindposten. Krokar och villkor: scripts/core/radiotrafik.gd.",
     "npc_lamnar": [
       {
         "efter_s": 4,
         "meddelanden": [
           {
             "fran": "Norra grinden",
-            "text": "AQ, AQ.",
+            "text": "CQ, CQ.",
             "efter": 0.0
           },
           {
-            "fran": "AQ",
-            "text": "AQ kom.",
+            "fran": "CQ",
+            "text": "CQ kom.",
             "efter": 1.5
           },
           {
@@ -466,7 +466,7 @@
             "efter": 3.0
           },
           {
-            "fran": "AQ",
+            "fran": "CQ",
             "text": "Uppfattat, slut kom.",
             "efter": 4.5
           },

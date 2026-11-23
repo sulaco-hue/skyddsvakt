@@ -36,13 +36,13 @@ i scenariotexterna ersätts `{objekt}` med objektets namn och `{objekt_bestamd}`
 
 Scenarierna delar kartan `data/kartor/granasen.json` och använder namngivna platser (`punkter`).
 Varje scenario kan ha `varianter` (egna fakta och bedömningar), `bedomning` (scenariospecifik
-bedömning av en handling) och `slutkrav` (t.ex. att händelsen måste rapporteras till AQ).
+bedömning av en handling) och `slutkrav` (t.ex. att händelsen måste rapporteras till CQ).
 
 ### Radiotrafik som följer läget
 
-AQ ropar inte själv upp Grindposten, det är vi som larmar. Men det vi säger, och AQ:s svar, följer
+CQ ropar inte själv upp Grindposten, det är vi som larmar. Men det vi säger, och CQ:s svar, följer
 vad som har hänt. `lagestext` ({lage} i lägesrapporten) och varje nyckel i `sambandstexter` (t.ex.
-{svar} för AQ:s svar och {polis} i polisbegäran) väljs efter händelsens fas: `fakta:<nyckel>` när ett
+{svar} för CQ:s svar och {polis} i polisbegäran) väljs efter händelsens fas: `fakta:<nyckel>` när ett
 faktum är sant (t.ex. `fakta:dronare_nedskjuten`), annars `lamnat`, `kontakt`, `efter` eller `fore`,
 även per variant (`kontakt_oriktig`). Har vi skjutit ner drönaren rapporterar vi alltså inte att den
 cirklar över objektet.
@@ -156,18 +156,18 @@ En jurist kan alltså ändra lagrum, krav och texter i JSON-filen utan att röra
   genom grinden och ställer sig och skyddar vid kontakt.
 - **Zoner:** positionsrutan visar **På skyddsobjektet**, **Invid skyddsobjektet (bedömning)** eller **Utanför**.
   ”Invid” är en lösare definition; hur långt ut den sträcker sig styrs av `karta.invid_avstand` (rutor).
-- **Samband:** vi är **Grindposten**, vaktchefen är **AQ** (Adam Qvintus) och befinner sig på annan plats.
-  Fraseologi: ”Grindposten, Grindposten.” – ”Grindposten kom.” – ”Från AQ, …, kom.” – ”Uppfattat, kom.” –
+- **Samband:** vi är **Grindposten**, vaktchefen är **CQ** (Caesar Qvintus) och befinner sig på annan plats.
+  Fraseologi: ”Grindposten, Grindposten.” – ”Grindposten kom.” – ”Från CQ, …, kom.” – ”Uppfattat, kom.” –
   ”…, slut kom.” – ”Klart slut.” Allt ligger i scenariofilen:
   - `anropssignaler`, `samband` (radiologgen vid passets start)
   - `sambandsval`: valen under **R / Samband**. Varje val pekar på en handling i `lagrum.json`; `efter` = sekunder.
     `{lage}` ersätts med texten i `lagestext`.
   - `handelser[].kamrat`: vad kamraten säger när händelsen upptäcks.
   - Sambandsfönstret är tomt från start. Varje rad bleknar efter ca 12 s och försvinner.
-  - **Radiobrus:** `data/radiobrus.json` innehåller trafik mellan AQ och andra enheter
+  - **Radiobrus:** `data/radiobrus.json` innehåller trafik mellan CQ och andra enheter
     (rondpatrullen, hundpatrullen, kökstjänst …) som glider förbi var 30–70:e sekund. Den visas
     dämpat; trafik till/från Grindposten syns tydligt.
-  - Sambandsprov: ”Från AQ, förbindelsen provas, kom.” – ”Hörbarhet femma, kom.” (skala 5–1, 5 bäst).
+  - Sambandsprov: ”Från CQ, förbindelsen provas, kom.” – ”Hörbarhet femma, kom.” (skala 5–1, 5 bäst).
 
 ## Händelser, upptäckt och debugrad
 

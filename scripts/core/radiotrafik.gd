@@ -1,13 +1,13 @@
 class_name Radiotrafik
 extends Node
-## Levande radiotrafik: scenariot beskriver vad AQ och andra enheter säger
+## Levande radiotrafik: scenariot beskriver vad CQ och andra enheter säger
 ## när något händer ("radio" i scenariofilen). Varje krok är en lista med
 ## inslag som spelas högst en gång:
 ##
 ##   "radio": {
 ##     "upptackt": [ { "efter_s": 25, "om_ej_handling": "rapportera_vaktchef",
 ##                     "variant": "med_pilot", "om_fakta": {"x": true},
-##                     "meddelanden": [ {"fran": "AQ", "text": "…", "efter": 0}, … ] } ],
+##                     "meddelanden": [ {"fran": "CQ", "text": "…", "efter": 0}, … ] } ],
 ##     "handling:anmala_polis": [ … ],
 ##     …
 ##   }
@@ -15,7 +15,7 @@ extends Node
 ## Krokar som spelet utlöser: upptackt, kontakt_start, kontakt_slut,
 ## npc_lamnar, dronare_flyger_bort, dronare_landar, motpart_ger_upp,
 ## motpart_skjuten, angrepp_nadde_fram samt "handling:<id>" för varje beslut
-## i loggen. Inslagen väntar tills kanalen är ledig så att AQ inte pratar
+## i loggen. Inslagen väntar tills kanalen är ledig så att CQ inte pratar
 ## i munnen på vår egen växling.
 
 const MAX_VANTAN_S := 20.0
@@ -88,7 +88,7 @@ func _process(delta: float) -> void:
 
 
 ## Villkoren prövas när inslaget ska spelas, inte när kroken utlöstes:
-## "AQ efterfrågar lägesrapport" spelas bara om rapporten fortfarande saknas.
+## "CQ efterfrågar lägesrapport" spelas bara om rapporten fortfarande saknas.
 func _villkor_uppfyllda(d: Dictionary) -> bool:
 	var ej := str(d.get("om_ej_handling", ""))
 	if ej != "" and Spel.handling_utford(ej):

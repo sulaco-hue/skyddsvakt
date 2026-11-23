@@ -541,7 +541,7 @@
       ]
     },
     "larma_sjukvard": {
-      "namn": "Larmade sjukvård (112) via AQ",
+      "namn": "Larmade sjukvård (112) via CQ",
       "lagrum": "Allmän hjälpskyldighet · VaktB",
       "krav": [],
       "vid_brist": "ok",
