@@ -102,6 +102,12 @@
       "mal": "fotograf_mal",
       "vid_framme": "fotograferar",
       "kamrat": "Där, vid staketet! Han fotograferar mot {objekt_bestamd}.",
+      "kamrat_per_objekttyp": {
+        "lastbil": {
+          "kamrat": "Där, vid staketet! Han fotograferar mot lastbilen.",
+          "svar": "Helikoptern."
+        }
+      },
       "upptackt": {
         "min_s": 2,
         "max_s": 10,

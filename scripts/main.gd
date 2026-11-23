@@ -795,6 +795,11 @@ func _uppdatera_upptackt(delta: float) -> void:
 		_kamrat_reagerar()
 
 
+func _spelaren_sager(text: String) -> void:
+	if hud.visible:
+		hud.visa_bubbla(varld.spelare, text, 3.0)
+
+
 func _kamrat_reagerar() -> void:
 	var id := str(_upptackt["npc"])
 	var h: Dictionary = _upptackt["h"]
@@ -807,8 +812,14 @@ func _kamrat_reagerar() -> void:
 	if id != "":
 		varld.satt_larm(id)
 	Spel.spela_samband(h.get("samband", []))
-	if str(h.get("kamrat", "")) != "":
-		hud.visa_bubbla(varld.kollega, str(h.get("kamrat", "")), 5.0)
+	# "kamrat_per_objekttyp" kan ersätta kamratens replik och ge vårt svar,
+	# t.ex. när kamraten kallar helikoptern för lastbil.
+	var per_typ: Dictionary = h.get("kamrat_per_objekttyp", {}).get(Spel.objekttyp, {})
+	var kamrat := str(per_typ.get("kamrat", h.get("kamrat", "")))
+	if kamrat != "":
+		hud.visa_bubbla(varld.kollega, kamrat, 5.0)
+	if str(per_typ.get("svar", "")) != "":
+		get_tree().create_timer(2.2).timeout.connect(_spelaren_sager.bind(str(per_typ["svar"])))
 	if is_instance_valid(nod):
 		varld.kollega.vand_mot(nod.global_position)
 	# Ev. ledtråd från kamraten en stund senare (per variant).
