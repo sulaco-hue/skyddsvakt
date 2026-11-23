@@ -232,7 +232,9 @@
   ],
   "lagestext": {
     "fore": "inga avvikelser vid grinden",
-    "efter": "hantverkare från Ventservice vid grinden, ej föranmäld"
+    "efter": "hantverkare från Ventservice vid grinden, ej föranmäld",
+    "kontakt_arlig": "hantverkare från Ventservice har lämnat grinden, besöket var inte föranmält",
+    "kontakt_oriktig": "person som uppgav sig komma från Ventservice har lämnat grinden, uppgifterna stämde inte"
   },
   "slutkrav": [
     {
@@ -394,5 +396,205 @@
       "replik": "Bommen går upp och servicebilen rullar in.\n\nKAMRATEN: – Stod han på passerlistan…?",
       "slut": true
     }
+  },
+  "radio": {
+    "kommentar": "Levande radiotrafik. Krokar och villkor beskrivs i scripts/core/radiotrafik.gd.",
+    "upptackt": [
+      {
+        "efter_s": 30,
+        "variant": "arlig",
+        "om_ej_handling": "rapportera_vaktchef",
+        "meddelanden": [
+          {
+            "fran": "AQ",
+            "text": "Grindposten, Grindposten.",
+            "efter": 0.0
+          },
+          {
+            "fran": "Grindposten",
+            "text": "Grindposten kom.",
+            "efter": 1.5
+          },
+          {
+            "fran": "AQ",
+            "text": "Från AQ, Ventservice har ringt vakten och frågar varför deras tekniker står vid er grind. Vad är läget? Lägesrapport. Slut kom.",
+            "efter": 3.0
+          },
+          {
+            "fran": "Grindposten",
+            "text": "Uppfattat, klart slut.",
+            "efter": 4.5
+          }
+        ]
+      },
+      {
+        "efter_s": 30,
+        "variant": "oriktig",
+        "om_ej_handling": "rapportera_vaktchef",
+        "meddelanden": [
+          {
+            "fran": "AQ",
+            "text": "Grindposten, Grindposten.",
+            "efter": 0.0
+          },
+          {
+            "fran": "Grindposten",
+            "text": "Grindposten kom.",
+            "efter": 1.5
+          },
+          {
+            "fran": "AQ",
+            "text": "Från AQ, inget servicebesök är bokat i dag. Har ni någon vid grinden? Lägesrapport. Slut kom.",
+            "efter": 3.0
+          },
+          {
+            "fran": "Grindposten",
+            "text": "Uppfattat, klart slut.",
+            "efter": 4.5
+          }
+        ]
+      }
+    ],
+    "kontakt_slut": [
+      {
+        "efter_s": 12,
+        "variant": "arlig",
+        "om_ej_handling": "slappa_in",
+        "meddelanden": [
+          {
+            "fran": "AQ",
+            "text": "Grindposten, Grindposten.",
+            "efter": 0.0
+          },
+          {
+            "fran": "Grindposten",
+            "text": "Grindposten kom.",
+            "efter": 1.5
+          },
+          {
+            "fran": "AQ",
+            "text": "Från AQ, Ventservice har ringt igen. Teknikern skulle till reningsverket på Granåsvägen, inte till oss. Fel adress. Notera det i rapporten. Slut kom.",
+            "efter": 3.0
+          },
+          {
+            "fran": "Grindposten",
+            "text": "Uppfattat, klart slut.",
+            "efter": 4.5
+          }
+        ]
+      },
+      {
+        "efter_s": 12,
+        "variant": "oriktig",
+        "om_fakta": {
+          "oriktiga_uppgifter": true
+        },
+        "meddelanden": [
+          {
+            "fran": "AQ",
+            "text": "Grindposten, Grindposten.",
+            "efter": 0.0
+          },
+          {
+            "fran": "Grindposten",
+            "text": "Grindposten kom.",
+            "efter": 1.5
+          },
+          {
+            "fran": "AQ",
+            "text": "Från AQ, Ventservice har ingen tekniker beställd hit, och legitimationen han visade är anmäld stulen. Polis är informerad. Notera bilens registreringsnummer och färdriktning. Slut kom.",
+            "efter": 3.0
+          },
+          {
+            "fran": "Grindposten",
+            "text": "Uppfattat, klart slut.",
+            "efter": 4.5
+          }
+        ]
+      },
+      {
+        "efter_s": 12,
+        "variant": "oriktig",
+        "om_fakta": {
+          "oriktiga_uppgifter": false
+        },
+        "meddelanden": [
+          {
+            "fran": "AQ",
+            "text": "Grindposten, Grindposten.",
+            "efter": 0.0
+          },
+          {
+            "fran": "Grindposten",
+            "text": "Grindposten kom.",
+            "efter": 1.5
+          },
+          {
+            "fran": "AQ",
+            "text": "Från AQ, Ventservice har ingen tekniker beställd hit. Polis är informerad. Notera bilens registreringsnummer och färdriktning. Slut kom.",
+            "efter": 3.0
+          },
+          {
+            "fran": "Grindposten",
+            "text": "Uppfattat, klart slut.",
+            "efter": 4.5
+          }
+        ]
+      }
+    ],
+    "handling:slappa_in": [
+      {
+        "efter_s": 15,
+        "variant": "oriktig",
+        "meddelanden": [
+          {
+            "fran": "AQ",
+            "text": "Grindposten, Grindposten!",
+            "efter": 0.0
+          },
+          {
+            "fran": "Grindposten",
+            "text": "Grindposten kom.",
+            "efter": 1.2
+          },
+          {
+            "fran": "AQ",
+            "text": "Från AQ, det finns ingen beställning från Ventservice! Var är personen nu? Håll honom under uppsikt och rapportera omedelbart, kom!",
+            "efter": 2.4
+          },
+          {
+            "fran": "Grindposten",
+            "text": "Uppfattat, klart slut.",
+            "efter": 3.6
+          }
+        ]
+      },
+      {
+        "efter_s": 15,
+        "variant": "arlig",
+        "meddelanden": [
+          {
+            "fran": "AQ",
+            "text": "Grindposten, Grindposten.",
+            "efter": 0.0
+          },
+          {
+            "fran": "Grindposten",
+            "text": "Grindposten kom.",
+            "efter": 1.5
+          },
+          {
+            "fran": "AQ",
+            "text": "Från AQ, vem släppte ni just in? Jag har inget besök föranmält. Rapportera omgående. Slut kom.",
+            "efter": 3.0
+          },
+          {
+            "fran": "Grindposten",
+            "text": "Uppfattat, klart slut.",
+            "efter": 4.5
+          }
+        ]
+      }
+    ]
   }
 }

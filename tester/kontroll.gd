@@ -93,7 +93,54 @@ func _kontrollera_scenario(sokvag: String, handlingar: Dictionary, karta: Dictio
 		var h := str(val.get("handling", ""))
 		if h != "" and not handlingar.has(h):
 			_fel("sambandsval pekar på okänd handling '%s'" % h)
+	_kontrollera_radio(scenario, handlingar, sokvag)
 	_ok("data och dialogkopplingar: " + sokvag.get_file())
+
+
+## Radiokrokarna: kända krokar, kända handlingar och varianter, och att
+## varje inslag har meddelanden med avsändare och text.
+const RADIOKROKAR := ["upptackt", "kontakt_start", "kontakt_slut", "npc_lamnar", "dronare_flyger_bort",
+	"dronare_landar", "motpart_ger_upp", "motpart_skjuten", "angrepp_nadde_fram", "motpart_omhandertagen"]
+
+
+func _kontrollera_radio(scenario: Dictionary, handlingar: Dictionary, sokvag: String) -> void:
+	var radio: Dictionary = scenario.get("radio", {})
+	var varianter: Dictionary = scenario.get("varianter", {})
+	for krok: String in radio:
+		if krok == "kommentar":
+			continue
+		if krok.begins_with("handling:"):
+			if not handlingar.has(krok.substr(9)):
+				_fel("%s: radiokrok för okänd handling '%s'" % [sokvag, krok])
+		elif not krok in RADIOKROKAR:
+			_fel("%s: okänd radiokrok '%s'" % [sokvag, krok])
+		for d in radio[krok]:
+			for nyckel in ["om_ej_handling", "om_handling"]:
+				var h := str(d.get(nyckel, ""))
+				if h != "" and not handlingar.has(h):
+					_fel("%s: radio %s har okänd handling '%s'" % [sokvag, krok, h])
+			var v: Variant = d.get("variant", "")
+			for namn in (v if v is Array else [v]):
+				if str(namn) != "" and not varianter.has(str(namn)):
+					_fel("%s: radio %s har okänd variant '%s'" % [sokvag, krok, namn])
+			var med: Array = d.get("meddelanden", [])
+			if med.is_empty():
+				_fel("%s: radio %s saknar meddelanden" % [sokvag, krok])
+			for mm in med:
+				if str(mm.get("fran", "")) == "" or str(mm.get("text", "")) == "":
+					_fel("%s: radio %s har meddelande utan avsändare eller text" % [sokvag, krok])
+
+
+## Väntar (högst max_s sekunder speltid) på att en radiorad som innehåller text dyker upp.
+func _vanta_radio(text: String, max_s := 60.0) -> bool:
+	var t := 0.0
+	while t < max_s:
+		for rad in Spel.samband:
+			if str(rad.get("text", "")).contains(text):
+				return true
+		await get_tree().create_timer(0.25).timeout
+		t += 0.25
+	return false
 
 
 func _spela_scenario_1() -> void:
@@ -134,6 +181,14 @@ func _spela_scenario_1() -> void:
 	await _vanta(2)
 	kontakt.call("_stang")
 	await _vanta(3)
+	if not str(main.call("_lagestext")).contains("kontakt tagen"):
+		_fel("lägestexten följer inte händelsen efter kontakt: " + str(main.call("_lagestext")))
+	else:
+		_ok("lägestext efter kontakt")
+	if await _vanta_radio("överlämnas till polis"):
+		_ok("AQ påminner om överlämning till polis")
+	else:
+		_fel("AQ:s radioinslag efter omhändertagande spelades inte")
 	main.call("_visa_debriefing")
 	await _vanta(3)
 
@@ -239,6 +294,10 @@ func _spela_dronaren_utan_pilot() -> void:
 		_fel("drönaren kraschade inte efter bekämpning")
 	else:
 		_ok("drönaren nedskjuten och kraschad")
+	if await _vanta_radio("hörde skott"):
+		_ok("AQ reagerar på skotten över radio")
+	else:
+		_fel("AQ reagerade inte på skotten")
 	main.call("_visa_debriefing")
 	await _vanta(3)
 	_forvanta({"vald_mot_farkost": "warn"})
@@ -316,6 +375,10 @@ func _spela_missad_handelse() -> void:
 		_fel("fotografen gick aldrig iväg")
 	else:
 		_ok("fotografen gav sig av utan kontakt")
+	if await _vanta_radio("Granåsvägen"):
+		_ok("Norra grinden rapporterar bilen som åker")
+	else:
+		_fel("radioinslaget när fotografen lämnar spelades inte")
 	main.call("_visa_debriefing")
 	await _vanta(3)
 	_forvanta({"missad_1": "bad"})

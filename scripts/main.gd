@@ -30,6 +30,7 @@ var _lamnat: Dictionary = {}
 ## Fordon som hör till en person: id -> {sprite, cell}
 var _fordon: Dictionary = {}
 var _dronare_handelse: Dictionary = {}
+var radio: Radiotrafik
 
 
 func _ready() -> void:
@@ -63,6 +64,11 @@ func _ready() -> void:
 	hud.avsluta_pass.connect(_visa_debriefing)
 	hud.lagestext = _lagestext
 	hud.situation.connect(_bekampa_dronare)
+
+	radio = Radiotrafik.new()
+	add_child(radio)
+	radio.setup(_scenario)
+	radio.ersattningar = _radio_ersattningar
 
 	snack = Kamratsnack.new()
 	add_child(snack)
@@ -133,9 +139,35 @@ func _pa_hud_handling(id: String, beskrivning: String) -> void:
 	Spel.utfor(id, beskrivning)
 
 
+func _radio_ersattningar() -> Dictionary:
+	return {"lage": _lagestext()}
+
+
+## Lägestexten följer händelsens fas. Scenariot kan ha "fore", "efter",
+## "kontakt" (efter avslutad kontakt), "lamnat" (personen gav sig av) och
+## "avslutad"; även per variant, t.ex. "kontakt_oriktig", och "fakta:<nyckel>".
 func _lagestext() -> String:
 	var lt: Dictionary = _scenario.get("lagestext", {})
-	return str(lt.get("efter" if _larm_har_skett else "fore", ""))
+	# "fakta:<nyckel>" vinner när faktumet är sant (t.ex. att drönaren sköts ner).
+	for nyckel: String in lt:
+		if nyckel.begins_with("fakta:") and bool(Spel.fakta.get(nyckel.substr(6), false)):
+			return str(lt[nyckel])
+	var faser: Array[String] = []
+	if bool(Spel.fakta.get("lage_avslutat", false)):
+		faser.append("avslutad")
+	if not _lamnat.is_empty():
+		faser.append("lamnat")
+	if not _samtal_klara.is_empty():
+		faser.append("kontakt")
+	if _larm_har_skett:
+		faser.append("efter")
+	faser.append("fore")
+	for fas in faser:
+		if Spel.variant != "" and lt.has(fas + "_" + Spel.variant):
+			return str(lt[fas + "_" + Spel.variant])
+		if lt.has(fas):
+			return str(lt[fas])
+	return ""
 
 
 func _starta_pass() -> void:
@@ -152,6 +184,7 @@ func _process(delta: float) -> void:
 	if not Spel.klocka_igang:
 		return
 	_uppdatera_upptackt(delta)
+	radio.vanta = kontakt.visible
 	_uppdatera_brus(delta)
 	if hud.debug_info_synlig():
 		hud.satt_debug_info(_debug_text())
@@ -184,6 +217,7 @@ func _debug_text() -> String:
 	for k in Spel.fakta:
 		f.append("%s=%s" % [k, "ja" if Spel.fakta[k] else "nej"])
 	rader.append("Fakta: " + ", ".join(f))
+	rader.append(radio.status())
 	rader.append("Kamratsnack: " + snack.status() + " · skyddsobjekt: " + Spel.objekttyp + " · variant: " + Spel.variant)
 	rader.append("Beslut i logg: %d · sambandsrader: %d · musik: %s" % [Spel.logg.size(), Spel.samband.size(),
 		"på" if Musik.ar_pa() else "av"])
@@ -300,6 +334,7 @@ func _npc_lamnar(id: String, h: Dictionary) -> void:
 	if _vantar_samtal == id:
 		_vantar_samtal = ""
 	_avsluta_handelse(h)
+	radio.krok("npc_lamnar")
 	var data: Dictionary = _scenario.get("npc", {}).get(id, {})
 	if str(data.get("lamnar_replik", "")) != "" and hud.visible:
 		hud.visa_bubbla(n, str(data.get("lamnar_replik", "")), 3.0)
@@ -388,6 +423,7 @@ func _dronare_flyger_bort() -> void:
 	if not _upptackt.is_empty() and _upptackt["nod"] == dronare:
 		_upptackt = {}
 	dronare.flyg_till(varld.cell_pos(varld.punkt(_dronare_handelse.get("bort_utan_pilot", "kant_sydvast"))), 60.0)
+	radio.krok("dronare_flyger_bort")
 	dronare.framme.connect(_ta_bort_dronare, CONNECT_ONE_SHOT)
 
 
@@ -403,6 +439,7 @@ func _landa_dronare() -> void:
 	hud.satt_situation("", false)
 	var plats := varld.punkt(_dronare_handelse.get("start_med_pilot", [0, 0]))
 	dronare.landa_vid(varld.cell_pos(plats) + Vector2(10, 4))
+	radio.krok("dronare_landar")
 
 
 ## Situationsknappen: bekämpa drönaren med vapen (ett beslut som bedöms).
@@ -468,6 +505,7 @@ func _kamrat_reagerar() -> void:
 	_upptackt = {}
 	_markera_upptackt(h)
 	_larm_har_skett = true
+	radio.krok("upptackt")
 	snack.pausa(float(h.get("upptackt", {}).get("paus_snack_s", 60)))
 	if id != "":
 		varld.satt_larm(id)
@@ -551,6 +589,8 @@ func _oppna_kontakt(id: String) -> void:
 	if not _upptackt.is_empty() and str(_upptackt["npc"]) in [id, ""]:
 		_upptackt = {}
 		_larm_har_skett = true
+	radio.krok("upptackt")
+	radio.krok("kontakt_start")
 	varld.kollega.stanna()
 	varld.kollega.vand_mot(n.position)
 	varld.interaktion_aktiv = false
@@ -585,6 +625,7 @@ func _pa_val(alt: Dictionary) -> void:
 func _pa_kontakt_stangd() -> void:
 	var id := str(kontakt.get_meta("npc", ""))
 	_samtal_klara[id] = true
+	radio.krok("kontakt_slut")
 	hud.visible = true
 	varld.satt_larm("")
 	varld.interaktion_aktiv = true
