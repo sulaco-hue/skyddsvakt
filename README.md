@@ -1,4 +1,6 @@
-# Skyddsvakt – utbildningsspel (prototyp)
+# Halt, militär skyddsvakt!
+
+*Utbildningsspel för militära skyddsvakter (prototyp).*
 
 Ett isometriskt pixelspel för att träna militära skyddsvakter på att fatta beslut med rätt lagstöd.
 Detta är en första spelbar prototyp med ett scenario: **Fotografen vid staketet**.

@@ -93,6 +93,23 @@ func _visa_scenarioval() -> void:
 	UiKit.helskarm(rot)
 	rot.theme = UiKit.skapa_tema()
 	lager.add_child(rot)
+	if not Spel.titel_visad:
+		var titel := Titelskarm.new()
+		rot.add_child(titel)
+		titel.bygg()
+		titel.fortsatt.connect(_efter_titel.bind(titel))
+		rot.add_child(VridOverlay.new())
+		return
+	_bygg_scenarioval()
+
+
+func _efter_titel(titel: Control) -> void:
+	Spel.titel_visad = true
+	titel.queue_free()
+	_bygg_scenarioval()
+
+
+func _bygg_scenarioval() -> void:
 	var val := Scenarioval.new()
 	rot.add_child(val)
 	val.bygg(Spel.scenarier())

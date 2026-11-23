@@ -15,6 +15,8 @@ var karta: Dictionary = {}
 var variant := ""
 ## Vilket skyddsobjekt som står innanför staketet (slumpas vid varje genomförande).
 var objekttyp := ""
+## Startskärmen visas bara en gång per session.
+var titel_visad := false
 var _bedomning_override: Dictionary = {}
 ## Händelser som stridsparet aldrig upptäckte (läggs till vid debriefing).
 var missade: Array = []

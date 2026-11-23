@@ -14,7 +14,8 @@ var fel := 0
 
 func _ready() -> void:
 	Engine.time_scale = 8.0
-	print("=== Skyddsvakt: automatisk kontroll ===")
+	print("=== Halt, militär skyddsvakt!: automatisk kontroll ===")
+	Spel.titel_visad = true
 	_kontrollera_skript()
 	_kontrollera_data()
 	await _spela_scenario_1()

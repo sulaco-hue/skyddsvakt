@@ -1147,6 +1147,53 @@ hogtalare("hogtalare_pa", [(8, 4, 0), (8, 5, 0), (8, 6, 0), (8, 7, 0), (9, 2, 0)
                            (10, 5, 0), (10, 6, 0), (10, 7, 0), (10, 8, 0), (9, 9, 0)])
 hogtalare("hogtalare_av", [(7 + i, 3 + i, 1) for i in range(5)] + [(11 - i, 3 + i, 1) for i in range(5)])
 
+# ========================================================= Startskärm ==
+# Vakt som räcker upp handen: "Halt!"
+HALT_TOP = list(GUARD_TOP)
+HALT_TOP[0] = "....HHHH...s"
+HALT_TOP[1] = "...HhhhhH..s"
+HALT_TOP[2] = "..HHHHHHHHHU"
+HALT_TOP[3] = "..EssssssE.U"
+HALT_TOP[4] = "..EsesseSE.U"
+HALT_TOP[5] = "...SssssS..U"
+HALT_TOP[6] = "....SSSS..aU"
+HALT_TOP[7] = "..UUUUUUUAAU"
+figure("vakt_halt", HALT_TOP, GUARD_LEGS[0])
+
+
+def logga():
+    """Spelets namn i pixelstil: ritas litet med Jersey 15 och skalas upp utan utjämning."""
+    from PIL import ImageFont
+    font_stor = ImageFont.truetype(os.path.join(os.path.dirname(OUT), "fonts", "Jersey15-Regular.ttf"), 30)
+    font_mellan = ImageFont.truetype(os.path.join(os.path.dirname(OUT), "fonts", "Jersey15-Regular.ttf"), 17)
+    W_, H_ = 220, 64
+    im = Image.new("RGBA", (W_, H_), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+
+    def text_med_kant(xy, text, font, fyll, kant, skugga):
+        x, y = xy
+        d.text((x + 2, y + 2), text, font=font, fill=skugga)
+        for dx in (-1, 0, 1):
+            for dy in (-1, 0, 1):
+                if dx or dy:
+                    d.text((x + dx, y + dy), text, font=font, fill=kant)
+        d.text((x, y), text, font=font, fill=fyll)
+
+    bredd = d.textlength("HALT,", font=font_stor)
+    text_med_kant(((W_ - bredd) / 2, 0), "HALT,", font_stor, (242, 177, 52, 255), (40, 24, 8, 255), (0, 0, 0, 160))
+    bredd2 = d.textlength("MILITÄR SKYDDSVAKT!", font=font_mellan)
+    text_med_kant(((W_ - bredd2) / 2, 36), "MILITÄR SKYDDSVAKT!", font_mellan, (230, 235, 224, 255),
+                  (18, 24, 34, 255), (0, 0, 0, 160))
+    # Binarisera alfa för skarpa pixelkanter
+    px = im.load()
+    for y in range(H_):
+        for x in range(W_):
+            r, g, b_, a_ = px[x, y]
+            px[x, y] = (r, g, b_, 255 if a_ > 110 else 0)
+    im.save(os.path.join(OUT, "logga.png"))
+
+logga()
+
 with open(os.path.join(OUT, "anchors.json"), "w") as f:
     json.dump(anchors, f, indent=1, sort_keys=True)
 print("ok", len(anchors))

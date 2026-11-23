@@ -20,8 +20,13 @@ func bygg(scenarier: Array) -> void:
 	kol.custom_minimum_size = Vector2(720, 0)
 	mitt.add_child(kol)
 
-	kol.add_child(UiKit.titel("SKYDDSVAKT", 40, UiKit.GRON))
-	kol.add_child(UiKit.etikett("Utbildningsspel för militära skyddsvakter · prototyp", 22, UiKit.DAMPAD))
+	var logga := TextureRect.new()
+	logga.texture = load("res://assets/gfx/logga.png")
+	logga.custom_minimum_size = Vector2(220, 64) * 2
+	logga.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	logga.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT
+	logga.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	kol.add_child(logga)
 	kol.add_child(UiKit.rubrik("VÄLJ SCENARIO", 14, UiKit.DAMPAD))
 
 	for i in scenarier.size():
