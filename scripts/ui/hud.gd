@@ -400,7 +400,6 @@ func _bygg_handlingar() -> void:
 	var h := UiKit.hbox(10)
 	p.add_child(h)
 	var knappar := [
-		["Observera", "Q", _observera],
 		["Samband", "R", _vaxla_sambandsmeny],
 		["Anteckna", "N", _anteckna],
 		["Instruktion", "I", _vaxla_instruktion],
@@ -568,10 +567,6 @@ func _avsluta() -> void:
 	avsluta_pass.emit()
 
 
-func _observera() -> void:
-	handling.emit("observera", "Observerade händelsen på avstånd")
-
-
 func _anteckna() -> void:
 	handling.emit("dokumentera", "Förde anteckningar i vaktjournalen")
 	visa_meddelande("Anteckning förd i vaktjournalen")
@@ -654,8 +649,6 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not visible or tangent == null or not tangent.pressed or tangent.echo:
 		return
 	match tangent.keycode:
-		KEY_Q:
-			_observera()
 		KEY_R:
 			_vaxla_sambandsmeny()
 		KEY_N:

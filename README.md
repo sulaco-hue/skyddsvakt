@@ -98,7 +98,7 @@ Om något går fel: titta i panelen **Utdata/Output** längst ner i editorn och 
 |---|---|
 | Briefing | Läs omvärldsläge och uppdrag, **Starta pass** (eller Enter) |
 | Patrull | **Klicka** på marken för att gå. Bommen vid grinden fälls upp automatiskt när du närmar dig. **Klicka på en person** för att ta kontakt |
-| | **Q** observera · **R** samband · **N** anteckna · **T** tyst nu · **I** instruktion · **M** musik av/på · **F3** debugrad · **Esc** avsluta pass |
+| | **R** samband · **N** anteckna · **T** tyst nu · **I** instruktion · **M** musik av/på · **F3** debugrad · **Esc** avsluta pass |
 | | **Klicka på skyddsobjektet** så kommenterar du eller kamraten det (redigeras under `objektkommentarer` i `data/kamratsnack.json`) |
 | | Situationsknappar vid högerkanten när något händer: **B** bekämpa drönaren · **H** halt-order · **V** varningsskott · **F** verkanseld · **S** larma sjukvård · **J** första hjälpen |
 | Kontakt | Välj svar med musen eller **1–4**. Under svaren finns alltid **åtgärdsraden**: Begär ID, Visitera, Undersök fordon, Beslag, Avvisa, Avlägsna, Omhänderta, Gripa, Låt gå. Med debug på visas inom parentes bedömningen just nu och vart valet leder, t.ex. *(DISKUTABELT → omhandertagen)* |
