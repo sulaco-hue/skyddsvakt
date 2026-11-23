@@ -70,10 +70,6 @@ func _kontrollera_data() -> void:
 	var handlingar: Dictionary = lagrum.get("handlingar", {})
 	for sc in Spel.scenarier():
 		_kontrollera_scenario(str(sc["sokvag"]), handlingar, karta)
-	var kommentarer: Dictionary = snack.get("objektkommentarer", {})
-	for typ: String in karta.get("objekttyper", {}):
-		if (kommentarer.get(typ, []) as Array).is_empty():
-			_fel("objektkommentarer saknas för objekttypen '%s'" % typ)
 	if Spel.scenarier().size() < 2:
 		_fel("färre än två scenarier i index.json")
 
@@ -385,12 +381,6 @@ func _bygg_alla_objekttyper() -> void:
 			_fel("skyddsobjektet %s blockerar inga rutor" % typ)
 		else:
 			_ok("%s (%s) blockerar %d rutor" % [typ, Spel.scenario.get("objekt", ""), blockerade])
-		var c: Vector2i = main.varld._objekt_celler[0]
-		if not main.varld.traffar_skyddsobjekt(c, main.varld.cell_pos(c)):
-			_fel("klick på skyddsobjektet %s träffar inte" % typ)
-		main.call("_kommentera_objekt")
-		if main._objektkommentarer.is_empty() and (Datafil.las_json("res://data/kamratsnack.json")["objektkommentarer"][typ] as Array).size() > 1:
-			_fel("ingen kommentar plockades för %s" % typ)
 		main.queue_free()
 		await _vanta(3)
 

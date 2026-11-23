@@ -79,7 +79,6 @@ func _ready() -> void:
 	snack.setup(hud, varld, _scenario)
 	hud.tysta_kamrat.connect(snack.tysta)
 	varld.kamrat_klickad.connect(snack.tysta)
-	varld.objekt_klickad.connect(_kommentera_objekt)
 
 	kontakt = Kontakt.new()
 	rot.add_child(kontakt)
@@ -794,37 +793,6 @@ func _uppdatera_upptackt(delta: float) -> void:
 		int(float(_upptackt["varde"]) * 100.0), avst, float(_upptackt["bas"])])
 	if float(_upptackt["varde"]) >= 1.0:
 		_kamrat_reagerar()
-
-
-## Klick på skyddsobjektet: en kommentar från oss eller kamraten
-## (data/kamratsnack.json, "objektkommentarer"). Går igenom alla innan någon upprepas.
-var _objektkommentarer: Array = []
-var _kommentar_upptagen_till := 0
-
-
-func _kommentera_objekt() -> void:
-	if Time.get_ticks_msec() < _kommentar_upptagen_till:
-		return
-	if _objektkommentarer.is_empty():
-		var alla: Dictionary = Datafil.las_json("res://data/kamratsnack.json").get("objektkommentarer", {})
-		_objektkommentarer = alla.get(Spel.objekttyp, []).duplicate()
-		_objektkommentarer.shuffle()
-		if _objektkommentarer.is_empty():
-			return
-	var k: Dictionary = _objektkommentarer.pop_back()
-	# Kamraten babblar inte i munnen på oss medan vi pratar om objektet.
-	snack.pausa(12.0)
-	var forst_du := str(k.get("vem", "kamrat")) == "du"
-	var svar := str(k.get("svar", ""))
-	if forst_du:
-		_spelaren_sager(str(k.get("text", "")))
-		if svar != "":
-			get_tree().create_timer(2.0).timeout.connect(_kamrat_sager.bind(svar))
-	else:
-		_kamrat_sager(str(k.get("text", "")))
-		if svar != "":
-			get_tree().create_timer(2.4).timeout.connect(_spelaren_sager.bind(svar))
-	_kommentar_upptagen_till = Time.get_ticks_msec() + (4500 if svar != "" else 2500)
 
 
 func _spelaren_sager(text: String) -> void:

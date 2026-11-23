@@ -9,8 +9,6 @@ extends Node2D
 signal npc_klickad(npc_id: String)
 signal spelare_framme
 signal kamrat_klickad
-## Spelaren klickade på skyddsobjektet.
-signal objekt_klickad
 
 const RUTSTORLEK := Vector2i(32, 16)
 const ZOOM := 2.0
@@ -211,21 +209,6 @@ func _skapa_objekt(rader: Array) -> void:
 
 
 ## Ställer ut skyddsobjektet (Spel.objekttyp) på objektytan (B-rutorna i kartan).
-var _objekt_sprites: Array[Sprite2D] = []
-var _objekt_celler: Array[Vector2i] = []
-
-
-## Träffar musklicket skyddsobjektet (en av dess rutor eller en synlig pixel)?
-func traffar_skyddsobjekt(c: Vector2i, mus: Vector2) -> bool:
-	if c in _objekt_celler:
-		return true
-	for s in _objekt_sprites:
-		var lokal := s.to_local(mus)
-		if s.get_rect().has_point(lokal) and s.is_pixel_opaque(lokal):
-			return true
-	return false
-
-
 func _placera_skyddsobjekt(yta: Array[Vector2i]) -> void:
 	if yta.is_empty():
 		return
@@ -238,21 +221,20 @@ func _placera_skyddsobjekt(yta: Array[Vector2i]) -> void:
 	var hinder: Array[Vector2i] = []
 	match Spel.objekttyp:
 		"lastbil":
-			_objekt_sprites.append(_sprite("lastbil", minsta + Vector2i(3, 1)))
+			_sprite("lastbil", minsta + Vector2i(3, 1))
 			for dx in 4:
 				hinder.append(minsta + Vector2i(dx, 1))
 		"radiomast":
-			_objekt_sprites.append(_sprite("radiomast", minsta + Vector2i(1, 1)))
-			_objekt_sprites.append(_sprite("teknikbod", minsta + Vector2i(3, 2)))
+			_sprite("radiomast", minsta + Vector2i(1, 1))
+			_sprite("teknikbod", minsta + Vector2i(3, 2))
 			hinder.append(minsta + Vector2i(1, 1))
 			hinder.append(minsta + Vector2i(3, 2))
 		"vapenforrad":
-			_objekt_sprites.append(_sprite("vapenforrad", ankare))
+			_sprite("vapenforrad", ankare)
 			hinder.assign(yta)
 		_:
-			_objekt_sprites.append(_sprite("byggnad", ankare))
+			_sprite("byggnad", ankare)
 			hinder.assign(yta)
-	_objekt_celler = hinder
 	for c in hinder:
 		astar.set_point_solid(c)
 		astar_npc.set_point_solid(c)
@@ -563,10 +545,6 @@ func _unhandled_input(event: InputEvent) -> void:
 				npc_klickad.emit(id)
 				get_viewport().set_input_as_handled()
 				return
-		if traffar_skyddsobjekt(c, mus):
-			objekt_klickad.emit()
-			get_viewport().set_input_as_handled()
-			return
 		if astar.region.has_point(c):
 			ga_till(c)
 			get_viewport().set_input_as_handled()
