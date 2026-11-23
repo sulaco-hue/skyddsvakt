@@ -21,9 +21,12 @@ func bygg(scenario: Dictionary) -> void:
 	marg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(marg)
 
+	var yttre := UiKit.vbox(12)
+	marg.add_child(yttre)
 	var scroll := ScrollContainer.new()
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	marg.add_child(scroll)
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	yttre.add_child(scroll)
 	var rad := UiKit.hbox(24)
 	rad.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	rad.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -81,11 +84,6 @@ func bygg(scenario: Dictionary) -> void:
 	info.add_child(UiKit.etikett(str(b.get("objektinfo", "")), 22, UiKit.LJUS, true))
 	info.add_child(UiKit.rubrik("SAMBAND", 13, UiKit.DAMPAD))
 	info.add_child(UiKit.etikett(str(b.get("samband", "")), 20, UiKit.LJUS, true))
-	info.add_child(UiKit.rubrik("STYRNING", 13, UiKit.DAMPAD))
-	var styr := "Klicka för att gå – grinden öppnas när du närmar dig. Klicka på en person för kontakt, på kamraten för ”tyst nu”. Q observera · R samband · N anteckna · T tyst nu · I instruktion · M musik av/på · F3 debugrad."
-	if UiKit.kompakt:
-		styr = "Tryck där du vill gå – grinden öppnas när du närmar dig. Tryck på en person för kontakt, på kamraten för ”tyst nu”. DBG visar debugraden."
-	info.add_child(UiKit.etikett(styr, 20, UiKit.LJUS, true))
 	kartrad.add_child(info)
 
 	var grid := GridContainer.new()
@@ -116,7 +114,6 @@ func bygg(scenario: Dictionary) -> void:
 	lv.add_child(flode)
 	grid.add_child(lag)
 
-	hoger.add_child(UiKit.fyllnad())
 	var knappar := UiKit.hbox(12)
 	knappar.add_child(UiKit.etikett("Lagstödet i detta utkast är inte juridiskt granskat.", 20, UiKit.DAMPAD))
 	knappar.add_child(UiKit.fyllnad())
@@ -124,7 +121,7 @@ func bygg(scenario: Dictionary) -> void:
 	start.custom_minimum_size = Vector2(200, 52)
 	start.pressed.connect(func() -> void: starta.emit())
 	knappar.add_child(start)
-	hoger.add_child(knappar)
+	yttre.add_child(knappar)
 
 
 func _unhandled_input(event: InputEvent) -> void:
