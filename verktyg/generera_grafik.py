@@ -253,24 +253,41 @@ save_obj("vaktkur", booth, (10.5, 11.5))
 
 
 def car(d, im):
-    x0, x1, y0, y1 = 15.85, 17.1, 3.15, 3.85
-    # hjul
-    for gx in (16.05, 16.8):
-        x, y = iso(gx, y1)
-        d.rectangle([x - 1, y - 3, x + 1, y], fill=(20, 20, 22))
-    for gx in (16.05, 16.8):
-        x, y = iso(gx, y0)
-        d.rectangle([x, y - 3, x + 1, y - 1], fill=(20, 20, 22))
-    block(d, x0, x1, y0, y1, 9, (128, 50, 44), (110, 40, 36), (88, 32, 30))
-    d.line([iso(x0, y1, 5), iso(x1, y1, 5)], fill=(140, 62, 54))
-    # kaross ovan + rutor
-    block(d, 16.1, 16.85, 3.22, 3.78, 15, (118, 46, 40), (70, 84, 102), (56, 66, 82))
-    d.line([iso(16.45, 3.78, 9), iso(16.45, 3.78, 15)], fill=(118, 46, 40))
-    # strålkastare (fram = +x)
-    x, y = iso(x1, 3.3, 6)
-    d.point((x, y), fill=(250, 240, 200))
-    x, y = iso(x1, 3.7, 6)
-    d.point((x, y), fill=(250, 240, 200))
+    """Röd kombi (fronten mot +x): kaross, kupé med rutor, hjul och lyktor."""
+    x0, x1, y0, y1 = 15.8, 17.2, 3.22, 3.78
+    rod, rod_m, rod_l = (164, 46, 40), (124, 34, 30), (192, 70, 60)
+    ruta, ruta_m = (60, 78, 96), (44, 56, 70)
+    # skugga under bilen
+    d.polygon([iso(x0 - 0.05, y0 + 0.05), iso(x1 + 0.05, y0 + 0.05), iso(x1 + 0.05, y1 + 0.1), iso(x0 - 0.05, y1 + 0.1)],
+              fill=(14, 20, 14))
+    # hjul på bortre sidan (syns precis under karossen)
+    for gx in (16.15, 16.9):
+        x, y = iso(gx, y0, 0)
+        d.ellipse([x - 2, y - 4, x + 2, y], fill=(22, 22, 24))
+    # kaross: sida (mot betraktaren), front och motorhuv/baklucka
+    d.polygon(face_quad(x0, y1, x1, y1, 2, 7), fill=rod)
+    d.polygon(face_quad(x1, y0, x1, y1, 2, 7), fill=rod_m)
+    d.polygon([iso(x0, y0, 7), iso(x1, y0, 7), iso(x1, y1, 7), iso(x0, y1, 7)], fill=rod_l)
+    d.line([iso(x0, y1, 4), iso(x1, y1, 4)], fill=(96, 26, 24))  # list längs sidan
+    # kupé (kombi: lång bakdel, kort huv)
+    k0, k1, l0, l1 = 15.9, 16.85, 3.27, 3.73
+    d.polygon(face_quad(k0, l1, k1, l1, 7, 12), fill=rod)
+    d.polygon(face_quad(k1, l0, k1, l1, 7, 12), fill=rod_m)
+    d.polygon([iso(k0, l0, 12), iso(k1, l0, 12), iso(k1, l1, 12), iso(k0, l1, 12)], fill=rod_l)
+    # sidorutor med B-stolpe, vindruta
+    d.polygon(face_quad(k0 + 0.06, l1, k1 - 0.05, l1, 8, 11), fill=ruta)
+    d.line([iso(16.42, l1, 8), iso(16.42, l1, 11)], fill=rod)
+    d.polygon(face_quad(k1, l0 + 0.05, k1, l1 - 0.05, 8, 11), fill=ruta_m)
+    d.point(iso(k1, l0 + 0.15, 10), fill=(150, 170, 186))
+    # hjul på närmaste sidan
+    for gx in (16.15, 16.9):
+        x, y = iso(gx, y1, 0)
+        d.ellipse([x - 3, y - 5, x + 2, y], fill=(22, 22, 24))
+        d.point((x, y - 3), fill=(130, 130, 134))
+    # strålkastare och baklykta
+    d.point(iso(x1, y0 + 0.12, 5), fill=(250, 240, 200))
+    d.point(iso(x1, y1 - 0.12, 5), fill=(250, 240, 200))
+    d.point(iso(x0, y1, 5), fill=(255, 60, 40))
 
 save_obj("bil", car, (16.5, 3.5))
 
