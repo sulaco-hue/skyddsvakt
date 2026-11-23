@@ -249,7 +249,7 @@
         {
           "text": "Be om legitimation och arbetsorder.",
           "handling": "begara_identitet",
-          "nasta": "leg",
+          "nasta": "leg_arlig",
           "nasta_variant": {
             "arlig": "leg_arlig",
             "oriktig": "leg_oriktig"
