@@ -91,9 +91,14 @@ func bygg(scenario: Dictionary) -> void:
 	vanster.add_child(info)
 
 	# Dialog
+	# Dialogspalten kan scrollas (behövs på små skärmar med långa repliker).
+	var dscroll := ScrollContainer.new()
+	dscroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	dscroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	mitt.add_child(dscroll)
 	var hoger := UiKit.vbox(14)
 	hoger.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	mitt.add_child(hoger)
+	dscroll.add_child(hoger)
 	var bubbla := UiKit.panel(Color("0B1016"), UiKit.TEXT, 24, 18)
 	var bv := UiKit.vbox(6)
 	bubbla.add_child(bv)

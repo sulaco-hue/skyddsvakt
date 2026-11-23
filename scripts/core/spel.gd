@@ -30,7 +30,7 @@ func _ready() -> void:
 	# Pekskärm (t.ex. iPhone/iPad i Safari): mindre basupplösning = större text och knappar.
 	if DisplayServer.is_touchscreen_available():
 		UiKit.kompakt = true
-		get_tree().root.content_scale_size = Vector2i(960, 540)
+		get_tree().root.content_scale_size = Vector2i(800, 450)
 
 
 ## Alla scenarier i data/scenarier/index.json: [{sokvag, namn, ingress}]

@@ -114,6 +114,7 @@ func _bygg_toppfalt() -> void:
 	on.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	oh.add_child(on)
 	rad.add_child(obj)
+	obj.visible = not UiKit.kompakt  # objektets namn står i briefingen
 
 	var dbg := UiKit.knapp("DBG")
 	dbg.custom_minimum_size = Vector2(52, 52)
@@ -333,6 +334,13 @@ func _bygg_samband() -> void:
 	p.offset_right = -16
 	p.offset_top = -16
 	p.offset_bottom = -16
+	if UiKit.kompakt:
+		# Kompakt: uppe till höger under toppraden (växer nedåt)
+		p.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+		p.grow_vertical = Control.GROW_DIRECTION_END
+		p.offset_left = -256
+		p.offset_top = 76
+		p.offset_bottom = 76
 	add_child(p)
 	_samband_panel = p
 	p.visible = false
@@ -353,6 +361,14 @@ func _bygg_position() -> void:
 	p.offset_right = 256
 	p.offset_top = -16
 	p.offset_bottom = -16
+	if UiKit.kompakt:
+		# Kompakt: uppe till vänster under toppraden
+		p.set_anchors_preset(Control.PRESET_TOP_LEFT)
+		p.grow_vertical = Control.GROW_DIRECTION_END
+		p.offset_left = 16
+		p.offset_right = 216
+		p.offset_top = 76
+		p.offset_bottom = 76
 	add_child(p)
 	var v := UiKit.vbox(2)
 	p.add_child(v)
@@ -385,7 +401,7 @@ func _bygg_handlingar() -> void:
 	]
 	for k in knappar:
 		var b := UiKit.knapp("%s\n[%s]" % [k[0], k[1]])
-		b.custom_minimum_size = Vector2(96, 60)
+		b.custom_minimum_size = Vector2(84, 56) if UiKit.kompakt else Vector2(96, 60)
 		b.add_theme_font_size_override("font_size", 19)
 		b.pressed.connect(k[2])
 		h.add_child(b)
