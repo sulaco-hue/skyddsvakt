@@ -192,7 +192,7 @@ i stället har stridsparskamraten en intern **upptäcktstimer** (`handelser[].up
   bort) visas i debriefingen som *saknar lagstöd* med hur länge den pågick och hur nära ni som närmast var.
 - Fotografen ger sig av efter `lamnar_efter_s` sekunder (30) om ingen kontakt tagits.
 
-**Debugraden** (överst, **F3** visar/döljer) har en knapp per händelse som startar den direkt,
+**Debugraden** (överst, av från start – **F3** eller **DBG** visar/döljer) har en knapp per händelse som startar den direkt,
 och visar upptäcktstimerns status. **INFO** öppnar en panel med klocka, händelser, positioner och zoner,
 figurernas tillstånd, upptäcktstimern, alla fakta och loggstorlek.
 

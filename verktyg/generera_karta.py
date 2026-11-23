@@ -219,7 +219,7 @@ k["objekttyper"] = OrderedDict([
     ("byggnad", OrderedDict([("namn", "Förråd Granåsen"), ("bestamd", "byggnaden"),
                              ("beskrivning", "En tvåvåningsbyggnad med förrådslokaler.")])),
     ("lastbil", OrderedDict([("namn", "Helikoptern Granåsen"), ("bestamd", "helikoptern"),
-                             ("beskrivning", "Helikoptern – en olivgrön lastbil med HELIKOPTER målat på sidan – står uppställd innanför staketet.")])),
+                             ("beskrivning", "Helikoptern står uppställd innanför staketet.")])),
     ("vapenforrad", OrderedDict([("namn", "Vapenförråd Granåsen"), ("bestamd", "vapenförrådet"),
                                  ("beskrivning", "En lagerbyggnad i plåt med vapen och ammunition.")])),
     ("radiomast", OrderedDict([("namn", "Radiostation Granåsen"), ("bestamd", "masten"),

@@ -54,7 +54,7 @@ func bygg(p_scenario: Dictionary, p_varld: Varld) -> void:
 	# Uppdragsrutan är borttagen tills vidare (ersätts av något bättre).
 	_bygg_debug()
 	_bygg_debug_info()
-	_debug.visible = not UiKit.kompakt
+	_debug.visible = false
 	_debug.visibility_changed.connect(func() -> void: Spel.debug = _debug.visible)
 	Spel.debug = _debug.visible
 	_bygg_samband()
