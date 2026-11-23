@@ -35,6 +35,8 @@ var dialog: Dictionary = {}
 var atgarder: Dictionary = {}
 var _atgard_lista: Array = []
 var _nod_id := ""
+## Åtgärder med egen replik som redan valts i det här steget (grånas ut).
+var _anvanda: Dictionary = {}
 var stamning := 3
 
 var _replik: Label
@@ -194,6 +196,8 @@ func oppna(npc: Dictionary, start_nod: String) -> void:
 
 func visa_nod(nod_id: String, replik_override := "") -> void:
 	var nod: Dictionary = dialog.get(nod_id, {})
+	if replik_override == "" or nod_id != _nod_id:
+		_anvanda.clear()
 	_nod_id = nod_id
 	_replik.text = replik_override if replik_override != "" else str(nod.get("replik", "…"))
 	if nod.has("stamning"):
@@ -247,6 +251,7 @@ func _bygg_atgarder(nod: Dictionary) -> void:
 		b.add_theme_font_size_override("font_size", 18 if UiKit.kompakt else 20)
 		b.custom_minimum_size = Vector2(0, 40)
 		b.pressed.connect(_valj_alt.bind(alt))
+		b.disabled = _anvanda.has(id)
 		_atgard_val.append(alt)
 		_atgard_rad.add_child(b)
 
@@ -321,6 +326,11 @@ func _nasta(alt: Dictionary) -> String:
 
 
 func _valj_alt(alt: Dictionary) -> void:
+	var h := str(alt.get("handling", ""))
+	if h != "" and _anvanda.has(h):
+		return
+	if alt.has("replik") and _nasta(alt) == "" and h != "":
+		_anvanda[h] = true
 	stamning = clampi(stamning + int(alt.get("stamning", 0)), 0, 8)
 	_uppdatera_stamning()
 	val_gjort.emit(alt)

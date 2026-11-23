@@ -121,6 +121,11 @@ func forhandsbedom(handling_id: String, extra_fakta: Dictionary = {}) -> Diction
 ## Utför en handling: bedöms av regelmotorn och läggs i beslutsloggen.
 func utfor(handling_id: String, beskrivning: String = "") -> Dictionary:
 	var post := regelmotor.bedom(handling_id, fakta, _bedomning_override)
+	# Samma beslut igen direkt efter (t.ex. en knapp som hamras på) loggas inte en gång till.
+	if not logg.is_empty():
+		var forra: Dictionary = logg[-1]
+		if str(forra.get("handling", "")) == handling_id and str(forra.get("utfall", "")) == str(post.get("utfall", "")):
+			return forra
 	post["tid"] = klockstrang()
 	post["beskrivning"] = beskrivning if beskrivning != "" else str(post["namn"])
 	logg.append(post)
