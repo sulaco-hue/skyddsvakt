@@ -47,9 +47,6 @@ func bygg() -> void:
 	logga.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	logga.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	kol.add_child(logga)
-	var under := UiKit.etikett("Utbildningsspel för militära skyddsvakter", 24, UiKit.LJUS)
-	under.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	kol.add_child(under)
 	kol.add_child(UiKit.ruta_farg(Color(0, 0, 0, 0), Vector2(0, 20)))
 	_uppmaning = UiKit.rubrik("TRYCK FÖR ATT BÖRJA", 16, UiKit.BARNSTEN)
 	_uppmaning.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
