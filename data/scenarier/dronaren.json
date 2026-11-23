@@ -17,22 +17,22 @@
     {
       "tid": "06:10",
       "kalla": "Regional lägesbild",
-      "text": "Drönare observerade nattetid över två militära områden i regionen. Inga piloter anträffade."
+      "text": "Ökad underrättelseaktivitet mot militära anläggningar i regionen."
     },
     {
       "tid": "12:40",
       "kalla": "Lokal nyhet",
-      "text": "Elektronikkedja rapporterar rekordförsäljning av hobbydrönare inför jul."
+      "text": "Badplatsen vid sjön har fått ny brygga – kommunen inviger den i helgen."
     },
     {
       "tid": "16:05",
       "kalla": "Vaktchef",
-      "text": "Vid drönarobservation: rapportera omgående till CQ."
+      "text": "Kvällspass enligt ordinarie bevakningsinstruktion. Inga särskilda händelser."
     }
   ],
   "briefing": {
-    "uppdrag": "Bevaka grind och staket. Var uppmärksam på drönare. Rapportera avvikelser till CQ.",
-    "objektinfo": "Skyddsobjektet omfattar området innanför staketet. Tillträdesförbudet gäller även obemannade farkoster. Skyltat: tillträdesförbud och avbildningsförbud.",
+    "uppdrag": "Bevaka grind och staket. Rapportera avvikelser till CQ.",
+    "objektinfo": "Skyddsobjektet omfattar området innanför staketet. Skyltat: tillträdesförbud och avbildningsförbud.",
     "samband": "Vi: Grindposten (stridspar, två skyddsvakter). Vaktchef: CQ (Caesar Qvintus).",
     "lagstod_fokus": [
       "Tillträdesförbud – även drönare",

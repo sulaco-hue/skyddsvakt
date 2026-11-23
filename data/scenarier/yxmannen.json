@@ -18,18 +18,18 @@
   "omvarldslage": [
     {
       "tid": "19:30",
-      "kalla": "Polisen, lokal nyhet",
-      "text": "Polisen söker en man i 50-årsåldern som hotat grannar i en ved- och tomtgränstvist norr om Granåsen. Han beskrivs som upprörd och förvirrad."
+      "kalla": "Lokal nyhet",
+      "text": "Minusgrader i natt – risk för halka på länsvägen."
     },
     {
       "tid": "23:50",
       "kalla": "Vaktchef",
-      "text": "Inga avvikelser. Nattpass: patrullera staketet och grinden. Vid hot mot person: larma CQ omedelbart."
+      "text": "Inga avvikelser. Nattpass: patrullera staketet och grinden."
     }
   ],
   "briefing": {
     "uppdrag": "Bevaka grind och staket under natten. Rapportera avvikelser till CQ.",
-    "objektinfo": "Skyddsobjektet omfattar området innanför staketet. Skyltat: tillträdesförbud och avbildningsförbud. En skogsstig leder norrut från staketet.",
+    "objektinfo": "Skyddsobjektet omfattar området innanför staketet. Skyltat: tillträdesförbud och avbildningsförbud.",
     "samband": "Vi: Grindposten (stridspar, två skyddsvakter). Vaktchef: CQ (Caesar Qvintus).",
     "lagstod_fokus": [
       "Nödvärn 24 kap. 1 § BrB",
