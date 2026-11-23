@@ -156,6 +156,9 @@ func oppna(npc: Dictionary, start_nod: String) -> void:
 func visa_nod(nod_id: String) -> void:
 	var nod: Dictionary = dialog.get(nod_id, {})
 	_replik.text = str(nod.get("replik", "…"))
+	if nod.has("stamning"):
+		stamning = clampi(int(nod["stamning"]), 0, 8)
+		_uppdatera_stamning()
 	nod_visad.emit(nod)
 	for c in _alternativ_lista.get_children():
 		c.queue_free()

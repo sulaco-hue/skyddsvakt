@@ -56,7 +56,8 @@
     "omhandertagande_nodvandigt": false,
     "skal_att_anhalla": false,
     "grund_for_beslag": false,
-    "anmalan_polis": false
+    "anmalan_polis": false,
+    "dronare_nedskjuten": false
   },
   "bedomning": {
     "begara_identitet": {
@@ -99,13 +100,19 @@
         "Drönaren: över skyddsobjektet",
         "Stridsparskamrat: skyddar"
       ],
-      "efter_skott": "Vad gör ni?! Det står ett barn här!"
+      "efter_skott": "Vad gör ni?! Det står ett barn här!",
+      "dialog_start_om": [
+        {
+          "fakta": "dronare_nedskjuten",
+          "nod": "skjuten"
+        }
+      ]
     },
     "dottern": {
       "namn": "Elsa, 10 år",
       "beskrivning": "Födelsedagsbarn",
       "sprite": "barn",
-      "portratt": "portratt_pappa",
+      "portratt": "portratt_barn",
       "start": "sjo_dotter",
       "synlig_fran_start": false,
       "stamning": 0,
@@ -114,7 +121,13 @@
         "Ett barn, 10 år",
         "Stridsparskamrat: skyddar"
       ],
-      "efter_skott": "BUHUUU! Min drönare!"
+      "efter_skott": "BUHUUU! Min drönare!",
+      "dialog_start_om": [
+        {
+          "fakta": "dronare_nedskjuten",
+          "nod": "elsa_skjuten"
+        }
+      ]
     }
   },
   "handelser": [
@@ -440,6 +453,86 @@
     },
     "elsa_slut": {
       "replik": "ELSA: – Där! Han flyger drönaren. Fast den är min egentligen.",
+      "slut": true
+    },
+    "skjuten": {
+      "replik": "MATS: – Vad håller ni på med?! Ni sköt ner hennes drönare! Det står ett barn här!\n\nELSA: – BUHUUU! Min drönare!",
+      "stamning": 7,
+      "alternativ": [
+        {
+          "text": "Förklara lugnt att drönaren flög över ett skyddsobjekt, där även drönare omfattas av tillträdesförbudet.",
+          "stamning": -1,
+          "nasta": "skjuten_forklarat"
+        },
+        {
+          "text": "Begär att han uppger namn, födelsetid och hemvist.",
+          "handling": "begara_identitet",
+          "stamning": 1,
+          "nasta": "skjuten_id"
+        },
+        {
+          "text": "Anropa AQ och rapportera vad som hänt.",
+          "handling": "rapportera_vaktchef",
+          "nasta": "skjuten_aq"
+        }
+      ]
+    },
+    "skjuten_forklarat": {
+      "replik": "MATS: – Men ni kunde väl bara ha sagt till? Vi stod ju här hela tiden! Jag kommer att anmäla det här.",
+      "alternativ": [
+        {
+          "text": "Anteckna hans uppgifter och vad som hänt, och hänvisa till vaktchefen.",
+          "handling": "dokumentera",
+          "nasta": "skjuten_slut"
+        },
+        {
+          "text": "Anropa AQ och rapportera vad som hänt.",
+          "handling": "rapportera_vaktchef",
+          "nasta": "skjuten_aq"
+        }
+      ]
+    },
+    "skjuten_id": {
+      "replik": "MATS: – Mats Lindqvist. Och jag vill ha ERA namn. Det här kommer att få konsekvenser.",
+      "alternativ": [
+        {
+          "text": "Anropa AQ och rapportera vad som hänt.",
+          "handling": "rapportera_vaktchef",
+          "nasta": "skjuten_aq"
+        },
+        {
+          "text": "Anteckna uppgifterna och vad som hänt.",
+          "handling": "dokumentera",
+          "nasta": "skjuten_slut"
+        }
+      ]
+    },
+    "skjuten_aq": {
+      "replik": "DU (radio): ”AQ, AQ.” – AQ: ”AQ kom.”\nDU: ”Från Grindposten, drönare nedskjuten över objektet, pilot med barn på plats vid sjön, kom.”\nAQ: ”…Uppfattat. Stanna där. Jag kommer ut. Slut kom.” – DU: ”Klart slut.”",
+      "alternativ": [
+        {
+          "text": "Anteckna vad som hänt och invänta AQ.",
+          "handling": "dokumentera",
+          "nasta": "skjuten_slut"
+        }
+      ]
+    },
+    "skjuten_slut": {
+      "replik": "ELSA: – Den var ny…\n\nMATS: – Kom, gumman. Vi väntar på chefen deras.",
+      "slut": true
+    },
+    "elsa_skjuten": {
+      "replik": "ELSA: – Varför sköt du den? Den gjorde ju inget!",
+      "stamning": 7,
+      "alternativ": [
+        {
+          "text": "”Förlåt. Det var inte meningen att göra dig ledsen. Var är din pappa?”",
+          "nasta": "elsa_skjuten_slut"
+        }
+      ]
+    },
+    "elsa_skjuten_slut": {
+      "replik": "ELSA: – Där. Han är jättearg.",
       "slut": true
     }
   }

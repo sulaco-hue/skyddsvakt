@@ -932,6 +932,8 @@ def portrait(kind):
         p.polygon([(x, 62), (x + 14, 62), (x + 7, 62 - hgt)], fill=(28, 40, 44))
     p.rectangle([0, 60, S, S], fill=(26, 36, 44))
     skin, skin_d, skin_l = (224, 180, 140), (196, 150, 112), (238, 200, 162)
+    if kind == "barn":
+        return portrait_barn()
     if kind == "pappa":
         jacket, jacket_d, jacket_l = (62, 96, 150), (46, 72, 116), (84, 118, 172)
     elif kind == "civil":
@@ -1073,9 +1075,59 @@ def portrait(kind):
         p.line([(34, 46), (45, 46)], fill=(140, 84, 70))
     return im
 
+def portrait_barn():
+    S = 80
+    im = Image.new("RGB", (S, S), (34, 46, 58))
+    p = ImageDraw.Draw(im)
+    for i, x in enumerate(range(-6, S, 14)):
+        hgt = 26 + (i * 7) % 12
+        p.polygon([(x, 62), (x + 14, 62), (x + 7, 62 - hgt)], fill=(28, 40, 44))
+    p.rectangle([0, 60, S, S], fill=(26, 36, 44))
+    skin, skin_d, skin_l = (232, 190, 152), (206, 160, 124), (244, 210, 176)
+    har, har_d = (226, 194, 108), (196, 160, 80)
+    rosa, rosa_d = (222, 112, 152), (184, 84, 120)
+    # jacka
+    p.polygon([(14, S), (18, 66), (32, 60), (48, 60), (62, 66), (66, S)], fill=rosa)
+    p.polygon([(14, S), (18, 66), (32, 60), (34, S)], fill=rosa_d)
+    p.line([(40, 64), (40, S)], fill=(240, 230, 236))
+    # hår bakom (flätor)
+    p.rectangle([20, 22, 27, 60], fill=har_d)
+    p.rectangle([52, 22, 59, 60], fill=har_d)
+    for y in range(34, 60, 6):
+        p.rectangle([19, y, 28, y + 3], fill=har)
+        p.rectangle([51, y, 60, y + 3], fill=har)
+    p.rectangle([20, 58, 27, 61], fill=(120, 200, 230))
+    p.rectangle([52, 58, 59, 61], fill=(120, 200, 230))
+    # hals och ansikte (rundare, mindre)
+    p.rectangle([35, 52, 45, 60], fill=skin_d)
+    p.ellipse([25, 20, 55, 56], fill=skin)
+    p.rectangle([47, 28, 50, 38], fill=skin_l)
+    # lugg
+    p.chord([24, 14, 56, 42], 180, 360, fill=har)
+    for x in range(27, 54, 4):
+        p.line([(x, 26), (x + 2, 32)], fill=har_d)
+    # ögon (stora, nyfikna)
+    for ex in (31, 44):
+        p.rectangle([ex, 36, ex + 5, 41], fill=(250, 250, 246))
+        p.rectangle([ex + 2, 37, ex + 4, 41], fill=(70, 110, 150))
+        p.point((ex + 3, 38), fill=(255, 255, 255))
+    p.line([(31, 33), (36, 32)], fill=har_d)
+    p.line([(44, 32), (49, 33)], fill=har_d)
+    # fräknar, näsa, mun (stort leende)
+    for q in [(30, 45), (33, 46), (47, 45), (50, 46)]:
+        p.point(q, fill=(200, 140, 110))
+    p.point((40, 45), fill=skin_d)
+    p.line([(35, 49), (45, 49)], fill=(150, 70, 70))
+    p.point((34, 48), fill=(150, 70, 70))
+    p.point((46, 48), fill=(150, 70, 70))
+    p.rectangle([37, 50, 43, 50], fill=(240, 236, 230))
+    return im
+
+
 portrait("civil").save(os.path.join(OUT, "portratt_civil.png"))
 portrait("vakt").save(os.path.join(OUT, "portratt_vakt.png"))
 portrait("pappa").save(os.path.join(OUT, "portratt_pappa.png"))
+portrait_barn().save(os.path.join(OUT, "portratt_barn.png"))
 
 # ============================================================ Ikoner ==
 def hogtalare(namn, extra):

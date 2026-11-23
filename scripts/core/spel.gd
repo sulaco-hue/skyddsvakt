@@ -154,9 +154,31 @@ func lagg_till_samband(fran: String, text: String) -> void:
 	samband_ny.emit(rad)
 
 
+## Radiokanalen: vår egen trafik har företräde. När vi anropar avbryts brus
+## (trafik mellan andra enheter) som redan är på gång, och inget nytt brus
+## startar förrän vår växling är klar.
+var _brus_generation := 0
+var _kanal_upptagen_till_ms := 0
+
+
+func kanal_upptagen() -> bool:
+	return Time.get_ticks_msec() < _kanal_upptagen_till_ms
+
+
 ## Spelar upp en radioväxling: varje meddelande har "fran", "text" och
 ## "efter" (sekunder från start). {nyckel} i texten ersätts från ersattningar.
-func spela_samband(meddelanden: Array, ersattningar: Dictionary = {}) -> void:
+## brus = trafik mellan andra enheter (lägre prioritet).
+func spela_samband(meddelanden: Array, ersattningar: Dictionary = {}, brus := false) -> void:
+	var langst := 0.0
+	for m in meddelanden:
+		langst = maxf(langst, float(m.get("efter", 0.0)))
+	if brus:
+		if kanal_upptagen():
+			return
+	else:
+		_brus_generation += 1
+	_kanal_upptagen_till_ms = maxi(_kanal_upptagen_till_ms, Time.get_ticks_msec() + int((langst + 1.5) * 1000.0))
+	var generation := _brus_generation
 	for m in meddelanden:
 		var text := str(m.get("text", ""))
 		for k in ersattningar:
@@ -165,8 +187,15 @@ func spela_samband(meddelanden: Array, ersattningar: Dictionary = {}) -> void:
 		var efter := float(m.get("efter", 0.0))
 		if efter <= 0.0:
 			lagg_till_samband(fran, text)
+		elif brus:
+			get_tree().create_timer(efter).timeout.connect(_brusrad.bind(fran, text, generation))
 		else:
 			get_tree().create_timer(efter).timeout.connect(func() -> void: lagg_till_samband(fran, text))
+
+
+func _brusrad(fran: String, text: String, generation: int) -> void:
+	if generation == _brus_generation:
+		lagg_till_samband(fran, text)
 
 
 func handling_utford(handling_id: String) -> bool:

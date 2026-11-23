@@ -177,7 +177,7 @@ func _uppdatera_brus(delta: float) -> void:
 	_brus_t = _rng.randf_range(float(inst.get("intervall_min_s", 30)), float(inst.get("intervall_max_s", 70)))
 	var vaxlingar: Array = _brus.get("vaxlingar", [])
 	if not vaxlingar.is_empty():
-		Spel.spela_samband(vaxlingar[_rng.randi_range(0, vaxlingar.size() - 1)])
+		Spel.spela_samband(vaxlingar[_rng.randi_range(0, vaxlingar.size() - 1)], {}, true)
 
 
 func _forcera_handelse(id: String) -> void:
@@ -357,6 +357,7 @@ func _bekampa_dronare() -> void:
 	if not _upptackt.is_empty() and _upptackt["nod"] == dronare:
 		_upptackt = {}
 	Spel.utfor("vald_mot_farkost", "Bekämpade drönaren med automatkarbin")
+	Spel.satt_fakta({"dronare_nedskjuten": true})
 	hud.visa_ljud(varld.spelare, "PANG PANG", 1.5)
 	dronare.krascha()
 	varld.kollega.vand_mot(dronare.global_position)
@@ -494,7 +495,16 @@ func _oppna_kontakt(id: String) -> void:
 	snack.aktiv = false
 	var data: Dictionary = _scenario.get("npc", {}).get(id, {})
 	kontakt.set_meta("npc", id)
-	kontakt.oppna(data, str(data.get("dialog_start", "start")))
+	kontakt.oppna(data, _dialogstart(data))
+
+
+## Startnod för dialogen. "dialog_start_om": [{fakta, nod}] väljer en annan
+## start om ett faktum är sant (t.ex. att drönaren har skjutits ner).
+func _dialogstart(data: Dictionary) -> String:
+	for villkor in data.get("dialog_start_om", []):
+		if bool(Spel.fakta.get(str(villkor.get("fakta", "")), false)):
+			return str(villkor.get("nod", "start"))
+	return str(data.get("dialog_start", "start"))
 
 
 func _pa_val(alt: Dictionary) -> void:
