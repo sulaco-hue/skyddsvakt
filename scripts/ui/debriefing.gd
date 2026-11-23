@@ -16,6 +16,8 @@ var _a_lagrum: Label
 var _a_kommentar: Label
 var _a_krav_rubrik: Label
 var _a_krav: Label
+var _a_ok_rubrik: Label
+var _a_ok: Label
 var _a_diskutera: Label
 var _status: Label
 
@@ -115,6 +117,10 @@ func bygg(poster: Array, scenario: Dictionary, granskad: bool, kommentar: String
 	av.add_child(UiKit.rubrik("BEDÖMNING", 13, UiKit.DAMPAD))
 	_a_kommentar = UiKit.etikett("", 22, UiKit.TEXT, true)
 	av.add_child(_a_kommentar)
+	_a_ok_rubrik = UiKit.rubrik("UPPFYLLDA REKVISIT", 13, UiKit.DAMPAD)
+	av.add_child(_a_ok_rubrik)
+	_a_ok = UiKit.etikett("", 21, UiKit.GRON, true)
+	av.add_child(_a_ok)
 	_a_krav_rubrik = UiKit.rubrik("EJ UPPFYLLDA REKVISIT", 13, UiKit.DAMPAD)
 	av.add_child(_a_krav_rubrik)
 	_a_krav = UiKit.etikett("", 22, UiKit.BARNSTEN, true)
@@ -195,8 +201,15 @@ func _visa(i: int) -> void:
 	_a_krav.visible = not krav.is_empty()
 	var lasbara := PackedStringArray()
 	for k in krav:
-		lasbara.append(str(k).replace("_", " "))
-	_a_krav.text = ", ".join(lasbara)
+		lasbara.append("– " + str(k))
+	_a_krav.text = "\n".join(lasbara)
+	var ok: Array = post.get("uppfyllda_krav", [])
+	var oklista := PackedStringArray()
+	for k in ok:
+		oklista.append("+ " + str(k))
+	_a_ok.text = "\n".join(oklista)
+	_a_ok_rubrik.visible = not ok.is_empty()
+	_a_ok.visible = not ok.is_empty()
 	_a_diskutera.text = str(post.get("diskutera", ""))
 	_analys.add_theme_stylebox_override("panel", UiKit.ruta(UiKit.RUTA, farg, 3, 22, 18))
 	for j in _rader.size():

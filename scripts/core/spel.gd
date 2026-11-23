@@ -200,6 +200,17 @@ func _brusrad(fran: String, text: String, generation: int) -> void:
 		lagg_till_samband(fran, text)
 
 
+## Sant om en åtgärd som kräver protokoll (16 §) genomförts utan att protokoll upprättats.
+func protokoll_kravs() -> bool:
+	if bool(fakta.get("protokoll_upprattat", false)):
+		return false
+	for k in ["omhandertagande_genomfort", "gripande_genomfort", "beslag_genomfort", "visitation_genomford",
+			"dronare_nedskjuten"]:
+		if bool(fakta.get(k, false)):
+			return true
+	return false
+
+
 func handling_utford(handling_id: String) -> bool:
 	for post in logg:
 		if post.get("handling", "") == handling_id:

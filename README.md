@@ -89,6 +89,11 @@ assets/fonts/                  VT323 och Jersey 15 (SIL Open Font License)
 verktyg/                       Python-skript för grafik och förhandsvisning av kartan
 ```
 
+## Lagstödskortet
+
+Under **Instruktion [I]** finns fliken **Lagstöd 10–17 §§** med en sammanfattning i egna ord av
+skyddslagens befogenheter (`data/lagstodskort.json`). Sammanfattningen ersätter inte lagtexten.
+
 ## Så fungerar regelmotorn
 
 Varje svarsalternativ eller knapp i spelet pekar på en **handling** i `lagrum.json`, till exempel `gripa_med_vald`:
@@ -102,8 +107,13 @@ Varje svarsalternativ eller knapp i spelet pekar på en **handling** i `lagrum.j
 }
 ```
 
-- **krav** är fakta som måste vara sanna i scenariot (`"fakta"` i scenariofilen). Är alla uppfyllda blir utfallet *lagstöd*, annars det som står i `vid_brist` (`warn` = diskutabelt, `bad` = saknar lagstöd).
-- **foljdkrav** kontrolleras när passet är slut. Exempel: ett gripande eller beslag som inte anmälts till polis (17 § skyddslagen).
+- **krav** är fakta som alla måste vara sanna i scenariot (`"fakta"` i scenariofilen), t.ex. behovsrekvisitet `behov_avlagsna`.
+- **krav_grupper** är grupper där minst ett måste vara sant, t.ex. *inom ELLER invid* och grunderna i 12 §
+  (*förbud ELLER identitet ELLER oriktiga uppgifter ELLER visitation ELLER fordon*).
+- Är allt uppfyllt blir utfallet *lagstöd*, annars det som står i `vid_brist` (`warn` = diskutabelt, `bad` = saknar lagstöd).
+- Debriefingen visar **uppfyllda** och **ej uppfyllda rekvisit** i klartext (`meta.rekvisit`).
+- **Anteckna [N]** blir *protokoll enligt 16 §* när en åtgärd som kräver protokoll har genomförts.
+- **foljdkrav** kontrolleras när passet är slut: anmälan till polis (17 §) och protokoll (16 §) efter omhändertagande, gripande, beslag, visitation och våld mot farkost.
 - Dialogval kan ändra fakta (`"satt_fakta"`), så samma handling kan få olika bedömning beroende på vad som hänt tidigare.
 
 En jurist kan alltså ändra lagrum, krav och texter i JSON-filen utan att röra koden.

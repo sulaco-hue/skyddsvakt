@@ -441,23 +441,75 @@ func _pa_sambandsval(val: Dictionary) -> void:
 	Spel.spela_samband(val.get("meddelanden", []), {"lage": lage})
 
 
+## Instruktion [I]: två flikar – bevakningsinstruktionen och lagstödskortet
+## (data/lagstodskort.json).
 func _bygg_instruktion() -> void:
-	_instruktion = UiKit.panel(UiKit.KANT2, UiKit.PANEL, 24, 18)
-	_instruktion.set_anchors_preset(Control.PRESET_CENTER)
-	_instruktion.grow_horizontal = Control.GROW_DIRECTION_BOTH
-	_instruktion.grow_vertical = Control.GROW_DIRECTION_BOTH
-	_instruktion.custom_minimum_size = Vector2(560, 0)
+	_instruktion = UiKit.panel(UiKit.KANT2, UiKit.PANEL, 20, 14)
+	_instruktion.set_anchors_preset(Control.PRESET_FULL_RECT)
+	var marg := 40 if UiKit.kompakt else 120
+	_instruktion.offset_left = marg
+	_instruktion.offset_right = -marg
+	_instruktion.offset_top = 76
+	_instruktion.offset_bottom = -16
 	_instruktion.visible = false
 	add_child(_instruktion)
 	var v := UiKit.vbox(10)
 	_instruktion.add_child(v)
-	var b: Dictionary = scenario.get("briefing", {})
-	v.add_child(UiKit.titel("Bevakningsinstruktion", 22))
-	v.add_child(UiKit.etikett(str(b.get("uppdrag", "")), 22, UiKit.TEXT, true))
-	v.add_child(UiKit.etikett(str(b.get("objektinfo", "")), 22, UiKit.LJUS, true))
+
+	var flikar := UiKit.hbox(8)
+	v.add_child(flikar)
+	var f1 := UiKit.knapp("BEVAKNINGSINSTRUKTION")
+	var f2 := UiKit.knapp("LAGSTÖD 10–17 §§")
+	flikar.add_child(f1)
+	flikar.add_child(f2)
+	flikar.add_child(UiKit.fyllnad())
 	var stang := UiKit.knapp("Stäng [I]")
 	stang.pressed.connect(_vaxla_instruktion)
-	v.add_child(stang)
+	flikar.add_child(stang)
+
+	var scroll := ScrollContainer.new()
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	v.add_child(scroll)
+	var innehall := UiKit.vbox(10)
+	innehall.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.add_child(innehall)
+
+	var instr := UiKit.vbox(10)
+	instr.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var b: Dictionary = scenario.get("briefing", {})
+	instr.add_child(UiKit.titel("Bevakningsinstruktion", 22))
+	instr.add_child(UiKit.etikett(str(b.get("uppdrag", "")), 22, UiKit.TEXT, true))
+	instr.add_child(UiKit.etikett(str(b.get("objektinfo", "")), 22, UiKit.LJUS, true))
+	instr.add_child(UiKit.etikett(str(b.get("samband", "")), 20, UiKit.LJUS, true))
+	innehall.add_child(instr)
+
+	var lag := UiKit.vbox(12)
+	lag.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var kort := Datafil.las_json("res://data/lagstodskort.json")
+	lag.add_child(UiKit.etikett("Sammanfattning i egna ord – inte lagtext. " + str(kort.get("kalla", "")), 18,
+		UiKit.DAMPAD, true))
+	for par in kort.get("paragrafer", []):
+		var rad := UiKit.hbox(14)
+		var nr := UiKit.titel(str(par.get("paragraf", "")), 20, UiKit.BARNSTEN)
+		nr.custom_minimum_size = Vector2(56, 0)
+		rad.add_child(nr)
+		var pv := UiKit.vbox(2)
+		pv.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		pv.add_child(UiKit.rubrik(str(par.get("rubrik", "")).to_upper(), 13, UiKit.GRON))
+		pv.add_child(UiKit.etikett(str(par.get("text", "")), 20, UiKit.TEXT, true))
+		rad.add_child(pv)
+		lag.add_child(rad)
+	lag.visible = false
+	innehall.add_child(lag)
+
+	f1.pressed.connect(_visa_flik.bind(instr, lag, false))
+	f2.pressed.connect(_visa_flik.bind(instr, lag, true))
+
+
+func _visa_flik(instr: Control, lag: Control, visa_lag: bool) -> void:
+	instr.visible = not visa_lag
+	lag.visible = visa_lag
 
 
 # --------------------------------------------------------------- Logik --

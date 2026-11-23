@@ -3,7 +3,7 @@ extends RefCounted
 ## Bedömer spelarens handlingar mot lagstödet i data/lagrum.json.
 ##
 ## Varje handling har en lista med krav (fakta som alla måste vara sanna i
-## scenariot) och eventuellt "krav_nagon" (minst ett måste vara sant). Är alla krav uppfyllda blir utfallet "ok", annars det som
+## scenariot) och "krav_grupper" (i varje grupp måste minst ett vara sant). Är alla krav uppfyllda blir utfallet "ok", annars det som
 ## anges i "vid_brist" ("warn" = diskutabelt, "bad" = saknar lagstöd).
 ## Följdkrav (t.ex. anmälan till polis enligt 17 § skyddslagen) kontrolleras
 ## när passet är slut. Ett följdkrav kan ha "om_fakta": det gäller då bara om
@@ -47,20 +47,32 @@ func bedom(handling_id: String, fakta: Dictionary, override: Dictionary = {}) ->
 			"kommentar": "Handlingen '%s' finns inte i lagstödsfilen." % handling_id,
 			"diskutera": "",
 			"saknade_krav": [],
+			"uppfyllda_krav": [],
 		}
 	var saknas: Array = []
+	var uppfyllda: Array = []
+	# "krav": alla måste vara sanna.
 	for krav in h.get("krav", []):
-		if not bool(fakta.get(krav, false)):
-			saknas.append(krav)
-	# "krav_nagon": minst ett av dessa fakta måste vara sant.
-	var nagon: Array = h.get("krav_nagon", [])
-	if not nagon.is_empty():
-		var nagot_sant := false
-		for k in nagon:
+		if bool(fakta.get(krav, false)):
+			uppfyllda.append(lasbar(krav))
+		else:
+			saknas.append(lasbar(krav))
+	# "krav_grupper": i varje grupp måste minst ett vara sant (t.ex. grunderna i 12 §).
+	var grupper: Array = h.get("krav_grupper", [])
+	if h.has("krav_nagon"):
+		grupper = grupper + [h["krav_nagon"]]
+	for grupp in grupper:
+		var sanna: Array = []
+		for k in grupp:
 			if bool(fakta.get(k, false)):
-				nagot_sant = true
-		if not nagot_sant:
-			saknas.append(" eller ".join(PackedStringArray(nagon)))
+				sanna.append(lasbar(k))
+		if sanna.is_empty():
+			var alla := PackedStringArray()
+			for k in grupp:
+				alla.append(lasbar(k))
+			saknas.append(" ELLER ".join(alla))
+		else:
+			uppfyllda.append_array(sanna)
 	var uppfyllt := saknas.is_empty()
 	return {
 		"handling": handling_id,
@@ -70,7 +82,14 @@ func bedom(handling_id: String, fakta: Dictionary, override: Dictionary = {}) ->
 		"kommentar": str(h.get("text_ok", "")) if uppfyllt else str(h.get("text_brist", "")),
 		"diskutera": str(h.get("diskutera", "")),
 		"saknade_krav": saknas,
+		"uppfyllda_krav": uppfyllda,
 	}
+
+
+## Rekvisitets namn i klartext (meta.rekvisit i lagrum.json).
+func lasbar(nyckel: String) -> String:
+	var r: Dictionary = meta.get("rekvisit", {})
+	return str(r.get(nyckel, nyckel.replace("_", " ")))
 
 
 func satter_fakta(handling_id: String) -> Dictionary:
@@ -101,6 +120,7 @@ func kontrollera_foljdkrav(logg: Array, fakta: Dictionary) -> Array:
 				"lagrum": str(fk.get("lagrum", "")),
 				"kommentar": str(fk.get("text", "")) + " Det gjordes inte under passet.",
 				"diskutera": "Hur och via vem gör du anmälan i praktiken?",
-				"saknade_krav": [nyckel],
+				"saknade_krav": [lasbar(nyckel)],
+				"uppfyllda_krav": [],
 			})
 	return extra

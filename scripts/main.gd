@@ -57,7 +57,7 @@ func _ready() -> void:
 	hud.bygg(_scenario, varld)
 	hud.visible = false
 	hud.forcera_handelse.connect(_forcera_handelse)
-	hud.handling.connect(func(id: String, beskrivning: String) -> void: Spel.utfor(id, beskrivning))
+	hud.handling.connect(_pa_hud_handling)
 	hud.avsluta_pass.connect(_visa_debriefing)
 	hud.lagestext = _lagestext
 	hud.situation.connect(_bekampa_dronare)
@@ -120,6 +120,15 @@ func _bygg_scenarioval() -> void:
 func _valj_scenario(sokvag: String) -> void:
 	Spel.nollstall(sokvag)
 	get_tree().reload_current_scene()
+
+
+func _pa_hud_handling(id: String, beskrivning: String) -> void:
+	# "Anteckna" blir protokoll enligt 16 § när en åtgärd kräver det.
+	if id == "dokumentera" and Spel.protokoll_kravs():
+		Spel.utfor("uppratta_protokoll", "Upprättade protokoll över åtgärden")
+		hud.visa_meddelande("Protokoll upprättat (16 §)")
+		return
+	Spel.utfor(id, beskrivning)
 
 
 func _lagestext() -> String:

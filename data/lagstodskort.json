@@ -1,0 +1,46 @@
+{
+  "kommentar": "Lagstödskortet i spelet (Instruktion [I] → Lagstöd). Sammanfattningar i egna ord av skyddslagen (2010:305) – inte lagtext. Ska granskas av jurist.",
+  "kalla": "Skyddslagen (2010:305), riksdagen.se",
+  "paragrafer": [
+    {
+      "paragraf": "10 §",
+      "rubrik": "Skyldigheter för den som vill in eller uppehåller sig invid",
+      "text": "Den som vill ha tillträde till ett skyddsobjekt eller uppehåller sig invid det är på begäran skyldig att uppge namn, födelsetid och hemvist, att underkasta sig kroppsvisitation (inte brev och privata handlingar) och att låta undersöka fordon som personen har med sig."
+    },
+    {
+      "paragraf": "11 §",
+      "rubrik": "Kroppsvisitation, fordon och drönare",
+      "text": "Skyddsvakten får besluta om kroppsvisitation och undersökning av fordon när det behövs för uppgiften eller för att söka efter föremål som kan tas i beslag. Mot en obemannad farkost i, vid eller över objektet får skyddsvakten ingripa på annat sätt när det behövs – våld mot farkosten bara om andra medel är otillräckliga och om det är försvarligt."
+    },
+    {
+      "paragraf": "12 §",
+      "rubrik": "Avvisa, avlägsna, tillfälligt omhänderta",
+      "text": "Om det behövs för att fullgöra uppgiften får skyddsvakten avvisa, avlägsna eller tillfälligt omhänderta den som inom eller invid objektet: 1) överträder ett förbud enligt lagen, 2) vägrar lämna eller sannolikt lämnar oriktiga uppgifter om identitet, 3) vägrar kroppsvisitation, eller 4) vägrar undersökning av fordon."
+    },
+    {
+      "paragraf": "13 §",
+      "rubrik": "Gripa",
+      "text": "Inom skyddsobjektet och i dess närhet har skyddsvakten samma befogenhet som en polis att gripa den som det finns skäl att anhålla för bl.a. spioneri, sabotage eller terroristbrott (eller försök/förberedelse), och att ta föremål som personen har med sig i beslag. Gäller också om personen flyr från objektet."
+    },
+    {
+      "paragraf": "14 §",
+      "rubrik": "Beslag",
+      "text": "Skyddsvakten får ta föremål i beslag som skäligen kan antas ha betydelse för utredning om brott enligt skyddslagen, eller som kan förverkas på grund av sådant brott."
+    },
+    {
+      "paragraf": "15 §",
+      "rubrik": "Gränser för kroppsvisitation",
+      "text": "Kroppsvisitation får inte göras mer ingående än ändamålet kräver. En mer ingående visitation bör om möjligt göras inomhus, med vittne, och av någon av samma kön (eller läkare/sjuksköterska)."
+    },
+    {
+      "paragraf": "16 §",
+      "rubrik": "Protokoll",
+      "text": "Protokoll ska föras över kroppsvisitation, våld mot farkost, tillfälligt omhändertagande, gripande och beslag. Protokollet ska ange skälen för åtgärden och vad som kom fram."
+    },
+    {
+      "paragraf": "17 §",
+      "rubrik": "Anmälan till polis",
+      "text": "Ett tillfälligt omhändertagande, gripande eller beslag ska genast anmälas till en polisman, och beslagtagen egendom lämnas över. Ett omhändertagande ska upphöra så snart syftet inte längre finns och senast efter sex timmar."
+    }
+  ]
+}

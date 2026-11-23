@@ -53,13 +53,24 @@
   "karta": "res://data/kartor/granasen.json",
   "fakta": {
     "skyltat_avbildningsforbud": true,
+    "motpart_inom": false,
     "motpart_invid": true,
+    "vill_ha_tilltrade": false,
+    "flyr_fran_objekt": false,
     "overtratt_forbud": true,
     "vagrat_id": false,
-    "omhandertagande_nodvandigt": false,
-    "skal_att_anhalla": false,
-    "grund_for_beslag": false,
-    "anmalan_polis": false
+    "oriktiga_uppgifter": false,
+    "vagrat_visitation": false,
+    "vagrat_fordon": false,
+    "behov_avvisa": false,
+    "behov_avlagsna": true,
+    "behov_omhanderta": false,
+    "visitation_behovs": false,
+    "misstanke_13": false,
+    "beslag_betydelse": false,
+    "anmalan_polis": false,
+    "protokoll_upprattat": false,
+    "behorig": false
   },
   "npc": {
     "fotografen": {

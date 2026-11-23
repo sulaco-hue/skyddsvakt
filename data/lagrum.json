@@ -1,9 +1,32 @@
 {
   "meta": {
-    "version": "0.1",
+    "version": "0.2",
     "granskad": false,
     "granskad_av": "",
-    "kommentar": "UTKAST. Lagrum markerade [§ – jurist] ska fastställas av jurist. Ifyllda paragrafer (10, 12, 13 och 17 §§ skyddslagen) är kontrollerade mot lagtexten men bedömningarna är exempel för diskussion, inte facit."
+    "kommentar": "UTKAST. Bygger på skyddslagen (2010:305) 10–17 §§. Rekvisit och följdkrav är modellerade efter lagtexten, men bedömningarna är exempel för diskussion och ska granskas av jurist. Lagrum markerade [jurist] är särskilt osäkra.",
+    "rekvisit": {
+      "motpart_inom": "personen befann sig inom skyddsobjektet",
+      "motpart_invid": "personen befann sig invid skyddsobjektet",
+      "vill_ha_tilltrade": "personen ville ha tillträde till skyddsobjektet",
+      "flyr_fran_objekt": "personen flydde från skyddsobjektet",
+      "overtratt_forbud": "personen hade överträtt ett förbud (tillträde/avbildning)",
+      "vagrat_id": "personen vägrade uppge namn, födelsetid och hemvist",
+      "oriktiga_uppgifter": "personen lämnade uppgifter som sannolikt var oriktiga",
+      "vagrat_visitation": "personen vägrade kroppsvisitation",
+      "vagrat_fordon": "personen vägrade undersökning av fordon",
+      "behov_avvisa": "avvisningen behövdes för att fullgöra uppgiften",
+      "behov_avlagsna": "avlägsnandet behövdes för att fullgöra uppgiften",
+      "behov_omhanderta": "omhändertagandet behövdes för att fullgöra uppgiften",
+      "visitation_behovs": "kroppsvisitationen behövdes för uppgiften eller för att söka efter föremål som kan tas i beslag",
+      "misstanke_13": "det fanns skäl att anhålla för spioneri, sabotage, terroristbrott eller annat brott som anges i 13 §",
+      "beslag_betydelse": "föremålet kunde skäligen antas ha betydelse för utredning om brott enligt skyddslagen",
+      "skyltat_avbildningsforbud": "avbildningsförbudet var beslutat och skyltat",
+      "dronare_inom_objekt": "drönaren befann sig inom, invid eller över skyddsobjektet",
+      "andra_medel_otillrackliga": "andra medel mot drönaren var otillräckliga",
+      "anmalan_polis": "anmälan gjordes till polis",
+      "protokoll_upprattat": "protokoll upprättades",
+      "behorig": "personen var behörig och föranmäld"
+    }
   },
   "handlingar": {
     "observera": {
@@ -24,17 +47,6 @@
       "text_brist": "",
       "diskutera": "Vad hade du gjort om sambandet inte fungerat?"
     },
-    "upplysa_forbud": {
-      "namn": "Upplyste om avbildningsförbudet",
-      "lagrum": "Skyddslagen – avbildningsförbud [§ – jurist]",
-      "krav": [
-        "skyltat_avbildningsforbud"
-      ],
-      "vid_brist": "warn",
-      "text_ok": "Tydlig och lugn kommunikation. Förbudet framgår av skyltningen vid staketet.",
-      "text_brist": "Det framgick inte att avbildningsförbud var beslutat och skyltat för objektet.",
-      "diskutera": "Hur märks det på motpartens stämning att du förklarar i stället för att beordra?"
-    },
     "fraga_frivilligt": {
       "namn": "Frågade om han frivilligt kunde visa bilderna",
       "lagrum": "Frivillig medverkan – ingen tvångsåtgärd",
@@ -43,43 +55,6 @@
       "text_ok": "En frivillig fråga kräver inget särskilt lagstöd, så länge det är tydligt att den är frivillig.",
       "text_brist": "",
       "diskutera": "Hur formulerar du frågan så att det är tydligt att han kan säga nej?"
-    },
-    "beslag": {
-      "namn": "Krävde att få ta kameran",
-      "lagrum": "Skyddslagen 13 § (beslag i samband med gripande) [jurist] · anmälan 17 §",
-      "krav": [
-        "grund_for_beslag"
-      ],
-      "vid_brist": "warn",
-      "text_ok": "Beslaget hade stöd. Kom ihåg anmälan till polis enligt 17 §.",
-      "text_brist": "Beslagsrätten i 13 § hänger ihop med att det finns skäl att anhålla för spioneri, sabotage m.m. Sådana skäl fanns inte här. [Bedömning – jurist]",
-      "diskutera": "Vilka omständigheter hade gett grund för beslag? (Fastställs med jurist.)",
-      "foljdkrav": [
-        {
-          "fakta": "anmalan_polis",
-          "om_fakta": "beslag_genomfort",
-          "lagrum": "Skyddslagen 17 §",
-          "text": "Ett beslag ska genast anmälas till en polisman och egendomen lämnas över."
-        }
-      ]
-    },
-    "gripa_med_vald": {
-      "namn": "Höll fast mannens arm",
-      "lagrum": "Skyddslagen 13 § (gripande – inom skyddsobjektet och i dess närhet) · Polislagen – våld [§ – jurist]",
-      "krav": [
-        "skal_att_anhalla"
-      ],
-      "vid_brist": "bad",
-      "text_ok": "Det fanns skäl att anhålla. Gripandet ska genast anmälas till polis enligt 17 §.",
-      "text_brist": "Inget i läget gav skäl att anhålla för spioneri, sabotage eller liknande brott. Utan sådan grund saknas befogenhet att gripa – och därmed att använda våld för att hålla kvar honom.",
-      "diskutera": "Vilka omständigheter hade behövt finnas för att ett gripande skulle vara möjligt?",
-      "foljdkrav": [
-        {
-          "fakta": "anmalan_polis",
-          "lagrum": "Skyddslagen 17 §",
-          "text": "Ett gripande ska genast anmälas till en polisman."
-        }
-      ]
     },
     "lata_ga": {
       "namn": "Lät honom gå",
@@ -99,6 +74,15 @@
       "text_brist": "",
       "diskutera": "Vad mer borde rapporten innehålla?"
     },
+    "be_radera_frivilligt": {
+      "namn": "Bad dem radera bilderna frivilligt",
+      "lagrum": "Frivillig medverkan – ingen tvångsåtgärd",
+      "krav": [],
+      "vid_brist": "ok",
+      "text_ok": "Frivillig radering kräver inget särskilt lagstöd, så länge det är tydligt att det är frivilligt. Notera vad som raderades.",
+      "text_brist": "",
+      "diskutera": "Vad gör du om de säger nej till att radera?"
+    },
     "anmala_polis": {
       "namn": "Anmälde till polis",
       "lagrum": "Skyddslagen 17 §",
@@ -107,20 +91,48 @@
       "satter_fakta": {
         "anmalan_polis": true
       },
-      "text_ok": "Anmälan gjord.",
+      "text_ok": "Anmälan gjord. Ett omhändertagande, gripande eller beslag ska anmälas genast.",
       "text_brist": "",
       "diskutera": "När är anmälan till polis obligatorisk och när är den bara lämplig?"
     },
+    "uppratta_protokoll": {
+      "namn": "Upprättade protokoll",
+      "lagrum": "Skyddslagen 16 §",
+      "krav": [],
+      "vid_brist": "ok",
+      "satter_fakta": {
+        "protokoll_upprattat": true
+      },
+      "text_ok": "Protokoll ska föras över kroppsvisitation, våld mot farkost, tillfälligt omhändertagande, gripande och beslag – med skälen för åtgärden och vad som hände.",
+      "text_brist": "",
+      "diskutera": "Vad ska protokollet innehålla för att en utomstående ska kunna bedöma åtgärden?"
+    },
+    "upplysa_forbud": {
+      "namn": "Upplyste om avbildningsförbudet",
+      "lagrum": "Skyddslagen – avbildningsförbud [§ – jurist]",
+      "krav": [
+        "skyltat_avbildningsforbud"
+      ],
+      "vid_brist": "warn",
+      "text_ok": "Tydlig och lugn kommunikation. Förbudet framgår av skyltningen vid staketet.",
+      "text_brist": "Det framgick inte att avbildningsförbud var beslutat och skyltat för objektet.",
+      "diskutera": "Hur märks det på motpartens stämning att du förklarar i stället för att beordra?"
+    },
     "begara_identitet": {
       "namn": "Begärde namn, födelsetid och hemvist",
-      "lagrum": "Skyddslagen 10 § (den som uppehåller sig invid ett skyddsobjekt)",
-      "krav": [
-        "motpart_invid"
+      "lagrum": "Skyddslagen 10 §",
+      "krav": [],
+      "krav_grupper": [
+        [
+          "motpart_inom",
+          "motpart_invid",
+          "vill_ha_tilltrade"
+        ]
       ],
       "vid_brist": "bad",
-      "text_ok": "Personen uppehöll sig invid skyddsobjektet och är då skyldig att på begäran uppge namn, födelsetid och hemvist.",
-      "text_brist": "Skyldigheten gäller den som vill ha tillträde till eller uppehåller sig invid skyddsobjektet.",
-      "diskutera": "Var går gränsen för ”invid”? Hur långt bort hade han behövt stå för att du inte skulle kunna kräva uppgifterna?"
+      "text_ok": "Den som vill ha tillträde till eller uppehåller sig invid ett skyddsobjekt är skyldig att på begäran uppge namn, födelsetid och hemvist.",
+      "text_brist": "Skyldigheten gäller bara den som vill ha tillträde till skyddsobjektet eller uppehåller sig invid det.",
+      "diskutera": "Var går gränsen för ”invid”?"
     },
     "upplysa_skyldighet": {
       "namn": "Förklarade skyldigheten att uppge identitet",
@@ -131,42 +143,62 @@
       "text_brist": "",
       "diskutera": "Vad säger du om personen frågar vad som händer om han vägrar?"
     },
-    "avlagsna": {
-      "namn": "Avlägsnade personen från platsen",
-      "lagrum": "Skyddslagen 12 § (avvisa, avlägsna – inom eller invid skyddsobjektet)",
+    "undersoka_fordon": {
+      "namn": "Begärde att få undersöka fordonet",
+      "lagrum": "Skyddslagen 10–11 §§",
       "krav": [
-        "motpart_invid"
-      ],
-      "krav_nagon": [
-        "overtratt_forbud",
-        "vagrat_id"
-      ],
-      "vid_brist": "bad",
-      "text_ok": "Personen hade överträtt avbildningsförbudet och/eller vägrat uppge identitet. Att avlägsna honom är den mindre ingripande åtgärden.",
-      "text_brist": "Det saknades grund enligt 12 §: personen hade varken överträtt något förbud eller vägrat uppge identitet.",
-      "diskutera": "Varför är avlägsnande ofta att föredra framför omhändertagande?"
-    },
-    "tillfalligt_omhanderta": {
-      "namn": "Omhändertog personen tillfälligt",
-      "lagrum": "Skyddslagen 12 § (tillfälligt omhänderta) · anmälan 17 §",
-      "krav": [
-        "motpart_invid",
-        "omhandertagande_nodvandigt"
-      ],
-      "krav_nagon": [
-        "overtratt_forbud",
-        "vagrat_id"
+        "vill_ha_tilltrade"
       ],
       "vid_brist": "warn",
-      "text_ok": "Grund och behov fanns. Omhändertagandet ska genast anmälas till polisman enligt 17 §.",
-      "text_brist": "Grund enligt 12 § fanns, men var ett omhändertagande nödvändigt när ett avlägsnande hade kunnat räcka? [Proportionalitet – jurist]",
-      "diskutera": "Vilka omständigheter hade gjort ett omhändertagande nödvändigt i stället för ett avlägsnande?",
+      "text_ok": "Den som vill ha tillträde är skyldig att låta undersöka fordon som han eller hon för med sig.",
+      "text_brist": "Skyldigheten att låta undersöka fordon gäller den som vill ha tillträde till objektet.",
+      "diskutera": "Vad letar du efter, och när behövs undersökningen?"
+    },
+    "kroppsvisitera": {
+      "namn": "Kroppsvisiterade personen",
+      "lagrum": "Skyddslagen 11 § · gränser 15 § · protokoll 16 §",
+      "krav": [
+        "visitation_behovs"
+      ],
+      "krav_grupper": [
+        [
+          "motpart_inom",
+          "motpart_invid",
+          "vill_ha_tilltrade"
+        ]
+      ],
+      "vid_brist": "bad",
+      "satter_fakta": {
+        "visitation_genomford": true
+      },
+      "text_ok": "Visitationen behövdes. Den får inte göras mer ingående än ändamålet kräver (15 §).",
+      "text_brist": "Kroppsvisitation får bara beslutas när det behövs för uppgiften eller för att söka efter föremål som kan tas i beslag.",
+      "diskutera": "Vad krävs för en mer ingående visitation, och vem bör utföra den?",
       "foljdkrav": [
         {
-          "fakta": "anmalan_polis",
-          "om_fakta": "omhandertagande_genomfort",
-          "lagrum": "Skyddslagen 17 §",
-          "text": "Ett tillfälligt omhändertagande ska genast anmälas till en polisman."
+          "fakta": "protokoll_upprattat",
+          "om_fakta": "visitation_genomford",
+          "lagrum": "Skyddslagen 16 §",
+          "text": "Protokoll ska föras över kroppsvisitation."
+        }
+      ]
+    },
+    "vald_mot_farkost": {
+      "namn": "Bekämpade drönaren med vapen",
+      "lagrum": "Skyddslagen 11 § andra stycket (våld mot obemannad farkost)",
+      "krav": [
+        "andra_medel_otillrackliga"
+      ],
+      "vid_brist": "bad",
+      "text_ok": "Andra medel var otillräckliga. Dokumentera och rapportera insatsen direkt.",
+      "text_brist": "Våld mot farkosten får bara användas om andra medel är otillräckliga. Piloten fanns vid sjön och kunde uppmanas att landa. Dessutom innebär eldgivning med automatkarbin mot ett luftmål nära bostäder och människor stor risk för tredje man.",
+      "diskutera": "Vilka andra medel fanns? Vem borde ha fattat beslut om en eventuell vapeninsats?",
+      "foljdkrav": [
+        {
+          "fakta": "protokoll_upprattat",
+          "om_fakta": "dronare_nedskjuten",
+          "lagrum": "Skyddslagen 16 §",
+          "text": "Protokoll ska föras över ingripande med våld mot obemannad farkost."
         }
       ]
     },
@@ -181,17 +213,6 @@
       "text_brist": "Drönaren befann sig inte inom objektet.",
       "diskutera": "Vad gör du om piloten vägrar att landa?"
     },
-    "vald_mot_farkost": {
-      "namn": "Bekämpade drönaren med vapen",
-      "lagrum": "Skyddslagen 11 § andra stycket (våld mot obemannad farkost)",
-      "krav": [
-        "andra_medel_otillrackliga"
-      ],
-      "vid_brist": "bad",
-      "text_ok": "Andra medel var otillräckliga. Dokumentera och rapportera insatsen direkt.",
-      "text_brist": "Våld mot farkosten får bara användas om andra medel är otillräckliga. Piloten fanns vid sjön och kunde uppmanas att landa. Dessutom innebär eldgivning med automatkarbin mot ett luftmål nära bostäder och människor stor risk för tredje man.",
-      "diskutera": "Vilka andra medel fanns? Vem borde ha fattat beslut om en eventuell vapeninsats?"
-    },
     "hota_vald": {
       "namn": "Hotade med att skjuta ner drönaren",
       "lagrum": "Hot om våld [§ – jurist]",
@@ -203,14 +224,210 @@
       "text_brist": "En lugn uppmaning hade räckt. Att hota med vapenvåld mot en förälder med barn eskalerar situationen i onödan. [Bedömning – jurist]",
       "diskutera": "Hur påverkade tonen pappans och dotterns reaktion? Hur hade du formulerat dig i stället?"
     },
-    "be_radera_frivilligt": {
-      "namn": "Bad dem radera bilderna frivilligt",
-      "lagrum": "Frivillig medverkan – ingen tvångsåtgärd",
+    "avvisa": {
+      "namn": "Avvisade personen",
+      "lagrum": "Skyddslagen 12 § (avvisa)",
+      "krav": [
+        "behov_avvisa"
+      ],
+      "krav_grupper": [
+        [
+          "motpart_inom",
+          "motpart_invid",
+          "vill_ha_tilltrade"
+        ],
+        [
+          "overtratt_forbud",
+          "vagrat_id",
+          "oriktiga_uppgifter",
+          "vagrat_visitation",
+          "vagrat_fordon"
+        ]
+      ],
+      "vid_brist": "bad",
+      "text_ok": "Grund fanns enligt 12 § och avvisningen behövdes för att fullgöra uppgiften.",
+      "text_brist": "Avvisning enligt 12 § kräver att personen överträtt ett förbud, vägrat eller lämnat sannolikt oriktiga identitetsuppgifter, eller vägrat visitation/undersökning av fordon – och att åtgärden behövs. Att bara neka tillträde kräver inget tvång.",
+      "diskutera": "Vad är skillnaden mellan att neka någon tillträde och att avvisa med stöd av 12 §?"
+    },
+    "avlagsna": {
+      "namn": "Avlägsnade personen",
+      "lagrum": "Skyddslagen 12 § (avlägsna – inom eller invid skyddsobjektet)",
+      "krav": [
+        "behov_avlagsna"
+      ],
+      "krav_grupper": [
+        [
+          "motpart_inom",
+          "motpart_invid"
+        ],
+        [
+          "overtratt_forbud",
+          "vagrat_id",
+          "oriktiga_uppgifter",
+          "vagrat_visitation",
+          "vagrat_fordon"
+        ]
+      ],
+      "vid_brist": "bad",
+      "text_ok": "Grund fanns enligt 12 § och avlägsnandet behövdes. Avlägsnande är mindre ingripande än omhändertagande.",
+      "text_brist": "Avlägsnande kräver att personen var inom eller invid objektet, att en grund i 12 § förelåg och att åtgärden behövdes.",
+      "diskutera": "Varför är avlägsnande ofta att föredra framför omhändertagande?"
+    },
+    "tillfalligt_omhanderta": {
+      "namn": "Omhändertog personen tillfälligt",
+      "lagrum": "Skyddslagen 12 § · anmälan 17 § · protokoll 16 §",
+      "krav": [
+        "behov_omhanderta"
+      ],
+      "krav_grupper": [
+        [
+          "motpart_inom",
+          "motpart_invid"
+        ],
+        [
+          "overtratt_forbud",
+          "vagrat_id",
+          "oriktiga_uppgifter",
+          "vagrat_visitation",
+          "vagrat_fordon"
+        ]
+      ],
+      "vid_brist": "warn",
+      "satter_fakta": {
+        "omhandertagande_genomfort": true
+      },
+      "text_ok": "Grund och behov fanns. Omhändertagandet ska anmälas genast till polis och upphöra så snart syftet inte längre finns, senast efter sex timmar.",
+      "text_brist": "Grund enligt 12 § kan ha funnits, men behövdes omhändertagandet när ett avlägsnande hade kunnat räcka? [Proportionalitet – jurist]",
+      "diskutera": "Vilka omständigheter gör ett omhändertagande nödvändigt i stället för ett avlägsnande?",
+      "foljdkrav": [
+        {
+          "fakta": "anmalan_polis",
+          "om_fakta": "omhandertagande_genomfort",
+          "lagrum": "Skyddslagen 17 §",
+          "text": "Ett tillfälligt omhändertagande ska genast anmälas till en polisman."
+        },
+        {
+          "fakta": "protokoll_upprattat",
+          "om_fakta": "omhandertagande_genomfort",
+          "lagrum": "Skyddslagen 16 §",
+          "text": "Protokoll ska föras över tillfälligt omhändertagande."
+        }
+      ]
+    },
+    "gripa": {
+      "namn": "Grep personen",
+      "lagrum": "Skyddslagen 13 § · anmälan 17 § · protokoll 16 §",
+      "krav": [
+        "misstanke_13"
+      ],
+      "krav_grupper": [
+        [
+          "motpart_inom",
+          "motpart_invid",
+          "flyr_fran_objekt"
+        ]
+      ],
+      "vid_brist": "bad",
+      "satter_fakta": {
+        "gripande_genomfort": true
+      },
+      "text_ok": "Det fanns skäl att anhålla för brott enligt 13 §. Gripandet ska genast anmälas till polis.",
+      "text_brist": "Gripande enligt 13 § kräver skäl att anhålla för spioneri, sabotage, terroristbrott eller annat brott som anges där – inom skyddsobjektet, i dess närhet eller när personen flyr därifrån.",
+      "diskutera": "Vilka omständigheter hade behövt finnas för att ett gripande skulle vara möjligt?",
+      "foljdkrav": [
+        {
+          "fakta": "anmalan_polis",
+          "om_fakta": "gripande_genomfort",
+          "lagrum": "Skyddslagen 17 §",
+          "text": "Ett gripande ska genast anmälas till en polisman."
+        },
+        {
+          "fakta": "protokoll_upprattat",
+          "om_fakta": "gripande_genomfort",
+          "lagrum": "Skyddslagen 16 §",
+          "text": "Protokoll ska föras över gripande."
+        }
+      ]
+    },
+    "gripa_med_vald": {
+      "namn": "Höll fast personen",
+      "lagrum": "Skyddslagen 13 § · våld [§ – jurist] · anmälan 17 § · protokoll 16 §",
+      "krav": [
+        "misstanke_13"
+      ],
+      "krav_grupper": [
+        [
+          "motpart_inom",
+          "motpart_invid",
+          "flyr_fran_objekt"
+        ]
+      ],
+      "vid_brist": "bad",
+      "satter_fakta": {
+        "gripande_genomfort": true
+      },
+      "text_ok": "Det fanns skäl att anhålla för brott enligt 13 §. Gripandet ska genast anmälas till polis.",
+      "text_brist": "Gripande enligt 13 § kräver skäl att anhålla för spioneri, sabotage, terroristbrott eller annat brott som anges där – inom skyddsobjektet, i dess närhet eller när personen flyr därifrån.",
+      "diskutera": "Vilka omständigheter hade behövt finnas för att ett gripande skulle vara möjligt?",
+      "foljdkrav": [
+        {
+          "fakta": "anmalan_polis",
+          "om_fakta": "gripande_genomfort",
+          "lagrum": "Skyddslagen 17 §",
+          "text": "Ett gripande ska genast anmälas till en polisman."
+        },
+        {
+          "fakta": "protokoll_upprattat",
+          "om_fakta": "gripande_genomfort",
+          "lagrum": "Skyddslagen 16 §",
+          "text": "Protokoll ska föras över gripande."
+        }
+      ]
+    },
+    "beslag": {
+      "namn": "Tog föremål i beslag",
+      "lagrum": "Skyddslagen 14 § · anmälan 17 § · protokoll 16 §",
+      "krav": [
+        "beslag_betydelse"
+      ],
+      "vid_brist": "warn",
+      "text_ok": "Föremålet kunde skäligen antas ha betydelse för utredning om brott enligt skyddslagen. Beslaget ska anmälas till polis och egendomen lämnas över.",
+      "text_brist": "Beslag enligt 14 § kräver att föremålet skäligen kan antas ha betydelse för utredning om brott enligt skyddslagen (eller kan förverkas). Om en överträdelse av avbildningsförbudet räcker här ska bedömas av jurist. [Jurist]",
+      "diskutera": "Vad skulle göra en kamera till ett föremål av betydelse för en utredning?",
+      "foljdkrav": [
+        {
+          "fakta": "anmalan_polis",
+          "om_fakta": "beslag_genomfort",
+          "lagrum": "Skyddslagen 17 §",
+          "text": "Ett beslag ska genast anmälas till en polisman och egendomen lämnas över."
+        },
+        {
+          "fakta": "protokoll_upprattat",
+          "om_fakta": "beslag_genomfort",
+          "lagrum": "Skyddslagen 16 §",
+          "text": "Protokoll ska föras över beslag."
+        }
+      ]
+    },
+    "neka_tilltrade": {
+      "namn": "Nekade tillträde",
+      "lagrum": "Bevakningsinstruktion – passerkontroll",
       "krav": [],
       "vid_brist": "ok",
-      "text_ok": "Frivillig radering kräver inget särskilt lagstöd, så länge det är tydligt att det är frivilligt. Notera vad som raderades.",
+      "text_ok": "Rätt: den som inte är behörig släpps inte in. Att neka tillträde är ingen tvångsåtgärd och kräver inget stöd i 12 §.",
       "text_brist": "",
-      "diskutera": "Vad gör du om de säger nej till att radera?"
+      "diskutera": "Hur kontrollerar du behörighet när besöket inte finns på passerlistan?"
+    },
+    "slappa_in": {
+      "namn": "Släppte in personen",
+      "lagrum": "Bevakningsinstruktion – passerkontroll · tillträdesförbud",
+      "krav": [
+        "behorig"
+      ],
+      "vid_brist": "bad",
+      "text_ok": "Personen var behörig och föranmäld.",
+      "text_brist": "Personen var inte föranmäld eller kontrollerad. Att släppa in en obehörig bryter mot tillträdesförbudet och bevakningsinstruktionen.",
+      "diskutera": "Vilka kontroller ska göras innan bommen öppnas?"
     }
   }
 }
