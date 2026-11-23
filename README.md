@@ -144,12 +144,20 @@ Den spelas som slinga av autoloaden `Musik` (`scripts/core/musik.gd`), volym i `
 Vill ni använda en annan låt: lägg en .ogg-fil i `assets/ljud/` och ändra `SOKVAG`.
 Skyddade verk (t.ex. Hemvärnets marsch) kräver tillstånd från rättighetshavaren.
 
+## Kartan
+
+Kartan (standard 52×52 rutor) genereras av `verktyg/generera_karta.py [storlek]`, som skriver in
+den i scenariofilen och flyttar med alla koordinater (start, mål, skyddsområde). Skyddsobjektet
+placeras nära mitten; runt det skapas skog, väg med korsning, stigar (bl.a. patrullstig runt
+staketet), stugor, lada, brevlådor, sjö, stenar och buskar. Kameran följer spelaren.
+Förhandsbild utan Godot: `python3 verktyg/forhandsvisa_karta.py . bild.png`.
+
 ## Ändra kartan
 
-Kartan i scenariofilen består av två lager med ett tecken per ruta (18×18):
+Kartan i scenariofilen består av två lager med ett tecken per ruta. Den kan genereras om (se ovan) eller redigeras för hand:
 
-- `mark`: `.` gräs, `i` gräs innanför staket, `g` grus, `a` asfalt, `d` asfalt med mittlinje
-- `objekt`: `F` staket, `S` staket med skylt, `G` grind/bom (öppnas för spelaren, stängd för andra figurer; bilden förutsätter grind längs kartans y-led), `B` byggnad (4×3), `K` vaktkur, `T`/`t` gran, `L` lyktstolpe, `C` bil, `P` spelarens start, `V` stridsparskamrat
+- `mark`: `.` gräs, `i` gräs innanför staket, `g` grus, `a` asfalt, `d` asfalt med mittlinje, `p` stig, `w` vatten
+- `objekt`: `F` staket, `S` staket med skylt, `G` grind/bom (öppnas för spelaren, stängd för andra figurer; bilden förutsätter grind längs kartans y-led), `B` byggnad (4×3), `K` vaktkur, `T`/`t` gran, `L` lyktstolpe, `C` bil, `P` spelarens start, `V` stridsparskamrat, `H`/`h` röd stuga, `I`/`i` gul stuga, `A`/`j` lada (versal = ankare där bilden ritas), `R` sten, `U` buske, `M` brevlåda
 
 Staket kopplas ihop automatiskt med grannrutorna. `verktyg/forhandsvisa_karta.py` ritar en förhandsbild utan Godot.
 

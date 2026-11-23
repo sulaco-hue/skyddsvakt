@@ -11,6 +11,7 @@ from PIL import Image
 ROOT = sys.argv[1]
 OUT = sys.argv[2]
 SCALE = int(sys.argv[3]) if len(sys.argv) > 3 else 1
+UTBREDD = int(sys.argv[4]) if len(sys.argv) > 4 else 0  # skala ner till denna bredd (t.ex. briefingkartan)
 GFX = ROOT + "/assets/gfx/"
 sc = json.load(open(ROOT + "/data/scenarier/fotografen.json"))
 anchors = json.load(open(GFX + "anchors.json"))
@@ -18,9 +19,10 @@ mark = sc["karta"]["mark"]
 obj = sc["karta"]["objekt"]
 W, H = len(mark[0]), len(mark)
 
-PW, PH = 640, 360
-ORG = (PW // 2, 36)
 TW, TH = 32, 16
+PW = (W + H) * TW // 2 + 2 * TW
+PH = (W + H) * TH // 2 + 110
+ORG = (PW // 2 + (H - W) * TW // 4, 70)
 
 
 def center(x, y):
@@ -38,7 +40,9 @@ d.polygon([v, n, (n[0], n[1] + 14), (v[0], v[1] + 14)], fill=(70, 52, 38))
 d.polygon([n, h, (h[0], h[1] + 14), (n[0], n[1] + 14)], fill=(52, 38, 28))
 
 atlas = Image.open(GFX + "rutor.png").convert("RGBA")
-MR = {".": [0, 1], "i": [2, 3], "g": [4, 5], "a": [6, 6], "d": [7, 7]}
+MR = {".": [0, 1], "i": [2, 3], "g": [4, 5], "a": [6, 6], "d": [7, 7], "p": [8, 9], "w": [10, 11]}
+SPRITES = {"K": "vaktkur", "T": "gran", "t": "gran_liten", "C": "bil", "H": "hus_rod", "I": "hus_gul",
+           "A": "lada", "R": "sten", "U": "buske", "M": "brevlada"}
 for y in range(H):
     for x in range(W):
         idx = MR.get(mark[y][x], [0, 1])[(x + y) % 2]
@@ -71,17 +75,11 @@ for y in range(H):
             staket[c] = "G"
         elif ch == "B":
             bygg.append(c)
-        elif ch == "K":
-            add("vaktkur", c)
-        elif ch == "T":
-            add("gran", c)
-        elif ch == "t":
-            add("gran_liten", c)
         elif ch == "L":
             add("lykta", c)
             decals.append(("ljus", c))
-        elif ch == "C":
-            add("bil", c)
+        elif ch in SPRITES:
+            add(SPRITES[ch], c)
         elif ch in "PV":
             start[ch] = c
 DIRS = [((1, 0), "xp"), ((-1, 0), "xn"), ((0, 1), "yp"), ((0, -1), "yn")]
@@ -135,7 +133,9 @@ for yy in range(PH):
             f = a / 255
             px[xx, yy] = (min(255, int(R + r * f)), min(255, int(G + g * f)), min(255, int(B + b * f)), A)
 img = img.convert("RGB")
-if SCALE > 1:
+if UTBREDD:
+    img = img.resize((UTBREDD, round(img.height * UTBREDD / img.width)), Image.LANCZOS)
+elif SCALE > 1:
     img = img.resize((PW * SCALE, PH * SCALE), Image.NEAREST)
 img.save(OUT)
 print("ok")

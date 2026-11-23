@@ -12,7 +12,13 @@ signal spelare_framme
 const RUTSTORLEK := Vector2i(32, 16)
 const ZOOM := 2.0
 ## Mark-tecken -> två varianter i rutatlasen (rutor.png), växlas i schackmönster.
-const MARKRUTOR := {".": [0, 1], "i": [2, 3], "g": [4, 5], "a": [6, 6], "d": [7, 7]}
+const MARKRUTOR := {".": [0, 1], "i": [2, 3], "g": [4, 5], "a": [6, 6], "d": [7, 7], "p": [8, 9], "w": [10, 11]}
+## Marktyper som inte går att gå på.
+const MARK_HINDER := ["w"]
+## Objekt: tecken -> sprite (ankare). Blockerade rutor utan egen bild listas i OBJEKT_HINDER.
+const OBJEKT_SPRITES := {"K": "vaktkur", "T": "gran", "t": "gran_liten", "L": "lykta", "C": "bil",
+	"H": "hus_rod", "I": "hus_gul", "A": "lada", "R": "sten", "U": "buske", "M": "brevlada"}
+const OBJEKT_HINDER := ["F", "S", "B", "K", "T", "t", "L", "C", "H", "h", "I", "i", "A", "j", "R", "U", "M"]
 const RIKTNINGAR := [[Vector2i(1, 0), "xp"], [Vector2i(-1, 0), "xn"], [Vector2i(0, 1), "yp"], [Vector2i(0, -1), "yn"]]
 
 var mark: TileMapLayer
@@ -44,6 +50,7 @@ var _grindceller: Array[Vector2i] = []
 var _bom_stangd: Array[Sprite2D] = []
 var _bom_uppe: Sprite2D
 var _grind_oppen := false
+var _mark_hinder: Array[Vector2i] = []
 
 const GRIND_AVSTAND := 2  ## grinden öppnas när spelaren är så här nära (rutor)
 
@@ -97,7 +104,7 @@ func _skapa_mark(rader: Array) -> void:
 	var kalla := TileSetAtlasSource.new()
 	kalla.texture = load("res://assets/gfx/rutor.png")
 	kalla.texture_region_size = RUTSTORLEK
-	for i in 8:
+	for i in int(kalla.texture.get_width() / float(RUTSTORLEK.x)):
 		kalla.create_tile(Vector2i(i, 0))
 	ts.add_source(kalla, 0)
 
@@ -124,6 +131,8 @@ func _skapa_mark(rader: Array) -> void:
 		for x in storlek.x:
 			var varianter: Array = MARKRUTOR.get(rad[x], [0, 1])
 			mark.set_cell(Vector2i(x, y), 0, Vector2i(int(varianter[(x + y) % 2]), 0))
+			if rad[x] in MARK_HINDER:
+				_mark_hinder.append(Vector2i(x, y))
 
 
 # ---------------------------------------------------------------- Objekt --
@@ -146,27 +155,21 @@ func _skapa_objekt(rader: Array) -> void:
 					staket[c] = "G"
 				"B":
 					byggceller.append(c)
-				"K":
-					_sprite("vaktkur", c)
-				"T":
-					_sprite("gran", c)
-				"t":
-					_sprite("gran_liten", c)
 				"L":
 					_sprite("lykta", c)
 					var ljus := _sprite("ljus", c, dekal_lager)
 					var mat := CanvasItemMaterial.new()
 					mat.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
 					ljus.material = mat
-				"C":
-					_sprite("bil", c)
 				"P":
 					_spelar_start = c
 				"V":
 					_kollega_start = c
-			if tecken in ["F", "S", "B", "K", "T", "t", "L", "C"]:
+			if OBJEKT_SPRITES.has(tecken) and tecken != "L":
+				_sprite(str(OBJEKT_SPRITES[tecken]), c)
+			if tecken in OBJEKT_HINDER or c in _mark_hinder:
 				astar.set_point_solid(c)
-			if tecken in ["F", "S", "G", "B", "K", "T", "t", "L", "C"]:
+			if tecken in OBJEKT_HINDER or tecken == "G" or c in _mark_hinder:
 				astar_npc.set_point_solid(c)
 			if tecken == "G":
 				_grindceller.append(c)
@@ -268,11 +271,21 @@ func _skapa_markorer() -> void:
 func _skapa_kamera() -> void:
 	kamera = Camera2D.new()
 	kamera.zoom = Vector2(ZOOM, ZOOM)
+	# Begränsa kameran till kartan (plus marginal för träd och plattans kant).
 	var topp := mark.map_to_local(Vector2i(0, 0))
+	var vanster := mark.map_to_local(Vector2i(0, storlek.y - 1))
+	var hoger := mark.map_to_local(Vector2i(storlek.x - 1, 0))
 	var botten := mark.map_to_local(storlek - Vector2i.ONE)
-	kamera.position = Vector2((topp.x + botten.x) / 2.0, (topp.y + botten.y) / 2.0 - 8.0)
+	kamera.limit_left = int(vanster.x - RUTSTORLEK.x * 2)
+	kamera.limit_right = int(hoger.x + RUTSTORLEK.x * 2)
+	kamera.limit_top = int(topp.y - 90)
+	kamera.limit_bottom = int(botten.y + 60)
+	kamera.position_smoothing_enabled = true
+	kamera.position_smoothing_speed = 5.0
+	kamera.position = spelare.position if spelare else Vector2.ZERO
 	add_child(kamera)
 	kamera.make_current()
+	kamera.reset_smoothing()
 
 
 # --------------------------------------------------------------- Hjälp --
@@ -425,6 +438,8 @@ func satt_larm(npc_id: String) -> void:
 
 
 func _process(_delta: float) -> void:
+	if kamera and spelare:
+		kamera.position = spelare.position + Vector2(0, -12)
 	_uppdatera_grind()
 	_uppdatera_kamrat()
 	var larm_aktor: Aktor = npcer.get(_larm_npc)

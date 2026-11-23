@@ -67,7 +67,8 @@ def diamond_rows(ox, img, colfn):
             img.putpixel((ox + x, r), colfn(x, r))
 
 
-TILES = ["gras_a", "gras_b", "inne_a", "inne_b", "grus_a", "grus_b", "asfalt", "asfalt_streck"]
+TILES = ["gras_a", "gras_b", "inne_a", "inne_b", "grus_a", "grus_b", "asfalt", "asfalt_streck",
+         "stig_a", "stig_b", "vatten_a", "vatten_b"]
 atlas = Image.new("RGBA", (TW * len(TILES), TH), (0, 0, 0, 0))
 
 
@@ -113,6 +114,29 @@ fns = [
     grass((82, 98, 61), (92, 110, 67), (72, 88, 55), (114, 132, 78)),
     gravel((98, 98, 92)), gravel((92, 92, 86)), asphalt, asphalt,
 ]
+def dirt(base):
+    def f(x, r):
+        v = random.random()
+        if v < 0.14:
+            return shade(base, 1.15) + (255,)
+        if v < 0.26:
+            return shade(base, 0.85) + (255,)
+        return base + (255,)
+    return f
+
+
+def water(base):
+    def f(x, r):
+        if (x + r * 3) % 11 == 0 and random.random() < 0.7:
+            return (96, 132, 160, 255)  # krusning
+        v = random.random()
+        if v < 0.15:
+            return shade(base, 1.08) + (255,)
+        return base + (255,)
+    return f
+
+
+fns += [dirt((112, 92, 64)), dirt((106, 87, 60)), water((44, 74, 102)), water((42, 71, 98))]
 for i, fn in enumerate(fns):
     diamond_rows(i * TW, atlas, fn)
 # grässtrån (små lodräta streck) på gräsrutorna
@@ -302,6 +326,95 @@ for yy in range(40):
             glow.putpixel((xx, yy), (255, 214, 130, a))
 glow.save(os.path.join(OUT, "ljus.png"))
 anchors["ljus"] = [40, 20]
+
+# ======================================================= Hus och lada ==
+def gavelhus(namn, bredd, djup, vagg, tak, takhojd, vagghojd, fonster_tant, dorr=True, port=False):
+    """Hus med sadeltak; nock längs x-axeln, gavel mot +x."""
+    x0, x1, y0, y1 = 0.08, bredd - 0.08, 0.08, djup - 0.08
+    ym = (y0 + y1) / 2
+    H, R = vagghojd, takhojd
+    vagg_v, vagg_h = vagg, shade(vagg, 0.78)
+    vit = (232, 230, 222)
+
+    def f(d, im):
+        # bakre takfall
+        d.polygon([iso(x0, ym, H + R), iso(x1, ym, H + R), iso(x1, y0, H), iso(x0, y0, H)], fill=shade(tak, 0.8))
+        # långsida (mot +y)
+        d.polygon(face_quad(x0, y1, x1, y1, 0, H), fill=vagg_v)
+        # gavel (mot +x)
+        d.polygon([iso(x1, y0, 0), iso(x1, y1, 0), iso(x1, y1, H), iso(x1, ym, H + R), iso(x1, y0, H)], fill=vagg_h)
+        # vita knutar
+        for (gx, gy) in [(x0, y1), (x1, y1), (x1, y0)]:
+            d.line([iso(gx, gy, 0), iso(gx, gy, H)], fill=vit)
+        # fönster på långsidan
+        antal = max(2, int(bredd * 1.3))
+        for i in range(antal):
+            gx = x0 + (i + 0.6) * (x1 - x0) / (antal + 0.2)
+            q = face_quad(gx, y1, gx + 0.28, y1, H * 0.35, H * 0.35 + 8)
+            tand = (i in fonster_tant)
+            d.polygon(q, fill=(246, 208, 104) if tand else (40, 48, 58))
+            d.polygon(q, outline=vit)
+        # dörr / port på gaveln
+        if dorr:
+            q = face_quad(x1, ym - 0.18, x1, ym + 0.18, 0, min(13, H - 2))
+            d.polygon(q, fill=(70, 54, 40) if not port else shade(vagg_h, 0.7))
+            d.polygon(q, outline=vit)
+        if port:
+            q = face_quad(x1, ym - 0.45, x1, ym + 0.45, 0, H - 3)
+            d.polygon(q, fill=shade(vagg_h, 0.75))
+            d.line([iso(x1, ym, 0), iso(x1, ym, H - 3)], fill=vit)
+            d.polygon(q, outline=vit)
+        # gavelfönster
+        gq = face_quad(x1, ym - 0.12, x1, ym + 0.12, H + 3, H + 9)
+        d.polygon(gq, fill=(40, 48, 58))
+        # främre takfall
+        d.polygon([iso(x0, y1, H), iso(x1, y1, H), iso(x1, ym, H + R), iso(x0, ym, H + R)], fill=tak)
+        d.line([iso(x0, ym, H + R), iso(x1, ym, H + R)], fill=shade(tak, 1.3))
+        d.line([iso(x0, y1, H), iso(x1, y1, H)], fill=shade(tak, 0.7))
+        # vindskiva
+        d.line([iso(x1, y1, H), iso(x1, ym, H + R), iso(x1, y0, H)], fill=vit)
+        # skorsten
+        cx = x0 + (x1 - x0) * 0.3
+        d.polygon(face_quad(cx, ym + 0.15, cx + 0.2, ym + 0.15, H + R - 2, H + R + 7), fill=(120, 60, 50))
+    save_obj(namn, f, (bredd - 0.5, djup - 0.5))
+
+gavelhus("hus_rod", 2, 2, (150, 44, 36), (46, 46, 50), 12, 18, {0, 2})
+gavelhus("hus_gul", 2, 2, (204, 170, 84), (60, 58, 62), 12, 18, {1})
+gavelhus("lada", 3, 2, (118, 50, 40), (88, 74, 66), 14, 22, set(), dorr=False, port=True)
+
+
+def rock(d, im):
+    x, y = iso(0.5, 0.5)
+    d.polygon([(x - 6, y), (x - 4, y - 5), (x + 1, y - 7), (x + 5, y - 4), (x + 6, y)], fill=(112, 114, 116))
+    d.polygon([(x + 1, y - 7), (x + 5, y - 4), (x + 6, y), (x + 1, y)], fill=(88, 90, 92))
+    d.point((x - 2, y - 4), fill=(140, 142, 144))
+    d.point((x - 4, y - 2), fill=(96, 118, 70))
+
+save_obj("sten", rock, (0.5, 0.5))
+
+
+def bush(d, im):
+    rnd = random.Random(5)
+    x, y = iso(0.5, 0.5)
+    d.ellipse([x - 7, y - 9, x + 7, y], fill=(46, 82, 50))
+    d.ellipse([x - 4, y - 11, x + 5, y - 3], fill=(56, 96, 58))
+    for _ in range(14):
+        px, py = x + rnd.randint(-6, 6), y - rnd.randint(1, 10)
+        if im.getpixel((px, py))[3]:
+            d.point((px, py), fill=(72, 116, 70) if px < x else (38, 70, 44))
+
+save_obj("buske", bush, (0.5, 0.5))
+
+
+def mailbox(d, im):
+    x, y = iso(0.5, 0.5)
+    d.line([(x, y), (x, y - 9)], fill=(90, 70, 50))
+    d.rectangle([x - 3, y - 13, x + 3, y - 9], fill=(40, 90, 150))
+    d.rectangle([x - 3, y - 13, x + 3, y - 13], fill=(60, 110, 170))
+    d.point((x + 3, y - 14), fill=(200, 50, 40))
+
+save_obj("brevlada", mailbox, (0.5, 0.5))
+
 
 # =============================================================== Staket ==
 POST, POST_HI = (150, 156, 162), (196, 200, 206)

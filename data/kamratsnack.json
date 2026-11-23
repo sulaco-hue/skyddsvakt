@@ -1,6 +1,5 @@
 {
   "kommentar": "Stridsparskamratens småprat. Lägg till, ta bort eller ändra repliker fritt. 'svar' är valfritt: Grindpostens möjliga svar på just den repliken. Tider i sekunder (realtid).",
-
   "installningar": {
     "forsta_efter_s": 12,
     "intervall_min_s": 25,
@@ -11,42 +10,272 @@
     "tystnad_s": 120,
     "paus_efter_handelse_s": 60
   },
-
   "snack": [
-    {"amne": "sport", "kamrat": "Såg du matchen i går? Tre insläppta mål på tio minuter. Tio minuter!", "svar": ["Nej, jag sov.", "Säsongen är redan körd."]},
-    {"amne": "sport", "kamrat": "Jag ska åka Vasaloppet i vinter. Har inte stått på skidor sen lågstadiet, men hur svårt kan det vara?", "svar": ["Nio mil. Lycka till.", "Ta med blåbärssoppa."]},
-    {"amne": "sport", "kamrat": "Om vi hade haft en målvakt i fjol hade vi gått upp. Bara så du vet.", "svar": ["Det säger du varje år."]},
-    {"amne": "sport", "kamrat": "Har börjat springa. Två gånger. Räknas det som en vana nu?", "svar": ["Inte riktigt.", "Tre gånger är en vana."]},
-
-    {"amne": "elpriser", "kamrat": "Elpriset igen alltså. Jag tvättar bara mitt i natten nu. Grannarna tror att jag är vampyr.", "svar": ["Smart. Billigt och skräckinjagande."]},
-    {"amne": "elpriser", "kamrat": "Jag har räknat ut att det är billigare att ladda telefonen på jobbet. Så jag gör det. Alla fyra.", "svar": ["Varför har du fyra telefoner?"]},
-    {"amne": "elpriser", "kamrat": "Svärfar har köpt solceller. Nu pratar han inte om något annat. Kilowattimmar vid middagen.", "svar": ["Låter som en mysig middag."]},
-
-    {"amne": "datorspel", "kamrat": "Jag var uppe till tre i natt och spelade. Byggde en hel stad. Sen kom ett jordskalv.", "svar": ["Spara oftare.", "Därför du gäspar."]},
-    {"amne": "datorspel", "kamrat": "Det borde finnas ett spel om det här jobbet. Fast vem skulle spela det?", "svar": ["Ingen. Absolut ingen.", "Säkert någon."]},
-    {"amne": "datorspel", "kamrat": "Min brorson slog mig i ett skjutspel i helgen. Han är nio. Jag har skjutit skarpt.", "svar": ["Det är inte samma sak.", "Nio år och bättre än dig."]},
-
-    {"amne": "film", "kamrat": "Jag såg en film där de bevakade en hemlig bas. Inte en enda gång kollade de legitimation.", "svar": ["Typiskt Hollywood."]},
-    {"amne": "film", "kamrat": "Varför springer alla i skräckfilmer alltid uppför trappan? Spring ut, liksom!", "svar": ["Då blir filmen fem minuter."]},
-    {"amne": "film", "kamrat": "Har du sett den nya serien alla pratar om? Inte jag heller. Jag låtsas bara.", "svar": ["Samma här."]},
-
-    {"amne": "mat", "kamrat": "Vad tror du det blir till lunch i morgon? Jag gissar pyttipanna. Det är alltid pyttipanna.", "svar": ["Det var pyttipanna i går.", "Hoppas på pannkakor."]},
-    {"amne": "mat", "kamrat": "Jag har en mazarin i fickan. Den har varit där sedan i tisdags. Den är fortfarande god.", "svar": ["Det tvivlar jag på."]},
-    {"amne": "mat", "kamrat": "Termosen läcker igen. Nu luktar hela fickan kaffe. Inte helt fel i och för sig.", "svar": ["Byt termos."]},
-
-    {"amne": "väder", "kamrat": "Duggregn. Mitt favoritväder. Blöt, men inte tillräckligt blöt för att klaga ordentligt.", "svar": ["Du klagar ändå."]},
-    {"amne": "väder", "kamrat": "Det sägs att det blir snö till helgen. Det sägs varje helg.", "svar": ["Någon gång får de rätt."]},
-
-    {"amne": "bilar", "kamrat": "Jag funderar på att köpa elbil. Men sen tänker jag på elpriset. Och så köper jag ingenting.", "svar": ["Cykel då?"]},
-    {"amne": "bilar", "kamrat": "Den där bilen vid skogskanten… nej förresten, glöm det. Jag tänkte på något annat.", "svar": ["Håll ögonen öppna ändå."]},
-
-    {"amne": "vardag", "kamrat": "Min katt har börjat väcka mig klockan fem. Hon har ingen respekt för skiftschema.", "svar": ["Katter respekterar ingenting."]},
-    {"amne": "vardag", "kamrat": "Jag har bestämt mig för att lära mig spela gitarr. Har köpt en. Den står i hallen.", "svar": ["Den spelar inte sig själv."]},
-    {"amne": "vardag", "kamrat": "Visste du att en vanlig människa går ungefär en jordenruntresa under livet? Vi tar det i rundor kring ett förråd.", "svar": ["Bra motion i alla fall."]},
-    {"amne": "vardag", "kamrat": "Mina comtacs knastrar på vänster sida. Eller så är det mitt öra. Svårt att säga.", "svar": ["Kolla dem efter passet."]},
-    {"amne": "vardag", "kamrat": "Har du märkt att tiden går långsammare mellan 19 och 20? Det är vetenskapligt bevisat. Av mig.", "svar": ["Ja, faktiskt."]}
+    {
+      "amne": "sport",
+      "kamrat": "Såg du matchen i går? Tre insläppta mål på tio minuter. Tio minuter!",
+      "svar": [
+        "Nej, jag sov.",
+        "Säsongen är redan körd."
+      ]
+    },
+    {
+      "amne": "sport",
+      "kamrat": "Jag ska åka Vasaloppet i vinter. Har inte stått på skidor sen lågstadiet, men hur svårt kan det vara?",
+      "svar": [
+        "Nio mil. Lycka till.",
+        "Ta med blåbärssoppa."
+      ]
+    },
+    {
+      "amne": "sport",
+      "kamrat": "Om vi hade haft en målvakt i fjol hade vi gått upp. Bara så du vet.",
+      "svar": [
+        "Det säger du varje år."
+      ]
+    },
+    {
+      "amne": "sport",
+      "kamrat": "Har börjat springa. Två gånger. Räknas det som en vana nu?",
+      "svar": [
+        "Inte riktigt.",
+        "Tre gånger är en vana."
+      ]
+    },
+    {
+      "amne": "elpriser",
+      "kamrat": "Elpriset igen alltså. Jag tvättar bara mitt i natten nu. Grannarna tror att jag är vampyr.",
+      "svar": [
+        "Smart. Billigt och skräckinjagande."
+      ]
+    },
+    {
+      "amne": "elpriser",
+      "kamrat": "Jag har räknat ut att det är billigare att ladda telefonen på jobbet. Så jag gör det. Alla fyra.",
+      "svar": [
+        "Varför har du fyra telefoner?"
+      ]
+    },
+    {
+      "amne": "elpriser",
+      "kamrat": "Svärfar har köpt solceller. Nu pratar han inte om något annat. Kilowattimmar vid middagen.",
+      "svar": [
+        "Låter som en mysig middag."
+      ]
+    },
+    {
+      "amne": "datorspel",
+      "kamrat": "Jag var uppe till tre i natt och spelade. Byggde en hel stad. Sen kom ett jordskalv.",
+      "svar": [
+        "Spara oftare.",
+        "Därför du gäspar."
+      ]
+    },
+    {
+      "amne": "datorspel",
+      "kamrat": "Det borde finnas ett spel om det här jobbet. Fast vem skulle spela det?",
+      "svar": [
+        "Ingen. Absolut ingen.",
+        "Säkert någon."
+      ]
+    },
+    {
+      "amne": "datorspel",
+      "kamrat": "Min brorson slog mig i ett skjutspel i helgen. Han är nio. Jag har skjutit skarpt.",
+      "svar": [
+        "Det är inte samma sak.",
+        "Nio år och bättre än dig."
+      ]
+    },
+    {
+      "amne": "film",
+      "kamrat": "Jag såg en film där de bevakade en hemlig bas. Inte en enda gång kollade de legitimation.",
+      "svar": [
+        "Typiskt Hollywood."
+      ]
+    },
+    {
+      "amne": "film",
+      "kamrat": "Varför springer alla i skräckfilmer alltid uppför trappan? Spring ut, liksom!",
+      "svar": [
+        "Då blir filmen fem minuter."
+      ]
+    },
+    {
+      "amne": "film",
+      "kamrat": "Har du sett den nya serien alla pratar om? Inte jag heller. Jag låtsas bara.",
+      "svar": [
+        "Samma här."
+      ]
+    },
+    {
+      "amne": "mat",
+      "kamrat": "Vad tror du det blir till lunch i morgon? Jag gissar pyttipanna. Det är alltid pyttipanna.",
+      "svar": [
+        "Det var pyttipanna i går.",
+        "Hoppas på pannkakor."
+      ]
+    },
+    {
+      "amne": "mat",
+      "kamrat": "Jag har en mazarin i fickan. Den har varit där sedan i tisdags. Den är fortfarande god.",
+      "svar": [
+        "Det tvivlar jag på."
+      ]
+    },
+    {
+      "amne": "mat",
+      "kamrat": "Termosen läcker igen. Nu luktar hela fickan kaffe. Inte helt fel i och för sig.",
+      "svar": [
+        "Byt termos."
+      ]
+    },
+    {
+      "amne": "väder",
+      "kamrat": "Duggregn. Mitt favoritväder. Blöt, men inte tillräckligt blöt för att klaga ordentligt.",
+      "svar": [
+        "Du klagar ändå."
+      ]
+    },
+    {
+      "amne": "väder",
+      "kamrat": "Det sägs att det blir snö till helgen. Det sägs varje helg.",
+      "svar": [
+        "Någon gång får de rätt."
+      ]
+    },
+    {
+      "amne": "bilar",
+      "kamrat": "Jag funderar på att köpa elbil. Men sen tänker jag på elpriset. Och så köper jag ingenting.",
+      "svar": [
+        "Cykel då?"
+      ]
+    },
+    {
+      "amne": "bilar",
+      "kamrat": "Den där bilen vid skogskanten… nej förresten, glöm det. Jag tänkte på något annat.",
+      "svar": [
+        "Håll ögonen öppna ändå."
+      ]
+    },
+    {
+      "amne": "vardag",
+      "kamrat": "Min katt har börjat väcka mig klockan fem. Hon har ingen respekt för skiftschema.",
+      "svar": [
+        "Katter respekterar ingenting."
+      ]
+    },
+    {
+      "amne": "vardag",
+      "kamrat": "Jag har bestämt mig för att lära mig spela gitarr. Har köpt en. Den står i hallen.",
+      "svar": [
+        "Den spelar inte sig själv."
+      ]
+    },
+    {
+      "amne": "vardag",
+      "kamrat": "Visste du att en vanlig människa går ungefär en jordenruntresa under livet? Vi tar det i rundor kring ett förråd.",
+      "svar": [
+        "Bra motion i alla fall."
+      ]
+    },
+    {
+      "amne": "vardag",
+      "kamrat": "Mina comtacs knastrar på vänster sida. Eller så är det mitt öra. Svårt att säga.",
+      "svar": [
+        "Kolla dem efter passet."
+      ]
+    },
+    {
+      "amne": "vardag",
+      "kamrat": "Har du märkt att tiden går långsammare mellan 19 och 20? Det är vetenskapligt bevisat. Av mig.",
+      "svar": [
+        "Ja, faktiskt."
+      ]
+    },
+    {
+      "amne": "soldatmat",
+      "kamrat": "Tror du det blir iso eller påse ikväll? Hoppas på iso.",
+      "svar": [
+        "Påse. Det är alltid påse när man hoppas på iso.",
+        "Iso, om kocken är på gott humör."
+      ]
+    },
+    {
+      "amne": "soldatmat",
+      "kamrat": "Iso är underskattat alltså. Varm mat i kärl, mitt i skogen. Det är ren lyx.",
+      "svar": [
+        "Bästa grejen med hela tjänsten."
+      ]
+    },
+    {
+      "amne": "soldatmat",
+      "kamrat": "Jag har en ration i benfickan. Kyckling i curry. Eller om det var curry i kyckling. Svårt att avgöra.",
+      "svar": [
+        "Det är samma sak efter två dagar i fält."
+      ]
+    },
+    {
+      "amne": "soldatmat",
+      "kamrat": "Har du något isotonicpulver kvar? Jag har bara det med citronsmak, och det smakar diskmedel.",
+      "svar": [
+        "Ta det. Jag har apelsin.",
+        "Nej, slut sen i tisdags."
+      ]
+    },
+    {
+      "amne": "soldatmat",
+      "kamrat": "Smakis. Vem bestämde att Smakis skulle vara soldatens dryck? Den personen förtjänar en medalj.",
+      "svar": [
+        "Instämmer helt."
+      ]
+    },
+    {
+      "amne": "soldatmat",
+      "kamrat": "Det värsta med rations är inte maten. Det är att värmepåsen alltid tar slut precis när det är som kallast.",
+      "svar": [
+        "Ät den kall då. Karaktärsdanande."
+      ]
+    },
+    {
+      "amne": "soldatmat",
+      "kamrat": "Kaffe. Jag behöver kaffe. Det finns ingen lägesrapport i världen som är viktigare än kaffe just nu.",
+      "svar": [
+        "Den från AQ är nog viktigare.",
+        "Termosen står i kuren."
+      ]
+    },
+    {
+      "amne": "soldatmat",
+      "kamrat": "Snuset är slut. Det här blir ett långt pass.",
+      "svar": [
+        "Du överlever.",
+        "Jag har en dosa, men den är min."
+      ]
+    },
+    {
+      "amne": "soldatmat",
+      "kamrat": "Om jag dricker en Nocco till kommer jag att kunna se ljud. Jag tar en ändå.",
+      "svar": [
+        "Det är din tredje.",
+        "Ge mig en med."
+      ]
+    },
+    {
+      "amne": "soldatmat",
+      "kamrat": "Jag bytte bort min chokladkaka från rationen mot två snus i går. Bästa affären jag gjort i år.",
+      "svar": [
+        "Sämsta affären jag sett i år."
+      ]
+    },
+    {
+      "amne": "soldatmat",
+      "kamrat": "Fun fact: man kan värma en ration under armen. Det tar fyra timmar, men det går.",
+      "svar": [
+        "Det där är inte ett fun fact."
+      ]
+    }
   ],
-
   "allmanna_svar": [
     "Mm.",
     "Jaså.",
@@ -55,19 +284,16 @@
     "Du har sagt det förut.",
     "Hm. Spännande."
   ],
-
   "suckar": [
     "suck",
     "djup suck",
     "himlar med ögonen"
   ],
-
   "tyst_repliker": [
     "Tyst nu, vi har ett jobb att sköta.",
     "Fokus. Vi snackar på rasten.",
     "Ögonen på staketet, tack."
   ],
-
   "kamrat_tystnad": [
     "Okej, okej…",
     "Jaja. Uppfattat.",
