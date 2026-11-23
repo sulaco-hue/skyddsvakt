@@ -106,21 +106,6 @@ func bygg(scenario: Dictionary) -> void:
 	uv.add_child(UiKit.rubrik("BEVAKNINGSINSTRUKTION", 13))
 	uv.add_child(UiKit.etikett(str(b.get("uppdrag", "")), 22, UiKit.TEXT, true))
 	grid.add_child(upp)
-	var lag := UiKit.panel(UiKit.KANT, UiKit.RUTA)
-	lag.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	var lv := UiKit.vbox(6)
-	lag.add_child(lv)
-	lv.add_child(UiKit.rubrik("LAGSTÖD I FOKUS", 13))
-	var flode := HFlowContainer.new()
-	flode.add_theme_constant_override("h_separation", 6)
-	flode.add_theme_constant_override("v_separation", 6)
-	flode.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	for t in b.get("lagstod_fokus", []):
-		var chip := UiKit.panel(UiKit.KANT2, Color(0, 0, 0, 0), 8, 2)
-		chip.add_child(UiKit.etikett(str(t), 19))
-		flode.add_child(chip)
-	lv.add_child(flode)
-	grid.add_child(lag)
 
 	var knappar := UiKit.hbox(12)
 	knappar.add_child(UiKit.etikett("Lagstödet i detta utkast är inte juridiskt granskat.", 20, UiKit.DAMPAD))
