@@ -30,7 +30,7 @@ Spelet startar med ett scenarioval (listan i `data/scenarier/index.json`):
    inte) och *ger upp* (släpper yxan efter varning). Når han fram brottas han ner – men det bedöms
    som att ni agerade för sent. Efteråt: envarsgripande (BrB 24:7) och överlämning till polis.
 
-**Skyddsobjektet slumpas** vid varje genomförande: byggnaden, lastbilen "HELIKOPTER", ett vapenförråd
+**Skyddsobjektet slumpas** vid varje genomförande: byggnaden, "helikoptern" (lastbil med HELIKOPTER målat på sidan), ett vapenförråd
 (lagerbyggnad i plåt) eller en radiomast med teknikbod. Typerna finns under `objekttyper` i kartfilen;
 i scenariotexterna ersätts `{objekt}` med objektets namn och `{objekt_bestamd}` med t.ex. "masten".
 

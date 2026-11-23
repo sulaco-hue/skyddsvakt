@@ -218,8 +218,8 @@ k["objektyta"] = [6 + DX, 5 + DY, 9 + DX, 7 + DY]
 k["objekttyper"] = OrderedDict([
     ("byggnad", OrderedDict([("namn", "Förråd Granåsen"), ("bestamd", "byggnaden"),
                              ("beskrivning", "En tvåvåningsbyggnad med förrådslokaler.")])),
-    ("lastbil", OrderedDict([("namn", "Fordonsuppställning Granåsen"), ("bestamd", "lastbilen"),
-                             ("beskrivning", "En lastbil med skyddsvärd last står uppställd innanför staketet.")])),
+    ("lastbil", OrderedDict([("namn", "Helikoptern Granåsen"), ("bestamd", "helikoptern"),
+                             ("beskrivning", "Helikoptern – en olivgrön lastbil med HELIKOPTER målat på sidan – står uppställd innanför staketet.")])),
     ("vapenforrad", OrderedDict([("namn", "Vapenförråd Granåsen"), ("bestamd", "vapenförrådet"),
                                  ("beskrivning", "En lagerbyggnad i plåt med vapen och ammunition.")])),
     ("radiomast", OrderedDict([("namn", "Radiostation Granåsen"), ("bestamd", "masten"),
