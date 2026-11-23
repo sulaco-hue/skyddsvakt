@@ -1,4 +1,8 @@
 {
   "kommentar": "Scenarierna som visas i scenariovalet, i denna ordning.",
-  "scenarier": ["fotografen.json", "dronaren.json"]
+  "scenarier": [
+    "fotografen.json",
+    "dronaren.json",
+    "hantverkaren.json"
+  ]
 }

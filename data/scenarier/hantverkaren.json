@@ -1,0 +1,398 @@
+{
+  "id": "hantverkaren",
+  "namn": "Hantverkaren vid grinden",
+  "ingress": "En servicebil stannar vid bommen. ”Ska bara fixa ventilationen.” Passerkontroll, skyldigheterna i 10 § och när det finns stöd för att avvisa enligt 12 §.",
+  "objekt": "Förråd Granåsen",
+  "pass": "Pass 1",
+  "passtid": "07:00–11:00",
+  "starttid": "08:10",
+  "tidsfaktor": 6,
+  "vader": "Klart · 9°C",
+  "vaderlag": [
+    "klart"
+  ],
+  "dagsljus": true,
+  "beredskap": "FÖRHÖJD",
+  "karta": "res://data/kartor/granasen.json",
+  "omvarldslage": [
+    {
+      "tid": "05:50",
+      "kalla": "Regional lägesbild",
+      "text": "Försök att ta sig in på militära områden under falsk förevändning har rapporterats i grannregionen."
+    },
+    {
+      "tid": "06:30",
+      "kalla": "Vaktchef",
+      "text": "Inga hantverkarbesök är föranmälda i dag. Passerlistan gäller."
+    },
+    {
+      "tid": "07:15",
+      "kalla": "Lokal nyhet",
+      "text": "Vägarbete på länsvägen – räkna med köer och omledd trafik förbi Granåsen."
+    }
+  ],
+  "briefing": {
+    "uppdrag": "Bemanna grinden och sköt passerkontrollen. Endast föranmälda och kontrollerade personer släpps in. Rapportera avvikelser till AQ.",
+    "objektinfo": "Skyddsobjektet omfattar området innanför staketet. Tillträdesförbud gäller för obehöriga.",
+    "samband": "Vi: Grindposten (stridspar, två skyddsvakter). Vaktchef: AQ (Adam Qvintus) – på annan plats, ser inte objektet. Det är vi som larmar.",
+    "lagstod_fokus": [
+      "Skyldigheter 10 §",
+      "Avvisa 12 §",
+      "Neka tillträde",
+      "Undersöka fordon"
+    ],
+    "mal": []
+  },
+  "anropssignaler": {
+    "vaktchef": "AQ",
+    "du": "Grindposten"
+  },
+  "fakta": {
+    "skyltat_avbildningsforbud": true,
+    "motpart_inom": false,
+    "motpart_invid": true,
+    "vill_ha_tilltrade": true,
+    "flyr_fran_objekt": false,
+    "overtratt_forbud": false,
+    "vagrat_id": false,
+    "oriktiga_uppgifter": false,
+    "vagrat_visitation": false,
+    "vagrat_fordon": false,
+    "behov_avvisa": true,
+    "behov_avlagsna": true,
+    "behov_omhanderta": false,
+    "visitation_behovs": false,
+    "misstanke_13": false,
+    "beslag_betydelse": false,
+    "anmalan_polis": false,
+    "protokoll_upprattat": false,
+    "behorig": false
+  },
+  "varianter": {
+    "arlig": {
+      "fakta": {}
+    },
+    "oriktig": {
+      "fakta": {}
+    }
+  },
+  "npc": {
+    "hantverkaren": {
+      "namn": "Hantverkare, ca 35 år",
+      "beskrivning": "Varselväst, servicebil",
+      "sprite": "hantverkare",
+      "portratt": "portratt_hantverkare",
+      "start": "hantverkare_start",
+      "synlig_fran_start": false,
+      "stamning": 2,
+      "dialog_start": "start",
+      "kontakt_info": [
+        "Motparten: vid bommen, vill komma in",
+        "Passerlistan: inga besök föranmälda",
+        "Stridsparskamrat: skyddar"
+      ],
+      "lamnar_replik": "Jag åker till nästa jobb. Ring kontoret."
+    }
+  },
+  "handelser": [
+    {
+      "id": "1",
+      "namn": "Hantverkaren",
+      "typ": "npc_gar_till",
+      "tid": "08:12",
+      "npc": "hantverkaren",
+      "mal": "grind_ute",
+      "varianter": [
+        "arlig",
+        "oriktig"
+      ],
+      "fordon": {
+        "sprite": "servicebil",
+        "plats": "servicebil_plats",
+        "ljud": "brumm"
+      },
+      "vid_framme": "vantar",
+      "vid_framme_replik": "Hallå! Kan ni öppna bommen?",
+      "lamnar_efter_s": 90,
+      "upptackt": {
+        "min_s": 1,
+        "max_s": 4,
+        "referensavstand": 6,
+        "max_avstand": 16,
+        "paus_snack_s": 60
+      },
+      "kamrat": "Servicebil vid bommen. Står han på listan?"
+    }
+  ],
+  "samband": [],
+  "sambandsval": [
+    {
+      "etikett": "Prova förbindelsen med AQ",
+      "handling": "",
+      "meddelanden": [
+        {
+          "fran": "Grindposten",
+          "text": "AQ, AQ.",
+          "efter": 0
+        },
+        {
+          "fran": "AQ",
+          "text": "AQ kom.",
+          "efter": 1.5
+        },
+        {
+          "fran": "Grindposten",
+          "text": "Från Grindposten, sambandsprov, kom.",
+          "efter": 3.0
+        },
+        {
+          "fran": "AQ",
+          "text": "Hörbarhet femma, kom.",
+          "efter": 4.5
+        },
+        {
+          "fran": "Grindposten",
+          "text": "Hörbarhet femma, klart slut.",
+          "efter": 6.0
+        }
+      ]
+    },
+    {
+      "etikett": "Lägesrapport till AQ",
+      "handling": "rapportera_vaktchef",
+      "meddelanden": [
+        {
+          "fran": "Grindposten",
+          "text": "AQ, AQ.",
+          "efter": 0
+        },
+        {
+          "fran": "AQ",
+          "text": "AQ kom.",
+          "efter": 1.5
+        },
+        {
+          "fran": "Grindposten",
+          "text": "Från Grindposten, lägesrapport: {lage}, kom.",
+          "efter": 3.0
+        },
+        {
+          "fran": "AQ",
+          "text": "Uppfattat. Håll uppsikt och rapportera förändring, kom.",
+          "efter": 5.0
+        },
+        {
+          "fran": "Grindposten",
+          "text": "Uppfattat, slut kom.",
+          "efter": 6.5
+        },
+        {
+          "fran": "AQ",
+          "text": "Klart slut.",
+          "efter": 8.0
+        }
+      ]
+    },
+    {
+      "etikett": "Begär att AQ underrättar polis",
+      "handling": "anmala_polis",
+      "meddelanden": [
+        {
+          "fran": "Grindposten",
+          "text": "AQ, AQ.",
+          "efter": 0
+        },
+        {
+          "fran": "AQ",
+          "text": "AQ kom.",
+          "efter": 1.5
+        },
+        {
+          "fran": "Grindposten",
+          "text": "Från Grindposten, begär att polis underrättas om händelse vid sektor NO, kom.",
+          "efter": 3.0
+        },
+        {
+          "fran": "AQ",
+          "text": "Uppfattat, polis underrättas, kom.",
+          "efter": 5.0
+        },
+        {
+          "fran": "Grindposten",
+          "text": "Uppfattat, slut kom.",
+          "efter": 6.5
+        },
+        {
+          "fran": "AQ",
+          "text": "Klart slut.",
+          "efter": 8.0
+        }
+      ]
+    }
+  ],
+  "lagestext": {
+    "fore": "inga avvikelser vid grinden",
+    "efter": "hantverkare från Ventservice vid grinden, ej föranmäld"
+  },
+  "slutkrav": [
+    {
+      "handling": "rapportera_vaktchef",
+      "lagrum": "Bevakningsinstruktion – passerkontroll",
+      "text": "Besöket kontrollerades aldrig med AQ.",
+      "diskutera": "Varför ska ett oanmält besök alltid kontrolleras med vaktchefen?"
+    }
+  ],
+  "dialog": {
+    "start": {
+      "replik": "HANTVERKAREN: – Tjena! Jonas från Ventservice. Vi ska byta filter i ventilationen i {objekt_bestamd}. Kan ni öppna bommen?",
+      "alternativ": [
+        {
+          "text": "Be om legitimation och arbetsorder.",
+          "handling": "begara_identitet",
+          "nasta": "leg",
+          "nasta_variant": {
+            "arlig": "leg_arlig",
+            "oriktig": "leg_oriktig"
+          }
+        },
+        {
+          "text": "Anropa AQ och kontrollera om besöket är föranmält.",
+          "handling": "rapportera_vaktchef",
+          "nasta": "aq_kontroll"
+        },
+        {
+          "text": "Öppna bommen och släpp in honom.",
+          "handling": "slappa_in",
+          "nasta": "inslappt"
+        }
+      ]
+    },
+    "leg_arlig": {
+      "replik": "HANTVERKAREN: – Visst, här. Jonas Berg. Arbetsordern har chefen, men det är beställt, jag lovar.",
+      "alternativ": [
+        {
+          "text": "Anropa AQ och kontrollera om besöket är föranmält.",
+          "handling": "rapportera_vaktchef",
+          "nasta": "aq_kontroll"
+        },
+        {
+          "text": "Be att få titta i servicebilen.",
+          "handling": "undersoka_fordon",
+          "nasta": "fordon_arlig"
+        },
+        {
+          "text": "Legitimationen stämmer – släpp in honom.",
+          "handling": "slappa_in",
+          "nasta": "inslappt"
+        }
+      ]
+    },
+    "fordon_arlig": {
+      "replik": "HANTVERKAREN: – Kör hårt. Filter, verktyg och en termos. Inget konstigt.",
+      "alternativ": [
+        {
+          "text": "Anropa AQ och kontrollera om besöket är föranmält.",
+          "handling": "rapportera_vaktchef",
+          "nasta": "aq_kontroll"
+        },
+        {
+          "text": "Släpp in honom.",
+          "handling": "slappa_in",
+          "nasta": "inslappt"
+        }
+      ]
+    },
+    "leg_oriktig": {
+      "replik": "HANTVERKAREN: – Här… Ja, det står Peter Ström. Det är min kollegas. Jag glömde min. Men jag heter Jonas, alltså.",
+      "satt_fakta": {
+        "oriktiga_uppgifter": true
+      },
+      "stamning": 3,
+      "alternativ": [
+        {
+          "text": "Be att få undersöka servicebilen.",
+          "handling": "undersoka_fordon",
+          "nasta": "fordon_oriktig"
+        },
+        {
+          "text": "Anropa AQ och kontrollera om besöket är föranmält.",
+          "handling": "rapportera_vaktchef",
+          "nasta": "aq_kontroll"
+        },
+        {
+          "text": "Avvisa honom: han får inte komma in och ska lämna grinden.",
+          "handling": "avvisa",
+          "nasta": "avvisad",
+          "npc_beteende": "ga_till_start"
+        }
+      ]
+    },
+    "fordon_oriktig": {
+      "replik": "HANTVERKAREN: – Nej, nu får det vara nog. Ni har inget med min bil att göra.",
+      "satt_fakta": {
+        "vagrat_fordon": true
+      },
+      "stamning": 5,
+      "alternativ": [
+        {
+          "text": "Avvisa honom med stöd av 12 §: han ska lämna grinden.",
+          "handling": "avvisa",
+          "nasta": "avvisad",
+          "npc_beteende": "ga_till_start"
+        },
+        {
+          "text": "Omhänderta honom tillfälligt.",
+          "handling": "tillfalligt_omhanderta",
+          "stamning": 2,
+          "satt_fakta": {
+            "omhandertagande_genomfort": true
+          },
+          "nasta": "omhandertagen"
+        },
+        {
+          "text": "Anropa AQ och rapportera.",
+          "handling": "rapportera_vaktchef",
+          "nasta": "aq_kontroll"
+        }
+      ]
+    },
+    "aq_kontroll": {
+      "replik": "DU (radio): ”AQ, AQ.” – AQ: ”AQ kom.”\nDU: ”Från Grindposten, hantverkare från Ventservice vid grinden, begär kontroll av behörighet, kom.”\nAQ: ”Inget besök föranmält. Släpp inte in. Slut kom.” – DU: ”Klart slut.”",
+      "alternativ": [
+        {
+          "text": "Förklara att besöket inte är föranmält och att han inte får komma in.",
+          "handling": "neka_tilltrade",
+          "nasta": "nekad",
+          "npc_beteende": "ga_till_start"
+        },
+        {
+          "text": "Avvisa honom med stöd av 12 §.",
+          "handling": "avvisa",
+          "nasta": "avvisad",
+          "npc_beteende": "ga_till_start"
+        },
+        {
+          "text": "Släpp in honom ändå – han verkar schysst.",
+          "handling": "slappa_in",
+          "nasta": "inslappt"
+        }
+      ]
+    },
+    "nekad": {
+      "replik": "HANTVERKAREN: – Typiskt. Jag ringer kontoret. Ha det.",
+      "slut": true
+    },
+    "avvisad": {
+      "replik": "HANTVERKAREN: – Okej, okej. Jag åker.",
+      "slut": true
+    },
+    "omhandertagen": {
+      "replik": "HANTVERKAREN: – Vad i… Det här är ju sjukt!\n\nKamraten tar fram radion.",
+      "slut": true
+    },
+    "inslappt": {
+      "replik": "Bommen går upp och servicebilen rullar in.\n\nKAMRATEN: – Stod han på passerlistan…?",
+      "slut": true
+    }
+  }
+}

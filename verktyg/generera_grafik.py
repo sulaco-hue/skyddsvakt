@@ -672,6 +672,7 @@ PAL = {
     "W": (236, 232, 220), "X": (255, 140, 40),
     "Y": (62, 96, 150), "y": (46, 72, 116), "Z": (78, 80, 66), "z": (152, 140, 108), "O": (28, 28, 30),
     "Q": (60, 62, 66), "u": (222, 192, 112), "m": (222, 112, 152),
+    "o": (240, 120, 30), "x": (60, 64, 72), "w": (36, 46, 82), "R": (210, 210, 200),
 }
 # ---- M/90-mönster (kantiga splitterfält i fyra färger) ------------------
 M90 = [(124, 138, 92), (84, 104, 62), (50, 68, 42), (26, 28, 24)]
@@ -850,6 +851,61 @@ for i in range(2):
     figure(f"barn_{i}", BARN_TOP, BARN_LEGS[i])
 
 
+# Hantverkaren: marinblå keps, orange varselväst, grå arbetsbyxor
+HANT_TOP = [
+    "....wwww....",
+    "...wwwwwww..",
+    "...ssssss...",
+    "...sesses...",
+    "...sSSSSs...",
+    "...SssssS...",
+    "....SSSS....",
+    "..oooooooo..",
+    ".ooRoooooRo.",
+    ".oooxoooxoo.",
+    ".ooRoooooRo.",
+    ".sooooooooos",
+    ".s.xxxxxx.s.",
+    "...xxxxxx...",
+]
+HANT_LEGS = [
+    ["...xxxxxx...", "...xxx.xxx..", "...xxx.xxx..", "...RRR.RRR..", "...xxx.xxx..", "...xxx.xxx..",
+     "...bbb.bbb..", "..bbbb.bbbb."],
+    ["...xxxxxx...", "..xxx..xxx..", "..xxx...xxx.", ".RRR....RRR.", ".xxx....xxx.", ".xxx....xxx.",
+     ".bbb....bbb.", "bbbb.....bbb"],
+]
+for i in range(2):
+    figure(f"hantverkare_{i}", HANT_TOP, HANT_LEGS[i])
+
+
+def servicebil(d, im):
+    """Vit servicebil med blå rand och orange takljus; fronten mot -x (mot grinden)."""
+    x0, x1, y0, y1 = 0.1, 1.9, 0.2, 0.8
+    vit, vit_m, bla = (226, 228, 224), (186, 190, 188), (52, 96, 170)
+    for gx in (0.45, 1.5):
+        x, y = iso(gx, y1, 0)
+        d.ellipse([x - 4, y - 6, x + 3, y + 1], fill=(28, 28, 28))
+        d.ellipse([x - 2, y - 4, x + 1, y - 1], fill=(120, 120, 120))
+    d.polygon(face_quad(x0, y1, x1, y1, 3, 20), fill=vit)
+    d.polygon(face_quad(x1, y0, x1, y1, 3, 20), fill=vit_m)
+    d.polygon([iso(x0, y0, 20), iso(x1, y0, 20), iso(x1, y1, 20), iso(x0, y1, 20)], fill=(240, 242, 240))
+    d.polygon(face_quad(x0, y1, x1, y1, 9, 11), fill=bla)
+    d.polygon(face_quad(x1, y0, x1, y1, 9, 11), fill=shade(bla, 0.8))
+    # framruta och sidoruta vid fronten (x0)
+    q = face_quad(x0 + 0.05, y1, x0 + 0.45, y1, 12, 18)
+    d.polygon(q, fill=(52, 64, 74))
+    d.line([q[3], q[2]], fill=(140, 160, 170))
+    # takljus
+    x, y = iso(0.4, 0.5, 20)
+    d.rectangle([x - 2, y - 3, x + 2, y], fill=(250, 150, 40))
+    d.point((x, y - 3), fill=(255, 220, 140))
+    # skjutdörr
+    d.line([iso(0.95, y1, 4), iso(0.95, y1, 18)], fill=vit_m)
+    d.line([iso(1.55, y1, 4), iso(1.55, y1, 18)], fill=vit_m)
+
+save_obj("servicebil", servicebil, (0.5, 0.5))
+
+
 # Drönare (två bilder för blinkande lampa), skugga och vrak
 def dronare(namn, lampa):
     im = Image.new("RGBA", (15, 7), (0, 0, 0, 0))
@@ -934,6 +990,8 @@ def portrait(kind):
     skin, skin_d, skin_l = (224, 180, 140), (196, 150, 112), (238, 200, 162)
     if kind == "barn":
         return portrait_barn()
+    if kind == "hantverkare":
+        return portrait_hantverkare()
     if kind == "pappa":
         jacket, jacket_d, jacket_l = (62, 96, 150), (46, 72, 116), (84, 118, 172)
     elif kind == "civil":
@@ -1075,6 +1133,28 @@ def portrait(kind):
         p.line([(34, 46), (45, 46)], fill=(140, 84, 70))
     return im
 
+def portrait_hantverkare():
+    im = portrait("civil")
+    p = ImageDraw.Draw(im)
+    S = 80
+    # orange varselväst med reflexband
+    p.polygon([(8, S), (14, 62), (30, 56), (50, 56), (66, 62), (72, S)], fill=(240, 120, 30))
+    p.polygon([(8, S), (14, 62), (30, 56), (34, S)], fill=(206, 98, 22))
+    p.rectangle([12, 70, 68, 72], fill=(220, 222, 214))
+    p.polygon([(30, 56), (40, 66), (50, 56)], fill=(70, 74, 82))
+    # marinblå keps i stället för mössa
+    p.rectangle([20, 2, 59, 25], fill=(34, 46, 58))
+    p.rectangle([22, 10, 57, 22], fill=(36, 46, 82))
+    p.rectangle([22, 10, 57, 12], fill=(52, 64, 104))
+    p.rectangle([40, 21, 66, 25], fill=(28, 36, 66))
+    # vänligare ögonbryn
+    p.line([(29, 30), (35, 30)], fill=(84, 58, 40), width=2)
+    p.line([(44, 30), (50, 30)], fill=(84, 58, 40), width=2)
+    # penna bakom örat
+    p.line([(58, 26), (63, 36)], fill=(240, 200, 60), width=2)
+    return im
+
+
 def portrait_barn():
     S = 80
     im = Image.new("RGB", (S, S), (34, 46, 58))
@@ -1128,6 +1208,7 @@ portrait("civil").save(os.path.join(OUT, "portratt_civil.png"))
 portrait("vakt").save(os.path.join(OUT, "portratt_vakt.png"))
 portrait("pappa").save(os.path.join(OUT, "portratt_pappa.png"))
 portrait_barn().save(os.path.join(OUT, "portratt_barn.png"))
+portrait_hantverkare().save(os.path.join(OUT, "portratt_hantverkare.png"))
 
 # ============================================================ Ikoner ==
 def hogtalare(namn, extra):

@@ -94,7 +94,8 @@ func bygg(karta: Dictionary) -> void:
 	_skapa_kamera()
 
 	var skymning := CanvasModulate.new()
-	skymning.color = Color(0.80, 0.84, 0.97)
+	# Dagsljus i scenarier med "dagsljus": true, annars skymning.
+	skymning.color = Color(1, 1, 1) if bool(Spel.scenario.get("dagsljus", false)) else Color(0.80, 0.84, 0.97)
 	add_child(skymning)
 
 
@@ -474,6 +475,21 @@ func _fri_granne(c: Vector2i) -> Vector2i:
 				bast_d = d
 				bast = n
 	return bast
+
+
+## Ställer ut ett fordon (sprite) på en ruta och gör rutan till hinder.
+func placera_fordon(namn: String, c: Vector2i) -> Sprite2D:
+	var s := _sprite(namn, c)
+	astar.set_point_solid(c)
+	astar_npc.set_point_solid(c)
+	return s
+
+
+func ta_bort_fordon(s: Sprite2D, c: Vector2i) -> void:
+	if is_instance_valid(s):
+		s.queue_free()
+	astar.set_point_solid(c, false)
+	astar_npc.set_point_solid(c, false)
 
 
 func satt_larm(npc_id: String) -> void:

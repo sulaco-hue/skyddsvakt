@@ -27,6 +27,8 @@ var _brus_t := 0.0
 var _handelse_status: Dictionary = {}
 ## Personer som lämnat platsen innan kontakt togs.
 var _lamnat: Dictionary = {}
+## Fordon som hör till en person: id -> {sprite, cell}
+var _fordon: Dictionary = {}
 var _dronare_handelse: Dictionary = {}
 
 
@@ -230,6 +232,14 @@ func _utlos_handelse(h: Dictionary) -> void:
 			var n: Aktor = varld.npcer.get(id)
 			if n == null:
 				return
+			_valj_variant(h)
+			var fordon: Dictionary = h.get("fordon", {})
+			if not fordon.is_empty():
+				var fc := varld.punkt(fordon.get("plats", [0, 0]))
+				var fs := varld.placera_fordon(str(fordon.get("sprite", "bil")), fc)
+				_fordon[id] = {"sprite": fs, "cell": fc}
+				if str(fordon.get("ljud", "")) != "":
+					hud.visa_ljud(fs, str(fordon["ljud"]), 1.8, 30.0)
 			n.visible = true
 			n.framme.connect(_pa_npc_framme.bind(h, id), CONNECT_ONE_SHOT)
 			varld.flytta_npc(id, varld.punkt(h.get("mal", [0, 0])))
@@ -237,14 +247,35 @@ func _utlos_handelse(h: Dictionary) -> void:
 			_starta_dronare(h)
 
 
+## Väljer variant för händelser som har "varianter" (om ingen redan valts).
+func _valj_variant(h: Dictionary) -> void:
+	var varianter: Array = h.get("varianter", [])
+	if varianter.is_empty() or Spel.variant != "":
+		return
+	var v := str(h.get("vald_variant", ""))
+	if v == "":
+		_rng.randomize()
+		v = str(varianter[_rng.randi_range(0, varianter.size() - 1)])
+	Spel.satt_variant(v)
+
+
 func _pa_npc_framme(h: Dictionary, id: String) -> void:
 	var n: Aktor = varld.npcer.get(id)
-	if n == null or h.get("vid_framme", "") != "fotograferar" or _samtal_klara.has(id):
+	if n == null or _samtal_klara.has(id):
 		return
-	n.vand_mot(varld.cell_pos(varld.punkt("objekt_mitt")))
-	n.satt_fotograferar(true)
-	if not n.blixt.is_connected(_pa_blixt):
-		n.blixt.connect(_pa_blixt.bind(id))
+	match str(h.get("vid_framme", "")):
+		"fotograferar":
+			n.vand_mot(varld.cell_pos(varld.punkt("objekt_mitt")))
+			n.satt_fotograferar(true)
+			if not n.blixt.is_connected(_pa_blixt):
+				n.blixt.connect(_pa_blixt.bind(id))
+		"vantar":
+			n.vand_mot(varld.cell_pos(varld.punkt("grind")))
+			var replik := str(h.get("vid_framme_replik", ""))
+			if replik != "":
+				hud.visa_bubbla(n, replik, 4.0)
+		_:
+			return
 	_larm_npc = id
 	_starta_upptackt(h, n, id)
 	var lamnar := float(h.get("lamnar_efter_s", 0))
@@ -458,6 +489,12 @@ func _dolj_npc(id: String) -> void:
 	var n: Aktor = varld.npcer.get(id)
 	if n:
 		n.visible = false
+	# Personens fordon åker också (t.ex. servicebilen).
+	if _fordon.has(id):
+		var f: Dictionary = _fordon[id]
+		hud.visa_ljud(f["sprite"], "brumm", 1.5, 30.0)
+		varld.ta_bort_fordon(f["sprite"], f["cell"])
+		_fordon.erase(id)
 
 
 # ----------------------------------------------------------- Kontakt --

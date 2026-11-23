@@ -18,6 +18,9 @@ Spelet startar med ett scenarioval (listan i `data/scenarier/index.json`):
    obemannad farkost (11 §). Två varianter: *med pilot* (pappa med dottern Elsa vid sjön) och
    *utan pilot* (drönaren kommer från nordost och försvinner). Situationsknappen **Bekämpa drönaren [B]**
    finns för att träna bedömningen.
+3. **Hantverkaren vid grinden** – passerkontroll i dagsljus: skyldigheterna i 10 § (identitet, fordon)
+   och skillnaden mellan att *neka tillträde* och att *avvisa* enligt 12 §. Två varianter: *ärlig*
+   (bara inte föranmäld) och *oriktig* (fel legitimation, vägrar undersökning av bilen).
 
 **Skyddsobjektet slumpas** vid varje genomförande: byggnaden, lastbilen "HELIKOPTER", ett vapenförråd
 (lagerbyggnad i plåt) eller en radiomast med teknikbod. Typerna finns under `objekttyper` i kartfilen;

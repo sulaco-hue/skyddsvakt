@@ -22,6 +22,8 @@ func _ready() -> void:
 	await _spela_dronaren_med_pilot()
 	await _spela_dronaren_utan_pilot()
 	await _spela_missad_handelse()
+	await _spela_hantverkaren("oriktig", [0, 2], {"begara_identitet": "ok", "avvisa": "ok"})
+	await _spela_hantverkaren("arlig", [0, 0, 1], {"rapportera_vaktchef": "ok", "avvisa": "bad"})
 	await _bygg_alla_objekttyper()
 	print("--- Kompakt läge (pekskärm) ---")
 	UiKit.kompakt = true
@@ -317,5 +319,40 @@ func _spela_missad_handelse() -> void:
 	main.call("_visa_debriefing")
 	await _vanta(3)
 	_forvanta({"missad_1": "bad"})
+	main.queue_free()
+	await _vanta(3)
+
+
+## Hantverkaren vid grinden: spelar en given väg genom dialogen.
+func _spela_hantverkaren(variant: String, val: Array, forvantat: Dictionary) -> void:
+	print("--- Scenario: Hantverkaren (%s) ---" % variant)
+	Spel.nollstall("res://data/scenarier/hantverkaren.json")
+	var main = load("res://scenes/main.tscn").instantiate()
+	add_child(main)
+	await _vanta(5)
+	main.call("_starta_pass")
+	await _vanta(3)
+	main.call("_forcera_handelse", "1:" + variant)
+	var npc: Aktor = main.varld.npcer.get("hantverkaren")
+	var t := 0
+	while npc.ar_i_rorelse() and t < 900:
+		await get_tree().process_frame
+		t += 1
+	if Spel.variant != variant:
+		_fel("fel variant: %s" % Spel.variant)
+	if not main._fordon.has("hantverkaren"):
+		_fel("servicebilen ställdes inte ut")
+	_ok("hantverkaren vid bommen %s" % str(npc.cell))
+	main.call("_oppna_kontakt", "hantverkaren")
+	await _vanta(3)
+	var kontakt: Kontakt = main.kontakt
+	for i in val:
+		kontakt.call("_valj", int(i))
+		await _vanta(2)
+	kontakt.call("_stang")
+	await _vanta(3)
+	main.call("_visa_debriefing")
+	await _vanta(3)
+	_forvanta(forvantat)
 	main.queue_free()
 	await _vanta(3)

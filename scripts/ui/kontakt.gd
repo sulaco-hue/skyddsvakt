@@ -207,6 +207,10 @@ func _valj(i: int) -> void:
 	_uppdatera_stamning()
 	val_gjort.emit(alt)
 	var nasta := str(alt.get("nasta", ""))
+	# "nasta_variant": olika fortsättning beroende på scenariots variant
+	var per_variant: Dictionary = alt.get("nasta_variant", {})
+	if per_variant.has(Spel.variant):
+		nasta = str(per_variant[Spel.variant])
 	if nasta == "" or not dialog.has(nasta):
 		_stang()
 	else:
