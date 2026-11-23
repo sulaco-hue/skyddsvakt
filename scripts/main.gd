@@ -65,7 +65,7 @@ func _ready() -> void:
 	hud.forcera_handelse.connect(_forcera_handelse)
 	hud.handling.connect(_pa_hud_handling)
 	hud.avsluta_pass.connect(_visa_debriefing)
-	hud.lagestext = _lagestext
+	hud.ersattningar = _radio_ersattningar
 	hud.situation.connect(_pa_situation)
 
 	radio = Radiotrafik.new()
@@ -143,16 +143,26 @@ func _pa_hud_handling(id: String, beskrivning: String) -> void:
 	Spel.utfor(id, beskrivning)
 
 
+## Ersättningar i radiotrafiken efter läget just nu: {lage} från "lagestext"
+## och en ersättning per nyckel i "sambandstexter" (t.ex. {svar} och {polis}),
+## så att vi inte rapporterar en drönare över objektet när den redan är nedskjuten.
 func _radio_ersattningar() -> Dictionary:
-	return {"lage": _lagestext()}
+	var byt := {"lage": _lagestext()}
+	var st: Dictionary = _scenario.get("sambandstexter", {})
+	for nyckel: String in st:
+		byt[nyckel] = _fasvarde(st[nyckel])
+	return byt
 
 
-## Lägestexten följer händelsens fas. Scenariot kan ha "fore", "efter",
-## "kontakt" (efter avslutad kontakt), "lamnat" (personen gav sig av) och
-## "avslutad"; även per variant, t.ex. "kontakt_oriktig", och "fakta:<nyckel>".
 func _lagestext() -> String:
-	var lt: Dictionary = _scenario.get("lagestext", {})
-	# "fakta:<nyckel>" vinner när faktumet är sant (t.ex. att drönaren sköts ner).
+	return _fasvarde(_scenario.get("lagestext", {}))
+
+
+## Väljer text efter händelsens fas. Nycklar i prioritetsordning:
+## "fakta:<nyckel>" (när faktumet är sant, i filens ordning), "avslutad",
+## "lamnat" (personen gav sig av), "kontakt" (efter avslutad kontakt),
+## "efter" (efter upptäckt) och "fore"; alla även per variant, t.ex. "kontakt_oriktig".
+func _fasvarde(lt: Dictionary) -> String:
 	for nyckel: String in lt:
 		if nyckel.begins_with("fakta:") and bool(Spel.fakta.get(nyckel.substr(6), false)):
 			return str(lt[nyckel])
@@ -430,6 +440,7 @@ func _dronare_flyger_bort() -> void:
 	if not _upptackt.is_empty() and _upptackt["nod"] == dronare:
 		_upptackt = {}
 	dronare.flyg_till(varld.cell_pos(varld.punkt(_dronare_handelse.get("bort_utan_pilot", "kant_sydvast"))), 60.0)
+	Spel.satt_fakta({"dronare_borta": true})
 	radio.krok("dronare_flyger_bort")
 	dronare.framme.connect(_ta_bort_dronare, CONNECT_ONE_SHOT)
 
@@ -446,6 +457,7 @@ func _landa_dronare() -> void:
 	hud.satt_situation("", false)
 	var plats := varld.punkt(_dronare_handelse.get("start_med_pilot", [0, 0]))
 	dronare.landa_vid(varld.cell_pos(plats) + Vector2(10, 4))
+	Spel.satt_fakta({"dronare_landad": true})
 	radio.krok("dronare_landar")
 
 

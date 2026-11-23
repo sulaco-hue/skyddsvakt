@@ -232,7 +232,7 @@
         },
         {
           "fran": "AQ",
-          "text": "Uppfattat. Lokalisera piloten om möjligt. Ingen vapeninsats utan order, kom.",
+          "text": "{svar}, kom.",
           "efter": 5.0
         },
         {
@@ -263,7 +263,7 @@
         },
         {
           "fran": "Grindposten",
-          "text": "Från Grindposten, begär att polis underrättas om drönare över objektet, kom.",
+          "text": "Från Grindposten, begär att polis underrättas om {polis}, kom.",
           "efter": 3.0
         },
         {
@@ -285,10 +285,12 @@
     }
   ],
   "lagestext": {
+    "fakta:dronare_nedskjuten": "drönaren bekämpad med automatkarbin och nedskjuten, vrak invid {objekt_bestamd}",
+    "fakta:dronare_landad": "drönare som flugit över skyddsobjektet har landat vid sjön, piloten anträffad",
+    "fakta:dronare_borta": "drönare som cirklat över {objekt_bestamd} har lämnat området mot sydväst, ingen pilot anträffad",
     "fore": "inga avvikelser",
     "efter": "drönare över skyddsobjektet, cirklar över {objekt_bestamd}",
-    "kontakt": "drönarpiloten vid sjön kontaktad",
-    "fakta:dronare_nedskjuten": "drönaren bekämpad med automatkarbin och nedskjuten, vrak invid {objekt_bestamd}"
+    "kontakt": "drönarpiloten vid sjön kontaktad"
   },
   "slutkrav": [
     {
@@ -550,7 +552,7 @@
     }
   },
   "radio": {
-    "kommentar": "Levande radiotrafik. Krokar och villkor beskrivs i scripts/core/radiotrafik.gd.",
+    "kommentar": "Trafik mellan andra enheter som följer händelserna. AQ ropar inte själv upp Grindposten. Krokar och villkor: scripts/core/radiotrafik.gd.",
     "upptackt": [
       {
         "efter_s": 5,
@@ -572,85 +574,6 @@
           },
           {
             "fran": "AQ",
-            "text": "Uppfattat, klart slut.",
-            "efter": 4.5
-          }
-        ]
-      },
-      {
-        "efter_s": 35,
-        "om_ej_handling": "rapportera_vaktchef",
-        "meddelanden": [
-          {
-            "fran": "AQ",
-            "text": "Grindposten, Grindposten.",
-            "efter": 0.0
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Grindposten kom.",
-            "efter": 1.5
-          },
-          {
-            "fran": "AQ",
-            "text": "Från AQ, Norra grinden rapporterar en drönare på väg mot er. Har ni den? Lägesrapport. Slut kom.",
-            "efter": 3.0
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Uppfattat, klart slut.",
-            "efter": 4.5
-          }
-        ]
-      }
-    ],
-    "handling:vald_mot_farkost": [
-      {
-        "efter_s": 2,
-        "meddelanden": [
-          {
-            "fran": "AQ",
-            "text": "Grindposten, Grindposten!",
-            "efter": 0.0
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Grindposten kom.",
-            "efter": 1.2
-          },
-          {
-            "fran": "AQ",
-            "text": "Från AQ, jag hörde skott i er sektor! Rapportera omedelbart, kom!",
-            "efter": 2.4
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Uppfattat, återkommer, klart slut.",
-            "efter": 3.6
-          }
-        ]
-      },
-      {
-        "efter_s": 45,
-        "om_ej_handling": "anmala_polis",
-        "meddelanden": [
-          {
-            "fran": "AQ",
-            "text": "Grindposten, Grindposten.",
-            "efter": 0.0
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Grindposten kom.",
-            "efter": 1.5
-          },
-          {
-            "fran": "AQ",
-            "text": "Från AQ, efter skottlossningen ska polis underrättas. Säkra platsen runt vraket och rör ingenting. Slut kom.",
-            "efter": 3.0
-          },
-          {
-            "fran": "Grindposten",
             "text": "Uppfattat, klart slut.",
             "efter": 4.5
           }
@@ -687,86 +610,22 @@
             "efter": 6.0
           }
         ]
-      },
-      {
-        "efter_s": 20,
-        "meddelanden": [
-          {
-            "fran": "AQ",
-            "text": "Grindposten, Grindposten.",
-            "efter": 0.0
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Grindposten kom.",
-            "efter": 1.5
-          },
-          {
-            "fran": "AQ",
-            "text": "Från AQ, drönaren har lämnat området mot sydväst. Notera tid, riktning och utseende för rapporten. Slut kom.",
-            "efter": 3.0
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Uppfattat, klart slut.",
-            "efter": 4.5
-          }
-        ]
-      }
-    ],
-    "dronare_landar": [
-      {
-        "efter_s": 6,
-        "meddelanden": [
-          {
-            "fran": "AQ",
-            "text": "Grindposten, Grindposten.",
-            "efter": 0.0
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Grindposten kom.",
-            "efter": 1.5
-          },
-          {
-            "fran": "AQ",
-            "text": "Från AQ, bekräfta att drönaren är på marken och att piloten är kontaktad. Lägesrapport när ni kan. Slut kom.",
-            "efter": 3.0
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Uppfattat, klart slut.",
-            "efter": 4.5
-          }
-        ]
-      }
-    ],
-    "handling:anmala_polis": [
-      {
-        "efter_s": 25,
-        "meddelanden": [
-          {
-            "fran": "AQ",
-            "text": "Grindposten, Grindposten.",
-            "efter": 0.0
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Grindposten kom.",
-            "efter": 1.5
-          },
-          {
-            "fran": "AQ",
-            "text": "Från AQ, polisen har tagit emot ärendet om drönaren. De ber er notera pilotens uppgifter och drönarens modell. Slut kom.",
-            "efter": 3.0
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Uppfattat, klart slut.",
-            "efter": 4.5
-          }
-        ]
       }
     ]
+  },
+  "sambandstexter": {
+    "svar": {
+      "fakta:dronare_nedskjuten": "Uppfattat. Säkra vraket, rör ingenting och invänta polis",
+      "fakta:dronare_landad": "Uppfattat. Notera pilotens uppgifter och drönarens modell",
+      "fakta:dronare_borta": "Uppfattat. Notera tid, riktning och utseende",
+      "efter": "Uppfattat. Lokalisera piloten om möjligt. Ingen vapeninsats utan order",
+      "fore": "Uppfattat"
+    },
+    "polis": {
+      "fakta:dronare_nedskjuten": "drönare som flugit över objektet och bekämpats med vapen, vrak invid {objekt_bestamd}",
+      "fakta:dronare_landad": "drönare som flugit över objektet, landad, piloten anträffad vid sjön",
+      "fakta:dronare_borta": "drönare som flugit över objektet och försvunnit mot sydväst",
+      "fore": "drönare över objektet"
+    }
   }
 }

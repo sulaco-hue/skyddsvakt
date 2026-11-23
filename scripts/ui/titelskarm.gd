@@ -68,7 +68,8 @@ func bygg() -> void:
 func _process(delta: float) -> void:
 	_t += delta
 	if _uppmaning:
-		_uppmaning.visible = fmod(_t, 1.2) < 0.8
+		# Blinkar med genomskinlighet så att layouten står still.
+		_uppmaning.modulate.a = 1.0 if fmod(_t, 1.2) < 0.8 else 0.0
 
 
 func _gui_input(event: InputEvent) -> void:

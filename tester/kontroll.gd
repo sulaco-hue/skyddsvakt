@@ -189,10 +189,6 @@ func _spela_scenario_1() -> void:
 		_fel("lägestexten följer inte händelsen efter kontakt: " + str(main.call("_lagestext")))
 	else:
 		_ok("lägestext efter kontakt")
-	if await _vanta_radio("överlämnas till polis"):
-		_ok("AQ påminner om överlämning till polis")
-	else:
-		_fel("AQ:s radioinslag efter omhändertagande spelades inte")
 	main.call("_visa_debriefing")
 	await _vanta(3)
 
@@ -298,10 +294,12 @@ func _spela_dronaren_utan_pilot() -> void:
 		_fel("drönaren kraschade inte efter bekämpning")
 	else:
 		_ok("drönaren nedskjuten och kraschad")
-	if await _vanta_radio("hörde skott"):
-		_ok("AQ reagerar på skotten över radio")
+	var byt: Dictionary = main.call("_radio_ersattningar")
+	if not str(byt.get("lage", "")).contains("nedskjuten") or not str(byt.get("polis", "")).contains("bekämpats") \
+			or str(byt.get("svar", "")).contains("Ingen vapeninsats"):
+		_fel("radiotexterna följer inte att drönaren skjutits ner: " + str(byt))
 	else:
-		_fel("AQ reagerade inte på skotten")
+		_ok("lägesrapport och polisbegäran säger att drönaren är nedskjuten")
 	main.call("_visa_debriefing")
 	await _vanta(3)
 	_forvanta({"vald_mot_farkost": "warn"})
@@ -507,10 +505,8 @@ func _spela_yxmannen_skarp() -> void:
 		_fel("knappen Larma sjukvård visas inte efter verkanseld")
 	else:
 		_ok("verkanseld: mannen ligger, sjukvårdsknapp visas")
-	if await _vanta_radio("skott hörda"):
-		_ok("AQ reagerar på skotten")
-	else:
-		_fel("AQ reagerade inte på verkanselden")
+	if not str(main.call("_lagestext")).contains("verkanseld"):
+		_fel("lägestexten nämner inte verkanselden: " + str(main.call("_lagestext")))
 	main.call("_larma_sjukvard")
 	await _avsluta_yxmannen(main, {"halt_order": "ok", "varningsskott": "ok", "verkanseld": "ok",
 		"larma_sjukvard": "ok", "foljdkrav_skjutning_rapporterad": "bad"})

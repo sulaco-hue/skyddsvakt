@@ -224,7 +224,7 @@
         },
         {
           "fran": "AQ",
-          "text": "Uppfattat. Håll avstånd, säkra platsen och rapportera förändring, kom.",
+          "text": "{svar}, kom.",
           "efter": 4.5
         },
         {
@@ -291,7 +291,7 @@
         },
         {
           "fran": "Grindposten",
-          "text": "Från Grindposten, begär polis till grinden, man som hotat med yxa, kom.",
+          "text": "Från Grindposten, begär att polis underrättas om {polis}, kom.",
           "efter": 3.0
         },
         {
@@ -320,254 +320,7 @@
     "efter": "man med yxa på väg mot grinden från norra stigen, hotar att döda oss"
   },
   "radio": {
-    "kommentar": "Levande radiotrafik. Krokar och villkor beskrivs i scripts/core/radiotrafik.gd.",
-    "upptackt": [
-      {
-        "efter_s": 25,
-        "om_ej_handling": "rapportera_vaktchef",
-        "meddelanden": [
-          {
-            "fran": "AQ",
-            "text": "Grindposten, Grindposten!",
-            "efter": 0.0
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Grindposten kom.",
-            "efter": 1.2
-          },
-          {
-            "fran": "AQ",
-            "text": "Från AQ, Västra posten hör skrik från ert håll. Vad händer? Lägesrapport omedelbart. Kom!",
-            "efter": 2.4
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Uppfattat, återkommer, klart slut.",
-            "efter": 3.6
-          }
-        ]
-      }
-    ],
-    "handling:varningsskott": [
-      {
-        "efter_s": 2,
-        "meddelanden": [
-          {
-            "fran": "AQ",
-            "text": "Grindposten, Grindposten!",
-            "efter": 0.0
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Grindposten kom.",
-            "efter": 1.2
-          },
-          {
-            "fran": "AQ",
-            "text": "Från AQ, jag hörde ett skott från er sektor! Rapportera omedelbart. Kom!",
-            "efter": 2.4
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Uppfattat, återkommer, klart slut.",
-            "efter": 3.6
-          }
-        ]
-      }
-    ],
-    "handling:verkanseld": [
-      {
-        "efter_s": 2,
-        "meddelanden": [
-          {
-            "fran": "AQ",
-            "text": "Grindposten, Grindposten!",
-            "efter": 0.0
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Grindposten kom.",
-            "efter": 1.2
-          },
-          {
-            "fran": "AQ",
-            "text": "Från AQ, skott hörda vid grinden! Rapportera läget omedelbart. Kom!",
-            "efter": 2.4
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Uppfattat, återkommer, klart slut.",
-            "efter": 3.6
-          }
-        ]
-      }
-    ],
-    "motpart_skjuten": [
-      {
-        "efter_s": 30,
-        "om_ej_handling": "larma_sjukvard",
-        "meddelanden": [
-          {
-            "fran": "AQ",
-            "text": "Grindposten, Grindposten.",
-            "efter": 0.0
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Grindposten kom.",
-            "efter": 1.5
-          },
-          {
-            "fran": "AQ",
-            "text": "Från AQ, finns det skadade? Begär ambulans via mig omgående. Slut kom.",
-            "efter": 3.0
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Uppfattat, klart slut.",
-            "efter": 4.5
-          }
-        ]
-      }
-    ],
-    "handling:larma_sjukvard": [
-      {
-        "efter_s": 6,
-        "meddelanden": [
-          {
-            "fran": "AQ",
-            "text": "Grindposten, Grindposten.",
-            "efter": 0.0
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Grindposten kom.",
-            "efter": 1.5
-          },
-          {
-            "fran": "AQ",
-            "text": "Från AQ, ambulans och polis är larmade, beräknad ankomst femton minuter. Säkra platsen och ge första hjälpen. Slut kom.",
-            "efter": 3.0
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Uppfattat, klart slut.",
-            "efter": 4.5
-          }
-        ]
-      }
-    ],
-    "motpart_ger_upp": [
-      {
-        "efter_s": 20,
-        "om_ej_handling": "rapportera_vaktchef",
-        "meddelanden": [
-          {
-            "fran": "AQ",
-            "text": "Grindposten, Grindposten.",
-            "efter": 0.0
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Grindposten kom.",
-            "efter": 1.5
-          },
-          {
-            "fran": "AQ",
-            "text": "Från AQ, jag saknar lägesrapport från grinden. Rapportera. Slut kom.",
-            "efter": 3.0
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Uppfattat, klart slut.",
-            "efter": 4.5
-          }
-        ]
-      }
-    ],
-    "handling:envarsgripande": [
-      {
-        "efter_s": 12,
-        "om_ej_handling": "anmala_polis",
-        "meddelanden": [
-          {
-            "fran": "AQ",
-            "text": "Grindposten, Grindposten.",
-            "efter": 0.0
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Grindposten kom.",
-            "efter": 1.5
-          },
-          {
-            "fran": "AQ",
-            "text": "Från AQ, har ni gripit någon ska han överlämnas till polis skyndsamt. Begär polis via mig. Slut kom.",
-            "efter": 3.0
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Uppfattat, klart slut.",
-            "efter": 4.5
-          }
-        ]
-      }
-    ],
-    "handling:anmala_polis": [
-      {
-        "efter_s": 20,
-        "meddelanden": [
-          {
-            "fran": "AQ",
-            "text": "Grindposten, Grindposten.",
-            "efter": 0.0
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Grindposten kom.",
-            "efter": 1.5
-          },
-          {
-            "fran": "AQ",
-            "text": "Från AQ, polispatrull är på väg till grinden, beräknad ankomst tjugo minuter. Håll mannen under uppsikt. Slut kom.",
-            "efter": 3.0
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Uppfattat, klart slut.",
-            "efter": 4.5
-          }
-        ]
-      }
-    ],
-    "angrepp_nadde_fram": [
-      {
-        "efter_s": 3,
-        "meddelanden": [
-          {
-            "fran": "AQ",
-            "text": "Grindposten, Grindposten!",
-            "efter": 0.0
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Grindposten kom.",
-            "efter": 1.2
-          },
-          {
-            "fran": "AQ",
-            "text": "Från AQ, Västra posten hör bråk vid grinden! Vad händer? Kom!",
-            "efter": 2.4
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Uppfattat, återkommer, klart slut.",
-            "efter": 3.6
-          }
-        ]
-      }
-    ]
+    "kommentar": "Trafik mellan andra enheter som följer händelserna. AQ ropar inte själv upp Grindposten. Krokar och villkor: scripts/core/radiotrafik.gd."
   },
   "slutkrav": [
     {
@@ -693,6 +446,19 @@
     "skjuten_klar": {
       "replik": "Blåljus syns nere vid vägen.\n\nKAMRATEN: – Det här blir en lång rapport.",
       "slut": true
+    }
+  },
+  "sambandstexter": {
+    "svar": {
+      "fakta:motpart_skjuten": "Uppfattat. Säkra platsen och rapportera förändring",
+      "fakta:motpart_overmannad": "Uppfattat. Håll honom under uppsikt",
+      "fakta:motpart_gett_upp": "Uppfattat. Håll honom under uppsikt",
+      "efter": "Uppfattat. Håll avstånd och rapportera förändring",
+      "fore": "Uppfattat"
+    },
+    "polis": {
+      "fakta:motpart_skjuten": "man som anföll med yxa, verkanseld avgiven, mannen skadad",
+      "fore": "man som hotat med yxa"
     }
   }
 }

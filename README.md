@@ -38,18 +38,20 @@ Scenarierna delar kartan `data/kartor/granasen.json` och använder namngivna pla
 Varje scenario kan ha `varianter` (egna fakta och bedömningar), `bedomning` (scenariospecifik
 bedömning av en handling) och `slutkrav` (t.ex. att händelsen måste rapporteras till AQ).
 
-### Levande radiotrafik
+### Radiotrafik som följer läget
 
-`radio` i scenariofilen beskriver vad AQ och andra enheter säger när något händer
-(`scripts/core/radiotrafik.gd`). Krokar: `upptackt`, `kontakt_start`, `kontakt_slut`, `npc_lamnar`,
-`dronare_flyger_bort`, `dronare_landar`, `motpart_ger_upp`, `motpart_skjuten`, `angrepp_nadde_fram`
-och `handling:<id>` för varje beslut. Varje inslag kan ha `efter_s` (fördröjning), `variant`,
-`om_ej_handling` / `om_handling` och `om_fakta`. Villkoren prövas när inslaget ska spelas, så
-”AQ efterfrågar lägesrapport” hörs bara om rapporten fortfarande saknas. Inslagen väntar tills
-kanalen är ledig och tills kontaktläget är stängt.
+AQ ropar inte själv upp Grindposten, det är vi som larmar. Men det vi säger, och AQ:s svar, följer
+vad som har hänt. `lagestext` ({lage} i lägesrapporten) och varje nyckel i `sambandstexter` (t.ex.
+{svar} för AQ:s svar och {polis} i polisbegäran) väljs efter händelsens fas: `fakta:<nyckel>` när ett
+faktum är sant (t.ex. `fakta:dronare_nedskjuten`), annars `lamnat`, `kontakt`, `efter` eller `fore`,
+även per variant (`kontakt_oriktig`). Har vi skjutit ner drönaren rapporterar vi alltså inte att den
+cirklar över objektet.
 
-`lagestext` (det som sägs i lägesrapporten) följer händelsens fas: `fore`, `efter`, `kontakt`,
-`lamnat`, även per variant (`kontakt_oriktig`) och `fakta:<nyckel>` när ett faktum är sant.
+`radio` i scenariofilen innehåller trafik mellan andra enheter som följer händelserna (t.ex. Norra
+grinden som ser bilen köra iväg), se `scripts/core/radiotrafik.gd`. Krokar: `upptackt`, `kontakt_start`,
+`kontakt_slut`, `npc_lamnar`, `dronare_flyger_bort`, `dronare_landar`, `motpart_ger_upp`,
+`motpart_skjuten`, `angrepp_nadde_fram` och `handling:<id>`. Inslagen kan ha `efter_s`, `variant`,
+`om_ej_handling` / `om_handling` och `om_fakta`, och väntar tills kanalen är ledig.
 
 ## Spela i webbläsaren
 

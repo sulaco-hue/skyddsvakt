@@ -13,7 +13,8 @@ signal avsluta_pass
 var varld: Varld
 var scenario: Dictionary
 ## Returnerar aktuell lägestext för lägesrapporter (sätts av main.gd).
-var lagestext: Callable
+## -> Dictionary med ersättningar för sambandsvalen ({lage}, {svar}, {polis} …) efter läget just nu.
+var ersattningar: Callable
 
 var _klocka: Label
 var _position: Label
@@ -443,8 +444,8 @@ func _pa_sambandsval(val: Dictionary) -> void:
 	_sambandsmeny.visible = false
 	if str(val.get("handling", "")) != "":
 		handling.emit(str(val.get("handling", "")), str(val.get("etikett", "")))
-	var lage := str(lagestext.call()) if lagestext.is_valid() else ""
-	Spel.spela_samband(val.get("meddelanden", []), {"lage": lage})
+	var byt: Dictionary = ersattningar.call() if ersattningar.is_valid() else {}
+	Spel.spela_samband(val.get("meddelanden", []), byt)
 
 
 ## Instruktion [I]: två flikar – bevakningsinstruktionen och lagstödskortet

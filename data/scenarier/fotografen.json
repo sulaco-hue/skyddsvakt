@@ -373,7 +373,7 @@
         },
         {
           "fran": "AQ",
-          "text": "Uppfattat. Håll uppsikt och rapportera förändring, kom.",
+          "text": "{svar}, kom.",
           "efter": 5.0
         },
         {
@@ -404,7 +404,7 @@
         },
         {
           "fran": "Grindposten",
-          "text": "Från Grindposten, begär att polis underrättas om händelse vid sektor NO, kom.",
+          "text": "Från Grindposten, begär att polis underrättas om {polis}, kom.",
           "efter": 3.0
         },
         {
@@ -445,61 +445,7 @@
     "skymning"
   ],
   "radio": {
-    "kommentar": "Levande radiotrafik. Krokar och villkor beskrivs i scripts/core/radiotrafik.gd.",
-    "upptackt": [
-      {
-        "efter_s": 40,
-        "om_ej_handling": "rapportera_vaktchef",
-        "meddelanden": [
-          {
-            "fran": "AQ",
-            "text": "Grindposten, Grindposten.",
-            "efter": 0.0
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Grindposten kom.",
-            "efter": 1.5
-          },
-          {
-            "fran": "AQ",
-            "text": "Från AQ, Norra grinden har sett en personbil stanna vid skogskanten i er sektor. Vad är läget? Lägesrapport. Kom.",
-            "efter": 3.0
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Uppfattat, återkommer, klart slut.",
-            "efter": 4.5
-          }
-        ]
-      },
-      {
-        "efter_s": 110,
-        "om_ej_handling": "rapportera_vaktchef",
-        "meddelanden": [
-          {
-            "fran": "AQ",
-            "text": "Grindposten, Grindposten.",
-            "efter": 0.0
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Grindposten kom.",
-            "efter": 1.5
-          },
-          {
-            "fran": "AQ",
-            "text": "Från AQ, jag saknar fortfarande lägesrapport från sektor NO. Rapportera omgående. Slut kom.",
-            "efter": 3.0
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Uppfattat, klart slut.",
-            "efter": 4.5
-          }
-        ]
-      }
-    ],
+    "kommentar": "Trafik mellan andra enheter som följer händelserna. AQ ropar inte själv upp Grindposten. Krokar och villkor: scripts/core/radiotrafik.gd.",
     "npc_lamnar": [
       {
         "efter_s": 4,
@@ -530,147 +476,20 @@
             "efter": 6.0
           }
         ]
-      },
-      {
-        "efter_s": 20,
-        "meddelanden": [
-          {
-            "fran": "AQ",
-            "text": "Grindposten, Grindposten.",
-            "efter": 0.0
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Grindposten kom.",
-            "efter": 1.5
-          },
-          {
-            "fran": "AQ",
-            "text": "Från AQ, var bilen västerut er person? Rapportera signalement och bilens färg och riktning. Slut kom.",
-            "efter": 3.0
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Uppfattat, klart slut.",
-            "efter": 4.5
-          }
-        ]
-      }
-    ],
-    "kontakt_slut": [
-      {
-        "efter_s": 3,
-        "om_fakta": {
-          "omhandertagande_genomfort": true
-        },
-        "om_ej_handling": "anmala_polis",
-        "meddelanden": [
-          {
-            "fran": "AQ",
-            "text": "Grindposten, Grindposten.",
-            "efter": 0.0
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Grindposten kom.",
-            "efter": 1.5
-          },
-          {
-            "fran": "AQ",
-            "text": "Från AQ, din kamrat meddelar ett omhändertagande. Personen ska överlämnas till polis snarast. Begär polis och upprätta protokoll. Slut kom.",
-            "efter": 3.0
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Uppfattat, klart slut.",
-            "efter": 4.5
-          }
-        ]
-      },
-      {
-        "efter_s": 10,
-        "om_ej_handling": "rapportera_vaktchef",
-        "meddelanden": [
-          {
-            "fran": "AQ",
-            "text": "Grindposten, Grindposten.",
-            "efter": 0.0
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Grindposten kom.",
-            "efter": 1.5
-          },
-          {
-            "fran": "AQ",
-            "text": "Från AQ, ni har haft kontakt med personen vid staketet. Begär lägesrapport: identitet och vad som hände med bilderna. Slut kom.",
-            "efter": 3.0
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Uppfattat, klart slut.",
-            "efter": 4.5
-          }
-        ]
-      }
-    ],
-    "handling:anmala_polis": [
-      {
-        "efter_s": 25,
-        "meddelanden": [
-          {
-            "fran": "AQ",
-            "text": "Grindposten, Grindposten.",
-            "efter": 0.0
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Grindposten kom.",
-            "efter": 1.5
-          },
-          {
-            "fran": "AQ",
-            "text": "Från AQ, polisen har tagit emot ärendet. Patrull har annan prioritet och är på plats tidigast om fyrtio minuter. Dokumentera noggrant. Slut kom.",
-            "efter": 3.0
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Uppfattat, klart slut.",
-            "efter": 4.5
-          }
-        ]
-      }
-    ],
-    "handling:rapportera_vaktchef": [
-      {
-        "efter_s": 30,
-        "om_fakta": {
-          "anmalan_polis": false
-        },
-        "om_ej_handling": "anmala_polis",
-        "meddelanden": [
-          {
-            "fran": "AQ",
-            "text": "Grindposten, Grindposten.",
-            "efter": 0.0
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Grindposten kom.",
-            "efter": 1.5
-          },
-          {
-            "fran": "AQ",
-            "text": "Från AQ, ska vi koppla in polis för fotograferingen? Begär det i så fall via mig. Slut kom.",
-            "efter": 3.0
-          },
-          {
-            "fran": "Grindposten",
-            "text": "Uppfattat, klart slut.",
-            "efter": 4.5
-          }
-        ]
       }
     ]
+  },
+  "sambandstexter": {
+    "svar": {
+      "lamnat": "Uppfattat. Notera signalement, bilens färg och riktning för rapporten",
+      "kontakt": "Uppfattat. Dokumentera kontakten",
+      "efter": "Uppfattat. Håll uppsikt och rapportera förändring",
+      "fore": "Uppfattat"
+    },
+    "polis": {
+      "lamnat": "person som fotograferat objektet vid sektor NO och lämnat platsen i mörk personbil västerut",
+      "kontakt": "person som fotograferat objektet vid sektor NO",
+      "fore": "händelse vid sektor NO"
+    }
   }
 }
