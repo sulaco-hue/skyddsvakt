@@ -26,6 +26,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # hela historiken: versionsnumret = antal commits
+
+      - name: Versionsnummer
+        run: |
+          N=$(git rev-list --count HEAD)
+          printf '{"version": %s, "commit": "%s", "datum": "%s"}\n' "$N" "$(git rev-parse --short HEAD)" "$(date -u +%Y-%m-%d)" > data/version.json
+          cat data/version.json
 
       - name: Välj Godot-version
         id: godot

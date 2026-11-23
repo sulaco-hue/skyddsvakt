@@ -78,6 +78,9 @@ Arbetsflödet `.github/workflows/bygg-och-publicera.yml` körs vid varje push ti
    *Actions → senaste körningen → Artifacts → skyddsvakt-windows*).
 4. Skriver resultatet till grenen `ci-status` (filen `status.md`).
 
+**Versionsnummer:** bygget skriver `data/version.json` med antalet commits, och spelet visar det
+(t.ex. *v44*) i nedre högra hörnet. Varje push ger en högre siffra. Lokalt visas *dev*.
+
 I webbläsaren laddas debriefingloggen ner som en JSON-fil när man trycker *Spara logg*.
 
 ## Kom igång (Windows)

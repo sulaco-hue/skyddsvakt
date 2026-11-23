@@ -27,12 +27,39 @@ var klocka_s := 0.0
 var klocka_igang := false
 
 
+## Versionsnummer: data/version.json skrivs av bygget (antal commits). Lokalt "dev".
+var version := "dev"
+
+
 func _ready() -> void:
 	regelmotor.ladda(LAGRUM_SOKVAG)
+	var v := Datafil.las_json("res://data/version.json") if FileAccess.file_exists("res://data/version.json") else {}
+	if v.has("version"):
+		version = "v%d" % int(v["version"])
+	_visa_version()
 	# Pekskärm (t.ex. iPhone/iPad i Safari): mindre basupplösning = större text och knappar.
 	if DisplayServer.is_touchscreen_available():
 		UiKit.kompakt = true
 		get_tree().root.content_scale_size = Vector2i(800, 450)
+
+
+## Versionsnumret i nedre högra hörnet, ovanpå allt.
+func _visa_version() -> void:
+	var lager := CanvasLayer.new()
+	lager.layer = 100
+	add_child(lager)
+	var l := Label.new()
+	l.text = version
+	l.add_theme_font_override("font", load("res://assets/fonts/VT323-Regular.ttf"))
+	l.add_theme_font_size_override("font_size", 16)
+	l.add_theme_color_override("font_color", Color(0.75, 0.8, 0.85, 0.55))
+	l.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	l.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+	l.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+	l.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	l.offset_right = -6
+	l.offset_bottom = -2
+	lager.add_child(l)
 
 
 ## Alla scenarier i data/scenarier/index.json: [{sokvag, namn, ingress}]
