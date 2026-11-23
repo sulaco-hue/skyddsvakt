@@ -1,0 +1,248 @@
+{
+  "kommentar": "Radiotrafik mellan andra enheter som då och då glider förbi i sambandsfönstret (brus). Lägg till egna växlingar fritt. 'efter' = sekunder från växlingens start.",
+  "installningar": {
+    "forsta_efter_s": 20,
+    "intervall_min_s": 30,
+    "intervall_max_s": 70
+  },
+  "vaxlingar": [
+    [
+      {
+        "fran": "AQ",
+        "text": "Rondpatrullen, Rondpatrullen.",
+        "efter": 0.0
+      },
+      {
+        "fran": "Rondpatrullen",
+        "text": "Rondpatrullen kom.",
+        "efter": 1.8
+      },
+      {
+        "fran": "AQ",
+        "text": "Från AQ, lägesrapport, kom.",
+        "efter": 3.6
+      },
+      {
+        "fran": "Rondpatrullen",
+        "text": "Inget att rapportera, kom.",
+        "efter": 5.4
+      },
+      {
+        "fran": "AQ",
+        "text": "Uppfattat, klart slut.",
+        "efter": 7.2
+      }
+    ],
+    [
+      {
+        "fran": "AQ",
+        "text": "Norra grinden, Norra grinden.",
+        "efter": 0.0
+      },
+      {
+        "fran": "Norra grinden",
+        "text": "Norra grinden kom.",
+        "efter": 1.8
+      },
+      {
+        "fran": "AQ",
+        "text": "Från AQ, förbindelsen provas, kom.",
+        "efter": 3.6
+      },
+      {
+        "fran": "Norra grinden",
+        "text": "Hörbarhet fyra, kom.",
+        "efter": 5.4
+      },
+      {
+        "fran": "AQ",
+        "text": "Hörbarhet fyra, klart slut.",
+        "efter": 7.2
+      }
+    ],
+    [
+      {
+        "fran": "AQ",
+        "text": "Kökstjänst, Kökstjänst.",
+        "efter": 0.0
+      },
+      {
+        "fran": "Kökstjänst",
+        "text": "Kökstjänst kom.",
+        "efter": 1.8
+      },
+      {
+        "fran": "AQ",
+        "text": "Från AQ, när kommer kvällsmålet, kom.",
+        "efter": 3.6
+      },
+      {
+        "fran": "Kökstjänst",
+        "text": "Iso om tjugo minuter, kom.",
+        "efter": 5.4
+      },
+      {
+        "fran": "AQ",
+        "text": "Uppfattat, klart slut.",
+        "efter": 7.2
+      }
+    ],
+    [
+      {
+        "fran": "BQ",
+        "text": "AQ, AQ.",
+        "efter": 0.0
+      },
+      {
+        "fran": "AQ",
+        "text": "AQ kom.",
+        "efter": 1.8
+      },
+      {
+        "fran": "BQ",
+        "text": "Från BQ, avlösning sker klockan tjugotvå, kom.",
+        "efter": 3.6
+      },
+      {
+        "fran": "AQ",
+        "text": "Uppfattat, slut kom.",
+        "efter": 5.4
+      },
+      {
+        "fran": "BQ",
+        "text": "Klart slut.",
+        "efter": 7.2
+      }
+    ],
+    [
+      {
+        "fran": "AQ",
+        "text": "Hundpatrullen, Hundpatrullen.",
+        "efter": 0.0
+      },
+      {
+        "fran": "Hundpatrullen",
+        "text": "Hundpatrullen kom.",
+        "efter": 1.8
+      },
+      {
+        "fran": "AQ",
+        "text": "Från AQ, er position, kom.",
+        "efter": 3.6
+      },
+      {
+        "fran": "Hundpatrullen",
+        "text": "Vid ladan. Hunden har hittat en igelkott, kom.",
+        "efter": 5.4
+      },
+      {
+        "fran": "AQ",
+        "text": "Uppfattat. Lämna igelkotten, klart slut.",
+        "efter": 7.2
+      }
+    ],
+    [
+      {
+        "fran": "AQ",
+        "text": "Sjukvårdsfordonet, Sjukvårdsfordonet.",
+        "efter": 0.0
+      },
+      {
+        "fran": "Sjukvårdsfordonet",
+        "text": "Sjukvårdsfordonet kom.",
+        "efter": 1.8
+      },
+      {
+        "fran": "AQ",
+        "text": "Från AQ, bekräfta beredskap, kom.",
+        "efter": 3.6
+      },
+      {
+        "fran": "Sjukvårdsfordonet",
+        "text": "Beredskap bekräftad, kom.",
+        "efter": 5.4
+      },
+      {
+        "fran": "AQ",
+        "text": "Uppfattat, klart slut.",
+        "efter": 7.2
+      }
+    ],
+    [
+      {
+        "fran": "CQ",
+        "text": "AQ, AQ.",
+        "efter": 0.0
+      },
+      {
+        "fran": "AQ",
+        "text": "AQ kom.",
+        "efter": 1.8
+      },
+      {
+        "fran": "CQ",
+        "text": "Från CQ, hörbarhet trea, upprepa senaste meddelande, kom.",
+        "efter": 3.6
+      },
+      {
+        "fran": "AQ",
+        "text": "Jag upprepar: avlösning klockan tjugotvå, kom.",
+        "efter": 5.4
+      },
+      {
+        "fran": "CQ",
+        "text": "Uppfattat, klart slut.",
+        "efter": 7.2
+      }
+    ],
+    [
+      {
+        "fran": "AQ",
+        "text": "Rondpatrullen, Rondpatrullen.",
+        "efter": 0.0
+      },
+      {
+        "fran": "Rondpatrullen",
+        "text": "Rondpatrullen kom.",
+        "efter": 1.8
+      },
+      {
+        "fran": "AQ",
+        "text": "Från AQ, har ni sett min termos, kom.",
+        "efter": 3.6
+      },
+      {
+        "fran": "Rondpatrullen",
+        "text": "Negativt, kom.",
+        "efter": 5.4
+      },
+      {
+        "fran": "AQ",
+        "text": "Uppfattat. Klart slut.",
+        "efter": 7.2
+      }
+    ],
+    [
+      {
+        "fran": "DQ",
+        "text": "AQ, AQ.",
+        "efter": 0.0
+      },
+      {
+        "fran": "AQ",
+        "text": "AQ kom.",
+        "efter": 1.8
+      },
+      {
+        "fran": "DQ",
+        "text": "Från DQ, fordon passerar södra vägen om fem minuter, föranmält, kom.",
+        "efter": 3.6
+      },
+      {
+        "fran": "AQ",
+        "text": "Uppfattat, klart slut.",
+        "efter": 5.4
+      }
+    ]
+  ]
+}

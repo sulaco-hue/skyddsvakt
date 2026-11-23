@@ -99,33 +99,7 @@
       }
     }
   ],
-  "samband": [
-    {
-      "tid": "18:30",
-      "fran": "AQ",
-      "text": "Grindposten, Grindposten."
-    },
-    {
-      "tid": "18:30",
-      "fran": "Grindposten",
-      "text": "Grindposten kom."
-    },
-    {
-      "tid": "18:30",
-      "fran": "AQ",
-      "text": "Från AQ, förbindelsen provas, kom."
-    },
-    {
-      "tid": "18:30",
-      "fran": "Grindposten",
-      "text": "Hörbarhet femma, kom."
-    },
-    {
-      "tid": "18:30",
-      "fran": "AQ",
-      "text": "Hörbarhet femma, klart slut."
-    }
-  ],
+  "samband": [],
   "dialog": {
     "start": {
       "replik": "– Vadå? Jag fotograferar bara höstlöven. Det är väl ändå inte förbjudet att stå på en skogsväg?",

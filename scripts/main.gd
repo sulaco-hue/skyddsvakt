@@ -20,6 +20,9 @@ var _upptackt: Dictionary = {}
 var _rng := RandomNumberGenerator.new()
 var snack: Kamratsnack
 var dronare: Dronare
+## Radiobrus: trafik mellan andra enheter (data/radiobrus.json).
+var _brus: Dictionary = {}
+var _brus_t := 0.0
 var _dronare_handelse: Dictionary = {}
 
 
@@ -117,6 +120,7 @@ func _process(delta: float) -> void:
 	if not Spel.klocka_igang:
 		return
 	_uppdatera_upptackt(delta)
+	_uppdatera_brus(delta)
 	if hud.debug_info_synlig():
 		hud.satt_debug_info(_debug_text())
 	for h in _handelser_kvar.duplicate():
@@ -155,6 +159,23 @@ func _debug_text() -> String:
 
 
 ## id kan vara "1" eller "1:variant" (debugraden).
+func _uppdatera_brus(delta: float) -> void:
+	if _brus.is_empty():
+		_brus = Datafil.las_json("res://data/radiobrus.json")
+		_brus_t = float(_brus.get("installningar", {}).get("forsta_efter_s", 20))
+		return
+	if kontakt.visible:
+		return
+	_brus_t -= delta
+	if _brus_t > 0.0:
+		return
+	var inst: Dictionary = _brus.get("installningar", {})
+	_brus_t = _rng.randf_range(float(inst.get("intervall_min_s", 30)), float(inst.get("intervall_max_s", 70)))
+	var vaxlingar: Array = _brus.get("vaxlingar", [])
+	if not vaxlingar.is_empty():
+		Spel.spela_samband(vaxlingar[_rng.randi_range(0, vaxlingar.size() - 1)])
+
+
 func _forcera_handelse(id: String) -> void:
 	var delar := id.split(":")
 	for h in _handelser_kvar.duplicate():

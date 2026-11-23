@@ -119,6 +119,10 @@ En jurist kan alltså ändra lagrum, krav och texter i JSON-filen utan att röra
   - `sambandsval`: valen under **R / Samband**. Varje val pekar på en handling i `lagrum.json`; `efter` = sekunder.
     `{lage}` ersätts med texten i `lagestext`.
   - `handelser[].kamrat`: vad kamraten säger när händelsen upptäcks.
+  - Sambandsfönstret är tomt från start. Varje rad bleknar efter ca 12 s och försvinner.
+  - **Radiobrus:** `data/radiobrus.json` innehåller trafik mellan AQ och andra enheter
+    (rondpatrullen, hundpatrullen, kökstjänst …) som glider förbi var 30–70:e sekund. Den visas
+    dämpat; trafik till/från Grindposten syns tydligt.
   - Sambandsprov: ”Från AQ, förbindelsen provas, kom.” – ”Hörbarhet femma, kom.” (skala 5–1, 5 bäst).
 
 ## Händelser, upptäckt och debugrad

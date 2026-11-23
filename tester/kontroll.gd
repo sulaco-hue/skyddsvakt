@@ -55,7 +55,8 @@ func _kontrollera_data() -> void:
 	var lagrum := Datafil.las_json("res://data/lagrum.json")
 	var snack := Datafil.las_json("res://data/kamratsnack.json")
 	var karta := Datafil.las_json("res://data/kartor/granasen.json")
-	for par in [["lagrum.json", lagrum], ["kamratsnack.json", snack], ["granasen.json", karta]]:
+	var brus := Datafil.las_json("res://data/radiobrus.json")
+	for par in [["lagrum.json", lagrum], ["kamratsnack.json", snack], ["granasen.json", karta], ["radiobrus.json", brus]]:
 		if (par[1] as Dictionary).is_empty():
 			_fel("tom eller ogiltig JSON: " + str(par[0]))
 	var handlingar: Dictionary = lagrum.get("handlingar", {})

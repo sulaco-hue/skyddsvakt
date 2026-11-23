@@ -153,33 +153,7 @@
       "situationsknapp": "Bekämpa drönaren"
     }
   ],
-  "samband": [
-    {
-      "tid": "19:00",
-      "fran": "AQ",
-      "text": "Grindposten, Grindposten."
-    },
-    {
-      "tid": "19:00",
-      "fran": "Grindposten",
-      "text": "Grindposten kom."
-    },
-    {
-      "tid": "19:00",
-      "fran": "AQ",
-      "text": "Från AQ, förbindelsen provas, kom."
-    },
-    {
-      "tid": "19:00",
-      "fran": "Grindposten",
-      "text": "Hörbarhet femma, kom."
-    },
-    {
-      "tid": "19:00",
-      "fran": "AQ",
-      "text": "Hörbarhet femma, klart slut."
-    }
-  ],
+  "samband": [],
   "sambandsval": [
     {
       "etikett": "Prova förbindelsen med AQ",

@@ -26,6 +26,10 @@ var _debug_info_text: Label
 ## Aktiva pratbubblor/ljudtexter: {nod, mal, t, hojd, stig, typ}
 var _bubblor: Array = []
 var _samband_lista: VBoxContainer
+var _samband_panel: PanelContainer
+## Sekunder som en radiorad syns innan den börjar blekna, och hur länge den bleknar.
+const SAMBAND_SYNS_S := 12.0
+const SAMBAND_BLEKNAR_S := 3.0
 var _sambandsmeny: PanelContainer
 var _instruktion: PanelContainer
 var _meddelande: Label
@@ -330,6 +334,8 @@ func _bygg_samband() -> void:
 	p.offset_top = -16
 	p.offset_bottom = -16
 	add_child(p)
+	_samband_panel = p
+	p.visible = false
 	var v := UiKit.vbox(1)
 	p.add_child(v)
 	v.add_child(UiKit.rubrik("SAMBAND", 12, UiKit.DAMPAD))
@@ -486,15 +492,36 @@ func _pa_logg(post: Dictionary) -> void:
 func _pa_samband(rad: Dictionary) -> void:
 	var du := str(scenario.get("anropssignaler", {}).get("du", ""))
 	var egen := str(rad.get("fran", "")) == du
+	# Trafik till/från oss syns tydligt; trafik mellan andra enheter (brus) dämpat.
+	var till_oss := egen or str(rad.get("text", "")).contains(du)
 	var t := UiKit.etikett("", 18, UiKit.TEXT, true)
 	t.custom_minimum_size = Vector2(250, 0)
 	t.text = "%s %s: %s" % [rad.get("tid", ""), rad.get("fran", ""), rad.get("text", "")]
-	t.add_theme_color_override("font_color", UiKit.BARNSTEN if egen else UiKit.TEXT)
+	var farg := UiKit.BARNSTEN if egen else (UiKit.TEXT if till_oss else UiKit.DAMPAD)
+	t.add_theme_color_override("font_color", farg)
+	t.set_meta("alder", 0.0)
 	_samband_lista.add_child(t)
+	_samband_panel.visible = true
 	while _samband_lista.get_child_count() > 4:
 		var forsta := _samband_lista.get_child(0)
 		_samband_lista.remove_child(forsta)
 		forsta.queue_free()
+
+
+## Radiorader bleknar efter en stund och försvinner; tom panel döljs.
+func _bleka_samband(delta: float) -> void:
+	for rad in _samband_lista.get_children():
+		if rad.is_queued_for_deletion():
+			continue
+		var alder := float(rad.get_meta("alder", 0.0)) + delta
+		rad.set_meta("alder", alder)
+		var l := rad as Label
+		if alder > SAMBAND_SYNS_S:
+			l.modulate.a = clampf(1.0 - (alder - SAMBAND_SYNS_S) / SAMBAND_BLEKNAR_S, 0.0, 1.0)
+		if alder > SAMBAND_SYNS_S + SAMBAND_BLEKNAR_S:
+			_samband_lista.remove_child(rad)
+			rad.queue_free()
+	_samband_panel.visible = _samband_lista.get_child_count() > 0
 
 
 func _process(delta: float) -> void:
@@ -502,6 +529,7 @@ func _process(delta: float) -> void:
 		return
 	_klocka.text = Spel.klockstrang()
 	_uppdatera_bubblor(delta)
+	_bleka_samband(delta)
 	if varld and varld.spelare:
 		match varld.zon(varld.spelare.cell):
 			"pa":
