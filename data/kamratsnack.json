@@ -218,9 +218,9 @@
     },
     {
       "amne": "soldatmat",
-      "kamrat": "Har du något isotonicpulver kvar? Jag har bara det med citronsmak, och det smakar diskmedel.",
+      "kamrat": "Har du något isotonicpulver kvar? Jag har bara det med ananassmak kvar, och det smakar diskmedel.",
       "svar": [
-        "Ta det. Jag har apelsin.",
+        "Här har du.",
         "Nej, slut sen i tisdags."
       ]
     },
@@ -233,16 +233,15 @@
     },
     {
       "amne": "soldatmat",
-      "kamrat": "Det värsta med rations är inte maten. Det är att värmepåsen alltid tar slut precis när det är som kallast.",
+      "kamrat": "Det värsta med påsarna är inte käket. Det är den där jäkla värmepåsen.",
       "svar": [
         "Ät den kall då. Karaktärsdanande."
       ]
     },
     {
       "amne": "soldatmat",
-      "kamrat": "Kaffe. Jag behöver kaffe. Det finns ingen lägesrapport i världen som är viktigare än kaffe just nu.",
+      "kamrat": "Kaffe. Jag behöver kaffe. Det finns ingen 7S i världen som är viktigare än kaffe just nu.",
       "svar": [
-        "Den från CQ är nog viktigare.",
         "Termosen står i kuren."
       ]
     },
@@ -258,7 +257,7 @@
       "amne": "soldatmat",
       "kamrat": "Om jag dricker en Nocco till kommer jag att kunna se ljud. Jag tar en ändå.",
       "svar": [
-        "Det är din tredje.",
+        "Det är din åttonde.",
         "Ge mig en med."
       ]
     },
@@ -266,14 +265,14 @@
       "amne": "soldatmat",
       "kamrat": "Jag bytte bort min chokladkaka från rationen mot två snus i går. Bästa affären jag gjort i år.",
       "svar": [
-        "Sämsta affären jag sett i år."
+        "Najs."
       ]
     },
     {
       "amne": "soldatmat",
       "kamrat": "Fun fact: man kan värma en ration under armen. Det tar fyra timmar, men det går.",
       "svar": [
-        "Det där är inte ett fun fact."
+        "Usch fyfan."
       ]
     },
     {
@@ -281,9 +280,9 @@
       "nar": [
         "regn"
       ],
-      "kamrat": "Fyra grader och regn. Vet du vad de kallar det här i Borås? Sommar.",
+      "kamrat": "Fyra grader och regn. Vet du vad de kallar det här i Borås?",
       "svar": [
-        "Borås har inget annat väder.",
+        "Sommar.",
         "Där regnar det inomhus också."
       ]
     },
