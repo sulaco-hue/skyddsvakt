@@ -58,8 +58,6 @@ func bygg(scenarier: Array) -> void:
 		ruta.gui_input.connect(_pa_klick.bind(str(sc.get("sokvag", "")), ruta))
 		kol.add_child(ruta)
 
-	kol.add_child(UiKit.etikett("Välj med musen eller med siffertangenterna. Lagstödet är inte juridiskt granskat.", 18,
-		UiKit.DAMPAD, true))
 	set_meta("scenarier", scenarier)
 
 

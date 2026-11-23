@@ -43,7 +43,6 @@ func bygg(scenario: Dictionary) -> void:
 	bered.add_child(bv)
 	bv.add_child(UiKit.rubrik("BEREDSKAPSNIVÅ", 13, UiKit.DAMPAD))
 	bv.add_child(UiKit.titel(str(scenario.get("beredskap", "")), 22, UiKit.BARNSTEN))
-	bv.add_child(UiKit.etikett("Påverkar vad som är troligt – inte vad lagen tillåter.", 20, UiKit.LJUS, true))
 	vanster.add_child(bered)
 
 	vanster.add_child(UiKit.rubrik("SENASTE DYGNET", 13, UiKit.DAMPAD))
