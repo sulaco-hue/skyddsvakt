@@ -97,7 +97,7 @@ Om något går fel: titta i panelen **Utdata/Output** längst ner i editorn och 
 | Patrull | **Klicka** på marken för att gå. Bommen vid grinden fälls upp automatiskt när du närmar dig. **Klicka på en person** för att ta kontakt |
 | | **Q** observera · **R** samband · **N** anteckna · **T** tyst nu · **I** instruktion · **M** musik av/på · **F3** debugrad · **Esc** avsluta pass |
 | | Situationsknappar vid högerkanten när något händer: **B** bekämpa drönaren · **H** halt-order · **V** varningsskott · **F** verkanseld · **S** larma sjukvård · **J** första hjälpen |
-| Kontakt | Välj svar med musen eller **1–4** |
+| Kontakt | Välj svar med musen eller **1–4**. Under svaren finns alltid **åtgärdsraden**: Begär ID, Visitera, Undersök fordon, Beslag, Avvisa, Avlägsna, Omhänderta, Gripa, Låt gå. Med debug på visas inom parentes bedömningen just nu och vart valet leder, t.ex. *(DISKUTABELT → omhandertagen)* |
 | Debriefing | Klicka på ett beslut i tidslinjen för lagrum och bedömning. **Spara logg** skriver en JSON-fil för instruktören |
 
 ## Projektets delar
@@ -116,6 +116,15 @@ assets/gfx/                    Pixelgrafik (genererad med verktyg/generera_grafi
 assets/fonts/                  VT323 och Jersey 15 (SIL Open Font License)
 verktyg/                       Python-skript för grafik och förhandsvisning av kartan
 ```
+
+## Åtgärdsraden i kontaktläget
+
+Samma åtgärder finns i varje dialogsteg, så att urvalet inte avslöjar vad som är rimligt. Bedömningen
+görs mot läget just då (har han vägrat uppge identitet? är förbudet konstaterat?). Motpartens reaktion
+står under `atgarder` i scenariofilen och kan ersättas per dialogsteg med nodens egen `atgarder`
+(`"atgarder": false` döljer raden). En reaktion har `nasta` (nästa steg) eller en egen `replik` – då
+står samtalet kvar i samma steg. `atgarder_lista` begränsar vilka åtgärder som visas. Hittills har
+fotografen fått reaktioner på alla åtgärder.
 
 ## Lagstödskortet
 

@@ -412,7 +412,7 @@
       ]
     },
     "vaktchef": {
-      "replik": "DU (radio): ”CQ, CQ.” – CQ: ”CQ kom.”\nDU: ”Från Grindposten, drönare över objektet, pilot anträffad vid sjön, kom.”\nAQ: ”Uppfattat. Be dem landa och radera bilderna om de medger det. Notera uppgifterna, slut kom.” – DU: ”Klart slut.”",
+      "replik": "DU (radio): ”CQ, CQ.” – CQ: ”CQ kom.”\nDU: ”Från Grindposten, drönare över objektet, pilot anträffad vid sjön, kom.”\nCQ: ”Uppfattat. Be dem landa och radera bilderna om de medger det. Notera uppgifterna, slut kom.” – DU: ”Klart slut.”",
       "alternativ": [
         {
           "text": "Be dem landa och radera bilderna frivilligt, och anteckna uppgifterna.",
@@ -523,7 +523,7 @@
       ]
     },
     "skjuten_aq": {
-      "replik": "DU (radio): ”CQ, CQ.” – CQ: ”CQ kom.”\nDU: ”Från Grindposten, drönare nedskjuten över objektet, pilot med barn på plats vid sjön, kom.”\nAQ: ”…Uppfattat. Stanna där. Jag kommer ut. Slut kom.” – DU: ”Klart slut.”",
+      "replik": "DU (radio): ”CQ, CQ.” – CQ: ”CQ kom.”\nDU: ”Från Grindposten, drönare nedskjuten över objektet, pilot med barn på plats vid sjön, kom.”\nCQ: ”…Uppfattat. Stanna där. Jag kommer ut. Slut kom.” – DU: ”Klart slut.”",
       "alternativ": [
         {
           "text": "Anteckna vad som hänt och invänta CQ.",

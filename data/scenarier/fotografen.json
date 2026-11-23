@@ -131,24 +131,24 @@
           "nasta": "visar"
         },
         {
-          "text": "Begär att han uppger namn, födelsetid och hemvist.",
-          "handling": "begara_identitet",
-          "stamning": 1,
-          "nasta": "id_fraga"
-        },
-        {
-          "text": "”Ge mig kameran. Nu.”",
-          "handling": "beslag",
-          "stamning": 3,
-          "nasta": "vagrar"
-        },
-        {
           "text": "Avsluta kontakten, notera bilens registreringsnummer och rapportera.",
           "handling": "dokumentera",
           "nasta": "lamnar",
           "npc_beteende": "ga_till_start"
         }
-      ]
+      ],
+      "atgarder": {
+        "begara_identitet": {
+          "text": "Begär att han uppger namn, födelsetid och hemvist.",
+          "stamning": 1,
+          "nasta": "id_fraga"
+        },
+        "beslag": {
+          "text": "”Ge mig kameran. Nu.”",
+          "stamning": 3,
+          "nasta": "vagrar"
+        }
+      }
     },
     "upplyst": {
       "replik": "– Okej, okej. Det såg jag inte. Men jag har redan tagit några bilder – vad händer nu?",
@@ -159,19 +159,20 @@
           "nasta": "visar"
         },
         {
-          "text": "Säg att du tar kameran i beslag.",
-          "handling": "beslag",
-          "stamning": 2,
-          "nasta": "vagrar"
-        },
-        {
           "text": "Tacka för samarbetet, notera registreringsnumret och rapportera.",
           "handling": "dokumentera",
           "stamning": -1,
           "nasta": "lamnar_lugn",
           "npc_beteende": "ga_till_start"
         }
-      ]
+      ],
+      "atgarder": {
+        "beslag": {
+          "text": "Säg att du tar kameran i beslag.",
+          "stamning": 2,
+          "nasta": "vagrar"
+        }
+      }
     },
     "visar": {
       "replik": "– Här. Lite träd… och ja, staketet och {objekt_bestamd} syns på några. Nöjd nu?",
@@ -182,21 +183,22 @@
           "nasta": "vaktchef"
         },
         {
-          "text": "Ta kameran i beslag.",
-          "handling": "beslag",
-          "stamning": 2,
-          "nasta": "vagrar"
-        },
-        {
           "text": "Notera registreringsnumret, tacka och låt honom gå.",
           "handling": "dokumentera",
           "nasta": "lamnar_lugn",
           "npc_beteende": "ga_till_start"
         }
-      ]
+      ],
+      "atgarder": {
+        "beslag": {
+          "text": "Ta kameran i beslag.",
+          "stamning": 2,
+          "nasta": "vagrar"
+        }
+      }
     },
     "vaktchef": {
-      "replik": "DU (radio): ”CQ, CQ.” – CQ: ”CQ kom.”\nDU: ”Från Grindposten, person invid objektet har fotograferat det, begär order, kom.”\nAQ: ”Uppfattat. Polis underrättas. Notera hans uppgifter om han medger det, slut kom.” – DU: ”Klart slut.”\n\nMANNEN: – Visst, här är mitt körkort.",
+      "replik": "DU (radio): ”CQ, CQ.” – CQ: ”CQ kom.”\nDU: ”Från Grindposten, person invid objektet har fotograferat det, begär order, kom.”\nCQ: ”Uppfattat. Polis underrättas. Notera hans uppgifter om han medger det, slut kom.” – DU: ”Klart slut.”\n\nMANNEN: – Visst, här är mitt körkort.",
       "satt_fakta": {
         "anmalan_polis": true
       },
@@ -218,14 +220,15 @@
           "handling": "gripa_med_vald",
           "stamning": 3,
           "nasta": "gripen"
-        },
-        {
+        }
+      ],
+      "atgarder": {
+        "lata_ga": {
           "text": "Låt honom gå. Notera registreringsnumret och rapportera direkt.",
-          "handling": "lata_ga",
           "nasta": "lamnar",
           "npc_beteende": "ga_till_start"
         }
-      ]
+      }
     },
     "gripen": {
       "replik": "– Släpp mig! Du har ingen rätt att göra så här!\n\nKAMRATEN: – Jag täcker! Ska jag ropa upp CQ?",
@@ -267,53 +270,63 @@
           "nasta": "vaktchef"
         },
         {
-          "text": "Uppmana honom att lämna platsen och sluta fotografera.",
-          "handling": "avlagsna",
-          "stamning": 1,
-          "nasta": "lamnar_lugn",
-          "npc_beteende": "ga_till_start"
-        },
-        {
           "text": "Anteckna uppgifterna och registreringsnumret, låt honom gå.",
           "handling": "dokumentera",
           "nasta": "lamnar_lugn",
           "npc_beteende": "ga_till_start"
         }
-      ]
+      ],
+      "atgarder": {
+        "avlagsna": {
+          "text": "Uppmana honom att lämna platsen och sluta fotografera.",
+          "stamning": 1,
+          "nasta": "lamnar_lugn",
+          "npc_beteende": "ga_till_start"
+        }
+      }
     },
     "vagrar_id": {
       "replik": "– Nej. Det ger jag inte ut till någon vakt.",
       "satt_fakta": {
         "vagrat_id": true
       },
-      "alternativ": [
-        {
+      "alternativ": [],
+      "atgarder": {
+        "avlagsna": {
           "text": "Avlägsna honom: beordra honom att lämna platsen direkt.",
-          "handling": "avlagsna",
           "stamning": 1,
           "nasta": "lamnar",
           "npc_beteende": "ga_till_start"
         },
-        {
+        "tillfalligt_omhanderta": {
           "text": "Omhänderta honom tillfälligt.",
-          "handling": "tillfalligt_omhanderta",
           "stamning": 3,
           "satt_fakta": {
             "omhandertagande_genomfort": true
           },
           "nasta": "omhandertagen"
         },
-        {
+        "lata_ga": {
           "text": "Låt honom gå. Notera registreringsnumret och rapportera.",
-          "handling": "lata_ga",
           "nasta": "lamnar",
           "npc_beteende": "ga_till_start"
         }
-      ]
+      }
     },
     "omhandertagen": {
       "replik": "– Det här kommer ni att få ångra!\n\nMannen följer motvilligt med mot grinden. Kamraten täcker.",
       "slut": true
+    },
+    "gripen_utan_grund": {
+      "replik": "– Gripen?! För att jag fotograferade löv? Det här är ju sjukt!\n\nKAMRATEN (lågt): – Gripa… på vilken grund? 13 § gäller väl spioneri och sabotage?",
+      "alternativ": [
+        {
+          "text": "Släpp honom, säg att det blev fel och be honom lämna platsen.",
+          "stamning": -1,
+          "nasta": "lamnar",
+          "npc_beteende": "ga_till_start"
+        }
+      ]
     }
   },
   "anropssignaler": {
@@ -490,6 +503,61 @@
       "lamnat": "person som fotograferat objektet vid sektor NO och lämnat platsen i mörk personbil västerut",
       "kontakt": "person som fotograferat objektet vid sektor NO",
       "fore": "händelse vid sektor NO"
+    }
+  },
+  "atgarder": {
+    "kommentar": "Standardreaktioner på åtgärdsraden i kontaktläget. Ett dialogsteg kan ersätta dem med egna \"atgarder\". \"nasta\" = nästa steg, annars \"replik\" och samtalet står kvar.",
+    "begara_identitet": {
+      "text": "Begär att han uppger namn, födelsetid och hemvist.",
+      "stamning": 1,
+      "nasta": "id_fraga"
+    },
+    "kroppsvisitera": {
+      "text": "Beslutar om kroppsvisitation.",
+      "stamning": 2,
+      "replik": "– Visitera mig? För att jag tog bilder på några träd? Glöm det!"
+    },
+    "undersoka_fordon": {
+      "text": "Beslutar om undersökning av hans bil.",
+      "stamning": 2,
+      "replik": "– Bilen står på allmän väg. Den rör du inte!"
+    },
+    "beslag": {
+      "text": "”Ge mig kameran. Den tas i beslag.”",
+      "stamning": 3,
+      "nasta": "vagrar"
+    },
+    "avvisa": {
+      "text": "Avvisar honom från skyddsobjektet.",
+      "stamning": 1,
+      "replik": "– Avvisa? Jag vill ju inte in någonstans. Jag står på en skogsväg."
+    },
+    "avlagsna": {
+      "text": "Avlägsnar honom: beordrar honom att lämna platsen och sluta fotografera.",
+      "stamning": 1,
+      "nasta": "lamnar",
+      "npc_beteende": "ga_till_start"
+    },
+    "tillfalligt_omhanderta": {
+      "text": "Omhändertar honom tillfälligt.",
+      "stamning": 3,
+      "satt_fakta": {
+        "omhandertagande_genomfort": true
+      },
+      "nasta": "omhandertagen"
+    },
+    "gripa": {
+      "text": "”Du är gripen.”",
+      "stamning": 3,
+      "satt_fakta": {
+        "gripande_genomfort": true
+      },
+      "nasta": "gripen_utan_grund"
+    },
+    "lata_ga": {
+      "text": "Låter honom gå. Noterar registreringsnumret.",
+      "nasta": "lamnar",
+      "npc_beteende": "ga_till_start"
     }
   }
 }

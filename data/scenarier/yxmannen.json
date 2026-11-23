@@ -388,7 +388,7 @@
       ]
     },
     "polis": {
-      "replik": "DU (radio): ”CQ, CQ.” – CQ: ”CQ kom.”\nDU: ”Från Grindposten, en man gripen för olaga hot med yxa, begär polis till grinden, kom.”\nAQ: ”Uppfattat, polis underrättas, slut kom.” – DU: ”Klart slut.”",
+      "replik": "DU (radio): ”CQ, CQ.” – CQ: ”CQ kom.”\nDU: ”Från Grindposten, en man gripen för olaga hot med yxa, begär polis till grinden, kom.”\nCQ: ”Uppfattat, polis underrättas, slut kom.” – DU: ”Klart slut.”",
       "slut": true
     },
     "vantar": {

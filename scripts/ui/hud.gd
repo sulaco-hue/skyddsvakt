@@ -55,6 +55,8 @@ func bygg(p_scenario: Dictionary, p_varld: Varld) -> void:
 	_bygg_debug()
 	_bygg_debug_info()
 	_debug.visible = not UiKit.kompakt
+	_debug.visibility_changed.connect(func() -> void: Spel.debug = _debug.visible)
+	Spel.debug = _debug.visible
 	_bygg_samband()
 	_bygg_position()
 	_bygg_handlingar()

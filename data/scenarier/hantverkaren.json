@@ -359,7 +359,7 @@
       ]
     },
     "aq_kontroll": {
-      "replik": "DU (radio): ”CQ, CQ.” – CQ: ”CQ kom.”\nDU: ”Från Grindposten, hantverkare från Ventservice vid grinden, begär kontroll av behörighet, kom.”\nAQ: ”Inget besök föranmält. Släpp inte in. Slut kom.” – DU: ”Klart slut.”",
+      "replik": "DU (radio): ”CQ, CQ.” – CQ: ”CQ kom.”\nDU: ”Från Grindposten, hantverkare från Ventservice vid grinden, begär kontroll av behörighet, kom.”\nCQ: ”Inget besök föranmält. Släpp inte in. Slut kom.” – DU: ”Klart slut.”",
       "alternativ": [
         {
           "text": "Förklara att besöket inte är föranmält och att han inte får komma in.",

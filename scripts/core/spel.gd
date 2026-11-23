@@ -79,6 +79,18 @@ func klockstrang() -> String:
 	return Datafil.s_till_tid(klocka_s)
 
 
+## Sant när debugraden visas (kontaktläget visar då vart valen leder).
+var debug := false
+
+
+## Bedömer en handling utan att logga den (debug: "vilket spår är vi på").
+## extra_fakta läggs ovanpå nuvarande fakta, som när ett val sätter fakta.
+func forhandsbedom(handling_id: String, extra_fakta: Dictionary = {}) -> Dictionary:
+	var f := fakta.duplicate()
+	f.merge(extra_fakta, true)
+	return regelmotor.bedom(handling_id, f, _bedomning_override)
+
+
 ## Utför en handling: bedöms av regelmotorn och läggs i beslutsloggen.
 func utfor(handling_id: String, beskrivning: String = "") -> Dictionary:
 	var post := regelmotor.bedom(handling_id, fakta, _bedomning_override)

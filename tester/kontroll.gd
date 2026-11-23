@@ -93,6 +93,23 @@ func _kontrollera_scenario(sokvag: String, handlingar: Dictionary, karta: Dictio
 			var nasta := str(alt.get("nasta", ""))
 			if nasta != "" and not dialog.has(nasta):
 				_fel("dialog '%s' pekar på okänd nod '%s'" % [nod_id, nasta])
+	# Åtgärdsraden: scenariots standardreaktioner och nodernas egna.
+	var reaktioner: Array = [["atgarder", scenario.get("atgarder", {})]]
+	for nod_id in dialog:
+		var egna: Variant = dialog[nod_id].get("atgarder", {})
+		if egna is Dictionary:
+			reaktioner.append([nod_id, egna])
+	for par in reaktioner:
+		for h: String in par[1]:
+			if h == "kommentar":
+				continue
+			if not handlingar.has(h):
+				_fel("%s: åtgärd '%s' finns inte i lagrum.json" % [par[0], h])
+			var nasta := str(par[1][h].get("nasta", ""))
+			if nasta != "" and not dialog.has(nasta):
+				_fel("%s: åtgärd '%s' pekar på okänd nod '%s'" % [par[0], h, nasta])
+			if nasta == "" and not par[1][h].has("replik"):
+				_fel("%s: åtgärd '%s' saknar både nasta och replik" % [par[0], h])
 	for val in scenario.get("sambandsval", []):
 		var h := str(val.get("handling", ""))
 		if h != "" and not handlingar.has(h):
@@ -177,11 +194,27 @@ func _spela_scenario_1() -> void:
 	if not kontakt.visible:
 		_fel("kontaktläget öppnades inte")
 		return
-	kontakt.call("_valj", 2)  # Begär namn, födelsetid och hemvist
+	# Debug visar spåret; en åtgärd med egen replik låter samtalet stå kvar.
+	Spel.debug = true
+	kontakt.visa_nod("start")
+	var spar := str(kontakt.call("_spar", {"handling": "avvisa", "replik": "x"}))
+	if not spar.contains("SAKNAR LAGSTÖD"):
+		_fel("debugspåret för Avvisa: " + spar)
+	else:
+		_ok("debug visar spåret: Avvisa " + spar)
+	kontakt.valj_atgard("avvisa")
+	await _vanta(2)
+	if not kontakt.visible or kontakt._nod_id != "start":
+		_fel("Avvisa med egen replik borde lämna samtalet i samma steg")
+	Spel.debug = false
+	kontakt.visa_nod("start")
+	if not kontakt.valj_atgard("begara_identitet"):  # Åtgärdsraden: Begär ID
+		_fel("åtgärden Begär ID saknas i kontaktläget")
 	await _vanta(2)
 	kontakt.call("_valj", 1)  # "Gör som jag säger." -> vägrar
 	await _vanta(2)
-	kontakt.call("_valj", 1)  # Omhänderta tillfälligt
+	if not kontakt.valj_atgard("tillfalligt_omhanderta"):
+		_fel("åtgärden Omhänderta saknas i kontaktläget")
 	await _vanta(2)
 	kontakt.call("_stang")
 	await _vanta(3)
