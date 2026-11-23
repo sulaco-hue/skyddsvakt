@@ -226,6 +226,7 @@ func _starta_upptackt(h: Dictionary, nod: Node2D, npc_id: String) -> void:
 		"h": h,
 		"bas": _rng.randf_range(float(u.get("min_s", 6)), float(u.get("max_s", 30))),
 		"ref": float(u.get("referensavstand", 6)),
+		"max": int(u.get("max_avstand", 14)),
 		"varde": 0.0,
 		"tid": 0.0,
 	}
@@ -332,9 +333,14 @@ func _uppdatera_upptackt(delta: float) -> void:
 		return
 	var cell := varld.cell_av(nod.global_position)
 	var avst := mini(varld.avstand(varld.spelare.cell, cell), varld.avstand(varld.kollega.cell, cell))
+	_upptackt["tid"] = float(_upptackt["tid"]) + delta
+	# För långt bort: timern står still tills ni kommer närmare.
+	if avst > int(_upptackt["max"]):
+		hud.satt_debug_status("kamraten upptäcker: %d %% · PAUSAD, avstånd %d > %d" % [
+			int(float(_upptackt["varde"]) * 100.0), avst, int(_upptackt["max"])])
+		return
 	var narhet := clampf(float(_upptackt["ref"]) / maxf(float(avst), 1.0), 0.3, 3.0)
 	_upptackt["varde"] = float(_upptackt["varde"]) + delta * narhet / float(_upptackt["bas"])
-	_upptackt["tid"] = float(_upptackt["tid"]) + delta
 	hud.satt_debug_status("kamraten upptäcker: %d %% · avstånd %d · grundtid %.0f s" % [
 		int(float(_upptackt["varde"]) * 100.0), avst, float(_upptackt["bas"])])
 	if float(_upptackt["varde"]) >= 1.0:

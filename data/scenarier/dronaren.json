@@ -142,7 +142,8 @@
         "max_s": 6,
         "referensavstand": 6,
         "paus_snack_s": 60,
-        "kommentar": "Drönaren hörs, så kamraten reagerar snabbare än på fotografen."
+        "kommentar": "Drönaren hörs, så kamraten reagerar snabbare än på fotografen. Längre bort än max_avstand (rutor) står timern still.",
+        "max_avstand": 18
       },
       "kamrat": "Hör du surret? Drönare – rakt över {objekt_bestamd}!",
       "kamrat_ledtrad": {

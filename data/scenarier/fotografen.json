@@ -94,8 +94,9 @@
         "min_s": 2,
         "max_s": 10,
         "referensavstand": 6,
-        "kommentar": "Kamraten reagerar efter en slumpad tid (min_s–max_s sekunder vid referensavståndet). Närmare = snabbare, längre bort = långsammare.",
-        "paus_snack_s": 60
+        "kommentar": "Kamraten reagerar efter en slumpad tid (min_s–max_s sekunder vid referensavståndet). Närmare = snabbare, längre bort = långsammare. Längre bort än max_avstand (rutor) står timern still.",
+        "paus_snack_s": 60,
+        "max_avstand": 14
       }
     }
   ],

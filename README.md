@@ -132,6 +132,7 @@ i stället har stridsparskamraten en intern **upptäcktstimer** (`handelser[].up
 
 - En grundtid slumpas mellan `min_s` och `max_s` sekunder (nu 2–10 s) – ibland snabbt, ibland långsamt.
 - Timern går fortare ju närmare ni är (`referensavstand` / avstånd, begränsat till 0,3–3 gånger).
+- Är ni längre bort än `max_avstand` rutor står timern still (fotografen 14, drönaren 18 – den hörs längre).
 - När den når 100 % reagerar kamraten (repliken i `kamrat`) och personen markeras.
 - Upptäcker du personen själv och tar kontakt innan dess, avbryts timern.
 
