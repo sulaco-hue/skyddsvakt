@@ -290,7 +290,9 @@ func _uppdatera_bubblor(delta: float) -> void:
 
 
 ## Flyttar bubblor som överlappar: äldre bubblor ligger kvar, nyare staplas
-## ovanför (eller nedanför om de skulle hamna utanför skärmen).
+## ovanför (eller nedanför om de skulle hamna utanför skärmen). En bubbla
+## behåller sin förskjutning tills den försvinner, så att den inte hoppar
+## tillbaka när en annan bubbla tas bort.
 func _undvik_overlapp() -> void:
 	var placerade: Array[Rect2] = []
 	var skarm := get_viewport_rect().size
@@ -298,7 +300,8 @@ func _undvik_overlapp() -> void:
 		var nod: Control = b["nod"]
 		if not is_instance_valid(nod) or nod.size == Vector2.ZERO:
 			continue
-		var r := Rect2(nod.position, nod.size).grow(3.0)
+		var naturlig_y := nod.position.y
+		var r := Rect2(nod.position + Vector2(0.0, float(b.get("dy", 0.0))), nod.size).grow(3.0)
 		var varv := 0
 		var krock := true
 		while krock and varv < 8:
@@ -314,6 +317,7 @@ func _undvik_overlapp() -> void:
 				if r.intersects(p):
 					r.position.y = p.end.y + 1.0
 		r.position.x = clampf(r.position.x, 4.0, skarm.x - r.size.x - 4.0)
+		b["dy"] = r.position.y + 3.0 - naturlig_y
 		placerade.append(r)
 		nod.position = (r.position + Vector2(3.0, 3.0)).round()
 
