@@ -812,6 +812,8 @@ func _kommentera_objekt() -> void:
 		if _objektkommentarer.is_empty():
 			return
 	var k: Dictionary = _objektkommentarer.pop_back()
+	# Kamraten babblar inte i munnen på oss medan vi pratar om objektet.
+	snack.pausa(12.0)
 	var forst_du := str(k.get("vem", "kamrat")) == "du"
 	var svar := str(k.get("svar", ""))
 	if forst_du:
