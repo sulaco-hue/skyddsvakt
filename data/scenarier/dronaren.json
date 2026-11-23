@@ -1,7 +1,7 @@
 {
   "id": "dronaren",
   "namn": "Drönaren vid sjön",
-  "ingress": "Ett surr över förrådet. Någon flyger drönare över skyddsobjektet – men var är piloten? Tillträdesförbud i luften och när våld mot en farkost är tillåtet.",
+  "ingress": "Ett surr över skyddsobjektet. Någon flyger drönare över skyddsobjektet – men var är piloten? Tillträdesförbud i luften och när våld mot en farkost är tillåtet.",
   "objekt": "Förråd Granåsen",
   "pass": "Pass 3",
   "passtid": "19:00–23:00",
@@ -144,7 +144,7 @@
         "paus_snack_s": 60,
         "kommentar": "Drönaren hörs, så kamraten reagerar snabbare än på fotografen."
       },
-      "kamrat": "Hör du surret? Drönare – rakt över förrådet!",
+      "kamrat": "Hör du surret? Drönare – rakt över {objekt_bestamd}!",
       "kamrat_ledtrad": {
         "med_pilot": "Den kom från sjöhållet. Det står folk nere vid stranden.",
         "utan_pilot": "Jag ser ingen pilot någonstans. Den kom från nordost."
@@ -287,7 +287,7 @@
   ],
   "lagestext": {
     "fore": "inga avvikelser",
-    "efter": "drönare över skyddsobjektet, cirklar över förrådet"
+    "efter": "drönare över skyddsobjektet, cirklar över {objekt_bestamd}"
   },
   "slutkrav": [
     {
@@ -369,7 +369,7 @@
       ]
     },
     "visar": {
-      "replik": "ELSA: – Kolla! Där är taket, och där är ni! Ni ser jättesmå ut.\n\nPå skärmen syns hela förrådet, staketet och lastbilen.",
+      "replik": "ELSA: – Kolla! Där är taket, och där är ni! Ni ser jättesmå ut.\n\nPå skärmen syns {objekt_bestamd} och hela staketet.",
       "satt_fakta": {
         "bilder_visar_objekt": true
       },

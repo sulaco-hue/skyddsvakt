@@ -18,7 +18,7 @@ const MARK_HINDER := ["w"]
 ## Objekt: tecken -> sprite (ankare). Blockerade rutor utan egen bild listas i OBJEKT_HINDER.
 const OBJEKT_SPRITES := {"K": "vaktkur", "T": "gran", "t": "gran_liten", "L": "lykta", "C": "bil",
 	"H": "hus_rod", "I": "hus_gul", "A": "lada", "R": "sten", "U": "buske", "M": "brevlada", "Q": "lastbil"}
-const OBJEKT_HINDER := ["F", "S", "B", "K", "T", "t", "L", "C", "H", "h", "I", "i", "A", "j", "R", "U", "M",
+const OBJEKT_HINDER := ["F", "S", "K", "T", "t", "L", "C", "H", "h", "I", "i", "A", "j", "R", "U", "M",
 	"Q", "q"]
 const RIKTNINGAR := [[Vector2i(1, 0), "xp"], [Vector2i(-1, 0), "xn"], [Vector2i(0, 1), "yp"], [Vector2i(0, -1), "yn"]]
 
@@ -200,12 +200,39 @@ func _skapa_objekt(rader: Array) -> void:
 		_bom_uppe = _sprite("bom_uppe", led)
 		_bom_uppe.visible = false
 
-	if not byggceller.is_empty():
-		var ankare := byggceller[0]
-		for c in byggceller:
-			if c.x + c.y > ankare.x + ankare.y or (c.x + c.y == ankare.x + ankare.y and c.x > ankare.x):
-				ankare = c
-		_sprite("byggnad", ankare)
+	_placera_skyddsobjekt(byggceller)
+
+
+## Ställer ut skyddsobjektet (Spel.objekttyp) på objektytan (B-rutorna i kartan).
+func _placera_skyddsobjekt(yta: Array[Vector2i]) -> void:
+	if yta.is_empty():
+		return
+	var minsta := yta[0]
+	var ankare := yta[0]
+	for c in yta:
+		minsta = Vector2i(mini(minsta.x, c.x), mini(minsta.y, c.y))
+		if c.x + c.y > ankare.x + ankare.y or (c.x + c.y == ankare.x + ankare.y and c.x > ankare.x):
+			ankare = c
+	var hinder: Array[Vector2i] = []
+	match Spel.objekttyp:
+		"lastbil":
+			_sprite("lastbil", minsta + Vector2i(3, 1))
+			for dx in 4:
+				hinder.append(minsta + Vector2i(dx, 1))
+		"radiomast":
+			_sprite("radiomast", minsta + Vector2i(1, 1))
+			_sprite("teknikbod", minsta + Vector2i(3, 2))
+			hinder.append(minsta + Vector2i(1, 1))
+			hinder.append(minsta + Vector2i(3, 2))
+		"vapenforrad":
+			_sprite("vapenforrad", ankare)
+			hinder.assign(yta)
+		_:
+			_sprite("byggnad", ankare)
+			hinder.assign(yta)
+	for c in hinder:
+		astar.set_point_solid(c)
+		astar_npc.set_point_solid(c)
 
 
 func _sprite(namn: String, c: Vector2i, lager: Node2D = null) -> Sprite2D:

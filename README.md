@@ -17,6 +17,10 @@ Spelet startar med ett scenarioval (listan i `data/scenarier/index.json`):
    *utan pilot* (drönaren kommer från nordost och försvinner). Situationsknappen **Bekämpa drönaren [B]**
    finns för att träna bedömningen.
 
+**Skyddsobjektet slumpas** vid varje genomförande: byggnaden, lastbilen "HELIKOPTER", ett vapenförråd
+(lagerbyggnad i plåt) eller en radiomast med teknikbod. Typerna finns under `objekttyper` i kartfilen;
+i scenariotexterna ersätts `{objekt}` med objektets namn och `{objekt_bestamd}` med t.ex. "masten".
+
 Scenarierna delar kartan `data/kartor/granasen.json` och använder namngivna platser (`punkter`).
 Varje scenario kan ha `varianter` (egna fakta och bedömningar), `bedomning` (scenariospecifik
 bedömning av en handling) och `slutkrav` (t.ex. att händelsen måste rapporteras till AQ).

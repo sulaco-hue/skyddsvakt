@@ -13,6 +13,8 @@ var scenario_sokvag := ""
 ## Kartan (från scenariots "karta": en sökväg till en kartfil eller kartan direkt).
 var karta: Dictionary = {}
 var variant := ""
+## Vilket skyddsobjekt som står innanför staketet (slumpas vid varje genomförande).
+var objekttyp := ""
 var _bedomning_override: Dictionary = {}
 var fakta: Dictionary = {}
 var logg: Array = []
@@ -39,13 +41,14 @@ func scenarier() -> Array:
 
 ## Läser in scenariot på nytt (samma som förut om sokvag är tom). Tom sokvag och
 ## inget valt scenario ger ett tomt scenario (scenariovalet visas då).
-func nollstall(sokvag: String = "") -> void:
+func nollstall(sokvag: String = "", tvinga_objekttyp: String = "") -> void:
 	if sokvag != "":
 		scenario_sokvag = sokvag
 	regelmotor.ladda(LAGRUM_SOKVAG)
 	scenario = Datafil.las_json(scenario_sokvag) if scenario_sokvag != "" else {}
 	var k: Variant = scenario.get("karta", {})
 	karta = Datafil.las_json(str(k)) if k is String else (k if k is Dictionary else {})
+	_valj_objekttyp(tvinga_objekttyp)
 	variant = ""
 	var bed: Dictionary = scenario.get("bedomning", {})
 	_bedomning_override = bed.duplicate(true)
@@ -76,6 +79,44 @@ func utfor(handling_id: String, beskrivning: String = "") -> Dictionary:
 	satt_fakta(regelmotor.satter_fakta(handling_id))
 	logg_ny.emit(post)
 	return post
+
+
+## Slumpar skyddsobjekt bland kartans objekttyper och anpassar scenariots texter:
+## {objekt} = objektets namn, {objekt_bestamd} = t.ex. "masten".
+func _valj_objekttyp(tvinga: String) -> void:
+	var typer: Dictionary = karta.get("objekttyper", {})
+	if typer.is_empty():
+		objekttyp = ""
+		return
+	var nycklar := typer.keys()
+	objekttyp = tvinga if typer.has(tvinga) else str(nycklar[randi() % nycklar.size()])
+	var info: Dictionary = typer[objekttyp]
+	scenario = _ersatt(scenario, {
+		"{objekt}": str(info.get("namn", "")),
+		"{objekt_bestamd}": str(info.get("bestamd", "objektet")),
+	})
+	scenario["objekt"] = str(info.get("namn", scenario.get("objekt", "")))
+	var b: Dictionary = scenario.get("briefing", {})
+	b["objektinfo"] = str(info.get("beskrivning", "")) + " " + str(b.get("objektinfo", ""))
+
+
+func _ersatt(v: Variant, byten: Dictionary) -> Variant:
+	if v is String:
+		var s: String = v
+		for nyckel in byten:
+			s = s.replace(nyckel, byten[nyckel])
+		return s
+	if v is Dictionary:
+		var ut := {}
+		for k in v:
+			ut[k] = _ersatt(v[k], byten)
+		return ut
+	if v is Array:
+		var ut2: Array = []
+		for x in v:
+			ut2.append(_ersatt(x, byten))
+		return ut2
+	return v
 
 
 ## Väljer en variant av scenariot (t.ex. "utan_pilot"): egna fakta och bedömningar.

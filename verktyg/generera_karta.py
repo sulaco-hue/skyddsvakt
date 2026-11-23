@@ -31,7 +31,7 @@ MALL_MARK = [
 MALL_OBJ = [
     "..................", "..................", "..................",
     "...FFFFFSFFFF...C.", "...FL.....PLF.....", "...F..BBBB..F.....", "...F..BBBB..F.....",
-    "...F..BBBB..F.....", "...F........FL....", "...F.qqqQ..VG.....", "...F........G.....",
+    "...F..BBBB..F.....", "...F........FL....", "...F.......VG.....", "...F........G.....",
     "...F......K.FL....", "...FFFFFFFFFF.....", "..................", "..................",
     "..................", "..................", "..................",
 ]
@@ -210,6 +210,18 @@ k["namn"] = "Förråd Granåsen med omgivning"
 k["storlek"] = N
 k["skyddsomrade"] = [FENCE0[0], FENCE0[1], FENCE1[0], FENCE1[1]]
 k["invid_avstand"] = 3
+# Ytan där skyddsobjektet placeras (B-rutorna i mallen, 4x3). Typen slumpas vid varje genomförande.
+k["objektyta"] = [6 + DX, 5 + DY, 9 + DX, 7 + DY]
+k["objekttyper"] = OrderedDict([
+    ("byggnad", OrderedDict([("namn", "Förråd Granåsen"), ("bestamd", "byggnaden"),
+                             ("beskrivning", "En tvåvåningsbyggnad med förrådslokaler.")])),
+    ("lastbil", OrderedDict([("namn", "Fordonsuppställning Granåsen"), ("bestamd", "lastbilen"),
+                             ("beskrivning", "En lastbil med skyddsvärd last står uppställd innanför staketet.")])),
+    ("vapenforrad", OrderedDict([("namn", "Vapenförråd Granåsen"), ("bestamd", "vapenförrådet"),
+                                 ("beskrivning", "En lagerbyggnad i plåt med vapen och ammunition.")])),
+    ("radiomast", OrderedDict([("namn", "Radiostation Granåsen"), ("bestamd", "masten"),
+                               ("beskrivning", "En radiomast med teknikbod.")])),
+])
 k["punkter"] = OrderedDict([
     ("fotograf_start", [15 + DX, 4 + DY]),
     ("fotograf_mal", [9 + DX, 1 + DY]),
@@ -228,10 +240,10 @@ k["teckenforklaring"] = OrderedDict([
     ("objekt", OrderedDict([("F", "staket"), ("S", "staket med skylt"), ("G", "grind/bom"), ("B", "byggnad"),
                             ("K", "vaktkur"), ("T", "gran"), ("t", "liten gran"), ("L", "lyktstolpe"),
                             ("C", "bil"), ("P", "spelarens start"), ("V", "stridsparskamrat"),
+                            ("B", "objektyta – skyddsobjektet (typ slumpas)"),
                             ("H", "röd stuga (ankare)"), ("h", "röd stuga"), ("I", "gul stuga (ankare)"),
                             ("i", "gul stuga"), ("A", "lada (ankare)"), ("j", "lada"), ("R", "sten"),
-                            ("U", "buske"), ("M", "brevlåda"), ("Q", "lastbil HELIKOPTER (ankare)"),
-                            ("q", "lastbil")])),
+                            ("U", "buske"), ("M", "brevlåda")])),
 ])
 json.dump(k, open(KARTFIL, "w"), ensure_ascii=False, indent=1)
 print(f"karta {N}x{N}, skyddsobjekt {FENCE0}-{FENCE1}, byggnader {len(byggnader)}, strand {STRAND}")

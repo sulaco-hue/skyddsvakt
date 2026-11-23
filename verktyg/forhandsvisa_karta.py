@@ -12,6 +12,7 @@ ROOT = sys.argv[1]
 OUT = sys.argv[2]
 SCALE = int(sys.argv[3]) if len(sys.argv) > 3 else 1
 UTBREDD = int(sys.argv[4]) if len(sys.argv) > 4 else 0  # skala ner till denna bredd (t.ex. briefingkartan)
+OBJEKTTYP = sys.argv[5] if len(sys.argv) > 5 else "byggnad"
 GFX = ROOT + "/assets/gfx/"
 karta = json.load(open(ROOT + "/data/kartor/granasen.json"))
 anchors = json.load(open(GFX + "anchors.json"))
@@ -94,10 +95,17 @@ for c in skyltar:
     add("skylt", c)
 if bygg:
     a = bygg[0]
+    mx, my = min(c[0] for c in bygg), min(c[1] for c in bygg)
     for c in bygg:
         if c[0] + c[1] > a[0] + a[1] or (c[0] + c[1] == a[0] + a[1] and c[0] > a[0]):
             a = c
-    add("byggnad", a)
+    if OBJEKTTYP == "lastbil":
+        add("lastbil", (mx + 3, my + 1))
+    elif OBJEKTTYP == "radiomast":
+        add("radiomast", (mx + 1, my + 1))
+        add("teknikbod", (mx + 3, my + 2))
+    else:
+        add("vapenforrad" if OBJEKTTYP == "vapenforrad" else "byggnad", a)
 add("vakt_0", start["P"])
 add("vakt_0", start["V"])
 add("civil_0", tuple(karta["punkter"]["fotograf_mal"]))

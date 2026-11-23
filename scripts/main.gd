@@ -145,7 +145,7 @@ func _debug_text() -> String:
 	for k in Spel.fakta:
 		f.append("%s=%s" % [k, "ja" if Spel.fakta[k] else "nej"])
 	rader.append("Fakta: " + ", ".join(f))
-	rader.append("Kamratsnack: " + snack.status())
+	rader.append("Kamratsnack: " + snack.status() + " · skyddsobjekt: " + Spel.objekttyp + " · variant: " + Spel.variant)
 	rader.append("Beslut i logg: %d · sambandsrader: %d · musik: %s" % [Spel.logg.size(), Spel.samband.size(),
 		"på" if Musik.ar_pa() else "av"])
 	return "\n".join(rader)

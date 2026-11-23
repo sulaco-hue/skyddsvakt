@@ -8,6 +8,34 @@
   27
  ],
  "invid_avstand": 3,
+ "objektyta": [
+  24,
+  20,
+  27,
+  22
+ ],
+ "objekttyper": {
+  "byggnad": {
+   "namn": "Förråd Granåsen",
+   "bestamd": "byggnaden",
+   "beskrivning": "En tvåvåningsbyggnad med förrådslokaler."
+  },
+  "lastbil": {
+   "namn": "Fordonsuppställning Granåsen",
+   "bestamd": "lastbilen",
+   "beskrivning": "En lastbil med skyddsvärd last står uppställd innanför staketet."
+  },
+  "vapenforrad": {
+   "namn": "Vapenförråd Granåsen",
+   "bestamd": "vapenförrådet",
+   "beskrivning": "En lagerbyggnad i plåt med vapen och ammunition."
+  },
+  "radiomast": {
+   "namn": "Radiostation Granåsen",
+   "bestamd": "masten",
+   "beskrivning": "En radiomast med teknikbod."
+  }
+ },
  "punkter": {
   "fotograf_start": [
    33,
@@ -121,7 +149,7 @@
   "..tT.....U...........F..BBBB..F.....hH.......hH..iI.",
   ".T...T..T............F..BBBB..F......t...........t..",
   "...T.t..........T....F........FL.......Mt.......M...",
-  ".t.............T.....F.qqqQ..VG.....................",
+  ".t.............T.....F.......VG.....................",
   "....T.....T.T........F........G.....................",
   "T...T.........TRt....F......K.FL....TT..T........U..",
   ".tT....Tt.TTT..t.....FFFFFFFFFF......TT.......T....T",
@@ -164,7 +192,7 @@
    "F": "staket",
    "S": "staket med skylt",
    "G": "grind/bom",
-   "B": "byggnad",
+   "B": "objektyta – skyddsobjektet (typ slumpas)",
    "K": "vaktkur",
    "T": "gran",
    "t": "liten gran",
@@ -180,9 +208,7 @@
    "j": "lada",
    "R": "sten",
    "U": "buske",
-   "M": "brevlåda",
-   "Q": "lastbil HELIKOPTER (ankare)",
-   "q": "lastbil"
+   "M": "brevlåda"
   }
  }
 }

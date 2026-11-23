@@ -20,6 +20,7 @@ func _ready() -> void:
 	await _spela_scenario_1()
 	await _spela_dronaren_med_pilot()
 	await _spela_dronaren_utan_pilot()
+	await _bygg_alla_objekttyper()
 	Engine.time_scale = 1.0
 	if fel == 0:
 		print("=== RESULTAT: OK ===")
@@ -252,3 +253,30 @@ func _filer(mapp: String, andelse: String) -> PackedStringArray:
 	for undermapp in d.get_directories():
 		ut.append_array(_filer(mapp.path_join(undermapp), andelse))
 	return ut
+
+
+## Bygger världen med varje typ av skyddsobjekt och kontrollerar att objektet
+## blockerar rutor och att inga platshållare finns kvar i texterna.
+func _bygg_alla_objekttyper() -> void:
+	print("--- Skyddsobjekt ---")
+	for typ in ["byggnad", "lastbil", "vapenforrad", "radiomast"]:
+		Spel.nollstall("res://data/scenarier/dronaren.json", typ)
+		if Spel.objekttyp != typ:
+			_fel("objekttyp %s valdes inte" % typ)
+		if JSON.stringify(Spel.scenario).contains("{objekt"):
+			_fel("platshållare kvar i texterna (%s)" % typ)
+		var main = load("res://scenes/main.tscn").instantiate()
+		add_child(main)
+		await _vanta(3)
+		var yta: Array = Spel.karta.get("objektyta", [0, 0, 0, 0])
+		var blockerade := 0
+		for y in range(int(yta[1]), int(yta[3]) + 1):
+			for x in range(int(yta[0]), int(yta[2]) + 1):
+				if not main.varld.ar_fri(Vector2i(x, y)):
+					blockerade += 1
+		if blockerade == 0:
+			_fel("skyddsobjektet %s blockerar inga rutor" % typ)
+		else:
+			_ok("%s (%s) blockerar %d rutor" % [typ, Spel.scenario.get("objekt", ""), blockerade])
+		main.queue_free()
+		await _vanta(3)

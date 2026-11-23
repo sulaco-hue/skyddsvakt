@@ -416,6 +416,97 @@ def mailbox(d, im):
 save_obj("brevlada", mailbox, (0.5, 0.5))
 
 
+# ================================================= Fler skyddsobjekt ==
+def vapenforrad(d, im):
+    """Låg lagerbyggnad i plåt med rullport på gaveln. Fotavtryck 4x3 rutor."""
+    x0, x1, y0, y1, H = 0.05, 3.95, 0.05, 2.95, 24
+    vagg, vagg_m, tak = (104, 112, 100), (82, 88, 78), (90, 94, 88)
+    d.polygon(face_quad(x0, y1, x1, y1, 0, H), fill=vagg)
+    d.polygon(face_quad(x1, y0, x1, y1, 0, H), fill=vagg_m)
+    # korrugerad plåt: lodräta ränder
+    for i in range(40):
+        gx = x0 + i * (x1 - x0) / 40
+        d.line([iso(gx, y1, 1), iso(gx, y1, H - 1)], fill=shade(vagg, 0.9 if i % 2 else 1.06))
+    for i in range(30):
+        gy = y0 + i * (y1 - y0) / 30
+        d.line([iso(x1, gy, 1), iso(x1, gy, H - 1)], fill=shade(vagg_m, 0.9 if i % 2 else 1.06))
+    # tak med kant
+    d.polygon([iso(x0, y0, H), iso(x1, y0, H), iso(x1, y1, H), iso(x0, y1, H)], fill=tak)
+    d.line([iso(x0, y1, H), iso(x1, y1, H), iso(x1, y0, H)], fill=shade(tak, 1.25))
+    for gx in (0.8, 1.8, 2.8):
+        d.line([iso(gx, y0, H), iso(gx, y1, H)], fill=shade(tak, 0.9))
+    # rullport på gaveln
+    q = face_quad(x1, 0.7, x1, 2.3, 0, 17)
+    d.polygon(q, fill=(70, 74, 76))
+    for h in range(2, 17, 2):
+        d.line([iso(x1, 0.7, h), iso(x1, 2.3, h)], fill=(58, 62, 64))
+    d.polygon(q, outline=(40, 42, 44))
+    # gul-svart markering vid porten
+    for k, h in enumerate(range(0, 17, 3)):
+        d.line([iso(x1, 0.62, h), iso(x1, 0.62, h + 2)], fill=(230, 196, 40) if k % 2 == 0 else (24, 24, 26))
+    # personaldörr och belysning på långsidan
+    q = face_quad(2.9, y1, 3.25, y1, 0, 13)
+    d.polygon(q, fill=(60, 66, 62))
+    d.polygon(q, outline=(40, 44, 42))
+    lx, ly = iso(3.07, y1, 17)
+    d.rectangle([lx - 2, ly - 1, lx + 1, ly], fill=(255, 236, 170))
+    # skylt med nummer
+    sx, sy = iso(1.0, y1, 15)
+    d.rectangle([sx, sy - 3, sx + 6, sy + 1], fill=(236, 232, 214))
+    d.line([(sx + 2, sy - 2), (sx + 2, sy)], fill=(30, 30, 30))
+    d.line([(sx + 4, sy - 2), (sx + 4, sy)], fill=(30, 30, 30))
+    # ventilationshuv
+    d.polygon(face_quad(1.5, 1.2, 1.9, 1.2, H, H + 4), fill=(120, 124, 120))
+
+save_obj("vapenforrad", vapenforrad, (3.5, 2.5))
+
+
+def radiomast(d, im):
+    """Fackverksmast (cirka 130 px) med staglinor, paraboler och toppljus."""
+    x, y = iso(0.5, 0.5)
+    hojd = 132
+    # staglinor
+    for (ax, ay) in [(-1.6, 0.5), (2.4, 0.2), (0.6, 2.4)]:
+        gx, gy = iso(ax, ay)
+        for k, frac in enumerate((0.45, 0.8)):
+            d.line([(gx, gy), (x, y - int(hojd * frac))], fill=(150, 154, 160, 150))
+        d.rectangle([gx - 1, gy - 1, gx + 1, gy], fill=(110, 112, 116))
+    # ben och stag
+    def bredd(h):
+        return 6 - 4 * h / hojd
+    for h in range(0, hojd, 6):
+        b0, b1 = bredd(h), bredd(h + 6)
+        col = (200, 60, 50) if (h // 18) % 2 == 0 and h > hojd - 54 else (180, 184, 188)
+        d.line([(x - b0, y - h), (x - b1, y - h - 6)], fill=col)
+        d.line([(x + b0, y - h), (x + b1, y - h - 6)], fill=col)
+        d.line([(x - b0, y - h), (x + b1, y - h - 6)], fill=shade(col, 0.8))
+        d.line([(x + b0, y - h), (x - b1, y - h - 6)], fill=shade(col, 0.8))
+        d.line([(x - b0, y - h), (x + b0, y - h)], fill=shade(col, 0.85))
+    # paraboler och antenner
+    for (dx, h, r) in [(-5, 70, 4), (5, 88, 3), (-4, 104, 3)]:
+        d.ellipse([x + dx - r, y - h - r, x + dx + r, y - h + r], fill=(226, 228, 230))
+        d.point((x + dx, y - h), fill=(120, 124, 128))
+    d.line([(x, y - hojd), (x, y - hojd - 10)], fill=(180, 184, 188))
+    d.rectangle([x - 1, y - hojd - 12, x, y - hojd - 11], fill=(255, 50, 40))
+    # fundament
+    d.polygon([(x - 8, y), (x, y - 4), (x + 8, y), (x, y + 4)], fill=(120, 120, 116))
+
+save_obj("radiomast", radiomast, (0.5, 0.5))
+
+
+def teknikbod(d, im):
+    block(d, 0.1, 0.9, 0.1, 0.9, 14, (150, 154, 148), (128, 132, 126), (106, 110, 104))
+    q = face_quad(0.9, 0.3, 0.9, 0.65, 0, 11)
+    d.polygon(q, fill=(90, 96, 92))
+    d.polygon(q, outline=(60, 64, 62))
+    x, y = iso(0.5, 0.9, 12)
+    d.rectangle([x - 2, y - 1, x + 2, y], fill=(80, 84, 80))  # galler/ventil
+    gx, gy = iso(0.7, 0.4, 14)
+    d.line([(gx, gy), (gx, gy - 6)], fill=(170, 172, 176))
+
+save_obj("teknikbod", teknikbod, (0.5, 0.5))
+
+
 # ========================================================= Lastbil ==
 # Olivgrön lastbil med kapell och "HELIKOPTER" handmålat på sidan.
 GLYFER = {

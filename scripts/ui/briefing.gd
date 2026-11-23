@@ -62,7 +62,8 @@ func bygg(scenario: Dictionary) -> void:
 	hoger.add_child(kartrad)
 	var kartram := UiKit.panel(UiKit.KANT2, UiKit.BG, 0, 0)
 	var karta := TextureRect.new()
-	karta.texture = load("res://assets/gfx/objektskarta.png")
+	var bild := "res://assets/gfx/objektskarta_%s.png" % Spel.objekttyp
+	karta.texture = load(bild if ResourceLoader.exists(bild) else "res://assets/gfx/objektskarta.png")
 	karta.custom_minimum_size = Vector2(480, 270)
 	karta.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	karta.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED

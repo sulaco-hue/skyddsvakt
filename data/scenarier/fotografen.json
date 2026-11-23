@@ -89,7 +89,7 @@
       "npc": "fotografen",
       "mal": "fotograf_mal",
       "vid_framme": "fotograferar",
-      "kamrat": "Där, vid staketet! Han fotograferar mot huset.",
+      "kamrat": "Där, vid staketet! Han fotograferar mot {objekt_bestamd}.",
       "upptackt": {
         "min_s": 2,
         "max_s": 10,
@@ -186,7 +186,7 @@
       ]
     },
     "visar": {
-      "replik": "– Här. Lite träd… och ja, staketet och huset syns på några. Nöjd nu?",
+      "replik": "– Här. Lite träd… och ja, staketet och {objekt_bestamd} syns på några. Nöjd nu?",
       "alternativ": [
         {
           "text": "Anropa AQ, rapportera och begär order.",
