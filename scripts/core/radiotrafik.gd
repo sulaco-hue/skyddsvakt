@@ -74,6 +74,10 @@ func _process(delta: float) -> void:
 	var forsta: Dictionary = _ko[0]
 	forsta["vantat"] = float(forsta["vantat"]) + delta
 	# Vår egen trafik eller annan pågående växling: vänta (högst MAX_VANTAN_S).
+	# Öppen linje med CQ: vänta tills samtalet är slut (ingen tidsgräns).
+	if Spel.samtal_oppet:
+		forsta["vantat"] = 0.0
+		return
 	if Spel.kanal_upptagen() and float(forsta["vantat"]) < MAX_VANTAN_S:
 		return
 	_ko.pop_front()

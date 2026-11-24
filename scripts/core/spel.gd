@@ -25,6 +25,8 @@ var logg: Array = []
 var samband: Array = []
 var klocka_s := 0.0
 var klocka_igang := false
+## Sant medan vi har en öppen radiolinje med CQ: ingen annan trafik bryter in.
+var samtal_oppet := false
 
 
 ## Versionsnummer: data/version.json skrivs av bygget (antal commits). Lokalt "dev".
@@ -78,6 +80,7 @@ func scenarier() -> Array:
 ## Läser in scenariot på nytt (samma som förut om sokvag är tom). Tom sokvag och
 ## inget valt scenario ger ett tomt scenario (scenariovalet visas då).
 func nollstall(sokvag: String = "", tvinga_objekttyp: String = "") -> void:
+	samtal_oppet = false
 	if sokvag != "":
 		scenario_sokvag = sokvag
 	regelmotor.ladda(LAGRUM_SOKVAG)

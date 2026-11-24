@@ -180,6 +180,13 @@ func _utfor(steg: Dictionary) -> void:
 	if steg.has("npc"):
 		var n: Node2D = main.varld.npcer.get(str(steg["npc"]))
 		logg.append("  npc %s: cell %s synlig %s vag %s" % [steg["npc"], n.cell, n.visible, n._vag.size()])
+	if steg.has("linje"):
+		# {"linje": "oppna"} / {"linje": "stang"}: öppna/stäng radiolinjen med CQ
+		if str(steg["linje"]) == "oppna":
+			main.hud.radio_anropa()
+		else:
+			main.hud.radio_avsluta()
+		await _vanta(0.5)
 	if steg.has("fakta"):
 		Spel.satt_fakta(steg["fakta"])
 	if steg.has("debriefing"):

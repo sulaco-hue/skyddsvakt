@@ -190,10 +190,18 @@ func _uppdatera_rimlighet() -> void:
 					skadad = true
 		if skadad:
 			f["skadad_person"] = true
+	# Förstärkning: posten ska kunna fortsätta bevakningen. Motiverat när
+	# stridsparet är (eller har varit) bundet av ett hot, skottlossning eller en
+	# frihetsberövad/skadad person – även om hotet inte längre är aktivt.
 	if not bool(f.get("behov_forstarkning", false)):
-		var stort := (not _angripare.is_empty() and str(_angripare["lage"]) == "anfaller" and bool(_angripare.get("upptackt", false))) \
-			or (not _horde.is_empty() and bool(_horde.get("upptackt", false)))
-		if stort:
+		var bundet := (not _angripare.is_empty() and bool(_angripare.get("upptackt", false))) \
+			or (not _horde.is_empty() and bool(_horde.get("upptackt", false))) \
+			or bool(f.get("skadad_person", false))
+		for nyckel in ["omhandertagande_genomfort", "gripande_genomfort", "envarsgripande_genomfort",
+				"varningsskott_avlossat", "verkanseld_avlossad", "dronare_nedskjuten"]:
+			if bool(f.get(nyckel, false)):
+				bundet = true
+		if bundet:
 			f["behov_forstarkning"] = true
 
 
@@ -301,7 +309,7 @@ func _uppdatera_brus(delta: float) -> void:
 		_brus = Datafil.las_json("res://data/radiobrus.json")
 		_brus_t = float(_brus.get("installningar", {}).get("forsta_efter_s", 20))
 		return
-	if kontakt.visible:
+	if kontakt.visible or Spel.samtal_oppet:
 		return
 	_brus_t -= delta
 	if _brus_t > 0.0:

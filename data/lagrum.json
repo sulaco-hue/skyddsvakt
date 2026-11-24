@@ -41,7 +41,7 @@
       "spelaren_vid_liv": "du överlevde och kunde fortsätta bevakningsuppgiften",
       "handelse_upptackt": "det hade hänt något att anmäla (en händelse var upptäckt)",
       "skadad_person": "någon var skadad",
-      "behov_forstarkning": "hotet var större än stridsparet ensamt kunde hantera"
+      "behov_forstarkning": "stridsparet var eller hade varit bundet av en händelse (hot, skottlossning, frihetsberövad eller skadad person) – förstärkning behövdes för att posten skulle kunna fortsätta bevakningen"
     }
   },
   "handlingar": {
@@ -577,9 +577,9 @@
         "behov_forstarkning"
       ],
       "vid_brist": "warn",
-      "text_ok": "Rätt: hotet var större än stridsparet ensamt klarar. Begär förstärkning i tid – hellre för tidigt än för sent.",
-      "text_brist": "Inget i läget motiverade förstärkning. Onödiga förstärkningar lämnar andra poster obemannade.",
-      "diskutera": "När är ett läge för stort för stridsparet? Vad gör ni medan förstärkningen är på väg?"
+      "text_ok": "Rätt. Stridsparet är bundet av händelsen – ett hot, en skottlossning, en frihetsberövad eller skadad person – och posten måste kunna fortsätta sin huvuduppgift: bevakningen. Förstärkning kan alltså vara motiverad även när hotet inte längre är aktivt.",
+      "text_brist": "Inget hade hänt som band stridsparet. Bevakningen kunde fortsätta som vanligt, och en onödig förstärkning lämnar andra poster obemannade.",
+      "diskutera": "Vem bevakar grinden medan ni tar hand om den gripne eller den skadade? När är läget för stort för stridsparet?"
     },
     "forsta_hjalpen": {
       "namn": "Gav första hjälpen",

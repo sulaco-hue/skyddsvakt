@@ -512,6 +512,7 @@ func radio_anropa() -> void:
 		samband_utan_svar.emit()
 		return
 	_samtal_pagar = true
+	Spel.samtal_oppet = true
 	_samtal_anvanda.clear()
 	Spel.spela_samband(_samband_data.get("anrop", []), {})
 	_visa_sambandsmeny_innehall()
@@ -540,6 +541,8 @@ func radio_avsluta() -> void:
 		return
 	_samtal_pagar = false
 	Spel.spela_samband(_samband_data.get("avslut", []), {})
+	# Linjen räknas som öppen tills "Klart slut" är sagt.
+	get_tree().create_timer(2.0).timeout.connect(func() -> void: Spel.samtal_oppet = false)
 	_sambandsmeny.visible = false
 	_visa_sambandsmeny_innehall()
 
