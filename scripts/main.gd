@@ -153,6 +153,16 @@ func _pa_hud_handling(id: String, beskrivning: String) -> void:
 ## så att vi inte rapporterar en drönare över objektet när den redan är nedskjuten.
 func _radio_ersattningar() -> Dictionary:
 	var byt := {"lage": _lagestext()}
+	# Zombiescenariot: antalet nedkämpade som behöver sjukvård, t.ex. "sju skadade personer".
+	if not _horde.is_empty():
+		var nere := 0
+		for z in (_horde["zombies"] as Dictionary).values():
+			if str(z["lage"]) == "nere":
+				nere += 1
+		const TAL := ["inga", "en", "två", "tre", "fyra", "fem", "sex", "sju", "åtta", "nio", "tio", "elva", "tolv"]
+		var ord: String = TAL[nere] if nere < TAL.size() else str(nere)
+		byt["skadade"] = ("en skadad person" if nere == 1 else "%s skadade personer" % ord) + \
+			(" med… avvikande hälsotillstånd" if nere > 0 else "")
 	var st: Dictionary = _scenario.get("sambandstexter", {})
 	for nyckel: String in st:
 		byt[nyckel] = _fasvarde(st[nyckel])

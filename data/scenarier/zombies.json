@@ -353,12 +353,12 @@
         },
         {
           "fran": "Grindposten",
-          "text": "Från Grindposten, begär ambulans till grinden, en skadad person, kom.",
+          "text": "Från Grindposten, begär ambulans till grinden, {skadade}, kom.",
           "efter": 3.0
         },
         {
           "fran": "CQ",
-          "text": "Uppfattat, ambulans larmas, kom.",
+          "text": "Uppfattat… sa du avvikande hälsotillstånd? Ambulans larmas, kom.",
           "efter": 4.5
         },
         {
