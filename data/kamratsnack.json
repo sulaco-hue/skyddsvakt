@@ -82,9 +82,9 @@
     },
     {
       "amne": "datorspel",
-      "kamrat": "Min brorson slog mig i ett skjutspel i helgen. Han är nio. Jag har skjutit skarpt.",
+      "kamrat": "Min brorson slog mig i ett skjutspel i helgen. Han är nio.",
       "svar": [
-        "Det är inte samma sak.",
+        "Gammal och långsam är du.",
         "Nio år och bättre än dig."
       ]
     },
@@ -99,7 +99,7 @@
       "amne": "film",
       "kamrat": "Varför springer alla i skräckfilmer alltid uppför trappan? Spring ut, liksom!",
       "svar": [
-        "Då blir filmen fem minuter."
+        "Då blir filmen fem minuter lång."
       ]
     },
     {
@@ -119,23 +119,23 @@
     },
     {
       "amne": "mat",
-      "kamrat": "Jag har en mazarin i fickan. Den har varit där sedan i tisdags. Den är fortfarande god.",
+      "kamrat": "Jag har en delicatoboll i fickan. Den har varit där sedan i tisdags.",
       "svar": [
-        "Det tvivlar jag på."
+        "Den som spar han har."
       ]
     },
     {
       "amne": "mat",
       "kamrat": "Termosen läcker igen. Nu luktar hela fickan kaffe. Inte helt fel i och för sig.",
       "svar": [
-        "Byt termos."
+        "Hemvärnslife."
       ]
     },
     {
       "amne": "väder",
       "kamrat": "Duggregn. Mitt favoritväder. Blöt, men inte tillräckligt blöt för att klaga ordentligt.",
       "svar": [
-        "Du klagar ändå."
+        "Du klagar ju nu."
       ]
     },
     {
@@ -199,12 +199,12 @@
       "kamrat": "Tror du det blir iso eller påse ikväll? Hoppas på iso.",
       "svar": [
         "Påse. Det är alltid påse när man hoppas på iso.",
-        "Iso, om kocken är på gott humör."
+        "Basseryktet säger iso."
       ]
     },
     {
       "amne": "soldatmat",
-      "kamrat": "Iso är underskattat alltså. Varm mat i kärl, mitt i skogen. Det är ren lyx.",
+      "kamrat": "Iso är så jävla najs alltså. Varm mat mitt i skogen. Det är ren lyx.",
       "svar": [
         "Bästa grejen med hela tjänsten."
       ]
@@ -218,7 +218,7 @@
     },
     {
       "amne": "soldatmat",
-      "kamrat": "Har du något isotonicpulver kvar? Jag har bara det med ananassmak kvar, och det smakar diskmedel.",
+      "kamrat": "Har du något isotonic kvar? Jag har bara det med ananassmak kvar, och det smakar diskmedel.",
       "svar": [
         "Här har du.",
         "Nej, slut sen i tisdags."
@@ -228,14 +228,14 @@
       "amne": "soldatmat",
       "kamrat": "Smakis. Vem bestämde att Smakis skulle vara soldatens dryck? Den personen förtjänar en medalj.",
       "svar": [
-        "Instämmer helt."
+        "Offentlig upphandling och lägst pris, men jag instämmer helt."
       ]
     },
     {
       "amne": "soldatmat",
-      "kamrat": "Det värsta med påsarna är inte käket. Det är den där jäkla värmepåsen.",
+      "kamrat": "Det värsta med rations är inte käket. Det är den där förbannade värmepåsen.",
       "svar": [
-        "Ät den kall då. Karaktärsdanande."
+        "Ät den kall. Karaktärsdanande."
       ]
     },
     {
@@ -272,7 +272,7 @@
       "amne": "soldatmat",
       "kamrat": "Fun fact: man kan värma en ration under armen. Det tar fyra timmar, men det går.",
       "svar": [
-        "Usch fyfan."
+        "Usch fyfan. Sök hjälp."
       ]
     },
     {
@@ -282,8 +282,8 @@
       ],
       "kamrat": "Fyra grader och regn. Vet du vad de kallar det här i Borås?",
       "svar": [
-        "Sommar.",
-        "Där regnar det inomhus också."
+        "Sommar?",
+        "Där regnar det väl inomhus också."
       ]
     },
     {
@@ -313,7 +313,7 @@
       ],
       "kamrat": "I Borås säger de inte ’det regnar’. De säger ’det är tisdag’.",
       "svar": [
-        "Och på onsdag?"
+        "Jo."
       ]
     },
     {
