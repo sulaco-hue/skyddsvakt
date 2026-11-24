@@ -224,7 +224,8 @@ func kanal_upptagen() -> bool:
 ## Spelar upp en radioväxling: varje meddelande har "fran", "text" och
 ## "efter" (sekunder från start). {nyckel} i texten ersätts från ersattningar.
 ## brus = trafik mellan andra enheter (lägre prioritet).
-func spela_samband(meddelanden: Array, ersattningar: Dictionary = {}, brus := false) -> void:
+## svans = hur länge kanalen räknas som upptagen efter sista meddelandet.
+func spela_samband(meddelanden: Array, ersattningar: Dictionary = {}, brus := false, svans := 1.5) -> void:
 	var langst := 0.0
 	for m in meddelanden:
 		langst = maxf(langst, float(m.get("efter", 0.0)))
@@ -233,7 +234,7 @@ func spela_samband(meddelanden: Array, ersattningar: Dictionary = {}, brus := fa
 			return
 	else:
 		_brus_generation += 1
-	_kanal_upptagen_till_ms = maxi(_kanal_upptagen_till_ms, Time.get_ticks_msec() + int((langst + 1.5) * 1000.0))
+	_kanal_upptagen_till_ms = maxi(_kanal_upptagen_till_ms, Time.get_ticks_msec() + int((langst + svans) * 1000.0))
 	var generation := _brus_generation
 	for m in meddelanden:
 		var text := str(m.get("text", ""))

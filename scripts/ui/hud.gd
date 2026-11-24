@@ -527,7 +527,8 @@ func radio_anropa() -> void:
 	_samtal_pagar = true
 	Spel.samtal_oppet = true
 	_samtal_anvanda.clear()
-	Spel.spela_samband(_samband_data.get("anrop", []), {})
+	# Anropet går snabbt: vi kan sända ärendet strax efter "CQ kom."
+	Spel.spela_samband(_samband_data.get("anrop", []), {}, false, 0.75)
 	_visa_sambandsmeny_innehall()
 	_sambandsmeny.visible = true
 
