@@ -1439,7 +1439,7 @@ def portrait_hantverkare():
     return im
 
 
-def portrait_yxman():
+def portrait_yxman(yxa=True):
     im = portrait("civil")
     p = ImageDraw.Draw(im)
     S = 80
@@ -1469,8 +1469,9 @@ def portrait_yxman():
         p.rectangle([ex, 35, ex + 5, 38], fill=(250, 246, 240))
         p.rectangle([ex + 2, 35, ex + 3, 38], fill=(30, 30, 30))
     # yxskaft över axeln
-    p.line([(62, 80), (74, 8)], fill=(184, 122, 62), width=3)
-    p.polygon([(66, 4), (79, 2), (79, 16), (68, 14)], fill=(176, 182, 190))
+    if yxa:
+        p.line([(62, 80), (74, 8)], fill=(184, 122, 62), width=3)
+        p.polygon([(66, 4), (79, 2), (79, 16), (68, 14)], fill=(176, 182, 190))
     return im
 
 
@@ -1529,6 +1530,8 @@ portrait("pappa").save(os.path.join(OUT, "portratt_pappa.png"))
 portrait_barn().save(os.path.join(OUT, "portratt_barn.png"))
 portrait_hantverkare().save(os.path.join(OUT, "portratt_hantverkare.png"))
 portrait_yxman().save(os.path.join(OUT, "portratt_yxman.png"))
+# I dialogen har yxan redan hamnat i gruset.
+portrait_yxman(yxa=False).save(os.path.join(OUT, "portratt_yxman_utan.png"))
 
 # ============================================================ Ikoner ==
 def hogtalare(namn, extra):

@@ -105,7 +105,7 @@
       "benamning": "mannen",
       "beskrivning": "Flanellskjorta, skägg, yxa",
       "sprite": "yxman",
-      "portratt": "portratt_yxman",
+      "portratt": "portratt_yxman_utan",
       "start": "stig_nord",
       "synlig_fran_start": false,
       "stamning": 4,
