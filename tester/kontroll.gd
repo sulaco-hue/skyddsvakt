@@ -663,6 +663,7 @@ func _spela_zombies(skjuter: bool) -> void:
 	_ok("zombierna upptäckta, knappar: " + ", ".join(PackedStringArray(main.hud.situationer())))
 	if skjuter:
 		main.call("_halt_order")
+		main._horde["patroner"] = 2  # så att omladdningen provas tidigt
 	var varnat := false
 	var klart := false
 	var t := 0.0
@@ -687,7 +688,6 @@ func _spela_zombies(skjuter: bool) -> void:
 		if skjuter and not varnat and avst <= 6:
 			main.call("_varningsskott")
 			varnat = true
-			main._horde["patroner"] = 2  # så att omladdningen provas tidigt
 		elif skjuter and avst <= 6:
 			main.call("_verkanseld")
 		await get_tree().create_timer(0.1).timeout
