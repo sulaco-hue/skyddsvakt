@@ -520,6 +520,12 @@
       "stamning": 1,
       "nasta": "id_fraga"
     },
+    "be_om_legitimation": {
+      "text": "Ber att få se legitimation.",
+      "du": "Har du någon legitimation du kan visa?",
+      "stamning": 1,
+      "replik": "– Den ligger i bilen. Och jag är inte skyldig att visa den, va?"
+    },
     "kroppsvisitera": {
       "text": "Beslutar om kroppsvisitation.",
       "du": "Vi kommer att kroppsvisitera dig.",

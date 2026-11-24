@@ -141,9 +141,18 @@
         ]
       ],
       "vid_brist": "bad",
-      "text_ok": "Den som vill ha tillträde till eller uppehåller sig invid ett skyddsobjekt är skyldig att på begäran uppge namn, födelsetid och hemvist.",
+      "text_ok": "Den som vill ha tillträde till eller uppehåller sig invid ett skyddsobjekt är skyldig att på begäran uppge namn, födelsetid och hemvist. Skyldigheten gäller att uppge uppgifterna – inte att visa legitimation.",
       "text_brist": "Skyldigheten gäller bara den som vill ha tillträde till skyddsobjektet eller uppehåller sig invid det.",
       "diskutera": "Var går gränsen för ”invid”?"
+    },
+    "be_om_legitimation": {
+      "namn": "Bad att få se legitimation (frivilligt)",
+      "lagrum": "Frivillig medverkan – skyddslagen 10 § ger ingen skyldighet att visa legitimation",
+      "krav": [],
+      "vid_brist": "ok",
+      "text_ok": "Det går alltid att be om legitimation, men 10 § kräver bara att personen uppger namn, födelsetid och hemvist. Att någon vägrar visa legitimation är i sig ingen grund för avvisning eller avlägsnande.",
+      "text_brist": "",
+      "diskutera": "Vad gör du om han uppger namn, födelsetid och hemvist men inte vill visa legitimation? Hur bedömer du om uppgifterna är sannolikt oriktiga?"
     },
     "upplysa_skyldighet": {
       "namn": "Förklarade skyldigheten att uppge identitet",

@@ -208,8 +208,8 @@ func _spela_scenario_1() -> void:
 		_fel("Avvisa med egen replik borde lämna samtalet i samma steg")
 	Spel.debug = false
 	kontakt.visa_nod("start")
-	if not kontakt.valj_atgard("begara_identitet"):  # Åtgärdsraden: Begär ID
-		_fel("åtgärden Begär ID saknas i kontaktläget")
+	if not kontakt.valj_atgard("begara_identitet"):  # Åtgärdsraden: Begär uppgifter
+		_fel("åtgärden Begär uppgifter saknas i kontaktläget")
 	await _vanta(2)
 	kontakt.call("_valj", 1)  # "Gör som jag säger." -> vägrar
 	await _vanta(2)

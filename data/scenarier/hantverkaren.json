@@ -250,7 +250,7 @@
       "replik": "HANTVERKAREN: – Tjena! Jonas från Ventservice. Vi ska byta filter i ventilationen i {objekt_bestamd}. Kan ni öppna bommen?",
       "alternativ": [
         {
-          "text": "Be om legitimation och arbetsorder.",
+          "text": "Be honom uppge namn, födelsetid och hemvist – och be att få se legitimation och arbetsorder.",
           "handling": "begara_identitet",
           "nasta": "leg_arlig",
           "nasta_variant": {

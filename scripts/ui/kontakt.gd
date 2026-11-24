@@ -15,7 +15,8 @@ extends Control
 
 ## Åtgärdsraden: handling i lagrum.json och kort etikett.
 const ATGARDER := [
-	["begara_identitet", "Begär ID"],
+	["begara_identitet", "Begär uppgifter"],  # namn, födelsetid, hemvist (10 §)
+	["be_om_legitimation", "Be om leg."],  # frivilligt – ingen skyldighet att visa
 	["kroppsvisitera", "Visitera"],
 	["undersoka_fordon", "Undersök fordon"],
 	["beslag", "Beslag"],
