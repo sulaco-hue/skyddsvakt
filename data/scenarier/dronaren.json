@@ -302,6 +302,7 @@
   ],
   "dialog": {
     "start": {
+      "du": "Hej! Vi är militära skyddsvakter. Är det er drönare som flög över området?",
       "replik": "MATS: – Hej hej! Vi testar bara kameran, Elsa fyllde tio i går. Visst flyger den fint?\n\nELSA: – Pappa, de har gevär!",
       "alternativ": [
         {
@@ -458,6 +459,7 @@
       "slut": true
     },
     "elsa": {
+      "du": "Hej på dig! Är det din pappa som styr drönaren?",
       "replik": "ELSA: – Är det där ett riktigt gevär? Får jag hålla i det?",
       "alternativ": [
         {
@@ -471,6 +473,7 @@
       "slut": true
     },
     "skjuten": {
+      "du": "Hej, militära skyddsvakter. Är det er drönare?",
       "replik": "MATS: – Vad håller ni på med?! Ni sköt ner hennes drönare! Det står ett barn här!\n\nELSA: – BUHUUU! Min drönare!",
       "stamning": 7,
       "alternativ": [
@@ -537,6 +540,7 @@
       "slut": true
     },
     "elsa_skjuten": {
+      "du": "Hej… hur är det med dig?",
       "replik": "ELSA: – Varför sköt du den? Den gjorde ju inget!",
       "stamning": 7,
       "alternativ": [

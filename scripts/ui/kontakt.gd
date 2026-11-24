@@ -40,6 +40,9 @@ var _anvanda: Dictionary = {}
 var stamning := 3
 
 var _replik: Label
+## Det vi själva sa just före motpartens replik (nodens "du", eller ett citerat svar).
+var _du: Label
+var _senast_sagt := ""
 var _alternativ_lista: VBoxContainer
 var _stamning_rutor: Array[ColorRect] = []
 var _stamning_text: Label
@@ -137,6 +140,8 @@ func bygg(scenario: Dictionary) -> void:
 	var bubbla := UiKit.panel(Color("0B1016"), UiKit.TEXT, 24, 18)
 	var bv := UiKit.vbox(6)
 	bubbla.add_child(bv)
+	_du = UiKit.etikett("", 21 if UiKit.kompakt else 25, Color("2E4A1E"), true)
+	bv.add_child(_du)
 	bv.add_child(UiKit.rubrik("MOTPARTEN", 14, Color("5A3B12")))
 	_replik = UiKit.etikett("", 24 if UiKit.kompakt else 30, UiKit.MORK, true)
 	bv.add_child(_replik)
@@ -200,6 +205,11 @@ func visa_nod(nod_id: String, replik_override := "") -> void:
 		_anvanda.clear()
 	_nod_id = nod_id
 	_replik.text = replik_override if replik_override != "" else str(nod.get("replik", "…"))
+	# Vår egen replik först: nodens "du" (t.ex. hälsningen) eller det vi just sa.
+	var du := _senast_sagt if _senast_sagt != "" else str(nod.get("du", ""))
+	_senast_sagt = ""
+	_du.text = "DU: – " + du if du != "" else ""
+	_du.visible = du != ""
 	if nod.has("stamning"):
 		stamning = clampi(int(nod["stamning"]), 0, 8)
 		_uppdatera_stamning()
@@ -333,6 +343,10 @@ func _valj_alt(alt: Dictionary) -> void:
 		_anvanda[h] = true
 	stamning = clampi(stamning + int(alt.get("stamning", 0)), 0, 8)
 	_uppdatera_stamning()
+	# Citat i svaret (”…”) visas som det vi sa ovanför motpartens svar.
+	var text := str(alt.get("text", ""))
+	if text.count("”") >= 2:
+		_senast_sagt = text.get_slice("”", 1).strip_edges()
 	val_gjort.emit(alt)
 	var nasta := _nasta(alt)
 	if nasta == "" and alt.has("replik"):

@@ -332,6 +332,7 @@
   ],
   "dialog": {
     "gett_upp": {
+      "du": "Stå still! Händerna där vi ser dem!",
       "replik": "YXMANNEN: – Okej, okej! Skjut inte! Jag… jag har inte sovit på tre dygn. Grannen tar min ved. Jag trodde ni var med honom…\n\nKamraten håller honom under uppsikt. Yxan ligger i gruset.",
       "satt_fakta": {
         "brott_pa_bar_garning": true
@@ -352,6 +353,7 @@
       ]
     },
     "overmannad": {
+      "du": "Ligg still! Lugna ner dig!",
       "replik": "Ni har brottat ner honom. Yxan ligger i gruset, kamraten har knät på hans rygg.\n\nYXMANNEN: – Släpp mig! Aaah…",
       "satt_fakta": {
         "brott_pa_bar_garning": true
@@ -400,6 +402,7 @@
       "slut": true
     },
     "skjuten": {
+      "du": "Ligg still! Rör dig inte!",
       "replik": "Mannen ligger på marken och stönar. Yxan ligger två meter bort – kamraten sparkar undan den och håller honom under uppsikt.\n\nYXMANNEN: – Aaah… benet…",
       "satt_fakta": {
         "brott_pa_bar_garning": true

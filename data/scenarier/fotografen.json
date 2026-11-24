@@ -122,7 +122,8 @@
   "samband": [],
   "dialog": {
     "start": {
-      "replik": "– Vadå? Jag fotograferar bara höstlöven. Det är väl ändå inte förbjudet att stå på en skogsväg?",
+      "du": "Hej! Vi är militära skyddsvakter. Det här är ett skyddsobjekt – vad gör du här?",
+      "replik": "FOTOGRAFEN: – Vadå? Jag fotograferar bara höstlöven. Det är väl ändå inte förbjudet att stå på en skogsväg?",
       "alternativ": [
         {
           "text": "Förklara lugnt att området är skyddsobjekt och att skylten anger avbildningsförbud.",

@@ -246,6 +246,7 @@
   ],
   "dialog": {
     "start": {
+      "du": "Hej, vi är militära skyddsvakter. Vad gäller ditt ärende?",
       "replik": "HANTVERKAREN: – Tjena! Jonas från Ventservice. Vi ska byta filter i ventilationen i {objekt_bestamd}. Kan ni öppna bommen?",
       "alternativ": [
         {
