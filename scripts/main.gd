@@ -554,7 +554,6 @@ func _uppdatera_angripare(delta: float) -> void:
 		if not rep.is_empty() and hud.visible:
 			hud.visa_bubbla(n, str(rep[int(_angripare["replik_i"]) % rep.size()]), 2.6)
 			_angripare["replik_i"] = int(_angripare["replik_i"]) + 1
-			_vral(n)
 	if bool(_angripare["upptackt"]) and not bool(_angripare["kamrat_nara"]) and avst <= 4:
 		_angripare["kamrat_nara"] = true
 		_kamrat_sager(str(h.get("kamrat_nara", "")))
@@ -567,21 +566,6 @@ func _uppdatera_angripare(delta: float) -> void:
 	if float(_angripare["omvag_t"]) <= 0.0:
 		_angripare["omvag_t"] = float(h.get("omvag_s", 0.8))
 		n.ga_langs(varld.vag_mot(n.cell, varld.spelare.cell))
-
-
-## Obegripligt vrål i C64-stil (assets/ljud/vral_*.ogg, skapas av
-## verktyg/generera_vral.py). Ljudet hörs från honom: starkare ju närmare.
-func _vral(n: Aktor) -> void:
-	var spelare: AudioStreamPlayer2D = n.get_node_or_null("Vral")
-	if spelare == null:
-		spelare = AudioStreamPlayer2D.new()
-		spelare.name = "Vral"
-		spelare.max_distance = 900.0
-		spelare.volume_db = -2.0
-		n.add_child(spelare)
-	spelare.stream = load("res://assets/ljud/vral_%d.ogg" % (randi() % 4))
-	spelare.pitch_scale = randf_range(0.92, 1.08)
-	spelare.play()
 
 
 func _angripare_upptackt() -> void:
