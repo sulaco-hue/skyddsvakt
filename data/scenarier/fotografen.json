@@ -73,7 +73,7 @@
   },
   "npc": {
     "fotografen": {
-      "namn": "Okänd man, ca 40 år",
+      "namn": "Man, ca 40 år",
       "benamning": "mannen",
       "beskrivning": "Kamera i handen",
       "sprite": "civil",
@@ -415,7 +415,7 @@
   "sambandstexter": {
     "svar": {
       "lamnat": "Uppfattat. Notera signalement, bilens färg och riktning för rapporten",
-      "kontakt": "Uppfattat. Dokumentera kontakten",
+      "kontakt": "Uppfattat",
       "efter": "Uppfattat. Håll uppsikt och rapportera förändring",
       "fore": "Uppfattat"
     },

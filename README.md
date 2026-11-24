@@ -49,7 +49,7 @@ bedömning av en handling) och `slutkrav` (t.ex. att händelsen måste rapporter
 ### Uppropet till CQ
 
 **Samband [R] → Anropa CQ** öppnar förbindelsen ("CQ, CQ." – "CQ kom."). Därefter kan flera ärenden tas i
-samma samtal: **Lägesrapport, Begär polis, Begär sjukvård, Begär förstärkning, Sambandsprov**, och
+samma samtal: **Lägesrapport, Begär polis, Begär sjukvård, Begär förstärkning**, och
 samtalet avslutas med **Klart slut**. Alla val finns alltid (`data/samband.json`), men orimliga val får
 kritik i debriefingen: polis utan händelse, ambulans utan skadade eller förstärkning utan hot bedöms som
 *diskutabla* (rekvisiten `handelse_upptackt`, `skadad_person`, `behov_forstarkning` i `lagrum.json`).

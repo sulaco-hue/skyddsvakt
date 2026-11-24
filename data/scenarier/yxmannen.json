@@ -101,7 +101,7 @@
   },
   "npc": {
     "yxmannen": {
-      "namn": "Man med yxa, ca 50 år",
+      "namn": "Man, ca 50 år",
       "benamning": "mannen",
       "beskrivning": "Flanellskjorta, skägg, yxa",
       "sprite": "yxman",
@@ -243,8 +243,8 @@
       "fore": "man som hotat med yxa"
     },
     "skadade": {
-      "fakta:motpart_skjuten": "en skadad person, skottskada i benet",
-      "fore": "en skadad person"
+      "fakta:motpart_skjuten": ", en skadad person, skottskada i benet",
+      "fore": ""
     },
     "svar_forstarkning": {
       "fore": "Uppfattat, rondpatrullen skickas till grinden"

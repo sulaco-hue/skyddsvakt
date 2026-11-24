@@ -163,15 +163,16 @@ func _radio_ersattningar() -> Dictionary:
 				nere += 1
 		const TAL := ["inga", "en", "två", "tre", "fyra", "fem", "sex", "sju", "åtta", "nio", "tio", "elva", "tolv"]
 		var ord: String = TAL[nere] if nere < TAL.size() else str(nere)
-		byt["skadade"] = ("en skadad person" if nere == 1 else "%s skadade personer" % ord) + \
-			(" med… avvikande hälsotillstånd" if nere > 0 else "")
+		if nere > 0:
+			byt["skadade"] = ", " + ("en skadad person" if nere == 1 else "%s skadade personer" % ord) + \
+				" med… avvikande hälsotillstånd"
 	var st: Dictionary = _scenario.get("sambandstexter", {})
 	for nyckel: String in st:
 		byt[nyckel] = _fasvarde(st[nyckel])
 	# Standardtexter för uppropet (data/samband.json) där scenariot inget sagt.
 	var standard: Dictionary = Datafil.las_json("res://data/samband.json").get("standard", {})
 	for nyckel: String in standard:
-		if not byt.has(nyckel) or str(byt[nyckel]) == "":
+		if not byt.has(nyckel):
 			byt[nyckel] = standard[nyckel]
 	return byt
 

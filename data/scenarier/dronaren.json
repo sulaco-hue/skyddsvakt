@@ -97,7 +97,7 @@
   },
   "npc": {
     "piloten": {
-      "namn": "Mats, ca 45 år",
+      "namn": "Man, ca 45 år",
       "benamning": "mannen",
       "beskrivning": "Handkontroll, glad",
       "sprite": "pappa",
@@ -115,7 +115,7 @@
       ]
     },
     "dottern": {
-      "namn": "Elsa, 10 år",
+      "namn": "Flicka, ca 10 år",
       "benamning": "flickan",
       "beskrivning": "Födelsedagsbarn",
       "sprite": "barn",

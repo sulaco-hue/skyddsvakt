@@ -205,7 +205,7 @@ func oppna(npc: Dictionary, start_nod: String) -> void:
 	# Rubriken över repliken: MANNEN, KVINNAN, FLICKAN, POJKEN …
 	_motpart_rubrik.text = str(npc.get("benamning", "MOTPARTEN")).to_upper()
 	_satt_krympt(false)
-	_namn.text = str(npc.get("namn", "Okänd person"))
+	_namn.text = str(npc.get("namn", "Person"))
 	_beskrivning.text = str(npc.get("beskrivning", ""))
 	_portratt.texture = load("res://assets/gfx/%s.png" % npc.get("portratt", "portratt_civil"))
 	stamning = int(npc.get("stamning", 3))
