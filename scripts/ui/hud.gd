@@ -29,6 +29,8 @@ var _debug_info: PanelContainer
 var _debug_info_text: Label
 ## Aktiva pratbubblor/ljudtexter: {nod, mal, t, hojd, stig, typ}
 var _bubblor: Array = []
+## Eget lager för radiomenyn (överst).
+var _radiolager: Control
 var _samband_lista: VBoxContainer
 var _samband_panel: PanelContainer
 ## Sekunder som en radiorad syns innan den börjar blekna, och hur länge den bleknar.
@@ -478,7 +480,16 @@ func _bygg_sambandsmeny() -> void:
 		_sambandsmeny.offset_top = -92
 		_sambandsmeny.offset_bottom = -92
 	_sambandsmeny.visible = false
-	add_child(_sambandsmeny)
+	# Radiomenyn ligger i ett eget lager allra överst, över pratbubblor och kontaktrutan.
+	var lager := CanvasLayer.new()
+	lager.layer = 10
+	add_child(lager)
+	_radiolager = Control.new()
+	UiKit.helskarm(_radiolager)
+	_radiolager.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_radiolager.theme = UiKit.skapa_tema()
+	lager.add_child(_radiolager)
+	_radiolager.add_child(_sambandsmeny)
 	_samband_lista_v = UiKit.vbox(8)
 	_sambandsmeny.add_child(_samband_lista_v)
 	_visa_sambandsmeny_innehall()
@@ -750,6 +761,8 @@ func _bleka_samband(delta: float) -> void:
 
 func _process(delta: float) -> void:
 	_uppdatera_sambandsknappar()
+	# Lagret följer inte HUD:ens synlighet av sig självt (t.ex. vid debriefingen).
+	_radiolager.visible = visible
 	if not visible:
 		return
 	_klocka.text = Spel.klockstrang()
