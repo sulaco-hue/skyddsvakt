@@ -186,7 +186,8 @@
           "nasta": "visar"
         },
         {
-          "text": "”Kan du radera bilderna där staketet och {objekt_bestamd} syns? Det är frivilligt.”",
+          "text": "Kan du radera bilderna där staketet och {objekt_bestamd} syns?",
+          "du": "Kan du radera bilderna där staketet och {objekt_bestamd} syns?",
           "handling": "be_radera_frivilligt",
           "nasta": "raderat"
         },
@@ -210,7 +211,8 @@
       "replik": "– Här. Lite träd… och ja, staketet och {objekt_bestamd} syns på några. Nöjd nu?",
       "alternativ": [
         {
-          "text": "”Kan du radera bilderna där staketet och {objekt_bestamd} syns? Det är frivilligt.”",
+          "text": "Kan du radera bilderna där staketet och {objekt_bestamd} syns?",
+          "du": "Kan du radera bilderna där staketet och {objekt_bestamd} syns?",
           "handling": "be_radera_frivilligt",
           "nasta": "raderat"
         },
