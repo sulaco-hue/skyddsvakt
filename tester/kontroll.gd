@@ -268,6 +268,11 @@ func _spela_scenario_1() -> void:
 	Spel.satt_fakta({"gripande_genomfort": true})
 	var sv2 := str(kontakt.call("_spar", {"handling": "skyddsvisitera", "replik": "x"}))
 	Spel.satt_fakta({"gripande_genomfort": false})
+	Spel.satt_fakta({"avlagsnande_genomfort": true})
+	var sv3 := str(kontakt.call("_spar", {"handling": "skyddsvisitera", "replik": "x"}))
+	Spel.satt_fakta({"avlagsnande_genomfort": false})
+	if sv3.contains("SAKNAR"):
+		_fel("skyddsvisitation vid avlägsnande borde ha lagstöd (PL 29 § 2 st.): " + sv3)
 	if not sv.contains("SAKNAR") or sv2.contains("SAKNAR") or not sv2.contains("LAGSTÖD"):
 		_fel("skyddsvisitation bedöms fel: före gripande %s, efter %s" % [sv, sv2])
 	else:

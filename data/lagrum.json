@@ -45,7 +45,8 @@
       "proportionerligt": "åtgärden stod i rimlig proportion till brottet",
       "omhandertagande_genomfort": "personen var tillfälligt omhändertagen",
       "gripande_genomfort": "personen var gripen",
-      "envarsgripande_genomfort": "personen var envarsgripen"
+      "envarsgripande_genomfort": "personen var envarsgripen",
+      "avlagsnande_genomfort": "personen avlägsnades"
     }
   },
   "handlingar": {
@@ -221,15 +222,16 @@
         [
           "omhandertagande_genomfort",
           "gripande_genomfort",
-          "envarsgripande_genomfort"
+          "envarsgripande_genomfort",
+          "avlagsnande_genomfort"
         ]
       ],
       "vid_brist": "bad",
       "satter_fakta": {
         "skyddsvisitation_genomford": true
       },
-      "text_ok": "Personen var frihetsberövad. En ytlig skyddsvisitation efter vapen och andra farliga föremål är tillåten när den behövs av säkerhetsskäl – för er, för den frihetsberövade och för omgivningen.",
-      "text_brist": "Skyddsvisitation förutsätter ett lagligt frihetsberövande (gripande, tillfälligt omhändertagande eller envarsgripande). Utan det är det kroppsvisitation enligt skyddslagen 11 § som gäller – med de villkoren.",
+      "text_ok": "Personen var frihetsberövad eller avlägsnades. En ytlig skyddsvisitation efter vapen och andra farliga föremål är tillåten i anslutning till ingripandet när den behövs av säkerhetsskäl – för er, för personen och för omgivningen. För militär bevakningspersonal följer det av polislagen 29 § andra stycket.",
+      "text_brist": "Skyddsvisitation förutsätter att personen med stöd i lag frihetsberövas (gripande, tillfälligt omhändertagande, envarsgripande) eller avlägsnas – inte bara avvisas. Utan det är det kroppsvisitation enligt skyddslagen 11 § som gäller, med de villkoren.",
       "diskutera": "Vad är skillnaden i syfte och lagstöd mellan kroppsvisitation enligt skyddslagen 11 § och skyddsvisitation? Hur ytlig ska en skyddsvisitation vara?"
     },
     "vald_mot_farkost": {
@@ -320,7 +322,10 @@
       "vid_brist": "bad",
       "text_ok": "Grund fanns enligt 12 § och avlägsnandet behövdes. Avlägsnande är mindre ingripande än omhändertagande.",
       "text_brist": "Avlägsnande kräver att personen var inom eller invid objektet, att en grund i 12 § förelåg och att åtgärden behövdes.",
-      "diskutera": "Varför är avlägsnande ofta att föredra framför omhändertagande?"
+      "diskutera": "Varför är avlägsnande ofta att föredra framför omhändertagande? Behövde ni skyddsvisitera honom innan ni förde bort honom?",
+      "satter_fakta": {
+        "avlagsnande_genomfort": true
+      }
     },
     "tillfalligt_omhanderta": {
       "namn": "Omhändertog personen tillfälligt",
