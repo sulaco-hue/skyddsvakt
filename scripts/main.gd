@@ -72,6 +72,7 @@ func _ready() -> void:
 	hud.avsluta_pass.connect(_visa_debriefing)
 	hud.ersattningar = _radio_ersattningar
 	hud.situation.connect(_pa_situation)
+	hud.samband_utan_svar.connect(_samband_utan_svar)
 
 	radio = Radiotrafik.new()
 	add_child(radio)
@@ -265,6 +266,9 @@ func _debug_text() -> String:
 
 ## id kan vara "1" eller "1:variant" (debugraden).
 func _uppdatera_brus(delta: float) -> void:
+	# Ingen vardaglig radiotrafik under zombieangreppet.
+	if not _horde.is_empty() and bool(_horde.get("upptackt", false)):
+		return
 	if _brus.is_empty():
 		_brus = Datafil.las_json("res://data/radiobrus.json")
 		_brus_t = float(_brus.get("installningar", {}).get("forsta_efter_s", 20))
@@ -835,6 +839,22 @@ func _uppdatera_upptackt(delta: float) -> void:
 		int(float(_upptackt["varde"]) * 100.0), avst, float(_upptackt["bas"])])
 	if float(_upptackt["varde"]) >= 1.0:
 		_kamrat_reagerar()
+
+
+## Ingen svarar på radion: vi och kamraten pratar oroligt med varandra
+## (scenariots "samband_tyst.oro", en växling per försök).
+func _samband_utan_svar() -> void:
+	var oro: Array = _scenario.get("samband_tyst", {}).get("oro", [])
+	if oro.is_empty():
+		return
+	var i := int(get_meta("oro_i", 0))
+	set_meta("oro_i", i + 1)
+	var v: Array = oro[mini(i, oro.size() - 1)]
+	var t := 4.0  # efter vårt eget anrop
+	for rad: Dictionary in v:
+		var fn := _spelaren_sager if str(rad.get("vem", "")) == "du" else _kamrat_sager
+		get_tree().create_timer(t).timeout.connect(fn.bind(str(rad.get("text", ""))))
+		t += 2.6
 
 
 func _spelaren_sager(text: String) -> void:

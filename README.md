@@ -34,7 +34,9 @@ Spelet startar med ett scenarioval (listan i `data/scenarier/index.json`):
    biter inte. Verkanselden träffar närmaste zombie, och bedömningen följer samma regler (avstånd,
    varning, varningsskott). Du och kamraten har svårt att tro det: *"Du, vad säger SoldF om zombies?"* –
    *"Vette fan. Eldstöt?"* – *"Metkrok?"*. Debriefingen frågar om en zombie är en ”person” och om det är
-   nödvärn eller nöd.
+   nödvärn eller nöd. Radion ballar ur: Norra grinden, Västra posten och Rondpatrullen överkörs en
+   efter en, och till sist faller CQ. Därefter svarar ingen på anrop (`samband_tyst` i scenariofilen),
+   och du och kamraten pratar oroligt med varandra i stället.
 
 **Skyddsobjektet slumpas** vid varje genomförande: byggnaden, "helikoptern" (lastbil med HELIKOPTER målat på sidan), ett vapenförråd
 (lagerbyggnad i plåt) eller en radiomast med teknikbod. Typerna finns under `objekttyper` i kartfilen;

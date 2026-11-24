@@ -78,7 +78,8 @@
     "kamraten_skyddad": false,
     "spelaren_vid_liv": false,
     "spelaren_dod": false,
-    "kamrat_dod": false
+    "kamrat_dod": false,
+    "cq_fallen": false
   },
   "bedomning": {
     "halt_order": {
@@ -453,7 +454,125 @@
             "text": "…Upprepa, kom?",
             "efter": 5.5
           }
-        ]
+        ],
+        "om_fakta": {
+          "cq_fallen": false
+        }
+      },
+      {
+        "efter_s": 45,
+        "meddelanden": [
+          {
+            "fran": "Norra grinden",
+            "text": "CQ, CQ! Från Norra grinden, de är vid bommen! De stannar inte för tillrop, vi öppnar eld, kom!",
+            "efter": 0
+          },
+          {
+            "fran": "CQ",
+            "text": "Uppfattat, håll ut! Rapportera, kom!",
+            "efter": 2.5
+          },
+          {
+            "fran": "Norra grinden",
+            "text": "PANG – PANG – de reser sig igen! De RESER sig—",
+            "efter": 4.5
+          }
+        ],
+        "om_fakta": {
+          "cq_fallen": false
+        }
+      },
+      {
+        "efter_s": 70,
+        "meddelanden": [
+          {
+            "fran": "Västra posten",
+            "text": "CQ… från Västra posten… Andersson är nere, de är överallt, vi drar oss mot—",
+            "efter": 0
+          },
+          {
+            "fran": "(brus)",
+            "text": "kssshhh…",
+            "efter": 3
+          },
+          {
+            "fran": "CQ",
+            "text": "Västra posten, Västra posten, svara, kom!",
+            "efter": 5
+          },
+          {
+            "fran": "CQ",
+            "text": "Västra posten, kom!",
+            "efter": 8
+          }
+        ],
+        "om_fakta": {
+          "cq_fallen": false
+        }
+      },
+      {
+        "efter_s": 95,
+        "meddelanden": [
+          {
+            "fran": "Rondpatrullen",
+            "text": "CQ från Rondpatrullen, vi är omringade vid ladan, begär… AAAH—",
+            "efter": 0
+          },
+          {
+            "fran": "(brus)",
+            "text": "kssshhh…",
+            "efter": 2.5
+          },
+          {
+            "fran": "CQ",
+            "text": "Rondpatrullen? Rondpatrullen, kom!",
+            "efter": 4.5
+          },
+          {
+            "fran": "CQ",
+            "text": "Norra grinden, Norra grinden, kom!",
+            "efter": 8
+          },
+          {
+            "fran": "(brus)",
+            "text": "…",
+            "efter": 10
+          }
+        ],
+        "om_fakta": {
+          "cq_fallen": false
+        }
+      },
+      {
+        "efter_s": 125,
+        "satt_fakta": {
+          "cq_fallen": true
+        },
+        "meddelanden": [
+          {
+            "fran": "CQ",
+            "text": "Till alla, till alla, från CQ… det bankar på dörren till vaktlokalen.",
+            "efter": 0
+          },
+          {
+            "fran": "CQ",
+            "text": "Om någon hör detta: håll era poster. Jag upprepar, håll era—",
+            "efter": 3.5
+          },
+          {
+            "fran": "CQ",
+            "text": "Vad i… NEJ! Bort, BORT—",
+            "efter": 6.5
+          },
+          {
+            "fran": "(brus)",
+            "text": "kssssshhhhhh…",
+            "efter": 9
+          }
+        ],
+        "om_fakta": {
+          "cq_fallen": false
+        }
       }
     ]
   },
@@ -465,5 +584,93 @@
       "diskutera": "När ska CQ få veta? Före, under eller efter?"
     }
   ],
-  "dialog": {}
+  "dialog": {},
+  "samband_tyst": {
+    "kommentar": "När CQ har fallit (fakta cq_fallen) svarar ingen. Varje försök ger en orolig växling mellan oss.",
+    "om_fakta": "cq_fallen",
+    "meddelanden": [
+      {
+        "fran": "Grindposten",
+        "text": "CQ, CQ, från Grindposten, kom.",
+        "efter": 0
+      },
+      {
+        "fran": "(brus)",
+        "text": "kssshhh…",
+        "efter": 2.5
+      },
+      {
+        "fran": "Grindposten",
+        "text": "CQ! Svara, kom!",
+        "efter": 4.5
+      },
+      {
+        "fran": "(brus)",
+        "text": "…",
+        "efter": 6.5
+      }
+    ],
+    "oro": [
+      [
+        {
+          "vem": "kamrat",
+          "text": "Ingen svarar. Ingen."
+        },
+        {
+          "vem": "du",
+          "text": "Försök igen om en stund. De har säkert bara… batteribyte."
+        }
+      ],
+      [
+        {
+          "vem": "du",
+          "text": "CQ har aldrig varit tyst så här länge."
+        },
+        {
+          "vem": "kamrat",
+          "text": "Tror du de… alltså. Har blivit som dem?"
+        }
+      ],
+      [
+        {
+          "vem": "kamrat",
+          "text": "Vad gör vi om vi är de enda kvar?"
+        },
+        {
+          "vem": "du",
+          "text": "Vi håller posten. Det är det enda vi vet."
+        }
+      ],
+      [
+        {
+          "vem": "du",
+          "text": "Hur länge räcker ammunitionen?"
+        },
+        {
+          "vem": "kamrat",
+          "text": "Räkna inte. Snälla, räkna inte."
+        }
+      ],
+      [
+        {
+          "vem": "kamrat",
+          "text": "Jag borde ha blivit kock."
+        },
+        {
+          "vem": "du",
+          "text": "Isomaten hade inte räddat oss heller."
+        }
+      ],
+      [
+        {
+          "vem": "du",
+          "text": "Det är bara vi nu."
+        },
+        {
+          "vem": "kamrat",
+          "text": "…Ja."
+        }
+      ]
+    ]
+  }
 }

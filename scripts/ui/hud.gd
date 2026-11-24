@@ -9,6 +9,8 @@ signal tysta_kamrat
 signal situation(id: String)
 signal handling(handling_id: String, beskrivning: String)
 signal avsluta_pass
+## Ett sambandsval när motstationen har tystnat (scenariots "samband_tyst").
+signal samband_utan_svar
 
 var varld: Varld
 var scenario: Dictionary
@@ -466,6 +468,15 @@ func _bygg_sambandsmeny() -> void:
 
 func _pa_sambandsval(val: Dictionary) -> void:
 	_sambandsmeny.visible = false
+	# Har CQ tystnat (t.ex. överkörd av zombies) får vi inget svar.
+	var tyst: Dictionary = scenario.get("samband_tyst", {})
+	if not tyst.is_empty() and bool(Spel.fakta.get(str(tyst.get("om_fakta", "")), false)):
+		# Försöket räknas: vi försökte rapportera/larma, men ingen svarade.
+		if str(val.get("handling", "")) != "":
+			handling.emit(str(val.get("handling", "")), str(val.get("etikett", "")) + " – inget svar")
+		Spel.spela_samband(tyst.get("meddelanden", []), {})
+		samband_utan_svar.emit()
+		return
 	if str(val.get("handling", "")) != "":
 		handling.emit(str(val.get("handling", "")), str(val.get("etikett", "")))
 	var byt: Dictionary = ersattningar.call() if ersattningar.is_valid() else {}
