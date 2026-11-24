@@ -178,7 +178,7 @@ func bygg(scenario: Dictionary) -> void:
 	pr.add_child(pt)
 	botten.add_child(pr)
 	var bvv := UiKit.vbox(0)
-	bvv.add_child(UiKit.titel("Du · Skyddsvakt", 15))
+	bvv.add_child(UiKit.titel("Ettan · Skyddsvakt", 15))
 	_tid_label = UiKit.etikett("", 19, UiKit.DAMPAD)
 	bvv.add_child(_tid_label)
 	botten.add_child(bvv)

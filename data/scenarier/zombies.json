@@ -29,7 +29,7 @@
   "briefing": {
     "uppdrag": "Bevaka grind och staket under natten. Rapportera avvikelser till CQ.",
     "objektinfo": "Skyddsobjektet omfattar området innanför staketet. Skyltat: tillträdesförbud och avbildningsförbud.",
-    "samband": "Vi: Grindposten (stridspar, två skyddsvakter). Vaktchef: CQ (Caesar Qvintus).",
+    "samband": "Vi: Grindposten – stridsparet, två skyddsvakter: du är ettan, din kamrat tvåan. Vaktchef: CQ (Caesar Qvintus).",
     "mal": []
   },
   "anropssignaler": {
@@ -202,7 +202,7 @@
       ],
       "kamrat_dor": "NEEEJ! Jag är…",
       "du_om_kamrat": "Nej! NEJ! Han är borta…",
-      "kamrat_om_dig": "NEEEJ! Grindposten är nere! Grindposten är nere!",
+      "kamrat_om_dig": "NEEEJ! Ettan är nere! Ettan är nere!",
       "kamrat_slut": "Det var nog alla. Jag tror jag behöver en Nocco.",
       "missad_diskutera": "Ett dussin zombies kan inte missas.",
       "forsta_hjalpen_vaxling": [

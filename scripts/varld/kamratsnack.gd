@@ -3,7 +3,7 @@ extends Node
 ## Stridsparskamratens småprat (data/kamratsnack.json).
 ##
 ## Kamraten säger då och då något om sport, elpriser, datorspel osv.
-## Grindposten kan sucka, svara eller inget göra. Med "Tyst nu" [T]
+## Ettan (du) kan sucka, svara eller inget göra. Med "Tyst nu" [T]
 ## tystnar kamraten en stund. Pratet pausas under kontakt och efter händelser.
 
 const SOKVAG := "res://data/kamratsnack.json"
@@ -50,7 +50,7 @@ func pausa(sek: float) -> void:
 	_tyst_kvar = maxf(_tyst_kvar, sek)
 
 
-## Grindposten säger åt kamraten att vara tyst.
+## Ettan säger åt tvåan att vara tyst.
 func tysta() -> void:
 	if not aktiv:
 		return

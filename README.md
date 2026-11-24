@@ -192,7 +192,7 @@ En jurist kan alltså ändra lagrum, krav och texter i JSON-filen utan att röra
   genom grinden och ställer sig och skyddar vid kontakt.
 - **Zoner:** positionsrutan visar **På skyddsobjektet**, **Invid skyddsobjektet (bedömning)** eller **Utanför**.
   ”Invid” är en lösare definition; hur långt ut den sträcker sig styrs av `karta.invid_avstand` (rutor).
-- **Samband:** vi är **Grindposten**, vaktchefen är **CQ** (Caesar Qvintus) och befinner sig på annan plats.
+- **Samband:** stridsparet tillsammans är **Grindposten**; du är **ettan** och din stridsparskamrat **tvåan**. Vaktchefen är **CQ** (Caesar Qvintus) och befinner sig på annan plats.
   Fraseologi: ”Grindposten, Grindposten.” – ”Grindposten kom.” – ”Från CQ, …, kom.” – ”Uppfattat, kom.” –
   ”…, slut kom.” – ”Klart slut.” Allt ligger i scenariofilen:
   - `anropssignaler`, `samband` (radiologgen vid passets start)
@@ -226,7 +226,7 @@ figurernas tillstånd, upptäcktstimern, alla fakta och loggstorlek.
 ## Kamratens småprat
 
 `data/kamratsnack.json` innehåller kamratens prat (sport, elpriser, datorspel, film, mat, väder …).
-Varje rad kan ha egna `svar` som Grindposten ibland ger; annars används `allmanna_svar`, eller så
+Varje rad kan ha egna `svar` som ettan (du) ibland ger; annars används `allmanna_svar`, eller så
 suckar Grindposten (`suckar`). Hur ofta det pratas och chansen för suck/svar styrs under `installningar`.
 **T** (tyst nu) säger en av `tyst_repliker` och tystar kamraten i `tystnad_s` sekunder.
 Pratet pausas under kontakt och en stund efter att kamraten upptäckt en händelse (`paus_snack_s`).

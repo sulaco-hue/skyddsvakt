@@ -1,5 +1,5 @@
 {
-  "kommentar": "Stridsparskamratens småprat. Lägg till, ta bort eller ändra repliker fritt. 'svar' är valfritt: Grindpostens möjliga svar. 'nar' är valfritt: repliken används bara när scenariots 'vaderlag' innehåller alla villkoren (t.ex. [\"regn\"]). Tider i sekunder.",
+  "kommentar": "Stridsparskamratens småprat. Lägg till, ta bort eller ändra repliker fritt. 'svar' är valfritt: ettans (ditt) möjliga svar. 'nar' är valfritt: repliken används bara när scenariots 'vaderlag' innehåller alla villkoren (t.ex. [\"regn\"]). Tider i sekunder.",
   "installningar": {
     "forsta_efter_s": 4,
     "intervall_min_s": 8,

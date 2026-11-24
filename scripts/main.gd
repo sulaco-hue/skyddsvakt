@@ -1303,7 +1303,7 @@ func _horde_nadde_fram(id: String, vem := "spelare") -> void:
 	if int(traffar[vem]) >= int(h.get("angrepp_innan_dod", 3)):
 		_horde_dod(vem, id)
 		return
-	Spel.utfor("angrepp_nadde_fram", "En av dem nådde fram – %s knuffade omkull den" % ("du" if vem == "spelare" else "kamraten"))
+	Spel.utfor("angrepp_nadde_fram", "En av dem nådde fram – %s knuffade omkull den" % ("du (ettan)" if vem == "spelare" else "tvåan"))
 	hud.visa_ljud(n, "DUNS!", 1.4)
 	var rop: Array = h.get("du_angripen" if vem == "spelare" else "kamrat_angripen", [])
 	if not rop.is_empty():
@@ -1345,7 +1345,7 @@ func _horde_dod(vem: String, zombie_id: String) -> void:
 		varld.kamrat_folj = false
 		snack.aktiv = false
 		Spel.satt_fakta({"kamrat_dod": true})
-		Spel.utfor("kamrat_dod", "Stridsparskamraten blev uppäten")
+		Spel.utfor("kamrat_dod", "Tvåan blev uppäten")
 		hud.visa_bubbla(varld.kollega, str(h.get("kamrat_dor", "")), 2.0)
 		get_tree().create_timer(1.8).timeout.connect(_spelaren_sager.bind(str(h.get("du_om_kamrat", ""))))
 		return
