@@ -24,8 +24,17 @@ func _ready() -> void:
 	await _spela_dronaren_med_pilot()
 	await _spela_dronaren_utan_pilot()
 	await _spela_missad_handelse()
-	await _spela_hantverkaren("oriktig", [0, 1], {"begara_identitet": "ok", "avvisa": "ok"})
-	await _spela_hantverkaren("arlig", [0, 0, 0], {"begara_identitet": "ok", "undersoka_fordon": "ok"})
+	# Steg: tal = svarsalternativ, text = åtgärd i åtgärdsraden.
+	await _spela_hantverkaren("arlig", ["begara_identitet", 0, 0, 0, 0],
+		{"begara_identitet": "ok", "neka_tilltrade": "ok", "dokumentera": "ok"})
+	await _spela_hantverkaren("arlig", ["avvisa"], {"avvisa": "bad"})
+	await _spela_hantverkaren("arlig", [2], {"slappa_in": "bad"})
+	await _spela_hantverkaren("oriktig", ["begara_identitet", "be_om_legitimation", "avvisa"],
+		{"be_om_legitimation": "ok", "avvisa": "ok"})
+	await _spela_hantverkaren("oriktig", ["undersoka_fordon", "avvisa"], {"avvisa": "ok"})
+	await _spela_hantverkaren("rekognosering", ["undersoka_fordon", "beslag", "gripa", "skyddsvisitera"],
+		{"undersoka_fordon": "ok", "beslag": "ok", "gripa": "ok", "skyddsvisitera": "ok"})
+	await _spela_hantverkaren("rekognosering", ["gripa"], {"gripa": "bad"})
 	await _spela_yxmannen_ger_upp()
 	await _spela_yxmannen_skarp()
 	await _spela_yxmannen_for_tidigt()
@@ -519,8 +528,12 @@ func _spela_hantverkaren(variant: String, val: Array, forvantat: Dictionary) -> 
 	main.call("_oppna_kontakt", "hantverkaren")
 	await _vanta(3)
 	var kontakt: Kontakt = main.kontakt
-	for i in val:
-		kontakt.call("_valj", int(i))
+	for steg in val:
+		if steg is String:
+			if not kontakt.valj_atgard(str(steg)):
+				_fel("åtgärden %s fanns inte (steg %s)" % [steg, kontakt._nod_id])
+		else:
+			kontakt.call("_valj", int(steg))
 		await _vanta(2)
 	kontakt.call("_stang")
 	await _vanta(3)

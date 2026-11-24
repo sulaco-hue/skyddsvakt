@@ -238,8 +238,23 @@ func _satt_krympt(k: bool) -> void:
 	_namn.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART if k else TextServer.AUTOWRAP_OFF
 
 
+## "variant": {"<variant>": {fält …}} i ett dialogsteg, svarsalternativ eller en
+## åtgärdsreaktion ersätter fälten när scenariot körs i den varianten
+## (t.ex. olika repliker eller fakta beroende på vem personen egentligen är).
+static func for_variant(d: Dictionary) -> Dictionary:
+	var per: Variant = d.get("variant", {})
+	if not per is Dictionary or not (per as Dictionary).has(Spel.variant):
+		return d
+	var ut := d.duplicate()
+	ut.erase("variant")
+	var byten: Dictionary = per[Spel.variant]
+	for k in byten:
+		ut[k] = byten[k]
+	return ut
+
+
 func visa_nod(nod_id: String, replik_override := "") -> void:
-	var nod: Dictionary = dialog.get(nod_id, {})
+	var nod: Dictionary = for_variant(dialog.get(nod_id, {}))
 	_nod_id = nod_id
 	_replik.text = replik_override if replik_override != "" else str(nod.get("replik", "…"))
 	# Vår egen replik först: nodens "du" (t.ex. hälsningen) eller det vi just sa.
@@ -326,7 +341,8 @@ func _pa_atgardstryck(ev: InputEvent, omslag: Control, b: Button, alt: Dictionar
 
 
 ## Debug: bedömningen just nu och vart valet leder, t.ex. "(DISKUTABELT → lamnar)".
-func _spar(alt: Dictionary) -> String:
+func _spar(alt_in: Dictionary) -> String:
+	var alt := for_variant(alt_in)
 	var delar: Array[String] = []
 	var h := str(alt.get("handling", ""))
 	if h != "":
@@ -394,7 +410,8 @@ func _nasta(alt: Dictionary) -> String:
 	return nasta
 
 
-func _valj_alt(alt: Dictionary) -> void:
+func _valj_alt(alt_in: Dictionary) -> void:
+	var alt := for_variant(alt_in)
 	if not _krympt:
 		_satt_krympt(true)
 	var h := str(alt.get("handling", ""))

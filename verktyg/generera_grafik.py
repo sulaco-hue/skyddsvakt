@@ -975,6 +975,10 @@ HANT_LEGS = [
 ]
 for i in range(2):
     figure(f"hantverkare_{i}", HANT_TOP, HANT_LEGS[i])
+# sittande (frihetsberövad vid grinden)
+HANT_SITTER_LEGS = ["..xxxxxxx...", ".xxRxxxRxx..", "bbxRxxxRxbb.", ".bb.....bb.."]
+figure("hantverkare_sitter_0", HANT_TOP, HANT_SITTER_LEGS)
+figure("hantverkare_sitter_1", HANT_TOP, HANT_SITTER_LEGS)
 
 
 # Zombie (scenario 5): grönaktig hud, röda ögon, trasig skjorta, armarna rakt

@@ -1,7 +1,7 @@
 {
   "id": "hantverkaren",
   "namn": "Hantverkaren vid grinden",
-  "ingress": "En servicebil stannar vid bommen. ”Ska bara fixa ventilationen.” Passerkontroll, skyldigheterna i 10 § och när det finns stöd för att avvisa enligt 12 §.",
+  "ingress": "En klar morgon stannar en servicebil vid bommen. ”Ska bara byta filter i ventilationen.”",
   "objekt": "Förråd Granåsen",
   "passtid": "07:00–11:00",
   "starttid": "08:10",
@@ -17,12 +17,12 @@
     {
       "tid": "05:50",
       "kalla": "Regional lägesbild",
-      "text": "Ökad underrättelseaktivitet mot militära anläggningar i regionen."
+      "text": "Ökad underrättelseaktivitet mot militära anläggningar i regionen. Personer har uppgett sig vara hantverkare eller leverantörer för att komma nära."
     },
     {
       "tid": "06:30",
       "kalla": "Vaktchef",
-      "text": "Passerlistan för dagen gäller. Kontroll enligt rutin."
+      "text": "Passerlistan för dagen gäller: inga föranmälda besök. Kontroll enligt rutin."
     },
     {
       "tid": "07:15",
@@ -31,16 +31,23 @@
     }
   ],
   "briefing": {
-    "uppdrag": "Bemanna grinden och sköt passerkontrollen. Endast föranmälda och kontrollerade personer släpps in. Rapportera avvikelser till CQ.",
-    "objektinfo": "Skyddsobjektet omfattar området innanför staketet. Tillträdesförbud gäller för obehöriga.",
-    "samband": "Vi: Grindposten. Vaktchef: CQ (Caesar Qvintus).",
-    "lagstod_fokus": [
-      "Skyldigheter 10 §",
-      "Avvisa 12 §",
-      "Neka tillträde",
-      "Undersöka fordon"
+    "uppdrag": "Bemanna grinden och sköt passerkontrollen. Endast föranmälda och kontrollerade personer släpps in. Dagens passerlista: inga föranmälda besök. Rapportera avvikelser till CQ.",
+    "objektinfo": "Skyddsobjektet omfattar området innanför staketet. Skyltat: tillträdesförbud och avbildningsförbud.",
+    "mal": [
+      {
+        "text": "Passage vid grind kontrollerad",
+        "klar_fran_start": true
+      },
+      {
+        "text": "Rapportera avvikelser till vaktchef",
+        "handling": "rapportera_vaktchef"
+      },
+      {
+        "text": "Dokumentera händelser",
+        "handling": "dokumentera"
+      }
     ],
-    "mal": []
+    "samband": "Vi: Grindposten. Vaktchef: CQ (Caesar Qvintus)."
   },
   "anropssignaler": {
     "vaktchef": "CQ",
@@ -58,20 +65,26 @@
     "vagrat_visitation": false,
     "vagrat_fordon": false,
     "behov_avvisa": true,
-    "behov_avlagsna": true,
+    "behov_avlagsna": false,
     "behov_omhanderta": false,
     "visitation_behovs": false,
     "misstanke_13": false,
     "beslag_betydelse": false,
     "anmalan_polis": false,
     "protokoll_upprattat": false,
-    "behorig": false
+    "behorig": false,
+    "brott_pa_bar_garning": false,
+    "proportionerligt": false
   },
   "varianter": {
+    "kommentar": "arlig: riktig hantverkare, men besöket är inte föranmält. oriktig: uppger falskt namn och vägrar undersökning av bilen. rekognosering: lugn och trevlig, men bilen innehåller kamera, flygbild och anteckningar om vaktbytena.",
     "arlig": {
       "fakta": {}
     },
     "oriktig": {
+      "fakta": {}
+    },
+    "rekognosering": {
       "fakta": {}
     }
   },
@@ -86,7 +99,39 @@
       "synlig_fran_start": false,
       "stamning": 2,
       "dialog_start": "start",
-      "lamnar_replik": "Jag åker till nästa jobb. Ring kontoret."
+      "lamnar_replik": "Jag åker till nästa jobb. Ring kontoret.",
+      "frihetsberovad": {
+        "kommentar": "Efter omhändertagande eller gripande: förs till grinden, sitter och muttrar.",
+        "plats": "grind_ute",
+        "sprite": "hantverkare_sitter",
+        "intervall_s": [
+          7,
+          12
+        ],
+        "repliker": [
+          "Jag har tre jobb till i dag…",
+          "Kontoret kommer att bli tokiga.",
+          "Det här är ju sjukt.",
+          "*mummel mummel*",
+          "Hur länge ska jag sitta här?",
+          "Filtren byter inte sig själva.",
+          "Suck.",
+          "Jag vill ringa ett samtal.",
+          "Kallt i ändan, det här."
+        ],
+        "variant": {
+          "rekognosering": {
+            "repliker": [
+              "Ni gör ett misstag.",
+              "Jag säger ingenting utan advokat.",
+              "…",
+              "Det där var för en offert.",
+              "Hur länge ska ni hålla på?",
+              "*tittar mot skogen*"
+            ]
+          }
+        }
+      }
     }
   },
   "handelser": [
@@ -99,7 +144,8 @@
       "mal": "grind_ute",
       "varianter": [
         "arlig",
-        "oriktig"
+        "oriktig",
+        "rekognosering"
       ],
       "fordon": {
         "sprite": "servicebil",
@@ -108,7 +154,7 @@
       },
       "vid_framme": "vantar",
       "vid_framme_replik": "Hallå! Kan ni öppna bommen?",
-      "lamnar_efter_s": 90,
+      "lamnar_efter_s": 120,
       "upptackt": {
         "min_s": 1,
         "max_s": 4,
@@ -116,15 +162,20 @@
         "max_avstand": 16,
         "paus_snack_s": 60
       },
-      "kamrat": "Servicebil vid bommen. Står han på listan?"
+      "kamrat": "Servicebil vid bommen."
     }
   ],
   "samband": [],
   "lagestext": {
-    "fore": "inga avvikelser vid grinden",
-    "efter": "hantverkare från Ventservice vid grinden, ej föranmäld",
-    "kontakt_arlig": "hantverkare från Ventservice har lämnat grinden, besöket var inte föranmält",
-    "kontakt_oriktig": "person som uppgav sig komma från Ventservice har lämnat grinden, uppgifterna stämde inte"
+    "fakta:gripande_genomfort": "man gripen vid grinden misstänkt för olovlig underrättelseverksamhet, kamera, flygbild över objektet och anteckningar om vaktbyten i hans bil",
+    "fakta:misstanke_13": "man vid grinden med kamera, flygbild över objektet och anteckningar om våra vaktbyten i bilen",
+    "fakta:omhandertagande_genomfort": "man tillfälligt omhändertagen vid grinden",
+    "fakta:vagrat_fordon": "man som uppger sig komma från Ventservice vägrar undersökning av sin bil vid grinden",
+    "fakta:oriktiga_uppgifter": "man som uppger sig komma från Ventservice har lämnat sannolikt oriktiga identitetsuppgifter vid grinden",
+    "lamnat": "servicebil från Ventservice har lämnat grinden, besöket var inte föranmält",
+    "kontakt": "servicebil från Ventservice vid grinden, besöket är inte föranmält",
+    "efter": "servicebil från Ventservice vid grinden, ej föranmäld",
+    "fore": "inga avvikelser vid grinden"
   },
   "slutkrav": [
     {
@@ -136,17 +187,19 @@
   ],
   "dialog": {
     "start": {
-      "du": "Hej, vi är militära skyddsvakter. Vad gäller ditt ärende?",
-      "replik": "HANTVERKAREN: – Tjena! Jonas från Ventservice. Vi ska byta filter i ventilationen i {objekt_bestamd}. Kan ni öppna bommen?",
+      "du": "Hej! Vi är militära skyddsvakter. Vad gäller ärendet?",
+      "replik": "– Tjena! Jonas från Ventservice. Vi ska byta filter i ventilationen i {objekt_bestamd}. Kan ni öppna?",
       "alternativ": [
         {
-          "text": "Be honom uppge namn, födelsetid och hemvist – och be att få se legitimation och arbetsorder.",
-          "handling": "begara_identitet",
-          "nasta": "leg_arlig",
-          "nasta_variant": {
-            "arlig": "leg_arlig",
-            "oriktig": "leg_oriktig"
-          }
+          "text": "Fråga vem som har beställt jobbet och om besöket är anmält.",
+          "du": "Vem har beställt jobbet? Är besöket anmält i förväg?",
+          "nasta": "bestallning"
+        },
+        {
+          "text": "Säg att han inte står på passerlistan och inte släpps in.",
+          "du": "Du står inte på dagens passerlista, så du kommer inte in.",
+          "handling": "neka_tilltrade",
+          "nasta": "nekad"
         },
         {
           "text": "Öppna bommen och släpp in honom.",
@@ -155,24 +208,54 @@
         }
       ]
     },
-    "leg_arlig": {
-      "replik": "HANTVERKAREN: – Visst, här. Jonas Berg. Arbetsordern har chefen, men det är beställt, jag lovar.",
+    "bestallning": {
+      "replik": "– Förvaltningen, tror jag. Vi har serviceavtal och kommer två gånger om året. Kontoret skulle ha ringt in det.",
+      "variant": {
+        "oriktig": {
+          "replik": "– Eh… det är kontoret som sköter det. Jag får bara en adress i telefonen."
+        },
+        "rekognosering": {
+          "replik": "– Ramavtalet med Försvarsmakten. Det brukar aldrig vara några problem – kollegan var här i våras."
+        }
+      },
       "alternativ": [
         {
-          "text": "Be att få titta i servicebilen.",
-          "handling": "undersoka_fordon",
-          "nasta": "fordon_arlig"
+          "text": "Be honom vänta utanför bommen medan ni kontrollerar med vaktchefen.",
+          "du": "Vänta utanför bommen, så kontrollerar vi med vaktchefen.",
+          "handling": "neka_tilltrade",
+          "nasta": "vantar"
         },
         {
-          "text": "Legitimationen stämmer – släpp in honom.",
+          "text": "Säg att han inte släpps in utan föranmälan.",
+          "du": "Utan föranmälan kommer du inte in.",
+          "handling": "neka_tilltrade",
+          "nasta": "nekad"
+        },
+        {
+          "text": "Det låter rimligt – släpp in honom.",
           "handling": "slappa_in",
           "nasta": "inslappt"
         }
       ]
     },
-    "fordon_arlig": {
-      "replik": "HANTVERKAREN: – Kör hårt. Filter, verktyg och en termos. Inget konstigt.",
+    "vantar": {
+      "replik": "– Visst. Men gör det snabbt, jag har tre jobb till i dag.",
+      "variant": {
+        "oriktig": {
+          "replik": "– Måste ni verkligen ringa? … Okej då.",
+          "stamning": 4
+        },
+        "rekognosering": {
+          "replik": "– Absolut. Ingen brådska.\n\nHan tänder en cigarett och ser sig omkring längs staketet."
+        }
+      },
       "alternativ": [
+        {
+          "text": "Säg att besöket inte är bekräftat och att han får boka en ny tid via förvaltningen.",
+          "du": "Besöket är inte bekräftat. Du får boka en ny tid via förvaltningen.",
+          "handling": "neka_tilltrade",
+          "nasta": "nekad"
+        },
         {
           "text": "Släpp in honom.",
           "handling": "slappa_in",
@@ -180,65 +263,197 @@
         }
       ]
     },
-    "leg_oriktig": {
-      "replik": "HANTVERKAREN: – Här… Ja, det står Peter Ström. Det är min kollegas. Jag glömde min. Men jag heter Jonas, alltså.",
-      "satt_fakta": {
-        "oriktiga_uppgifter": true
+    "nekad": {
+      "replik": "– Typiskt. Jag ringer kontoret och får dem att boka. Ha det.",
+      "variant": {
+        "oriktig": {
+          "replik": "– Jaha. Ja, ja. Då åker jag väl."
+        },
+        "rekognosering": {
+          "replik": "– Inga problem. Jag hör av mig."
+        }
       },
-      "stamning": 3,
       "alternativ": [
         {
-          "text": "Be att få undersöka servicebilen.",
-          "handling": "undersoka_fordon",
-          "nasta": "fordon_oriktig"
-        },
-        {
-          "text": "Avvisa honom: han får inte komma in och ska lämna grinden.",
-          "handling": "avvisa",
-          "nasta": "avvisad",
+          "text": "Notera registreringsnumret och låt honom åka.",
+          "handling": "dokumentera",
+          "nasta": "lamnar",
           "npc_beteende": "ga_till_start"
         }
       ]
     },
-    "fordon_oriktig": {
-      "replik": "HANTVERKAREN: – Nej, nu får det vara nog. Ni har inget med min bil att göra.",
+    "lamnar": {
+      "replik": "Mannen sätter sig i servicebilen, backar och försvinner mot länsvägen.",
+      "slut": true
+    },
+    "fordon_tomt": {
+      "replik": "Ni tittar igenom servicebilen: filterkartonger, en verktygslåda, en stege och en termos.\n\n– Nöjda?",
+      "alternativ": [
+        {
+          "text": "Säg att han ändå inte släpps in utan föranmälan.",
+          "du": "Bilen är okej, men utan föranmälan kommer du inte in.",
+          "handling": "neka_tilltrade",
+          "nasta": "nekad"
+        },
+        {
+          "text": "Släpp in honom.",
+          "handling": "slappa_in",
+          "nasta": "inslappt"
+        }
+      ]
+    },
+    "fordon_fynd": {
+      "replik": "– Visst, kolla ni.\n\nBakom filterkartongerna ligger en systemkamera med teleobjektiv, en utskriven flygbild över {objekt_bestamd} med staketet inritat och ett anteckningsblock: ”06:00 – 14:00 – 22:00. Två vakter. Bom manuell.”\n\n– Det där… det är för en offert.",
+      "satt_fakta": {
+        "misstanke_13": true,
+        "beslag_betydelse": true,
+        "visitation_behovs": true
+      },
+      "stamning": 5,
+      "alternativ": [
+        {
+          "text": "Säg att han inte släpps in och att han ska lämna platsen.",
+          "du": "Du kommer inte in. Lämna platsen.",
+          "handling": "avvisa",
+          "nasta": "lamnar",
+          "npc_beteende": "ga_till_start"
+        }
+      ]
+    },
+    "fordon_vagrar": {
+      "replik": "– Nej, nu får det vara nog. Ni har inget med min bil att göra.",
       "satt_fakta": {
         "vagrat_fordon": true
       },
       "stamning": 5,
       "alternativ": [
         {
-          "text": "Avvisa honom med stöd av 12 §: han ska lämna grinden.",
-          "handling": "avvisa",
-          "nasta": "avvisad",
-          "npc_beteende": "ga_till_start"
-        },
-        {
-          "text": "Omhänderta honom tillfälligt.",
-          "handling": "tillfalligt_omhanderta",
-          "stamning": 2,
-          "satt_fakta": {
-            "omhandertagande_genomfort": true
-          },
-          "nasta": "omhandertagen"
+          "text": "Säg att han inte släpps in.",
+          "du": "Då kommer du inte in.",
+          "handling": "neka_tilltrade",
+          "nasta": "nekad"
         }
       ]
     },
-    "nekad": {
-      "replik": "HANTVERKAREN: – Typiskt. Jag ringer kontoret. Ha det.",
-      "slut": true
-    },
-    "avvisad": {
-      "replik": "HANTVERKAREN: – Okej, okej. Jag åker.",
-      "slut": true
-    },
-    "omhandertagen": {
-      "replik": "HANTVERKAREN: – Vad i… Det här är ju sjukt!\n\nKamraten tar fram radion.",
-      "slut": true
+    "frihetsberovad": {
+      "replik": "Mannen sätter sig på stenen vid bommen.\n\n– Det här kommer ni att få höra om.",
+      "variant": {
+        "rekognosering": {
+          "replik": "Mannen sätter sig på stenen vid bommen och tittar ner i gruset.\n\n– Jag säger ingenting."
+        }
+      }
     },
     "inslappt": {
-      "replik": "Bommen går upp och servicebilen rullar in.\n\nKAMRATEN: – Stod han på passerlistan…?",
+      "replik": "Bommen går upp och servicebilen rullar in på området.\n\nTVÅAN: – Stod han på passerlistan…?",
       "slut": true
+    }
+  },
+  "atgarder": {
+    "kommentar": "Svar på åtgärdsraden. 'variant' ger olika svar beroende på vem mannen egentligen är.",
+    "begara_identitet": {
+      "text": "Begär namn, födelsetid och hemvist.",
+      "du": "Jag behöver ditt namn, födelsetid och var du bor.",
+      "replik": "– Jonas Berg, fjortonde mars -91. Bor i Sundsvall.",
+      "variant": {
+        "oriktig": {
+          "replik": "– Jonas… Berg. Född… -88. Sundsvall."
+        },
+        "rekognosering": {
+          "replik": "– Jonas Berg, 1984-06-02, Stockholm. Vill ni se körkortet också?"
+        }
+      }
+    },
+    "be_om_legitimation": {
+      "text": "Ber att få se legitimation.",
+      "du": "Har du legitimation?",
+      "replik": "– Visst, här.\n\nKörkortet: Jonas Berg, född 1991. Det stämmer.",
+      "variant": {
+        "oriktig": {
+          "replik": "– Här… ja, det står Peter Ström. Det är min kollegas, jag glömde min. Men jag heter Jonas, alltså.",
+          "satt_fakta": {
+            "oriktiga_uppgifter": true
+          },
+          "stamning": 2
+        },
+        "rekognosering": {
+          "replik": "– Självklart.\n\nKörkortet: Jonas Berg, född 1984. Det ser äkta ut."
+        }
+      }
+    },
+    "kroppsvisitera": {
+      "text": "Beslutar om kroppsvisitation.",
+      "du": "Vi kommer att kroppsvisitera dig.",
+      "stamning": 2,
+      "replik": "– Va? Jag ska ju bara byta filter!"
+    },
+    "skyddsvisitera": {
+      "text": "Skyddsvisiterar honom efter vapen och farliga föremål.",
+      "du": "Stå still med armarna ut, jag känner igenom dig efter vapen.",
+      "replik": "– Det här är ju helt sjukt… Plånbok, telefon, en skruvmejsel. Nöjd?"
+    },
+    "undersoka_fordon": {
+      "text": "Begär att få undersöka servicebilen.",
+      "du": "Innan något annat händer vill vi titta i bilen.",
+      "nasta": "fordon_tomt",
+      "variant": {
+        "oriktig": {
+          "nasta": "fordon_vagrar"
+        },
+        "rekognosering": {
+          "nasta": "fordon_fynd"
+        }
+      }
+    },
+    "beslag": {
+      "text": "Säger att du tar saker i beslag.",
+      "du": "Det här tar vi i beslag.",
+      "stamning": 2,
+      "replik": "– Beslag? Av vad då? Filtren?",
+      "variant": {
+        "rekognosering": {
+          "replik": "Du tar kameran, flygbilden och anteckningsblocket i beslag.\n\n– Det där är företagets grejer!"
+        }
+      }
+    },
+    "avvisa": {
+      "text": "Avvisar honom.",
+      "du": "Du kommer inte in. Lämna platsen nu.",
+      "replik": "– Okej, okej. Jag åker.",
+      "nasta": "lamnar",
+      "npc_beteende": "ga_till_start"
+    },
+    "avlagsna": {
+      "text": "Avlägsnar honom.",
+      "du": "Du ska härifrån – nu.",
+      "stamning": 3,
+      "replik": "– Rör mig inte! Jag åker ju!",
+      "nasta": "lamnar",
+      "npc_beteende": "ga_till_start"
+    },
+    "tillfalligt_omhanderta": {
+      "text": "Omhändertar honom tillfälligt.",
+      "du": "Du är tillfälligt omhändertagen. Följ med till bommen.",
+      "stamning": 3,
+      "nasta": "frihetsberovad"
+    },
+    "gripa": {
+      "text": "Griper honom.",
+      "du": "Du är gripen.",
+      "stamning": 3,
+      "nasta": "frihetsberovad"
+    },
+    "envarsgripande": {
+      "text": "Griper honom (envarsgripande).",
+      "du": "Du är gripen!",
+      "stamning": 3,
+      "nasta": "frihetsberovad"
+    },
+    "lata_ga": {
+      "text": "Låter honom åka.",
+      "du": "Du kan åka.",
+      "replik": "– Tack. Jag ringer kontoret.",
+      "nasta": "lamnar",
+      "npc_beteende": "ga_till_start"
     }
   },
   "radio": {
@@ -246,14 +461,26 @@
   },
   "sambandstexter": {
     "svar": {
-      "kontakt": "Uppfattat. Inget besök var föranmält",
-      "efter": "Uppfattat. Inget besök är föranmält i dag – släpp inte in",
+      "fakta:gripande_genomfort": "Uppfattat. Polis är underrättad om gripandet",
+      "efter_arlig": "Uppfattat. Förvaltningen har avtal med Ventservice, men inget besök är bokat i dag",
+      "efter": "Uppfattat. Förvaltningen känner inte till något besök från Ventservice",
       "fore": "Uppfattat"
     },
     "polis": {
-      "kontakt_oriktig": "person som lämnat sannolikt oriktiga uppgifter vid grinden",
+      "fakta:gripande_genomfort": "man som gripits vid grinden, misstänkt för olovlig underrättelseverksamhet",
+      "fakta:misstanke_13": "man vid grinden med kamera, flygbild och anteckningar om objektet",
+      "fakta:oriktiga_uppgifter": "person som lämnat sannolikt oriktiga uppgifter vid grinden",
       "efter": "händelse vid grinden",
       "fore": "händelse vid grinden"
+    }
+  },
+  "bedomning": {
+    "gripa": {
+      "text_ok": "Kamera med teleobjektiv, en flygbild med staketet inritat och anteckningar om era vaktbyten ger skälig misstanke om t.ex. olovlig underrättelseverksamhet eller förberedelse till sabotage – brott som ger skyddsvakten samma befogenhet som en polisman att gripa (13 §). Gripandet ska genast anmälas till polis (17 §) och protokollföras (16 §). [Jurist]",
+      "diskutera": "Vilka brott räknas upp i 13 §, och räckte fynden i bilen för skälig misstanke? Skyddsvisiterade ni honom efter gripandet?"
+    },
+    "slappa_in": {
+      "diskutera": "Han var trevlig, hade körkort och ett trovärdigt ärende. Varför räcker inte det? Vad står i dagens passerlista?"
     }
   }
 }

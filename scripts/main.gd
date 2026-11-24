@@ -1579,7 +1579,7 @@ func _frihetsberovad() -> bool:
 
 
 func _satt_vid_grinden(id: String) -> void:
-	var cfg: Dictionary = _scenario.get("npc", {}).get(id, {}).get("frihetsberovad", {})
+	var cfg: Dictionary = Kontakt.for_variant(_scenario.get("npc", {}).get(id, {}).get("frihetsberovad", {}))
 	if cfg.is_empty() or _sittande.has(id):
 		return
 	var n: Aktor = varld.npcer[id]

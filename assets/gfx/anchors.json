@@ -107,6 +107,14 @@
   8,
   22
  ],
+ "hantverkare_sitter_0": [
+  8,
+  18
+ ],
+ "hantverkare_sitter_1": [
+  8,
+  18
+ ],
  "hus_gul": [
   29,
   47
@@ -120,8 +128,8 @@
   59
  ],
  "lastbil": [
-  59,
-  56
+  61,
+  57
  ],
  "ljus": [
   40,
