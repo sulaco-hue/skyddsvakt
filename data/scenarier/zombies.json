@@ -168,6 +168,11 @@
       "kamrat_efter_varningsskott": "Inte ens ett varningsskott. Det här står inte i SoldF.",
       "kamrat_efter_verkanseld": "Han reste sig inte i alla fall. Skönt.",
       "kamrat_nadde_fram": "Bort med dig! … Puh. Skjut, för sjutton!",
+      "kamrat_reser_sig": "Han reser sig igen! Det där funkar bara med skarp ammunition.",
+      "reser_sig_efter_s": [
+        3,
+        6
+      ],
       "kamrat_slut": "Det var nog alla. Jag tror jag behöver en Nocco.",
       "missad_diskutera": "Ett dussin zombies kan inte missas."
     }

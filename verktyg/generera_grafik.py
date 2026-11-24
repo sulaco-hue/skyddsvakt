@@ -1034,6 +1034,20 @@ for i in range(2):
     im.save(os.path.join(OUT, f"zombie_ligger_{i}.png"))
     anchors[f"zombie_ligger_{i}"] = [13, h - 4]
 
+# Blodpöl under en nedkämpad zombie (tecknad, mörkröd med lite glans).
+blod = Image.new("RGBA", (22, 9), (0, 0, 0, 0))
+bd = ImageDraw.Draw(blod)
+bd.ellipse([2, 2, 19, 8], fill=(112, 16, 18, 230))
+bd.ellipse([0, 4, 7, 8], fill=(112, 16, 18, 230))
+bd.ellipse([14, 0, 21, 5], fill=(98, 12, 14, 220))
+bd.ellipse([6, 3, 15, 7], fill=(138, 22, 24, 240))
+bd.point((9, 4), fill=(190, 70, 70, 255))
+bd.point((10, 4), fill=(170, 50, 52, 255))
+for (x, y) in [(1, 1), (20, 7), (17, 8)]:
+    bd.point((x, y), fill=(112, 16, 18, 220))
+blod.save(os.path.join(OUT, "blod.png"))
+anchors["blod"] = [11, 5]
+
 # Yxmannen (scenario 4, nödvärn): röd-svartrutig flanellskjorta, skägg,
 # grön mössa och en yxa höjd över huvudet. F/f = flanell, G = skägg, g = mössa,
 # I = yxans blad. Varianter: händerna uppe (ger upp), liggande och yxan på marken.

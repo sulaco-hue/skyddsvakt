@@ -1037,6 +1037,9 @@ func _uppdatera_horde(delta: float) -> void:
 	var gar := 0
 	for id: String in zombies:
 		var z: Dictionary = zombies[id]
+		if str(z["lage"]) == "slagen":
+			gar += 1  # ligger bara tillfälligt
+			continue
 		if str(z["lage"]) != "gar":
 			continue
 		gar += 1
@@ -1155,6 +1158,9 @@ func _horde_verkanseld() -> void:
 	Spel.utfor("verkanseld", "Avgav verkanseld mot närmaste… person (patronvis, mot benen)")
 	_skott(2)
 	_horde_falla(id)
+	var blod := varld.lagg_dekal("blod", n.cell)
+	blod.modulate.a = 0.0
+	create_tween().tween_property(blod, "modulate:a", 1.0, 1.2)
 	_horde_kommentar("kamrat_efter_verkanseld", 1.4)
 	_visa_horde_knappar()
 
@@ -1171,8 +1177,33 @@ func _horde_nadde_fram(id: String) -> void:
 	var n: Aktor = varld.npcer[id]
 	Spel.utfor("angrepp_nadde_fram", "En av dem nådde fram – knuffades omkull av kamraten")
 	hud.visa_ljud(n, "DUNS!", 1.4)
+	# Knuffas bakåt ett par rutor, ligger några sekunder och reser sig igen.
+	var bort := Vector2(n.cell - varld.spelare.cell)
+	bort = bort.normalized() if bort.length() > 0.0 else Vector2(1, 0)
+	for steg: int in [3, 2]:
+		var c := n.cell + Vector2i(roundi(bort.x * steg), roundi(bort.y * steg))
+		if varld.ar_fri(c):
+			n.cell = c
+			create_tween().tween_property(n, "position", varld.cell_pos(c), 0.25)
+			break
 	_horde_falla(id)
+	_horde["zombies"][id]["lage"] = "slagen"
+	var h: Dictionary = _horde["h"]
+	var tid: Array = h.get("reser_sig_efter_s", [3.0, 6.0])
+	get_tree().create_timer(randf_range(float(tid[0]), float(tid[1]))).timeout.connect(_horde_reser_sig.bind(id))
 	_horde_kommentar("kamrat_nadde_fram", 0.3)
+
+
+func _horde_reser_sig(id: String) -> void:
+	if _horde.is_empty() or str(_horde["zombies"].get(id, {}).get("lage", "")) != "slagen":
+		return
+	var n: Aktor = varld.npcer[id]
+	n.vaxla_still = false
+	varld.byt_bilder(n, str((_horde["h"] as Dictionary).get("sprite", "zombie")))
+	_horde["zombies"][id]["lage"] = "gar"
+	_horde["zombies"][id]["omvag_t"] = 0.5
+	hud.visa_bubbla(n, "Uuurrgh…", 2.0)
+	_horde_kommentar("kamrat_reser_sig", 0.8)
 
 
 # ------------------------------------------------- Frihetsberövad --

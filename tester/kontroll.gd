@@ -585,10 +585,20 @@ func _spela_zombies(skjuter: bool) -> void:
 	var varnat := false
 	var klart := false
 	var t := 0.0
+	var slagen := ""
 	while t < 240.0:
 		if bool(Spel.fakta.get("horde_nere", false)):
 			klart = true
 			break
+		if not skjuter:
+			# Den som knuffats omkull ska resa sig igen.
+			for id: String in main._horde["zombies"]:
+				if str(main._horde["zombies"][id]["lage"]) == "slagen" and slagen == "":
+					slagen = id
+			if slagen != "" and str(main._horde["zombies"][slagen]["lage"]) == "gar":
+				_ok("%s knuffades omkull och reste sig igen" % slagen)
+				klart = true
+				break
 		var narmast := str(main._horde.get("narmast", ""))
 		var avst: int = main.varld.avstand(main.varld.spelare.cell, main.varld.npcer[narmast].cell) if narmast != "" else 999
 		if skjuter and not varnat and avst <= 6:
@@ -599,8 +609,8 @@ func _spela_zombies(skjuter: bool) -> void:
 		await get_tree().create_timer(0.1).timeout
 		t += 0.1
 	if not klart:
-		_fel("alla zombies kom aldrig ner (%s)" % main.call("_debug_text"))
-	else:
+		_fel("zombiescenariot blev aldrig klart (%s)" % main.call("_debug_text"))
+	elif skjuter:
 		_ok("alla tolv nere")
 	main.call("_visa_debriefing")
 	await _vanta(3)

@@ -284,6 +284,11 @@ func byt_bilder(a: Aktor, bas: String) -> void:
 	a.byt_bilder(bas, anchors.get(bas + "_0", [4, 12]))
 
 
+## Lägger en bild på marken under figurerna (t.ex. en blodpöl).
+func lagg_dekal(namn: String, c: Vector2i) -> Sprite2D:
+	return _sprite(namn, c, dekal_lager)
+
+
 ## Lägger en lös sprite (t.ex. en tappad yxa) på en ruta.
 func lagg_foremal(namn: String, c: Vector2i) -> Sprite2D:
 	return _sprite(namn, c)
