@@ -86,10 +86,6 @@
       "synlig_fran_start": false,
       "stamning": 2,
       "dialog_start": "start",
-      "kontakt_info": [
-        "Motparten: vid bommen, vill komma in",
-        "Passerlistan: inga besök föranmälda"
-      ],
       "lamnar_replik": "Jag åker till nästa jobb. Ring kontoret."
     }
   },

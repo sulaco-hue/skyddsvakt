@@ -106,10 +106,6 @@
       "synlig_fran_start": false,
       "stamning": 1,
       "dialog_start": "start",
-      "kontakt_info": [
-        "Motparten: vid sjön, en bra bit från objektet",
-        "Drönaren: över skyddsobjektet"
-      ],
       "efter_skott": "Vad gör ni?! Det står ett barn här!",
       "dialog_start_om": [
         {
@@ -128,9 +124,6 @@
       "synlig_fran_start": false,
       "stamning": 0,
       "dialog_start": "elsa",
-      "kontakt_info": [
-        "Ett barn, 10 år"
-      ],
       "efter_skott": "BUHUUU! Min drönare!",
       "dialog_start_om": [
         {
