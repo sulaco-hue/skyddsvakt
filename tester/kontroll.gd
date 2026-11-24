@@ -16,8 +16,10 @@ func _ready() -> void:
 	Engine.time_scale = 8.0
 	print("=== Halt, militär skyddsvakt!: automatisk kontroll ===")
 	Spel.titel_visad = true
+	Datafil.anvand_redigerat = false
 	_kontrollera_skript()
 	_kontrollera_data()
+	await _kontrollera_redigeraren()
 	await _spela_scenario_1()
 	await _spela_dronaren_med_pilot()
 	await _spela_dronaren_utan_pilot()
@@ -60,6 +62,61 @@ func _kontrollera_skript() -> void:
 			_fel("kunde inte ladda skript " + sokvag)
 		else:
 			_ok(sokvag)
+
+
+## Textredigeraren: filerna ska kunna sparas tillbaka exakt som de ser ut i repot
+## (annars blir det onödiga ändringar när man klistrar in på GitHub), och en
+## redigering på enheten ska användas när spelet läser filen.
+func _kontrollera_redigeraren() -> void:
+	print("--- Textredigeraren ---")
+	var filer := ["res://data/kamratsnack.json", "res://data/radiobrus.json", "res://data/samband.json",
+		"res://data/lagrum.json", "res://data/lagstodskort.json"]
+	for f in DirAccess.get_files_at("res://data/scenarier"):
+		if f.ends_with(".json"):
+			filer.append("res://data/scenarier/" + f)
+	var olika: Array = []
+	for f: String in filer:
+		var t := Datafil.las_text(f, true)
+		if Datafil.till_text(JSON.parse_string(t)) != t:
+			olika.append(f.get_file())
+	if olika.is_empty():
+		_ok("alla %d datafiler sparas tillbaka tecken för tecken lika" % filer.size())
+	else:
+		_fel("datafiler som inte sparas tillbaka likadant (kör om formateringen): " + ", ".join(PackedStringArray(olika)))
+	# Redigering på enheten används, och kan återställas.
+	var prov := "res://data/samband.json"
+	var fanns := Datafil.har_redigering(prov)
+	var gammal := Datafil.las_text(prov) if fanns else ""
+	Datafil.anvand_redigerat = true
+	var d := Datafil.las_json(prov, true)
+	d["kommentar"] = "PROV"
+	Datafil.spara_redigering(prov, Datafil.till_text(d))
+	if str(Datafil.las_json(prov).get("kommentar", "")) != "PROV":
+		_fel("redigeringen används inte när filen läses")
+	else:
+		_ok("redigering på enheten används")
+	Datafil.ta_bort_redigering(prov)
+	if Datafil.har_redigering(prov) or str(Datafil.las_json(prov).get("kommentar", "")) == "PROV":
+		_fel("återställning till originalet fungerar inte")
+	if fanns:
+		Datafil.spara_redigering(prov, gammal)
+	Datafil.anvand_redigerat = false
+	# Redigeraren kan öppna alla filer och bygga formuläret utan fel.
+	var red := Redigerare.new()
+	add_child(red)
+	red.bygg(filer[0])
+	for f: String in filer:
+		if f.get_file() == "index.json":
+			continue
+		red.call("_oppna", f)
+		await get_tree().process_frame
+	red.call("_oppna", "res://data/scenarier/fotografen.json")
+	await get_tree().process_frame
+	red.call("_hoppa", "visar")
+	await get_tree().process_frame
+	_ok("redigeraren öppnade alla filer")
+	red.queue_free()
+	await get_tree().process_frame
 
 
 func _kontrollera_data() -> void:
@@ -201,7 +258,8 @@ func _spela_scenario_1() -> void:
 	Spel.debug = true
 	kontakt.visa_nod("start")
 	var spar := str(kontakt.call("_spar", {"handling": "avvisa", "replik": "x"}))
-	if not spar.contains("SAKNAR LAGSTÖD"):
+	# Han står invid och har överträtt avbildningsförbudet: avvisning har stöd i 12 §.
+	if not spar.contains("LAGSTÖD") or spar.contains("SAKNAR"):
 		_fel("debugspåret för Avvisa: " + spar)
 	else:
 		_ok("debug visar spåret: Avvisa " + spar)

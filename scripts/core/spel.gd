@@ -17,6 +17,8 @@ var variant := ""
 var objekttyp := ""
 ## Startskärmen visas bara en gång per session.
 var titel_visad := false
+## Sant när passet startades från redigeraren (scenariovalet öppnar den igen).
+var till_redigeraren := false
 var _bedomning_override: Dictionary = {}
 ## Händelser som stridsparet aldrig upptäckte (läggs till vid debriefing).
 var missade: Array = []

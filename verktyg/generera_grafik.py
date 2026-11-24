@@ -537,7 +537,7 @@ GLYFER = {
 
 def lastbil(d, im):
     rnd = random.Random(79)
-    y0, y1 = 0.24, 0.76
+    y0, y1 = 0.1, 0.9
     oliv, oliv_m, kapell, kapell_m = (98, 102, 78), (74, 78, 60), (114, 116, 100), (88, 90, 76)
 
     def lada(x0, x1, ya, yb, h0, h1, top, vanster, hoger):

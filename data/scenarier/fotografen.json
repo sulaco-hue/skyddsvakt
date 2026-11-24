@@ -61,7 +61,7 @@
     "oriktiga_uppgifter": false,
     "vagrat_visitation": false,
     "vagrat_fordon": false,
-    "behov_avvisa": false,
+    "behov_avvisa": true,
     "behov_avlagsna": true,
     "behov_omhanderta": false,
     "visitation_behovs": false,
@@ -385,7 +385,7 @@
           {
             "fran": "Norra grinden",
             "text": "CQ, CQ.",
-            "efter": 0.0
+            "efter": 0
           },
           {
             "fran": "CQ",
@@ -395,7 +395,7 @@
           {
             "fran": "Norra grinden",
             "text": "Från Norra grinden, mörk personbil lämnar skogskanten västerut på Granåsvägen, hög fart, kom.",
-            "efter": 3.0
+            "efter": 3
           },
           {
             "fran": "CQ",
@@ -405,7 +405,7 @@
           {
             "fran": "Norra grinden",
             "text": "Klart slut.",
-            "efter": 6.0
+            "efter": 6
           }
         ]
       }

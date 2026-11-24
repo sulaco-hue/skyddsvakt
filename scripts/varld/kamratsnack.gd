@@ -16,6 +16,8 @@ var _data: Dictionary = {}
 var _inst: Dictionary = {}
 var _rng := RandomNumberGenerator.new()
 var _timer := 0.0
+## Tvåans små ljud ("fippel fippel", "skrammel skrammel"), även när han är tyst.
+var _ljud_timer := 0.0
 var _tyst_kvar := 0.0
 var _senaste: Array[int] = []
 ## Scenariots väderläge, t.ex. ["regn", "kallt"]. Repliker med "nar" kräver att
@@ -31,11 +33,18 @@ func setup(p_hud: Hud, p_varld: Varld, scenario: Dictionary = {}) -> void:
 	_data = Datafil.las_json(SOKVAG)
 	_inst = _data.get("installningar", {})
 	_timer = float(_inst.get("forsta_efter_s", 12))
+	_ljud_timer = _rng.randf_range(float(_inst.get("ljud_min_s", 20)), float(_inst.get("ljud_max_s", 50)))
 
 
 func _process(delta: float) -> void:
 	if not aktiv or _data.is_empty():
 		return
+	_ljud_timer -= delta
+	if _ljud_timer <= 0.0:
+		_ljud_timer = _rng.randf_range(float(_inst.get("ljud_min_s", 20)), float(_inst.get("ljud_max_s", 50)))
+		var ljud: Array = _data.get("ljud", [])
+		if not ljud.is_empty() and hud.visible:
+			hud.visa_ljud(varld.kollega, _slumpa(ljud), 1.6)
 	if _tyst_kvar > 0.0:
 		_tyst_kvar -= delta
 		return

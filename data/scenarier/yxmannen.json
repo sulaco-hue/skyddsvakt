@@ -190,13 +190,6 @@
       "replik": "YXMANNEN: – Okej, okej! Skjut inte! Jag… jag har inte sovit på tre dygn. Grannen tar min ved. Jag trodde ni var med honom…\n\nTvåan håller honom under uppsikt. Yxan ligger i gruset.",
       "satt_fakta": {
         "brott_pa_bar_garning": true
-      },
-      "atgarder": {
-        "forsta_hjalpen": {
-          "text": "Erbjuder första hjälpen.",
-          "du": "Är du skadad?",
-          "replik": "– Nej… bara trött. Så himla trött."
-        }
       }
     },
     "overmannad": {
@@ -204,13 +197,6 @@
       "replik": "Ni har brottat ner honom. Yxan ligger i gruset, tvåan har knät på hans rygg.\n\nYXMANNEN: – Släpp mig! Aaah…",
       "satt_fakta": {
         "brott_pa_bar_garning": true
-      },
-      "atgarder": {
-        "forsta_hjalpen": {
-          "text": "Kontrollerar om han är skadad.",
-          "du": "Är du skadad?",
-          "replik": "– Armen… det gör ont i armen. Men det är inget."
-        }
       }
     },
     "skjuten": {
@@ -305,11 +291,6 @@
       "stamning": -1,
       "nasta": "gripen"
     },
-    "forsta_hjalpen": {
-      "text": "Ger första hjälpen.",
-      "du": "Ligg still, jag lägger ett tryckförband.",
-      "replik": "– Aaah… tack…"
-    },
     "lata_ga": {
       "text": "Låter honom gå.",
       "du": "Gå hem, Bengt.",
@@ -327,7 +308,6 @@
     "tillfalligt_omhanderta",
     "gripa",
     "envarsgripande",
-    "forsta_hjalpen",
     "lata_ga"
   ]
 }

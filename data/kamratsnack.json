@@ -9,8 +9,14 @@
     "chans_svar": 0.4,
     "tystnad_s": 120,
     "paus_efter_handelse_s": 60,
-    "chans_vaderreplik": 0.4
+    "chans_vaderreplik": 0.4,
+    "ljud_min_s": 20,
+    "ljud_max_s": 50
   },
+  "ljud": [
+    "fippel fippel",
+    "skrammel skrammel"
+  ],
   "snack": [
     {
       "amne": "sport",

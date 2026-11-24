@@ -28,6 +28,7 @@ var logg: Array[String] = []
 
 
 func _ready() -> void:
+	Datafil.anvand_redigerat = false
 	var manus_fil := ""
 	for a in OS.get_cmdline_user_args():
 		if a.begins_with("--manus="):
@@ -78,6 +79,19 @@ func _utfor(steg: Dictionary) -> void:
 		Spel.nollstall()
 		Spel.titel_visad = false
 		await _ny_main()
+	# {"redigerare": "fotografen.json"} öppnar textredigeraren på en fil,
+	# {"hoppa": "visar"} hoppar till ett dialogsteg i den.
+	if steg.has("redigerare"):
+		var r := Redigerare.new()
+		r.name = "Redigerare"
+		get_tree().root.add_child(r)
+		r.theme = UiKit.skapa_tema()
+		var fil := str(steg["redigerare"])
+		r.bygg(fil if fil.begins_with("res://") else "res://data/scenarier/" + fil)
+		await get_tree().process_frame
+	if steg.has("hoppa"):
+		get_tree().root.get_node("Redigerare").call("_hoppa", str(steg["hoppa"]))
+		await get_tree().create_timer(0.3).timeout
 	if steg.has("scenarioval"):
 		Spel.nollstall()
 		Spel.titel_visad = true

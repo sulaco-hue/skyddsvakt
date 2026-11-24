@@ -11,6 +11,8 @@ var debriefing: Debriefing
 var _handelser_kvar: Array = []
 var _larm_npc := ""
 var _samtal_klara: Dictionary = {}
+## Dialogsteget där samtalet med varje person senast avslutades.
+var _senaste_nod: Dictionary = {}
 var _vantar_samtal := ""
 var _npc_efter_samtal := {}  # npc_id -> beteende
 var _scenario: Dictionary
@@ -132,7 +134,36 @@ func _bygg_scenarioval() -> void:
 	rot.add_child(val)
 	val.bygg(Spel.scenarier())
 	val.valt.connect(_valj_scenario)
-	rot.add_child(VridOverlay.new())
+	val.redigera.connect(_visa_redigerare.bind(val))
+	if not rot.has_node("Vrid"):
+		var vrid := VridOverlay.new()
+		vrid.name = "Vrid"
+		rot.add_child(vrid)
+	else:
+		rot.move_child(rot.get_node("Vrid"), -1)
+	# Tillbaka från provspel: öppna redigeraren igen.
+	if Spel.till_redigeraren:
+		Spel.till_redigeraren = false
+		_visa_redigerare(val)
+
+
+func _visa_redigerare(val: Control) -> void:
+	val.queue_free()
+	var red := Redigerare.new()
+	rot.add_child(red)
+	red.bygg()
+	if rot.has_node("Vrid"):
+		rot.move_child(rot.get_node("Vrid"), -1)
+	red.stang.connect(func() -> void:
+		red.queue_free()
+		_bygg_scenarioval())
+	red.provspela.connect(func(sokvag: String) -> void:
+		red.queue_free()
+		if sokvag == "":
+			_bygg_scenarioval()
+		else:
+			Spel.till_redigeraren = true
+			_valj_scenario(sokvag))
 
 
 func _valj_scenario(sokvag: String) -> void:
@@ -661,7 +692,7 @@ func _visa_angripar_knappar() -> void:
 			if not bool(Spel.fakta.get("varningsskott_avlossat", false)):
 				val.append({"id": "varningsskott", "text": "Varningsskott", "tangent": "V", "farg": "barnsten"})
 			val.append({"id": "verkanseld", "text": "Verkanseld", "tangent": "F", "farg": "rosa"})
-		"skjuten":
+		"skjuten", "overmannad":
 			if not bool(Spel.fakta.get("forsta_hjalp_given", false)):
 				val.append({"id": "forsta_hjalpen", "text": "Första hjälpen", "tangent": "J", "farg": "gron"})
 	hud.satt_situationer(val)
@@ -826,7 +857,8 @@ func _forsta_hjalpen() -> void:
 	Spel.utfor("forsta_hjalpen", "Gav första hjälpen (tryckförband)")
 	if n:
 		varld.ga_till(n.cell)
-		hud.visa_bubbla(varld.spelare, "Tryckförband på! Ligg still.", 3.0)
+		hud.visa_bubbla(varld.spelare, "Tryckförband på! Ligg still." if str(_angripare.get("lage", "")) == "skjuten"
+			else "Ligg still, jag kollar om du är skadad.", 3.0)
 	_visa_angripar_knappar()
 
 
@@ -943,15 +975,16 @@ func _pa_npc_klickad(id: String) -> void:
 		return
 	if _sittande.has(id):
 		_sittande[id]["t"] = 0.0
-		return
 	if not _angripare.is_empty() and str(_angripare["id"]) == id and str(_angripare["lage"]) == "anfaller":
 		hud.visa_meddelande("Han anfaller! Halt-order [H], varningsskott [V] eller verkanseld [F].")
 		return
 	if _lamnat.has(id):
 		hud.visa_meddelande("Personen har lämnat platsen.")
 		return
-	if _samtal_klara.has(id):
-		hud.visa_meddelande("Kontakten med personen är redan avslutad.")
+	# Ett avslutat samtal kan tas upp igen (t.ex. efter första hjälpen och samband
+	# med CQ), så länge personen är kvar och inte är på väg därifrån.
+	if _samtal_klara.has(id) and _npc_efter_samtal.get(id, "") == "ga_till_start":
+		hud.visa_meddelande("Personen är på väg därifrån.")
 		return
 	_ga_till_samtal(id)
 
@@ -1006,7 +1039,8 @@ func _oppna_kontakt(id: String) -> void:
 	snack.aktiv = false
 	var data: Dictionary = _scenario.get("npc", {}).get(id, {})
 	kontakt.set_meta("npc", id)
-	kontakt.oppna(data, _dialogstart(data))
+	# Återupptaget samtal fortsätter där det slutade.
+	kontakt.oppna(data, str(_senaste_nod.get(id, _dialogstart(data))))
 
 
 ## Startnod för dialogen. "dialog_start_om": [{fakta, nod}] väljer en annan
@@ -1034,6 +1068,7 @@ func _pa_val(alt: Dictionary) -> void:
 func _pa_kontakt_stangd() -> void:
 	var id := str(kontakt.get_meta("npc", ""))
 	_samtal_klara[id] = true
+	_senaste_nod[id] = kontakt._nod_id
 	radio.krok("kontakt_slut")
 	hud.visible = true
 	varld.satt_larm("")
@@ -1041,7 +1076,7 @@ func _pa_kontakt_stangd() -> void:
 	snack.aktiv = true
 	snack.pausa(30.0)
 	hud.visa_meddelande("Kom ihåg: rapportera och dokumentera händelsen.", 4.0)
-	if _npc_efter_samtal.get(id, "") != "ga_till_start" and _frihetsberovad():
+	if _npc_efter_samtal.get(id, "") != "ga_till_start" and _frihetsberovad() and not _sittande.has(id):
 		_satt_vid_grinden(id)
 	if _npc_efter_samtal.get(id, "") == "ga_till_start":
 		var n: Aktor = varld.npcer[id]
@@ -1187,6 +1222,11 @@ func _horde_upptackt() -> void:
 
 
 func _visa_horde_knappar() -> void:
+	# Alla nere: bara Första hjälpen kvar (annars dyker Verkanseld upp igen när
+	# en omladdning blir klar eller en sen träff registreras).
+	if bool(Spel.fakta.get("horde_nere", false)):
+		hud.satt_situationer([{"id": "forsta_hjalpen", "text": "Första hjälpen", "tangent": "J", "farg": "gron"}])
+		return
 	var val: Array = []
 	if not bool(Spel.fakta.get("varning_given", false)):
 		val.append({"id": "halt", "text": "Halt-order", "tangent": "H", "farg": "barnsten"})
@@ -1251,6 +1291,7 @@ func _horde_avfyra() -> bool:
 		get_tree().create_timer(0.5).timeout.connect(func() -> void:
 			hud.visa_bubbla(varld.spelare, str(h.get("rop_omladdning", "Magasin, täck mig!")), 2.5))
 		get_tree().create_timer(float(h.get("omladdning_s", 5.0))).timeout.connect(_horde_omladdad)
+		_fipplar(varld.spelare, float(h.get("omladdning_s", 5.0)))
 		_visa_horde_knappar()
 		return false
 	_horde["patroner"] = int(_horde["patroner"]) - 1
@@ -1285,17 +1326,30 @@ func _horde_tvaan_skjuter() -> void:
 				get_tree().create_timer(0.5).timeout.connect(func() -> void:
 					if not _horde.is_empty() and not (_horde["dod"] as Dictionary).has("kamrat"):
 						hud.visa_bubbla(varld.kollega, str(h.get("rop_omladdning", "Magasin, täck mig!")), 2.5))
+				_fipplar(varld.kollega, float(h.get("omladdning_s", 5.0)))
 				get_tree().create_timer(float(h.get("omladdning_s", 5.0))).timeout.connect(func() -> void:
 					if not _horde.is_empty():
 						_horde["tvaan_patroner"] = int(h.get("magasin", 20))
 						_horde["tvaan_laddar_om"] = false
-						hud.visa_ljud(varld.kollega, "KLICK-KLACK", 1.0))
+						hud.visa_ljud(varld.kollega, "KLICK-KLACK", 1.0)
+						if not (_horde["dod"] as Dictionary).has("kamrat"):
+							hud.visa_bubbla(varld.kollega, str(h.get("rop_omladdad", "Kan verka!")), 2.0))
 			else:
 				_horde["tvaan_patroner"] = int(_horde["tvaan_patroner"]) - 1
 				_skott(1, varld.kollega)
 				if randf() <= _horde_traffchans(basta):
 					_horde_traff(mal)
 	get_tree().create_timer(intervall).timeout.connect(_horde_tvaan_skjuter)
+
+
+## Ljudtexten "fipplar" medan någon byter magasin.
+func _fipplar(vem: Aktor, sek: float) -> void:
+	var t := 1.6
+	while t < sek - 0.8:
+		get_tree().create_timer(t).timeout.connect(func() -> void:
+			if not _horde.is_empty() and hud.visible:
+				hud.visa_ljud(vem, "fipplar", 1.2))
+		t += 1.7
 
 
 func _horde_omladdad() -> void:
@@ -1305,6 +1359,7 @@ func _horde_omladdad() -> void:
 	_horde["laddar_om"] = false
 	_horde["omladdningar"] = int(_horde.get("omladdningar", 0)) + 1
 	hud.visa_ljud(varld.spelare, "KLICK-KLACK", 1.0)
+	hud.visa_bubbla(varld.spelare, str((_horde["h"] as Dictionary).get("rop_omladdad", "Kan verka!")), 2.0)
 	_visa_horde_knappar()
 
 

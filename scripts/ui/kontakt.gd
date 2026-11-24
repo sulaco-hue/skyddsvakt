@@ -25,7 +25,6 @@ const ATGARDER := [
 	["tillfalligt_omhanderta", "Omhänderta"],
 	["gripa", "Gripa"],
 	["envarsgripande", "Envarsgripande"],  # BrB 24:7
-	["forsta_hjalpen", "Första hjälpen"],
 	["lata_ga", "Låt gå"],
 ]
 

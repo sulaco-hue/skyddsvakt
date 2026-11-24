@@ -116,9 +116,9 @@
       "spawn_intervall_s": 5,
       "start_avstand": 18,
       "fart": 18,
-      "omvag_s": 1.0,
+      "omvag_s": 1,
       "upptacks_avstand": 15,
-      "overhangande_avstand": 6,
+      "overhangande_avstand": 15,
       "ingen_tid_avstand": 2,
       "eldhastighet_s": 0.25,
       "max_skjutavstand": 12,
@@ -128,6 +128,8 @@
       "magasin": 20,
       "omladdning_s": 5,
       "rop_omladdning": "Magasin, täck mig!",
+      "rop_omladdad": "Kan verka!",
+      "tvaan_eldintervall_s": 0.4,
       "skott_for_att_falla": [
         1,
         5

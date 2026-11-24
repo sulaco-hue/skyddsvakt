@@ -3,6 +3,7 @@ extends Control
 ## Startskärm: välj scenario (listan kommer från data/scenarier/index.json).
 
 signal valt(sokvag: String)
+signal redigera
 
 
 func bygg(scenarier: Array) -> void:
@@ -51,13 +52,29 @@ func bygg(scenarier: Array) -> void:
 		h.add_child(nr)
 		var v := UiKit.vbox(2)
 		v.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		v.add_child(UiKit.titel(str(sc.get("namn", "")), 20))
+		var namnrad := UiKit.hbox(10)
+		namnrad.add_child(UiKit.titel(str(sc.get("namn", "")), 20))
+		if Datafil.har_redigering(str(sc.get("sokvag", ""))):
+			namnrad.add_child(UiKit.rubrik("REDIGERAD", 11, UiKit.ROSA))
+		v.add_child(namnrad)
 		var ing := UiKit.etikett(str(sc.get("ingress", "")), 19 if UiKit.kompakt else 21, UiKit.LJUS, true)
 		v.add_child(ing)
 		h.add_child(v)
 		ruta.gui_input.connect(_pa_klick.bind(str(sc.get("sokvag", "")), ruta))
 		kol.add_child(ruta)
 
+	# Textredigeraren (dialoger m.m.). Ändringar gäller bara på den här enheten.
+	var red := UiKit.hbox(12)
+	var rk := UiKit.knapp("Redigera texter")
+	rk.pressed.connect(func() -> void: redigera.emit())
+	red.add_child(rk)
+	var andrade := Datafil.redigerade()
+	if not andrade.is_empty():
+		var namn := PackedStringArray(andrade.map(func(s: String) -> String: return s.get_file()))
+		red.add_child(UiKit.etikett("Redigerade texter används här: " + ", ".join(namn), 18, UiKit.ROSA, true))
+		red.get_child(1).size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	kol.add_child(red)
+	kol.add_child(UiKit.ruta_farg(Color(0, 0, 0, 0), Vector2(0, 8)))
 	set_meta("scenarier", scenarier)
 
 
