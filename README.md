@@ -89,6 +89,11 @@ xvfb-run -a godot --path . --resolution 1334x750 res://tester/spela.tscn -- --ma
 
 `--kompakt` ger mobilläget. Så kan spelet provas utan att någon sitter vid skärmen.
 
+**Förhandsbild vid länkning:** `webb/delningsbild.png` (1200×630) kopieras till sidan av bygget och anges
+som `og:image` i webbexportens `head_include`, så att en länk till spelet visar spelets logga i stället för
+Godots. `assets/gfx/startbild.png` visas medan spelet laddar. Båda skapas av
+`python3 verktyg/generera_delningsbild.py`.
+
 **Versionsnummer:** bygget skriver `data/version.json` med antalet commits, och spelet visar det
 (t.ex. *v44*) i nedre högra hörnet. Varje push ger en högre siffra. Lokalt visas *dev*.
 

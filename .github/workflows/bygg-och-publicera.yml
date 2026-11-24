@@ -97,6 +97,8 @@ jobs:
           godot --headless --path . --export-release "Web" build/web/index.html 2>&1 | tee export.log
           godot --headless --path . --export-release "Windows Desktop" build/windows/Skyddsvakt.exe 2>&1 | tee -a export.log
           test -f build/web/index.pck || { echo "::error::Webbexporten saknas"; exit 1; }
+          # Förhandsbild när någon länkar till spelet (og:image i export_presets.cfg)
+          cp webb/delningsbild.png build/web/delningsbild.png
           ls -la build/web build/windows
 
       - name: Ladda upp Windows-version
