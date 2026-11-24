@@ -349,12 +349,12 @@ func _bygg_samband() -> void:
 	p.offset_top = -16
 	p.offset_bottom = -16
 	if UiKit.kompakt:
-		# Kompakt: uppe till höger under toppraden (växer nedåt)
-		p.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-		p.grow_vertical = Control.GROW_DIRECTION_END
-		p.offset_left = -256
-		p.offset_top = 76
-		p.offset_bottom = 76
+		# Kompakt: nere i högra hörnet (handlingsraden ligger till vänster),
+		# så att rutan inte hamnar mitt i synfältet.
+		p.offset_left = -258
+		p.offset_right = -8
+		p.offset_top = -8
+		p.offset_bottom = -8
 	add_child(p)
 	_samband_panel = p
 	p.visible = false
@@ -403,8 +403,16 @@ func _bygg_handlingar() -> void:
 	p.grow_vertical = Control.GROW_DIRECTION_BEGIN
 	p.offset_top = -16
 	p.offset_bottom = -16
+	if UiKit.kompakt:
+		# Kompakt: nere till vänster, så att sambandsrutan får högra hörnet.
+		p.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
+		p.grow_horizontal = Control.GROW_DIRECTION_END
+		p.offset_left = 8
+		p.offset_right = 8
+		p.offset_top = -8
+		p.offset_bottom = -8
 	add_child(p)
-	var h := UiKit.hbox(10)
+	var h := UiKit.hbox(8 if UiKit.kompakt else 10)
 	p.add_child(h)
 	var knappar := [
 		["Samband", "R", _vaxla_sambandsmeny],
@@ -434,6 +442,14 @@ func _bygg_sambandsmeny() -> void:
 	_sambandsmeny.grow_vertical = Control.GROW_DIRECTION_BEGIN
 	_sambandsmeny.offset_top = -112
 	_sambandsmeny.offset_bottom = -112
+	if UiKit.kompakt:
+		# Kompakt: ovanför Samband-knappen nere till vänster.
+		_sambandsmeny.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
+		_sambandsmeny.grow_horizontal = Control.GROW_DIRECTION_END
+		_sambandsmeny.offset_left = 8
+		_sambandsmeny.offset_right = 8
+		_sambandsmeny.offset_top = -92
+		_sambandsmeny.offset_bottom = -92
 	_sambandsmeny.visible = false
 	add_child(_sambandsmeny)
 	var v := UiKit.vbox(8)
@@ -607,7 +623,7 @@ func _pa_samband(rad: Dictionary) -> void:
 	t.set_meta("alder", 0.0)
 	_samband_lista.add_child(t)
 	_samband_panel.visible = true
-	while _samband_lista.get_child_count() > 4:
+	while _samband_lista.get_child_count() > (3 if UiKit.kompakt else 4):
 		var forsta := _samband_lista.get_child(0)
 		_samband_lista.remove_child(forsta)
 		forsta.queue_free()
