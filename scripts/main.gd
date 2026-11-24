@@ -432,6 +432,9 @@ func _starta_dronare(h: Dictionary) -> void:
 
 
 func _kamrat_sager(text: String) -> void:
+	# En uppäten kamrat säger ingenting mer.
+	if not _horde.is_empty() and (_horde["dod"] as Dictionary).has("kamrat"):
+		return
 	if hud.visible:
 		hud.visa_bubbla(varld.kollega, text, 5.0)
 
