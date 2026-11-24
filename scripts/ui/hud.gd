@@ -750,7 +750,7 @@ func _process(delta: float) -> void:
 				_position.text = "Invid (bedömning)"
 				_position_ruta.color = UiKit.BARNSTEN
 			_:
-				_position.text = "Utanför skyddsobjektet"
+				_position.text = "Utanför (bedömning)"
 				_position_ruta.color = UiKit.DAMPAD
 	if _meddelande_t > 0.0:
 		_meddelande_t -= delta
