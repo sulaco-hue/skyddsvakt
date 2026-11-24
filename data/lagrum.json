@@ -42,7 +42,10 @@
       "handelse_upptackt": "det hade hänt något att anmäla (en händelse var upptäckt)",
       "skadad_person": "någon var skadad",
       "behov_forstarkning": "stridsparet var eller hade varit bundet av en händelse (hot, skottlossning, frihetsberövad eller skadad person) – förstärkning behövdes för att posten skulle kunna fortsätta bevakningen",
-      "proportionerligt": "åtgärden stod i rimlig proportion till brottet"
+      "proportionerligt": "åtgärden stod i rimlig proportion till brottet",
+      "omhandertagande_genomfort": "personen var tillfälligt omhändertagen",
+      "gripande_genomfort": "personen var gripen",
+      "envarsgripande_genomfort": "personen var envarsgripen"
     }
   },
   "handlingar": {
@@ -211,6 +214,24 @@
         }
       ]
     },
+    "skyddsvisitera": {
+      "namn": "Skyddsvisiterade personen",
+      "lagrum": "Polislagen 19 § första stycket 1 jämte 29 § · skyddslagen 15 §",
+      "krav_grupper": [
+        [
+          "omhandertagande_genomfort",
+          "gripande_genomfort",
+          "envarsgripande_genomfort"
+        ]
+      ],
+      "vid_brist": "bad",
+      "satter_fakta": {
+        "skyddsvisitation_genomford": true
+      },
+      "text_ok": "Personen var frihetsberövad. En ytlig skyddsvisitation efter vapen och andra farliga föremål är tillåten när den behövs av säkerhetsskäl – för er, för den frihetsberövade och för omgivningen.",
+      "text_brist": "Skyddsvisitation förutsätter ett lagligt frihetsberövande (gripande, tillfälligt omhändertagande eller envarsgripande). Utan det är det kroppsvisitation enligt skyddslagen 11 § som gäller – med de villkoren.",
+      "diskutera": "Vad är skillnaden i syfte och lagstöd mellan kroppsvisitation enligt skyddslagen 11 § och skyddsvisitation? Hur ytlig ska en skyddsvisitation vara?"
+    },
     "vald_mot_farkost": {
       "namn": "Bekämpade drönaren med vapen",
       "lagrum": "Skyddslagen 11 § andra stycket (våld mot obemannad farkost)",
@@ -326,7 +347,7 @@
       },
       "text_ok": "Grund och behov fanns. Omhändertagandet ska anmälas genast till polis och upphöra så snart syftet inte längre finns, senast efter sex timmar.",
       "text_brist": "Grund enligt 12 § kan ha funnits, men behövdes omhändertagandet när ett avlägsnande hade kunnat räcka? [Proportionalitet – jurist]",
-      "diskutera": "Vilka omständigheter gör ett omhändertagande nödvändigt i stället för ett avlägsnande?",
+      "diskutera": "Vilka omständigheter gör ett omhändertagande nödvändigt i stället för ett avlägsnande? Skyddsvisiterade ni personen efteråt – och borde ni ha gjort det?",
       "foljdkrav": [
         {
           "fakta": "anmalan_polis",
@@ -361,7 +382,7 @@
       },
       "text_ok": "Det fanns skäl att anhålla för brott enligt 13 §. Gripandet ska genast anmälas till polis.",
       "text_brist": "Gripande enligt 13 § kräver skäl att anhålla för spioneri, sabotage, terroristbrott eller annat brott som anges där – inom skyddsobjektet, i dess närhet eller när personen flyr därifrån.",
-      "diskutera": "Vilka omständigheter hade behövt finnas för att ett gripande skulle vara möjligt?",
+      "diskutera": "Vilka omständigheter hade behövt finnas för att ett gripande skulle vara möjligt? Skyddsvisiterade ni personen efteråt – och borde ni ha gjort det?",
       "foljdkrav": [
         {
           "fakta": "anmalan_polis",
@@ -608,7 +629,7 @@
       },
       "text_ok": "Han påträffades på bar gärning för olaga hot med yxa – ett brott med fängelse i straffskalan. Var och en får då gripa honom. Den gripne ska skyndsamt överlämnas till närmaste polisman.",
       "text_brist": "Envarsgripande kräver brott med fängelse i straffskalan och bar gärning eller flykt.",
-      "diskutera": "Varför är det här ett envarsgripande och inte ett gripande enligt 13 § skyddslagen?",
+      "diskutera": "Varför är det här ett envarsgripande och inte ett gripande enligt 13 § skyddslagen? Skyddsvisiterade ni personen efteråt – och borde ni ha gjort det?",
       "foljdkrav": [
         {
           "fakta": "anmalan_polis",

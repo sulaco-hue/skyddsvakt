@@ -253,6 +253,11 @@
       "du": "Vi kommer att kroppsvisitera dig. Stå still.",
       "replik": "– Gör det. Det är bara en kniv i fickan… till smörgåsarna."
     },
+    "skyddsvisitera": {
+      "text": "Skyddsvisiterar honom efter vapen och farliga föremål.",
+      "du": "Ligg still, jag känner igenom dig efter vapen.",
+      "replik": "– Det är bara en kniv i fickan… till smörgåsarna. Ta den då."
+    },
     "beslag": {
       "text": "Tar yxan i beslag.",
       "du": "Yxan tas i beslag.",
@@ -302,6 +307,7 @@
     "begara_identitet",
     "be_om_legitimation",
     "kroppsvisitera",
+    "skyddsvisitera",
     "beslag",
     "avvisa",
     "avlagsna",

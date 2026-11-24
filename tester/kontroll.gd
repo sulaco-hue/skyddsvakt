@@ -263,6 +263,15 @@ func _spela_scenario_1() -> void:
 		_fel("debugspåret för Avvisa: " + spar)
 	else:
 		_ok("debug visar spåret: Avvisa " + spar)
+	# Skyddsvisitation utan frihetsberövande saknar lagstöd; efter gripande har den stöd.
+	var sv := str(kontakt.call("_spar", {"handling": "skyddsvisitera", "replik": "x"}))
+	Spel.satt_fakta({"gripande_genomfort": true})
+	var sv2 := str(kontakt.call("_spar", {"handling": "skyddsvisitera", "replik": "x"}))
+	Spel.satt_fakta({"gripande_genomfort": false})
+	if not sv.contains("SAKNAR") or sv2.contains("SAKNAR") or not sv2.contains("LAGSTÖD"):
+		_fel("skyddsvisitation bedöms fel: före gripande %s, efter %s" % [sv, sv2])
+	else:
+		_ok("skyddsvisitation: %s utan frihetsberövande, %s efter gripande" % [sv, sv2])
 	kontakt.valj_atgard("avvisa")
 	await _vanta(2)
 	if not kontakt.visible or kontakt._nod_id != "start":

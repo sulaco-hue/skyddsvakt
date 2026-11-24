@@ -444,6 +444,12 @@
       "stamning": 2,
       "replik": "– Visitera mig? För att jag tog bilder på några träd? Glöm det!"
     },
+    "skyddsvisitera": {
+      "text": "Skyddsvisiterar honom efter vapen och farliga föremål.",
+      "du": "Jag kommer att känna igenom dina kläder efter vapen. Stå still med armarna ut.",
+      "stamning": 1,
+      "replik": "– Vapen? Jag har en kamera och en termos! … Okej, okej."
+    },
     "undersoka_fordon": {
       "text": "Beslutar om undersökning av hans bil.",
       "du": "Vi kommer att undersöka din bil.",
