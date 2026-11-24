@@ -1048,6 +1048,18 @@ for (x, y) in [(1, 1), (20, 7), (17, 8)]:
 blod.save(os.path.join(OUT, "blod.png"))
 anchors["blod"] = [11, 5]
 
+# Stupad skyddsvakt (zombiescenariot): stående figur vriden 90 grader.
+for i in range(2):
+    v = Image.open(os.path.join(OUT, "vakt_0.png")).convert("RGBA")
+    bbox = v.getbbox()
+    v = v.crop(bbox).rotate(90 if i == 0 else 90, expand=True)
+    w, h = v.width + 4, v.height + 4
+    im = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    ImageDraw.Draw(im).ellipse([0, h - 6, w - 1, h - 1], fill=(18, 26, 18, 140))
+    im.alpha_composite(v, (2, 0 if i == 0 else 1))
+    im.save(os.path.join(OUT, f"vakt_ligger_{i}.png"))
+    anchors[f"vakt_ligger_{i}"] = [w // 2, h - 3]
+
 # Yxmannen (scenario 4, nödvärn): röd-svartrutig flanellskjorta, skägg,
 # grön mössa och en yxa höjd över huvudet. F/f = flanell, G = skägg, g = mössa,
 # I = yxans blad. Varianter: händerna uppe (ger upp), liggande och yxan på marken.

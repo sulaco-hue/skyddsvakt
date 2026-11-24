@@ -45,6 +45,8 @@ func bygg(poster: Array, scenario: Dictionary, granskad: bool, kommentar: String
 	var topp := HFlowContainer.new()
 	topp.add_theme_constant_override("h_separation", 10 if k else 16)
 	topp.add_theme_constant_override("v_separation", 4)
+	if bool(Spel.fakta.get("spelaren_dod", false)):
+		topp.add_child(UiKit.titel("GAME OVER", 22 if k else 26, UiKit.ROSA))
 	topp.add_child(UiKit.titel("Debriefing · " + str(scenario.get("pass", "")), 22 if k else 26))
 	if not k:
 		var under := UiKit.etikett(str(scenario.get("namn", "")), 22, UiKit.DAMPAD)
@@ -158,6 +160,10 @@ func bygg(poster: Array, scenario: Dictionary, granskad: bool, kommentar: String
 		if poster[i].get("utfall", "") == "bad":
 			_vald = i
 			break
+	# GAME OVER: börja med att visa varför.
+	for i in poster.size():
+		if str(poster[i].get("handling", "")) == "spelaren_dod":
+			_vald = i
 	_visa(_vald)
 
 

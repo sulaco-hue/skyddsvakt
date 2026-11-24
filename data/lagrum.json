@@ -36,7 +36,9 @@
       "brott_pa_bar_garning": "personen påträffades på bar gärning för ett brott med fängelse i straffskalan (t.ex. olaga hot)",
       "skjutning_rapporterad": "skjutningen rapporterades till chef",
       "angrepp_pagar_ej": "angreppet hade upphört och platsen var säkrad",
-      "handlade_i_tid": "stridsparet avvärjde angreppet innan det nådde fram"
+      "handlade_i_tid": "stridsparet avvärjde angreppet innan det nådde fram",
+      "kamraten_skyddad": "stridsparskamraten skyddades och överlevde",
+      "spelaren_vid_liv": "du överlevde och kunde fortsätta bevakningsuppgiften"
     }
   },
   "handlingar": {
@@ -607,6 +609,28 @@
       "text_ok": "",
       "text_brist": "Angriparen med yxan kom ända fram till stridsparet. Ni klarade er den här gången, men det var tur. Varning, varningsskott och – vid behov – verkanseld finns för att ett sådant angrepp ska avvärjas innan det når fram.",
       "diskutera": "Vid vilket avstånd borde ni ha agerat? Fanns det utrymme att backa och skapa avstånd?"
+    },
+    "kamrat_dod": {
+      "namn": "Stridsparskamraten blev uppäten",
+      "lagrum": "Stridsparets uppgift – skydda varandra",
+      "krav": [
+        "kamraten_skyddad"
+      ],
+      "vid_brist": "bad",
+      "text_ok": "",
+      "text_brist": "Du täckte inte din stridsparskamrat. Ni är två av en anledning: en agerar, en skyddar. När de kom inpå honom gång på gång var det ditt ansvar att ingripa – med varning, varningsskott och verkanseld i tid.",
+      "diskutera": "Vad hade du behövt göra annorlunda för att skydda kamraten? Och hur förklarar du det här för CQ?"
+    },
+    "spelaren_dod": {
+      "namn": "GAME OVER – du blev uppäten",
+      "lagrum": "Bevakningsinstruktionen – uppdraget",
+      "krav": [
+        "spelaren_vid_liv"
+      ],
+      "vid_brist": "bad",
+      "text_ok": "",
+      "text_brist": "Du är död. Du lät angriparna komma inpå dig gång på gång utan att avvärja angreppet i tid. Hur tänker du dig att du ska kunna fortsätta lösa din bevakningsuppgift om du är död – eller zombiefierad?",
+      "diskutera": "Vid vilket avstånd borde du ha agerat? Vad säger förordningen om att avvärja svårare våld – och vad säger sunt förnuft?"
     }
   }
 }

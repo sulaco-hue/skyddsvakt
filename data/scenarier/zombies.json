@@ -74,7 +74,11 @@
     "handlade_i_tid": false,
     "envarsgripande_genomfort": false,
     "aldrig": false,
-    "horde_nere": false
+    "horde_nere": false,
+    "kamraten_skyddad": false,
+    "spelaren_vid_liv": false,
+    "spelaren_dod": false,
+    "kamrat_dod": false
   },
   "bedomning": {
     "halt_order": {
@@ -109,6 +113,10 @@
       "upptacks_avstand": 15,
       "overhangande_avstand": 6,
       "ingen_tid_avstand": 2,
+      "skott_for_att_falla": [
+        1,
+        5
+      ],
       "repliker": [
         "Uuuhhh…",
         "Hjäääärnor…",
@@ -167,12 +175,27 @@
       "kamrat_efter_halt": "De lyssnar inte. Typiskt civila.",
       "kamrat_efter_varningsskott": "Inte ens ett varningsskott. Det här står inte i SoldF.",
       "kamrat_efter_verkanseld": "Han reste sig inte i alla fall. Skönt.",
+      "kamrat_reser_sig_efter_traff": "Träff! … Han går ju fortfarande!?",
       "kamrat_nadde_fram": "Bort med dig! … Puh. Skjut, för sjutton!",
       "kamrat_reser_sig": "Han reser sig igen! Det där funkar bara med skarp ammunition.",
       "reser_sig_efter_s": [
         3,
         6
       ],
+      "angrepp_innan_dod": 3,
+      "kamrat_angripen": [
+        "Bort med dig!",
+        "Aaj! Den bet mig nästan!",
+        "Hjälp mig då!"
+      ],
+      "du_angripen": [
+        "Bort!",
+        "Aj! Släpp!",
+        "AAAH!"
+      ],
+      "kamrat_dor": "NEEEJ! Jag är…",
+      "du_om_kamrat": "Nej! NEJ! Han är borta…",
+      "kamrat_om_dig": "NEEEJ! Grindposten är nere! Grindposten är nere!",
       "kamrat_slut": "Det var nog alla. Jag tror jag behöver en Nocco.",
       "missad_diskutera": "Ett dussin zombies kan inte missas."
     }
@@ -320,6 +343,7 @@
     }
   ],
   "lagestext": {
+    "fakta:kamrat_dod": "min stridsparskamrat är uppäten. Jag är ensam. Ett dussin personer med avvikande beteende vid grinden",
     "fakta:horde_nere": "tolv personer med avvikande beteende har oskadliggjorts vid grinden, inga egna skadade, begär förstärkning och en förklaring",
     "fore": "inga avvikelser",
     "efter": "ett dussin personer med… avvikande beteende närmar sig grinden från alla håll, uppträder hotfullt, svarar inte på tilltal"

@@ -30,6 +30,7 @@ func _ready() -> void:
 	await _spela_yxmannen_nar_fram()
 	await _spela_zombies(true)
 	await _spela_zombies(false)
+	await _spela_zombies_dodsfall()
 	await _bygg_alla_objekttyper()
 	print("--- Kompakt läge (pekskärm) ---")
 	UiKit.kompakt = true
@@ -615,6 +616,35 @@ func _spela_zombies(skjuter: bool) -> void:
 	main.call("_visa_debriefing")
 	await _vanta(3)
 	_forvanta({"verkanseld": "ok", "halt_order": "ok", "varningsskott": "ok"} if skjuter else {"angrepp_nadde_fram": "bad"})
+	main.queue_free()
+	await _vanta(3)
+
+
+## Tre angrepp på kamraten: han dör (kritik). Sedan låter vi dem ta oss: GAME OVER.
+func _spela_zombies_dodsfall() -> void:
+	print("--- Scenario: Zombieapokalypsen (dödsfall) ---")
+	Spel.nollstall("res://data/scenarier/zombies.json")
+	var main = load("res://scenes/main.tscn").instantiate()
+	add_child(main)
+	await _vanta(5)
+	main.call("_starta_pass")
+	await _vanta(3)
+	main.call("_forcera_handelse", "1")
+	await _vanta_tills(func() -> bool: return (main._horde["zombies"] as Dictionary).size() >= 2)
+	var id: String = (main._horde["zombies"] as Dictionary).keys()[0]
+	for i in 3:
+		main._horde["zombies"][id]["lage"] = "gar"
+		main.call("_horde_nadde_fram", id, "kamrat")
+	if not bool(Spel.fakta.get("kamrat_dod", false)):
+		_fel("kamraten dog inte efter tredje angreppet")
+	else:
+		_ok("kamraten uppäten efter tredje angreppet")
+	if not await _vanta_tills(func() -> bool: return main.debriefing != null, 240.0):
+		_fel("spelet gick aldrig till debriefing efter att vi blev uppätna")
+	else:
+		_ok("GAME OVER: direkt till debriefingen")
+	await _vanta(2)
+	_forvanta({"kamrat_dod": "bad", "spelaren_dod": "bad"})
 	main.queue_free()
 	await _vanta(3)
 
