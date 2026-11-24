@@ -26,7 +26,7 @@ Spelet startar med ett scenarioval (listan i `data/scenarier/index.json`):
    jävel!”. Så fort kamraten upptäcker honom visas situationsknapparna **Halt-order [H]**,
    **Varningsskott [V]** och **Verkanseld [F]**. Bedömningen beror på om varning getts, om varningsskott
    föregick verkanselden, hur nära han var (*omedelbart förestående*) och om angreppet fortfarande pågick.
-   Efter verkanseld: **Larma sjukvård [S]** och **Första hjälpen [J]**. Två varianter: *skarp* (stannar
+   Efter verkanseld: **Första hjälpen [J]**; sjukvård begärs via uppropet till CQ. Två varianter: *skarp* (stannar
    inte) och *ger upp* (släpper yxan efter varning). Når han fram brottas han ner – men det bedöms
    som att ni agerade för sent. Efteråt: envarsgripande (BrB 24:7) och överlämning till polis.
 5. **Zombieapokalypsen** – ett skämtscenario. Ett dussin zombies kommer i vågor från olika håll.
@@ -133,7 +133,7 @@ Om något går fel: titta i panelen **Utdata/Output** längst ner i editorn och 
 | Briefing | Läs omvärldsläge och uppdrag, **Starta pass** (eller Enter) |
 | Patrull | **Klicka** på marken för att gå. Bommen vid grinden fälls upp automatiskt när du närmar dig. **Klicka på en person** för att ta kontakt |
 | | **R** samband · **N** anteckna · **T** tyst nu · **I** instruktion · **M** musik av/på · **F3** debugrad · **Esc** avsluta pass |
-| | Situationsknappar vid högerkanten när något händer: **B** bekämpa drönaren · **H** halt-order · **V** varningsskott · **F** verkanseld · **S** larma sjukvård · **J** första hjälpen |
+| | Situationsknappar vid högerkanten när något händer: **B** bekämpa drönaren · **H** halt-order · **V** varningsskott · **F** verkanseld · **J** första hjälpen |
 | Kontakt | Välj svar med musen eller **1–4**. Under svaren finns alltid **åtgärdsraden**: Begär uppgifter (namn, födelsetid, hemvist – 10 §), Be om leg. (frivilligt), Visitera, Undersök fordon, Beslag, Avvisa, Avlägsna, Omhänderta, Gripa, Låt gå. Med debug på visas inom parentes bedömningen just nu och vart valet leder, t.ex. *(DISKUTABELT → omhandertagen)* |
 | Debriefing | Klicka på ett beslut i tidslinjen för lagrum och bedömning. **Spara logg** skriver en JSON-fil för instruktören |
 

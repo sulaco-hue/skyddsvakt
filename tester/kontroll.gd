@@ -537,13 +537,16 @@ func _spela_yxmannen_skarp() -> void:
 	main.call("_verkanseld")
 	if str(main._angripare.get("lage", "")) != "skjuten":
 		_fel("yxmannen föll inte efter verkanseld")
-	elif not "sjukvard" in main.hud.situationer():
-		_fel("knappen Larma sjukvård visas inte efter verkanseld")
+	elif not "forsta_hjalpen" in main.hud.situationer():
+		_fel("knappen Första hjälpen visas inte efter verkanseld")
 	else:
-		_ok("verkanseld: mannen ligger, sjukvårdsknapp visas")
+		_ok("verkanseld: mannen ligger, knappen Första hjälpen visas")
 	if not str(main.call("_lagestext")).contains("verkanseld"):
 		_fel("lägestexten nämner inte verkanselden: " + str(main.call("_lagestext")))
-	main.call("_larma_sjukvard")
+	# Sjukvård begärs via uppropet till CQ.
+	main.hud.radio_anropa()
+	main.hud.radio_valj("sjukvard")
+	main.hud.radio_avsluta()
 	await _avsluta_yxmannen(main, {"halt_order": "ok", "varningsskott": "ok", "verkanseld": "ok",
 		"larma_sjukvard": "ok", "foljdkrav_skjutning_rapporterad": "bad"})
 

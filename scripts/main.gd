@@ -540,8 +540,6 @@ func _pa_situation(id: String) -> void:
 			_varningsskott()
 		"verkanseld":
 			_verkanseld()
-		"sjukvard":
-			_larma_sjukvard()
 		"forsta_hjalpen":
 			_forsta_hjalpen()
 
@@ -663,8 +661,6 @@ func _visa_angripar_knappar() -> void:
 				val.append({"id": "varningsskott", "text": "Varningsskott", "tangent": "V", "farg": "barnsten"})
 			val.append({"id": "verkanseld", "text": "Verkanseld", "tangent": "F", "farg": "rosa"})
 		"skjuten":
-			if not bool(Spel.fakta.get("sjukvard_larmad", false)):
-				val.append({"id": "sjukvard", "text": "Larma sjukvård", "tangent": "S", "farg": "gron"})
 			if not bool(Spel.fakta.get("forsta_hjalp_given", false)):
 				val.append({"id": "forsta_hjalpen", "text": "Första hjälpen", "tangent": "J", "farg": "gron"})
 	hud.satt_situationer(val)
@@ -809,20 +805,6 @@ func _angrepp_upphort(extra: Dictionary) -> void:
 	Spel.satt_fakta(f)
 	varld.satt_larm("")
 	_avsluta_handelse(_angripare["h"])
-
-
-func _larma_sjukvard() -> void:
-	_uppdatera_rimlighet()
-	Spel.utfor("larma_sjukvard", "Larmade sjukvård via CQ")
-	Spel.spela_samband([
-		{"fran": "Grindposten", "text": "CQ, CQ.", "efter": 0},
-		{"fran": "CQ", "text": "CQ kom.", "efter": 1.5},
-		{"fran": "Grindposten", "text": "Från Grindposten, en skadad person vid grinden, skottskada i benet, begär ambulans, kom.", "efter": 3.0},
-		{"fran": "CQ", "text": "Uppfattat, ambulans larmas, kom.", "efter": 5.0},
-		{"fran": "Grindposten", "text": "Uppfattat, slut kom.", "efter": 6.5},
-		{"fran": "CQ", "text": "Klart slut.", "efter": 8.0},
-	])
-	_visa_angripar_knappar()
 
 
 func _forsta_hjalpen() -> void:

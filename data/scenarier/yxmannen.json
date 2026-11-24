@@ -268,29 +268,14 @@
       "stamning": 2,
       "alternativ": [
         {
-          "text": "Larma sjukvård via CQ.",
-          "handling": "larma_sjukvard",
-          "nasta": "skjuten_larmat"
-        },
-        {
           "text": "Ge första hjälpen: tryckförband på benet.",
           "handling": "forsta_hjalpen",
           "nasta": "skjuten_hjalp"
-        }
-      ]
-    },
-    "skjuten_larmat": {
-      "replik": "CQ: ”Ambulans och polis larmade, slut kom.”\n\nKAMRATEN: – Yxan är säkrad. Jag täcker dig.",
-      "alternativ": [
-        {
-          "text": "Ge första hjälpen: tryckförband på benet.",
-          "handling": "forsta_hjalpen",
-          "nasta": "skjuten_klar"
         },
         {
           "text": "Grip honom för olaga hot (envarsgripande).",
           "handling": "envarsgripande",
-          "nasta": "skjuten_klar"
+          "nasta": "skjuten_gripen"
         }
       ]
     },
@@ -298,15 +283,33 @@
       "replik": "Förbandet sitter. Blödningen avtar.\n\nYXMANNEN: – Förlåt… förlåt…",
       "alternativ": [
         {
-          "text": "Larma sjukvård via CQ.",
-          "handling": "larma_sjukvard",
+          "text": "Grip honom för olaga hot (envarsgripande).",
+          "handling": "envarsgripande",
+          "nasta": "skjuten_klar"
+        },
+        {
+          "text": "Låt kamraten hålla honom under uppsikt.",
           "nasta": "skjuten_klar"
         }
       ]
     },
     "skjuten_klar": {
-      "replik": "Blåljus syns nere vid vägen.\n\nKAMRATEN: – Det här blir en lång rapport.",
+      "replik": "Kamraten håller honom under uppsikt. Yxan är säkrad.",
       "slut": true
+    },
+    "skjuten_gripen": {
+      "replik": "Han nickar svagt.\n\nYXMANNEN: – Benet… snälla…",
+      "alternativ": [
+        {
+          "text": "Ge första hjälpen: tryckförband på benet.",
+          "handling": "forsta_hjalpen",
+          "nasta": "skjuten_klar"
+        },
+        {
+          "text": "Låt kamraten hålla honom under uppsikt.",
+          "nasta": "skjuten_klar"
+        }
+      ]
     }
   },
   "sambandstexter": {
