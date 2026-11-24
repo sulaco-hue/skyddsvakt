@@ -191,125 +191,47 @@
   "dialog": {
     "gett_upp": {
       "du": "Stå still! Händerna där vi ser dem!",
-      "replik": "YXMANNEN: – Okej, okej! Skjut inte! Jag… jag har inte sovit på tre dygn. Grannen tar min ved. Jag trodde ni var med honom…\n\nKamraten håller honom under uppsikt. Yxan ligger i gruset.",
+      "replik": "YXMANNEN: – Okej, okej! Skjut inte! Jag… jag har inte sovit på tre dygn. Grannen tar min ved. Jag trodde ni var med honom…\n\nTvåan håller honom under uppsikt. Yxan ligger i gruset.",
       "satt_fakta": {
         "brott_pa_bar_garning": true
       },
-      "alternativ": [
-        {
-          "text": "Grip honom: ”Du är gripen för olaga hot. Händerna bakom ryggen.”",
-          "handling": "envarsgripande",
-          "nasta": "gripen",
-          "stamning": -1
-        },
-        {
-          "text": "Låt honom gå – yxan är ju borta nu.",
-          "handling": "lata_ga",
-          "nasta": "slapper",
-          "npc_beteende": "ga_till_start"
+      "atgarder": {
+        "forsta_hjalpen": {
+          "text": "Erbjuder första hjälpen.",
+          "du": "Är du skadad?",
+          "replik": "– Nej… bara trött. Så himla trött."
         }
-      ]
+      }
     },
     "overmannad": {
       "du": "Ligg still! Lugna ner dig!",
-      "replik": "Ni har brottat ner honom. Yxan ligger i gruset, kamraten har knät på hans rygg.\n\nYXMANNEN: – Släpp mig! Aaah…",
+      "replik": "Ni har brottat ner honom. Yxan ligger i gruset, tvåan har knät på hans rygg.\n\nYXMANNEN: – Släpp mig! Aaah…",
       "satt_fakta": {
         "brott_pa_bar_garning": true
       },
-      "alternativ": [
-        {
-          "text": "Grip honom: ”Du är gripen för olaga hot.”",
-          "handling": "envarsgripande",
-          "nasta": "gripen",
-          "stamning": -1
-        },
-        {
-          "text": "Släpp honom och låt honom gå.",
-          "handling": "lata_ga",
-          "nasta": "slapper",
-          "npc_beteende": "ga_till_start"
+      "atgarder": {
+        "forsta_hjalpen": {
+          "text": "Kontrollerar om han är skadad.",
+          "du": "Är du skadad?",
+          "replik": "– Armen… det gör ont i armen. Men det är inget."
         }
-      ]
-    },
-    "gripen": {
-      "replik": "Han sätter sig på marken och tittar ner i gruset.\n\nYXMANNEN: – Förlåt… jag vet inte vad som hände.",
-      "stamning": 1,
-      "alternativ": [
-        {
-          "text": "Begär polis via CQ – han ska överlämnas till polis.",
-          "handling": "anmala_polis",
-          "nasta": "polis"
-        },
-        {
-          "text": "Låt honom sitta. Vi rapporterar senare.",
-          "handling": "dokumentera",
-          "nasta": "vantar"
-        }
-      ]
-    },
-    "polis": {
-      "replik": "DU (radio): ”CQ, CQ.” – CQ: ”CQ kom.”\nDU: ”Från Grindposten, en man gripen för olaga hot med yxa, begär polis till grinden, kom.”\nCQ: ”Uppfattat, polis underrättas, slut kom.” – DU: ”Klart slut.”",
-      "slut": true
-    },
-    "vantar": {
-      "replik": "KAMRATEN: – Ska vi inte ropa in polisen? Vi kan ju inte sitta här hela natten…",
-      "slut": true
-    },
-    "slapper": {
-      "replik": "Han traskar iväg in i skogen igen, utan yxa.\n\nKAMRATEN: – Öh… ska vi inte… polisen?",
-      "slut": true
+      }
     },
     "skjuten": {
       "du": "Ligg still! Rör dig inte!",
-      "replik": "Mannen ligger på marken och stönar. Yxan ligger två meter bort – kamraten sparkar undan den och håller honom under uppsikt.\n\nYXMANNEN: – Aaah… benet…",
+      "replik": "Mannen ligger på marken och stönar. Yxan ligger två meter bort – tvåan sparkar undan den och håller honom under uppsikt.\n\nYXMANNEN: – Aaah… benet…",
       "satt_fakta": {
         "brott_pa_bar_garning": true
       },
-      "stamning": 2,
-      "alternativ": [
-        {
-          "text": "Ge första hjälpen: tryckförband på benet.",
-          "handling": "forsta_hjalpen",
-          "nasta": "skjuten_hjalp"
-        },
-        {
-          "text": "Grip honom för olaga hot (envarsgripande).",
-          "handling": "envarsgripande",
-          "nasta": "skjuten_gripen"
-        }
-      ]
+      "stamning": 2
     },
-    "skjuten_hjalp": {
-      "replik": "Förbandet sitter. Blödningen avtar.\n\nYXMANNEN: – Förlåt… förlåt…",
-      "alternativ": [
-        {
-          "text": "Grip honom för olaga hot (envarsgripande).",
-          "handling": "envarsgripande",
-          "nasta": "skjuten_klar"
-        },
-        {
-          "text": "Låt kamraten hålla honom under uppsikt.",
-          "nasta": "skjuten_klar"
-        }
-      ]
+    "gripen": {
+      "replik": "Han sätter sig på marken och tittar ner i gruset.\n\nYXMANNEN: – Förlåt… jag vet inte vad som hände.",
+      "stamning": 1
     },
-    "skjuten_klar": {
-      "replik": "Kamraten håller honom under uppsikt. Yxan är säkrad.",
+    "slapper": {
+      "replik": "Han traskar iväg in i skogen igen, utan yxa.\n\nTVÅAN: – Öh… ska vi inte… polisen?",
       "slut": true
-    },
-    "skjuten_gripen": {
-      "replik": "Han nickar svagt.\n\nYXMANNEN: – Benet… snälla…",
-      "alternativ": [
-        {
-          "text": "Ge första hjälpen: tryckförband på benet.",
-          "handling": "forsta_hjalpen",
-          "nasta": "skjuten_klar"
-        },
-        {
-          "text": "Låt kamraten hålla honom under uppsikt.",
-          "nasta": "skjuten_klar"
-        }
-      ]
     }
   },
   "sambandstexter": {
@@ -331,5 +253,85 @@
     "svar_forstarkning": {
       "fore": "Uppfattat, rondpatrullen skickas till grinden"
     }
-  }
+  },
+  "atgarder": {
+    "kommentar": "Åtgärdsraden i kontaktläget (inga samtalsval). nasta = nästa steg, annars replik och samtalet står kvar.",
+    "begara_identitet": {
+      "text": "Begär namn, födelsetid och hemvist.",
+      "du": "Vad heter du? Födelsetid och hemvist.",
+      "replik": "– Bengt… Bengt Ivarsson. Femtiosju år. Stugan vid ån."
+    },
+    "be_om_legitimation": {
+      "text": "Ber att få se legitimation.",
+      "du": "Har du legitimation?",
+      "replik": "– Legitimation? Jag hade bara yxan med mig."
+    },
+    "kroppsvisitera": {
+      "text": "Kroppsvisiterar honom.",
+      "du": "Vi kommer att kroppsvisitera dig. Stå still.",
+      "replik": "– Gör det. Det är bara en kniv i fickan… till smörgåsarna."
+    },
+    "beslag": {
+      "text": "Tar yxan i beslag.",
+      "du": "Yxan tas i beslag.",
+      "replik": "– Ta den. Jag vill aldrig se den igen."
+    },
+    "avvisa": {
+      "text": "Avvisar honom från skyddsobjektet.",
+      "du": "Du avvisas från skyddsobjektet.",
+      "replik": "– Avvisa? Jag vill inte in någonstans. Jag vill hem."
+    },
+    "avlagsna": {
+      "text": "Avlägsnar honom från platsen.",
+      "du": "Du måste lämna platsen. Nu.",
+      "nasta": "slapper",
+      "npc_beteende": "ga_till_start"
+    },
+    "tillfalligt_omhanderta": {
+      "text": "Omhändertar honom tillfälligt.",
+      "du": "Du omhändertas tillfälligt.",
+      "satt_fakta": {
+        "omhandertagande_genomfort": true
+      },
+      "nasta": "gripen"
+    },
+    "gripa": {
+      "text": "Griper honom enligt skyddslagen 13 §.",
+      "du": "Du är gripen.",
+      "satt_fakta": {
+        "gripande_genomfort": true
+      },
+      "nasta": "gripen"
+    },
+    "envarsgripande": {
+      "text": "Griper honom för olaga hot (envarsgripande).",
+      "du": "Du är gripen för olaga hot. Händerna bakom ryggen.",
+      "stamning": -1,
+      "nasta": "gripen"
+    },
+    "forsta_hjalpen": {
+      "text": "Ger första hjälpen.",
+      "du": "Ligg still, jag lägger ett tryckförband.",
+      "replik": "– Aaah… tack…"
+    },
+    "lata_ga": {
+      "text": "Låter honom gå.",
+      "du": "Gå hem, Bengt.",
+      "nasta": "slapper",
+      "npc_beteende": "ga_till_start"
+    }
+  },
+  "atgarder_lista": [
+    "begara_identitet",
+    "be_om_legitimation",
+    "kroppsvisitera",
+    "beslag",
+    "avvisa",
+    "avlagsna",
+    "tillfalligt_omhanderta",
+    "gripa",
+    "envarsgripande",
+    "forsta_hjalpen",
+    "lata_ga"
+  ]
 }

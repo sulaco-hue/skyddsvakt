@@ -514,12 +514,15 @@ func _spela_yxmannen_ger_upp() -> void:
 	main.call("_oppna_kontakt", "yxmannen")
 	await _vanta(3)
 	var kontakt: Kontakt = main.kontakt
-	kontakt.call("_valj", 0)  # Grip honom (envarsgripande)
-	await _vanta(2)
-	kontakt.call("_valj", 0)  # Begär polis via CQ
+	if not kontakt.valj_atgard("envarsgripande"):
+		_fel("åtgärden Envarsgripande saknas hos yxmannen")
 	await _vanta(2)
 	kontakt.call("_stang")
 	await _vanta(3)
+	# Polis begärs via uppropet till CQ.
+	main.hud.radio_anropa()
+	main.hud.radio_valj("polis")
+	main.hud.radio_avsluta()
 	if not str(main.call("_lagestext")).contains("gett upp"):
 		_fel("lägestexten följer inte händelsen: " + str(main.call("_lagestext")))
 	await _avsluta_yxmannen(main, {"halt_order": "ok", "envarsgripande": "ok", "anmala_polis": "ok",

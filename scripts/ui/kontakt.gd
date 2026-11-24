@@ -24,6 +24,8 @@ const ATGARDER := [
 	["avlagsna", "Avlägsna"],
 	["tillfalligt_omhanderta", "Omhänderta"],
 	["gripa", "Gripa"],
+	["envarsgripande", "Envarsgripande"],  # BrB 24:7
+	["forsta_hjalpen", "Första hjälpen"],
 	["lata_ga", "Låt gå"],
 ]
 
@@ -62,6 +64,7 @@ var _slut := false
 var _tid := 0.0
 var _chips: HFlowContainer
 var _atgard_rubrik: Label
+var _svar_rubrik: Label
 var _atgard_rad: HFlowContainer
 var _atgard_val: Array = []
 
@@ -157,7 +160,8 @@ func bygg(scenario: Dictionary) -> void:
 	_replik = UiKit.etikett("", 24 if UiKit.kompakt else 30, UiKit.MORK, true)
 	bv.add_child(_replik)
 	hoger.add_child(bubbla)
-	hoger.add_child(UiKit.rubrik("DITT SVAR", 14, UiKit.GRON))
+	_svar_rubrik = UiKit.rubrik("DITT SVAR", 14, UiKit.GRON)
+	hoger.add_child(_svar_rubrik)
 	_alternativ_lista = UiKit.vbox(8)
 	hoger.add_child(_alternativ_lista)
 	_atgard_rubrik = UiKit.rubrik("ÅTGÄRDER", 14, UiKit.BARNSTEN)
@@ -249,6 +253,7 @@ func visa_nod(nod_id: String, replik_override := "") -> void:
 		c.queue_free()
 	_atgard_val.clear()
 	_aktuella = nod.get("alternativ", [])
+	_svar_rubrik.visible = not _aktuella.is_empty() or bool(nod.get("slut", false))
 	# Utan svar och utan åtgärdsrad är samtalet slut.
 	var utan_atgarder: bool = atgarder.is_empty() or nod.get("atgarder", {}) is bool
 	_slut = bool(nod.get("slut", false)) or (_aktuella.is_empty() and utan_atgarder)
@@ -301,6 +306,12 @@ func _bygg_atgarder(nod: Dictionary) -> void:
 		b.disabled = _anvanda.has(id)
 		_atgard_val.append(alt)
 		_atgard_rad.add_child(omslag)
+	# Man kan alltid avsluta samtalet utan att välja något.
+	var avsluta := UiKit.knapp("Avsluta samtalet")
+	avsluta.add_theme_font_size_override("font_size", 18 if UiKit.kompakt else 20)
+	avsluta.custom_minimum_size = Vector2(0, 40)
+	avsluta.pressed.connect(_stang)
+	_atgard_rad.add_child(avsluta)
 
 
 func _pa_atgardstryck(ev: InputEvent, omslag: Control, b: Button, alt: Dictionary) -> void:
