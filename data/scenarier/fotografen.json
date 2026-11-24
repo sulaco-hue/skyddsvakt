@@ -21,7 +21,7 @@
     {
       "tid": "15:45",
       "kalla": "Vaktchef",
-      "text": "Leverans via grinden ca 20:00. Föranmält fordon, kontroll enligt rutin."
+      "text": "Kvällspass enligt ordinarie bevakningsinstruktion. Byte av radiobatterier vid passets slut."
     }
   ],
   "briefing": {
@@ -47,7 +47,7 @@
         "handling": "dokumentera"
       }
     ],
-    "samband": "Vi: Grindposten – stridsparet, två skyddsvakter: du är ettan, din kamrat tvåan. Vaktchef: CQ (Caesar Qvintus)."
+    "samband": "Vi: Grindposten. Vaktchef: CQ (Caesar Qvintus)."
   },
   "karta": "res://data/kartor/granasen.json",
   "fakta": {

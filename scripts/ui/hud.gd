@@ -286,6 +286,11 @@ func _uppdatera_bubblor(delta: float) -> void:
 			_bubblor.erase(b)
 			continue
 		var mal: Node2D = b["mal"]
+		# Är personen själv utanför bild? Då står bubblan still vid kanten tills han syns.
+		var fot := kamera * mal.global_position
+		b["utanfor"] = not get_viewport_rect().grow(-4.0).has_point(fot)
+		if not bool(b["utanfor"]):
+			b.erase("fast_pos")
 		var pos := kamera * (mal.global_position + Vector2(0, -float(b["hojd"])))
 		if b["stig"]:
 			pos.y -= (float(b["start"]) - float(b["t"])) * 18.0
@@ -304,6 +309,11 @@ func _undvik_overlapp() -> void:
 		var nod: Control = b["nod"]
 		if not is_instance_valid(nod) or nod.size == Vector2.ZERO:
 			continue
+		if b.has("fast_pos"):
+			nod.position = b["fast_pos"]
+			placerade.append(Rect2(nod.position - Vector2(3.0, 3.0), nod.size).grow(3.0))
+			nod.modulate.a = 1.0
+			continue
 		var naturlig_y := nod.position.y
 		var r := Rect2(nod.position + Vector2(0.0, float(b.get("dy", 0.0))), nod.size).grow(3.0)
 		var varv := 0
@@ -321,10 +331,13 @@ func _undvik_overlapp() -> void:
 				if r.intersects(p):
 					r.position.y = p.end.y + 1.0
 		r.position.x = clampf(r.position.x, 4.0, skarm.x - r.size.x - 4.0)
+		r.position.y = minf(r.position.y, skarm.y - r.size.y - 4.0)
 		b["dy"] = r.position.y + 3.0 - naturlig_y
 		placerade.append(r)
 		nod.position = (r.position + Vector2(3.0, 3.0)).round()
 		nod.modulate.a = 1.0
+		if bool(b.get("utanfor", false)):
+			b["fast_pos"] = nod.position
 
 
 func _pa_debug_knapp(id: String) -> void:
