@@ -615,7 +615,14 @@ func _spela_zombies(skjuter: bool) -> void:
 		_ok("alla tolv nere")
 	main.call("_visa_debriefing")
 	await _vanta(3)
-	_forvanta({"verkanseld": "ok", "halt_order": "ok", "varningsskott": "ok"} if skjuter else {"angrepp_nadde_fram": "bad"})
+	if skjuter:
+		if not "forsta_hjalpen" in main.hud.situationer():
+			_fel("knappen Första hjälpen saknas när zombierna ligger")
+		else:
+			main.call("_forsta_hjalpen")
+			main.call("_forsta_hjalpen")
+			_ok("första hjälpen erbjuds (och avböjs)")
+	_forvanta({"verkanseld": "ok", "halt_order": "ok", "varningsskott": "ok", "forsta_hjalpen": "ok"} if skjuter else {"angrepp_nadde_fram": "bad"})
 	main.queue_free()
 	await _vanta(3)
 

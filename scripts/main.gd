@@ -771,6 +771,9 @@ func _larma_sjukvard() -> void:
 
 
 func _forsta_hjalpen() -> void:
+	if not _horde.is_empty():
+		_horde_forsta_hjalpen()
+		return
 	var n := _angripare_nod()
 	Spel.utfor("forsta_hjalpen", "Gav första hjälpen (tryckförband)")
 	if n:
@@ -1099,7 +1102,7 @@ func _uppdatera_horde(delta: float) -> void:
 	# Alla nere
 	if gar == 0 and int(_horde["kvar"]) == 0 and not bool(Spel.fakta.get("horde_nere", false)):
 		Spel.satt_fakta({"horde_nere": true, "angrepp_pagar": false, "angrepp_overhangande": false, "angrepp_pagar_ej": true})
-		hud.satt_situationer([])
+		hud.satt_situationer([{"id": "forsta_hjalpen", "text": "Första hjälpen", "tangent": "J", "farg": "gron"}])
 		varld.satt_larm("")
 		_avsluta_handelse(h)
 		get_tree().create_timer(1.5).timeout.connect(_kamrat_sager.bind(str(h.get("kamrat_slut", ""))))
@@ -1123,6 +1126,11 @@ func _visa_horde_knappar() -> void:
 	if not bool(Spel.fakta.get("varningsskott_avlossat", false)):
 		val.append({"id": "varningsskott", "text": "Varningsskott", "tangent": "V", "farg": "barnsten"})
 	val.append({"id": "verkanseld", "text": "Verkanseld", "tangent": "F", "farg": "rosa"})
+	# Skyddsvakter ger första hjälpen även till den de själva skadat – även här.
+	for z in (_horde["zombies"] as Dictionary).values():
+		if str(z["lage"]) == "nere":
+			val.append({"id": "forsta_hjalpen", "text": "Första hjälpen", "tangent": "J", "farg": "gron"})
+			break
 	hud.satt_situationer(val)
 
 
@@ -1190,6 +1198,7 @@ func _horde_verkanseld() -> void:
 		_visa_horde_knappar()
 		return
 	_horde_falla(id)
+	_visa_horde_knappar()
 	var blod := varld.lagg_dekal("blod", n.cell)
 	blod.modulate.a = 0.0
 	create_tween().tween_property(blod, "modulate:a", 1.0, 1.2)
@@ -1218,6 +1227,28 @@ func _blodstank(n: Node2D) -> void:
 	n.add_child(p)
 	p.emitting = true
 	get_tree().create_timer(1.2).timeout.connect(p.queue_free)
+
+
+## Första hjälpen till en nedkämpad zombie: vi och kamraten kommer fram till
+## att det inte blir av ("Aldrig i livet"), med olika varianter varje gång.
+func _horde_forsta_hjalpen() -> void:
+	var h: Dictionary = _horde["h"]
+	var vaxlingar: Array = h.get("forsta_hjalpen_vaxling", [])
+	var i := int(_horde.get("fh_i", 0))
+	_horde["fh_i"] = i + 1
+	if i == 0:
+		Spel.utfor("forsta_hjalpen", "Övervägde att ge första hjälpen till en nedkämpad zombie")
+	if vaxlingar.is_empty():
+		return
+	var v: Array = vaxlingar[mini(i, vaxlingar.size() - 1)]
+	var t := 0.0
+	for rad: Dictionary in v:
+		var fn := _spelaren_sager if str(rad.get("vem", "")) == "du" else _kamrat_sager
+		if t == 0.0:
+			fn.call(str(rad.get("text", "")))
+		else:
+			get_tree().create_timer(t).timeout.connect(fn.bind(str(rad.get("text", ""))))
+		t += 2.4
 
 
 func _horde_falla(id: String) -> void:

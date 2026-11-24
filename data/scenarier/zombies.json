@@ -93,6 +93,12 @@
     },
     "angrepp_nadde_fram": {
       "text_brist": "En av dem nådde ända fram till stridsparet innan ni agerade. Kamraten knuffade omkull den – den här gången."
+    },
+    "forsta_hjalpen": {
+      "krav": [],
+      "vid_brist": "ok",
+      "text_ok": "Rätt reflex: skyddsvakter ska ge första hjälpen även till den man själv skadat, så snart platsen är säkrad. Att ni sedan avstod när den skadade var en zombie … får ni diskutera på debriefingen.",
+      "diskutera": "Gäller hjälpskyldigheten odöda? När är platsen tillräckligt säker för att gå fram till någon som nyss försökte äta dig?"
     }
   },
   "varianter": {},
@@ -197,7 +203,69 @@
       "du_om_kamrat": "Nej! NEJ! Han är borta…",
       "kamrat_om_dig": "NEEEJ! Grindposten är nere! Grindposten är nere!",
       "kamrat_slut": "Det var nog alla. Jag tror jag behöver en Nocco.",
-      "missad_diskutera": "Ett dussin zombies kan inte missas."
+      "missad_diskutera": "Ett dussin zombies kan inte missas.",
+      "forsta_hjalpen_vaxling": [
+        [
+          {
+            "vem": "du",
+            "text": "Ska vi… ge första hjälpen?"
+          },
+          {
+            "vem": "kamrat",
+            "text": "Aldrig i livet."
+          }
+        ],
+        [
+          {
+            "vem": "kamrat",
+            "text": "Du tänker väl inte göra mun-mot-mun på den där?"
+          },
+          {
+            "vem": "du",
+            "text": "…Nej. Nej, det tänker jag inte."
+          }
+        ],
+        [
+          {
+            "vem": "du",
+            "text": "Utbildningen säger att vi ska hjälpa skadade. Även dem vi själva skadat."
+          },
+          {
+            "vem": "kamrat",
+            "text": "Utbildningen sa inget om att de skadade biter."
+          }
+        ],
+        [
+          {
+            "vem": "kamrat",
+            "text": "Fria luftvägar? Den andas ju inte ens."
+          },
+          {
+            "vem": "du",
+            "text": "Stabilt sidoläge då?"
+          },
+          {
+            "vem": "kamrat",
+            "text": "Aldrig i livet."
+          }
+        ],
+        [
+          {
+            "vem": "du",
+            "text": "Tryckförband?"
+          },
+          {
+            "vem": "kamrat",
+            "text": "Ta den du. Jag håller mig här borta."
+          }
+        ],
+        [
+          {
+            "vem": "kamrat",
+            "text": "Fortfarande nej. Jag ringer hellre CQ och säger upp mig."
+          }
+        ]
+      ]
     }
   ],
   "samband": [],
