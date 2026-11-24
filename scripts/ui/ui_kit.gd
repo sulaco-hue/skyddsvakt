@@ -192,6 +192,16 @@ static func klickruta(kant := KANT2, bg := KNAPP, hover_kant := BARNSTEN) -> Pan
 	return p
 
 
+## Låter tryck-dra gå igenom paneler till en omgivande ScrollContainer
+## (PanelContainer stoppar annars händelsen, så att man inte kan scrolla
+## på pekskärm när fingret startar på t.ex. en textruta).
+static func slapp_igenom(rot: Node) -> void:
+	for c in rot.get_children():
+		if c is PanelContainer and (c as Control).mouse_filter == Control.MOUSE_FILTER_STOP:
+			(c as Control).mouse_filter = Control.MOUSE_FILTER_PASS
+		slapp_igenom(c)
+
+
 ## Ett "tryck": knappen släpps på rutan utan att fingret/musen dragits iväg
 ## (så att scrollning inte räknas som ett val).
 static func ar_tryck(event: InputEvent, c: Control) -> bool:

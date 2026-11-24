@@ -109,6 +109,7 @@ func bygg(scenario: Dictionary) -> void:
 	start.pressed.connect(func() -> void: starta.emit())
 	knappar.add_child(start)
 	yttre.add_child(knappar)
+	UiKit.slapp_igenom(scroll)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -165,6 +166,7 @@ func _bygg_kompakt(scenario: Dictionary) -> void:
 		var innehall: Control = sidor[i][1]
 		innehall.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		scroll.add_child(innehall)
+		UiKit.slapp_igenom(scroll)
 		yttre.add_child(scroll)
 		_sidor.append(scroll)
 	_visa_sida(0)

@@ -147,6 +147,7 @@ func bygg(scenario: Dictionary) -> void:
 	hoger.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	dscroll.add_child(hoger)
 	var bubbla := UiKit.panel(Color("0B1016"), UiKit.TEXT, 24, 18)
+	bubbla.mouse_filter = Control.MOUSE_FILTER_PASS  # tryck-dra i textrutan scrollar
 	var bv := UiKit.vbox(6)
 	bubbla.add_child(bv)
 	_du = UiKit.etikett("", 21 if UiKit.kompakt else 25, Color("2E4A1E"), true)
@@ -289,10 +290,22 @@ func _bygg_atgarder(nod: Dictionary) -> void:
 		var b := UiKit.knapp(etikett, true, UiKit.BARNSTEN)
 		b.add_theme_font_size_override("font_size", 18 if UiKit.kompakt else 20)
 		b.custom_minimum_size = Vector2(0, 40)
-		b.pressed.connect(_valj_alt.bind(alt))
+		# Knappen tar inte emot tryck själv; omslaget släpper igenom dragningar
+		# till scrollningen och räknar bara ett "tryck" (släpp utan att dra) som val.
+		b.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		var omslag := MarginContainer.new()
+		omslag.mouse_filter = Control.MOUSE_FILTER_PASS
+		omslag.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		omslag.add_child(b)
+		omslag.gui_input.connect(_pa_atgardstryck.bind(omslag, b, alt))
 		b.disabled = _anvanda.has(id)
 		_atgard_val.append(alt)
-		_atgard_rad.add_child(b)
+		_atgard_rad.add_child(omslag)
+
+
+func _pa_atgardstryck(ev: InputEvent, omslag: Control, b: Button, alt: Dictionary) -> void:
+	if not b.disabled and UiKit.ar_tryck(ev, omslag):
+		_valj_alt(alt)
 
 
 ## Debug: bedömningen just nu och vart valet leder, t.ex. "(DISKUTABELT → lamnar)".

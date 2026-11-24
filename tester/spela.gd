@@ -134,6 +134,42 @@ func _utfor(steg: Dictionary) -> void:
 	if steg.has("samband"):
 		main.hud.call("_pa_sambandsval", Spel.scenario.get("sambandsval", [])[int(steg["samband"])])
 		await _vanta(0.5)
+	if steg.has("hjul"):
+		# Mushjul nedåt på en punkt (fönsterkoordinater) – visar om händelsen når scrollningen.
+		for i in 3:
+			var w := InputEventMouseButton.new()
+			w.position = Vector2(steg["hjul"][0], steg["hjul"][1])
+			w.global_position = w.position
+			w.button_index = MOUSE_BUTTON_WHEEL_DOWN
+			w.pressed = true
+			Input.parse_input_event(w)
+			await get_tree().process_frame
+		await _vanta(0.3)
+		var sh := _forsta_scroll(main.kontakt) if main.kontakt.visible else null
+		logg.append("  scroll efter hjul: %s" % [sh.scroll_vertical if sh else "-"])
+	if steg.has("drag"):
+		# Tryck-dra med fingret (fönsterkoordinater): [x1, y1, x2, y2]
+		var d: Array = steg["drag"]
+		var fran := Vector2(d[0], d[1])
+		var till := Vector2(d[2], d[3])
+		var t := InputEventScreenTouch.new()
+		t.position = fran
+		t.pressed = true
+		Input.parse_input_event(t)
+		await get_tree().process_frame
+		for i in range(1, 11):
+			var dr := InputEventScreenDrag.new()
+			dr.position = fran.lerp(till, i / 10.0)
+			dr.relative = (till - fran) / 10.0
+			Input.parse_input_event(dr)
+			await get_tree().process_frame
+		var u := InputEventScreenTouch.new()
+		u.position = till
+		u.pressed = false
+		Input.parse_input_event(u)
+		await _vanta(0.5)
+		var sc := _forsta_scroll(main.kontakt) if main.kontakt.visible else null
+		logg.append("  scroll efter drag: %s, nod: %s" % [sc.scroll_vertical if sc else "-", main.kontakt._nod_id])
 	if steg.has("debriefing"):
 		main.call("_visa_debriefing")
 		await _vanta(1.0)
@@ -143,3 +179,14 @@ func _utfor(steg: Dictionary) -> void:
 		var fil := ut.path_join(str(steg["bild"]) + ".png")
 		bild.save_png(fil)
 		logg.append("  bild: " + fil)
+
+
+func _forsta_scroll(n: Node) -> ScrollContainer:
+	for c in n.get_children():
+		if c is ScrollContainer and (c as ScrollContainer).visible:
+			return c
+		var f := _forsta_scroll(c)
+		if f:
+			return f
+	return null
+
