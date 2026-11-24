@@ -301,7 +301,7 @@
     },
     "envarsgripande": {
       "text": "Griper honom för olaga hot (envarsgripande).",
-      "du": "Du är gripen för olaga hot. Händerna bakom ryggen.",
+      "du": "Du är gripen!",
       "stamning": -1,
       "nasta": "gripen"
     },

@@ -69,7 +69,9 @@
     "beslag_betydelse": false,
     "anmalan_polis": false,
     "protokoll_upprattat": false,
-    "behorig": false
+    "behorig": false,
+    "brott_pa_bar_garning": true,
+    "proportionerligt": false
   },
   "npc": {
     "fotografen": {
@@ -246,7 +248,7 @@
       }
     },
     "gripen": {
-      "replik": "– Släpp mig! Du har ingen rätt att göra så här!\n\nKAMRATEN: – Jag täcker! Ska jag ropa upp CQ?",
+      "replik": "– Släpp mig! Du har ingen rätt att göra så här!\n\nTVÅAN: – Jag täcker!",
       "slut": true
     },
     "lamnar": {
@@ -481,11 +483,35 @@
       },
       "nasta": "gripen_utan_grund"
     },
+    "envarsgripande": {
+      "text": "Griper honom för olovlig avbildning (envarsgripande).",
+      "du": "Du är gripen!",
+      "stamning": 3,
+      "satt_fakta": {
+        "envarsgripande_genomfort": true
+      },
+      "nasta": "gripen"
+    },
     "lata_ga": {
       "text": "Låter honom gå. Noterar registreringsnumret.",
       "du": "Okej. Du kan gå.",
       "nasta": "lamnar",
       "npc_beteende": "ga_till_start"
+    }
+  },
+  "bedomning": {
+    "envarsgripande": {
+      "krav": [
+        "brott_pa_bar_garning",
+        "proportionerligt"
+      ],
+      "krav_utfall": {
+        "proportionerligt": "warn"
+      },
+      "text_krav": {
+        "proportionerligt": "Olovlig avbildning av skyddsobjekt (skyddslagen 30 a §) har fängelse i straffskalan, och han påträffades på bar gärning – så ett envarsgripande är formellt möjligt. Men är det proportionerligt mot en man som fotograferar? Ett tillfälligt omhändertagande (15 §) eller att begära polis kan vara rimligare."
+      },
+      "diskutera": "Uppsåt eller oaktsamhet räcker för olovlig avbildning. Men behövde han gripas, eller räckte det att han raderade bilderna och lämnade sina uppgifter?"
     }
   }
 }
