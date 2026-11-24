@@ -40,6 +40,9 @@ var _atgard_lista: Array = []
 var _nod_id := ""
 ## Åtgärder med egen replik som redan valts i det här steget (grånas ut).
 var _anvanda: Dictionary = {}
+## Använda åtgärder per person: de förblir använda hela passet, även när
+## samtalet går vidare till ett nytt steg eller tas upp igen senare.
+var _anvanda_per_person: Dictionary = {}
 var stamning := 3
 
 var _replik: Label
@@ -201,6 +204,10 @@ func _bygg_chips(rader: Array) -> void:
 
 
 func oppna(npc: Dictionary, start_nod: String) -> void:
+	var person := str(get_meta("npc", npc.get("namn", "")))
+	if not _anvanda_per_person.has(person):
+		_anvanda_per_person[person] = {}
+	_anvanda = _anvanda_per_person[person]
 	_bygg_chips(npc.get("kontakt_info", []))
 	# Rubriken över repliken: MANNEN, KVINNAN, FLICKAN, POJKEN …
 	_motpart_rubrik.text = str(npc.get("benamning", "MOTPARTEN")).to_upper()
@@ -233,8 +240,6 @@ func _satt_krympt(k: bool) -> void:
 
 func visa_nod(nod_id: String, replik_override := "") -> void:
 	var nod: Dictionary = dialog.get(nod_id, {})
-	if replik_override == "" or nod_id != _nod_id:
-		_anvanda.clear()
 	_nod_id = nod_id
 	_replik.text = replik_override if replik_override != "" else str(nod.get("replik", "…"))
 	# Vår egen replik först: nodens "du" (t.ex. hälsningen) eller det vi just sa.
@@ -285,6 +290,7 @@ func _bygg_atgarder(nod: Dictionary) -> void:
 			continue
 		var alt := reaktion.duplicate()
 		alt["handling"] = id
+		alt["_atgard"] = true
 		if not alt.has("text"):
 			alt["text"] = str(a[1])
 		if not alt.has("du") and (atgarder.get(id, {}) as Dictionary).has("du"):
@@ -392,9 +398,10 @@ func _valj_alt(alt: Dictionary) -> void:
 	if not _krympt:
 		_satt_krympt(true)
 	var h := str(alt.get("handling", ""))
-	if h != "" and _anvanda.has(h):
-		return
-	if alt.has("replik") and _nasta(alt) == "" and h != "":
+	if bool(alt.get("_atgard", false)):
+		# En åtgärd görs en gång per person.
+		if _anvanda.has(h):
+			return
 		_anvanda[h] = true
 	stamning = clampi(stamning + int(alt.get("stamning", 0)), 0, 8)
 	_uppdatera_stamning()
