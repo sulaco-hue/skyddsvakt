@@ -120,6 +120,14 @@
       "upptacks_avstand": 15,
       "overhangande_avstand": 6,
       "ingen_tid_avstand": 2,
+      "eldhastighet_s": 0.25,
+      "max_skjutavstand": 12,
+      "sakert_avstand": 3,
+      "traffchans_nara": 0.95,
+      "traffchans_max": 0.3,
+      "magasin": 20,
+      "omladdning_s": 5,
+      "rop_omladdning": "Magasin, täck mig!",
       "skott_for_att_falla": [
         1,
         5

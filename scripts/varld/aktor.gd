@@ -26,7 +26,7 @@ const VILA := {
 		["fippla_hjalm", 0.9, ""]],
 	"kaffe": [["kaffe_lag", 1.0, "anga"], ["kaffe_dricker", 1.4, ""], ["kaffe_lag", 1.2, "anga"],
 		["kaffe_dricker", 1.2, ""], ["kaffe_lag", 0.8, "anga"]],
-	"roka": [["roka_ner", 1.2, ""], ["roka_hand", 1.2, ""], ["roka_ner", 1.6, "rok"], ["roka_hand", 1.2, ""],
+	"roka": [["roka_ner", 1.2, "rok"], ["roka_hand", 1.2, ""], ["roka_ner", 1.6, "rok"], ["roka_hand", 1.2, ""],
 		["roka_ner", 1.4, "rok"]],
 }
 ## Sannolikhetsvikter för vilken viloanimation som väljs.
@@ -192,12 +192,12 @@ func _valj_vila() -> String:
 func _effekt(typ: String) -> void:
 	if typ == "":
 		return
-	var antal := 3 if typ == "rok" else 2
+	var antal := 6 if typ == "rok" else 2
 	for i in antal:
 		if i == 0:
 			_puff(typ, i)
 		else:
-			get_tree().create_timer(i * 0.35).timeout.connect(_puff.bind(typ, i))
+			get_tree().create_timer(i * (0.25 if typ == "rok" else 0.35)).timeout.connect(_puff.bind(typ, i))
 
 
 func _puff(typ: String, i: int) -> void:
@@ -213,7 +213,15 @@ func _puff(typ: String, i: int) -> void:
 	s.z_index = 1
 	varld_lager.add_child(s)
 	var tw := s.create_tween()
-	tw.tween_property(s, "modulate:a", 0.9, 0.15)
-	tw.parallel().tween_property(s, "position", start + Vector2(riktning * (2.0 + i), -14.0), 1.6)
-	tw.tween_property(s, "modulate:a", 0.0, 0.5)
+	if typ == "rok":
+		# Cigarettrök: tjockare, driver långsamt, växer och hänger kvar en stund.
+		var drift := Vector2(riktning * (3.0 + i * 1.5) + randf_range(-3.0, 3.0), -20.0 - randf_range(0.0, 6.0))
+		tw.tween_property(s, "modulate:a", 0.85, 0.2)
+		tw.parallel().tween_property(s, "position", start + drift, 4.0).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
+		tw.parallel().tween_property(s, "scale", Vector2(2.0, 1.7), 4.0)
+		tw.parallel().tween_property(s, "modulate:a", 0.0, 2.2).set_delay(1.8)
+	else:
+		tw.tween_property(s, "modulate:a", 0.9, 0.15)
+		tw.parallel().tween_property(s, "position", start + Vector2(riktning * (2.0 + i), -14.0), 1.6)
+		tw.tween_property(s, "modulate:a", 0.0, 0.5)
 	tw.tween_callback(s.queue_free)

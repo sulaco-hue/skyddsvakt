@@ -703,10 +703,13 @@ func _angripare_sager(text: String) -> void:
 
 
 ## Ett skott (patronvis eld, FFS 2010:7 11 §): ett "PANG" per avfyrning.
-func _skott(_antal := 1) -> void:
-	hud.visa_ljud(varld.spelare, "PANG", 1.4)
-	var flamma := varld.lagg_foremal("mynningsflamma", varld.spelare.cell)
-	flamma.position += Vector2(-8 if varld.spelare.position.x > varld.kollega.position.x else 8, -14)
+func _skott(_antal := 1, skytt: Aktor = null) -> void:
+	if skytt == null:
+		skytt = varld.spelare
+	var annan := varld.kollega if skytt == varld.spelare else varld.spelare
+	hud.visa_ljud(skytt, "PANG", 1.4)
+	var flamma := varld.lagg_foremal("mynningsflamma", skytt.cell)
+	flamma.position += Vector2(-8 if skytt.position.x > annan.position.x else 8, -14)
 	get_tree().create_timer(0.12).timeout.connect(flamma.queue_free)
 
 
@@ -808,10 +811,17 @@ func _angrepp_upphort(extra: Dictionary) -> void:
 	_avsluta_handelse(_angripare["h"])
 
 
+## Spärr så att snabba tryck på Första hjälpen inte startar flera repliker samtidigt.
+var _fh_klar_ms := 0
+
+
 func _forsta_hjalpen() -> void:
 	if not _horde.is_empty():
 		_horde_forsta_hjalpen()
 		return
+	if Time.get_ticks_msec() < _fh_klar_ms:
+		return
+	_fh_klar_ms = Time.get_ticks_msec() + 3000
 	var n := _angripare_nod()
 	Spel.utfor("forsta_hjalpen", "Gav första hjälpen (tryckförband)")
 	if n:
@@ -1052,7 +1062,9 @@ func _pa_kontakt_stangd() -> void:
 func _starta_horde(h: Dictionary) -> void:
 	_horde = {"h": h, "zombies": {}, "kvar": int(h.get("antal", 12)), "spawn_t": 0.0, "nr": 0,
 		"upptackt": false, "replik_t": 2.0, "banter_i": 0, "banter_t": 0.0, "kommenterat": {},
-		"traffar": {"spelare": 0, "kamrat": 0}, "dod": {}}
+		"traffar": {"spelare": 0, "kamrat": 0}, "dod": {},
+		"patroner": int(h.get("magasin", 20)), "senaste_skott_ms": -100000, "laddar_om": false,
+		"tvaan_skjuter": false, "tvaan_patroner": int(h.get("magasin", 20)), "tvaan_laddar_om": false}
 	Spel.satt_fakta({"hot_svarare_vald": true, "angrepp_pagar": true})
 
 
@@ -1180,7 +1192,8 @@ func _visa_horde_knappar() -> void:
 		val.append({"id": "halt", "text": "Halt-order", "tangent": "H", "farg": "barnsten"})
 	if not bool(Spel.fakta.get("varningsskott_avlossat", false)):
 		val.append({"id": "varningsskott", "text": "Varningsskott", "tangent": "V", "farg": "barnsten"})
-	val.append({"id": "verkanseld", "text": "Verkanseld", "tangent": "F", "farg": "rosa"})
+	val.append({"id": "verkanseld", "text": "Omladdning…" if bool(_horde.get("laddar_om", false)) else "Verkanseld",
+		"tangent": "F", "farg": "rosa"})
 	# Skyddsvakter ger första hjälpen även till den de själva skadat – även här.
 	for z in (_horde["zombies"] as Dictionary).values():
 		if str(z["lage"]) == "nere":
@@ -1222,10 +1235,95 @@ func _horde_halt() -> void:
 	_visa_horde_knappar()
 
 
+## Eldhastighet, magasin och omladdning. Sant om ett skott går iväg (en patron förbrukas).
+func _horde_avfyra() -> bool:
+	var h: Dictionary = _horde["h"]
+	if bool(_horde["laddar_om"]):
+		return false
+	var nu := Time.get_ticks_msec()
+	if nu - int(_horde["senaste_skott_ms"]) < int(float(h.get("eldhastighet_s", 0.25)) * 1000.0):
+		return false
+	_horde["senaste_skott_ms"] = nu
+	if int(_horde["patroner"]) <= 0:
+		# Tomt: det klickar, och den som laddar om ropar till kamraten.
+		hud.visa_ljud(varld.spelare, "KLICK", 1.0)
+		_horde["laddar_om"] = true
+		get_tree().create_timer(0.5).timeout.connect(func() -> void:
+			hud.visa_bubbla(varld.spelare, str(h.get("rop_omladdning", "Magasin, täck mig!")), 2.5))
+		get_tree().create_timer(float(h.get("omladdning_s", 5.0))).timeout.connect(_horde_omladdad)
+		_visa_horde_knappar()
+		return false
+	_horde["patroner"] = int(_horde["patroner"]) - 1
+	_horde["skott"] = int(_horde.get("skott", 0)) + 1
+	_skott(1)
+	return true
+
+
+## Tvåan börjar skjuta när vi avlossat första verkanseldskottet: mot den zombie
+## som är närmast honom och hotar (inom överhängande avstånd), med samma
+## magasin och omladdning som vi. När han laddar om ropar han till oss.
+func _horde_tvaan_skjuter() -> void:
+	if _horde.is_empty() or (_horde["dod"] as Dictionary).has("kamrat") \
+			or (_horde["dod"] as Dictionary).has("spelare") or bool(Spel.fakta.get("horde_nere", false)):
+		return
+	var h: Dictionary = _horde["h"]
+	var intervall := maxf(float(h.get("tvaan_eldintervall_s", 0.6)), float(h.get("eldhastighet_s", 0.25)))
+	if not bool(_horde["tvaan_laddar_om"]):
+		var mal := ""
+		var basta := 999
+		for id: String in _horde["zombies"]:
+			if str(_horde["zombies"][id]["lage"]) != "gar":
+				continue
+			var a := varld.avstand(varld.kollega.cell, varld.npcer[id].cell)
+			if a < basta:
+				basta = a
+				mal = id
+		if mal != "" and basta <= mini(int(h.get("max_skjutavstand", 12)), int(h.get("overhangande_avstand", 6))):
+			if int(_horde["tvaan_patroner"]) <= 0:
+				hud.visa_ljud(varld.kollega, "KLICK", 1.0)
+				_horde["tvaan_laddar_om"] = true
+				get_tree().create_timer(0.5).timeout.connect(func() -> void:
+					if not _horde.is_empty() and not (_horde["dod"] as Dictionary).has("kamrat"):
+						hud.visa_bubbla(varld.kollega, str(h.get("rop_omladdning", "Magasin, täck mig!")), 2.5))
+				get_tree().create_timer(float(h.get("omladdning_s", 5.0))).timeout.connect(func() -> void:
+					if not _horde.is_empty():
+						_horde["tvaan_patroner"] = int(h.get("magasin", 20))
+						_horde["tvaan_laddar_om"] = false
+						hud.visa_ljud(varld.kollega, "KLICK-KLACK", 1.0))
+			else:
+				_horde["tvaan_patroner"] = int(_horde["tvaan_patroner"]) - 1
+				_skott(1, varld.kollega)
+				if randf() <= _horde_traffchans(basta):
+					_horde_traff(mal)
+	get_tree().create_timer(intervall).timeout.connect(_horde_tvaan_skjuter)
+
+
+func _horde_omladdad() -> void:
+	if _horde.is_empty():
+		return
+	_horde["patroner"] = int((_horde["h"] as Dictionary).get("magasin", 20))
+	_horde["laddar_om"] = false
+	_horde["omladdningar"] = int(_horde.get("omladdningar", 0)) + 1
+	hud.visa_ljud(varld.spelare, "KLICK-KLACK", 1.0)
+	_visa_horde_knappar()
+
+
+## Träffsannolikhet: säker på nära håll, sämre ju längre bort.
+func _horde_traffchans(avst: int) -> float:
+	var h: Dictionary = _horde["h"]
+	var nara := int(h.get("sakert_avstand", 3))
+	var maxa := int(h.get("max_skjutavstand", 12))
+	if avst <= nara:
+		return float(h.get("traffchans_nara", 0.95))
+	var t := clampf(float(avst - nara) / float(maxi(1, maxa - nara)), 0.0, 1.0)
+	return lerpf(float(h.get("traffchans_nara", 0.95)), float(h.get("traffchans_max", 0.3)), t)
+
+
 func _horde_varningsskott() -> void:
 	_horde_narmast_fakta()
+	if not _horde_avfyra():
+		return
 	Spel.utfor("varningsskott", "Avlossade varningsskott (riktat så att ingen kan skadas)")
-	_skott(1)
 	_horde_kommentar("kamrat_efter_varningsskott", 1.6)
 	_visa_horde_knappar()
 
@@ -1236,12 +1334,29 @@ func _horde_verkanseld() -> void:
 		return
 	var h: Dictionary = _horde["h"]
 	var n: Aktor = varld.npcer[id]
-	var avst := _horde_avstand(n)
+	# Vi skjuter själva, så det är vårt avstånd till målet som gäller.
+	var avst := varld.avstand(varld.spelare.cell, n.cell)
+	if avst > int(h.get("max_skjutavstand", 12)):
+		hud.visa_meddelande("Inget mål inom skjutavstånd")
+		return
+	if not _horde_avfyra():
+		return
 	if avst <= int(h.get("ingen_tid_avstand", 2)):
 		Spel.satt_fakta({"varningsskott_foregick": true})
-	Spel.satt_fakta({"angrepp_overhangande": avst <= int(h.get("overhangande_avstand", 6))})
+	Spel.satt_fakta({"angrepp_overhangande": _horde_avstand(n) <= int(h.get("overhangande_avstand", 6))})
 	Spel.utfor("verkanseld", "Avgav verkanseld mot närmaste… person (patronvis, mot benen)")
-	_skott(1)
+	if not bool(_horde["tvaan_skjuter"]):
+		_horde["tvaan_skjuter"] = true
+		get_tree().create_timer(0.8).timeout.connect(_horde_tvaan_skjuter)
+	if randf() > _horde_traffchans(avst):
+		return  # bom
+	_horde_traff(id)
+
+
+## En träff på en zombie (från oss eller från tvåan).
+func _horde_traff(id: String) -> void:
+	var n: Aktor = varld.npcer[id]
+	_horde["zträffar"] = int(_horde.get("zträffar", 0)) + 1
 	_blodstank(n)
 	# Det krävs ett slumpvis antal träffar (1–5) innan den faller.
 	var z: Dictionary = _horde["zombies"][id]
@@ -1287,6 +1402,9 @@ func _blodstank(n: Node2D) -> void:
 ## Första hjälpen till en nedkämpad zombie: vi och kamraten kommer fram till
 ## att det inte blir av ("Aldrig i livet"), med olika varianter varje gång.
 func _horde_forsta_hjalpen() -> void:
+	# En växling i taget: nya tryck medan den pågår ignoreras.
+	if Time.get_ticks_msec() < int(_horde.get("fh_klar_ms", 0)):
+		return
 	var h: Dictionary = _horde["h"]
 	var vaxlingar: Array = h.get("forsta_hjalpen_vaxling", [])
 	var i := int(_horde.get("fh_i", 0))
@@ -1304,6 +1422,7 @@ func _horde_forsta_hjalpen() -> void:
 		else:
 			get_tree().create_timer(t).timeout.connect(fn.bind(str(rad.get("text", ""))))
 		t += 2.4
+	_horde["fh_klar_ms"] = Time.get_ticks_msec() + int((t + 0.6) * 1000.0)
 
 
 func _horde_falla(id: String) -> void:

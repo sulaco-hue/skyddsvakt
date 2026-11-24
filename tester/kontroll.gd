@@ -597,6 +597,8 @@ func _spela_zombies(skjuter: bool) -> void:
 		if bool(Spel.fakta.get("horde_nere", false)):
 			klart = true
 			break
+		if (main._horde["dod"] as Dictionary).has("spelare"):
+			break
 		if not skjuter:
 			# Den som knuffats omkull ska resa sig igen.
 			for id: String in main._horde["zombies"]:
@@ -611,14 +613,18 @@ func _spela_zombies(skjuter: bool) -> void:
 		if skjuter and not varnat and avst <= 6:
 			main.call("_varningsskott")
 			varnat = true
-		elif skjuter and avst <= 5:
+			main._horde["patroner"] = 2  # så att omladdningen provas tidigt
+		elif skjuter and avst <= 6:
 			main.call("_verkanseld")
 		await get_tree().create_timer(0.1).timeout
 		t += 0.1
 	if not klart:
-		_fel("zombiescenariot blev aldrig klart (%s)" % main.call("_debug_text"))
+		_fel("zombiescenariot blev aldrig klart (patroner %s, laddar om %s, lägen %s, träffar %s)" % [main._horde.get("patroner"), main._horde.get("laddar_om"),
+			str((main._horde["zombies"] as Dictionary).values().map(func(z: Dictionary) -> String: return str(z["lage"]))), str(main._horde["traffar"]) + " skott %s träffar %s omladdn %s t %.1f" % [main._horde.get("skott"), main._horde.get("zträffar"), main._horde.get("omladdningar"), t]])
 	elif skjuter:
-		_ok("alla tolv nere")
+		_ok("alla tolv nere (%d omladdningar)" % int(main._horde.get("omladdningar", 0)))
+		if int(main._horde.get("omladdningar", 0)) < 1:
+			_fel("magasinet tog aldrig slut – omladdningen provades inte")
 	main.call("_visa_debriefing")
 	await _vanta(3)
 	if skjuter:
