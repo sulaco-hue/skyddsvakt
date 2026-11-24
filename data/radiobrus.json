@@ -144,12 +144,12 @@
     [
       {
         "fran": "CQ",
-        "text": "Sjukvårdsfordonet, Sjukvårdsfordonet.",
+        "text": "QRF'en, QRF'en.",
         "efter": 0.0
       },
       {
-        "fran": "Sjukvårdsfordonet",
-        "text": "Sjukvårdsfordonet kom.",
+        "fran": "QRF",
+        "text": "QRF'en kom.",
         "efter": 1.8
       },
       {
@@ -158,7 +158,7 @@
         "efter": 3.6
       },
       {
-        "fran": "Sjukvårdsfordonet",
+        "fran": "QRF",
         "text": "Beredskap bekräftad, kom.",
         "efter": 5.4
       },
@@ -186,7 +186,7 @@
       },
       {
         "fran": "CQ",
-        "text": "Jag upprepar: avlösning klockan tjugotvå, kom.",
+        "text": "Jag upprepar: Bilnyckeln är återfunnen i Fanjunkarens ficka, kom.",
         "efter": 5.4
       },
       {
@@ -198,27 +198,27 @@
     [
       {
         "fran": "CQ",
-        "text": "Rondpatrullen, Rondpatrullen.",
+        "text": "Trossen, Trossen.",
         "efter": 0.0
       },
       {
-        "fran": "Rondpatrullen",
-        "text": "Rondpatrullen kom.",
+        "fran": "Trossen",
+        "text": "Trossen kom.",
         "efter": 1.8
       },
       {
         "fran": "CQ",
-        "text": "Från CQ, har ni sett min termos, kom.",
+        "text": "Från CQ, har ni snus frågas, kom.",
         "efter": 3.6
       },
       {
-        "fran": "Rondpatrullen",
-        "text": "Negativt, kom.",
+        "fran": "Trossen",
+        "text": "Svar nej, kom.",
         "efter": 5.4
       },
       {
         "fran": "CQ",
-        "text": "Uppfattat. Klart slut.",
+        "text": "Fan. Uppfattat. Klart slut.",
         "efter": 7.2
       }
     ],
