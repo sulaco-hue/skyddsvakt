@@ -187,23 +187,33 @@ func _valj_vila() -> String:
 	return "titta"
 
 
-## Liten rökpuff eller ånga som stiger och tonar bort.
+## Liten rökpuff eller ånga som stiger och tonar bort. Puffarna lämnas kvar i
+## världen där de släpptes (de följer inte med när gubben går vidare).
 func _effekt(typ: String) -> void:
 	if typ == "":
 		return
-	var riktning := -1.0 if _sprite.flip_h else 1.0
 	var antal := 3 if typ == "rok" else 2
 	for i in antal:
-		var s := Sprite2D.new()
-		s.texture = load("res://assets/gfx/%s.png" % ("rok" if typ == "rok" else "anga"))
-		var start := Vector2(3.0 * riktning, -17.0) if typ == "rok" else Vector2(4.0 * riktning, -15.0)
-		s.position = start
-		s.modulate.a = 0.0
-		s.z_index = 1
-		add_child(s)
-		var tw := create_tween()
-		tw.tween_interval(i * 0.35)
-		tw.tween_property(s, "modulate:a", 0.9, 0.15)
-		tw.parallel().tween_property(s, "position", start + Vector2(riktning * (2.0 + i), -14.0), 1.6)
-		tw.tween_property(s, "modulate:a", 0.0, 0.5)
-		tw.tween_callback(s.queue_free)
+		if i == 0:
+			_puff(typ, i)
+		else:
+			get_tree().create_timer(i * 0.35).timeout.connect(_puff.bind(typ, i))
+
+
+func _puff(typ: String, i: int) -> void:
+	var varld_lager := get_parent()
+	if varld_lager == null or not is_inside_tree():
+		return
+	var riktning := -1.0 if _sprite.flip_h else 1.0
+	var s := Sprite2D.new()
+	s.texture = load("res://assets/gfx/%s.png" % ("rok" if typ == "rok" else "anga"))
+	var start := position + (Vector2(3.0 * riktning, -17.0) if typ == "rok" else Vector2(4.0 * riktning, -15.0))
+	s.position = start
+	s.modulate.a = 0.0
+	s.z_index = 1
+	varld_lager.add_child(s)
+	var tw := s.create_tween()
+	tw.tween_property(s, "modulate:a", 0.9, 0.15)
+	tw.parallel().tween_property(s, "position", start + Vector2(riktning * (2.0 + i), -14.0), 1.6)
+	tw.tween_property(s, "modulate:a", 0.0, 0.5)
+	tw.tween_callback(s.queue_free)
