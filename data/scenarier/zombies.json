@@ -425,17 +425,17 @@
         "meddelanden": [
           {
             "fran": "CQ",
-            "text": "Till alla, till alla, från CQ… det bankar på dörren till vaktlokalen.",
+            "text": "Alla Qvintus, alla Qvintus, från CQ… det klöser och bankar på dörren till vaktlokalen. Förstärk!",
             "efter": 0
           },
           {
             "fran": "CQ",
-            "text": "Om någon hör detta: håll era poster. Jag upprepar, håll era—",
+            "text": "Alla Qvintus, gå på mar—",
             "efter": 3.5
           },
           {
             "fran": "CQ",
-            "text": "Vad i… NEJ! Bort, BORT—",
+            "text": "*KRASCH *Vad i… NEJ för fa..bort, BORT—",
             "efter": 6.5
           },
           {
