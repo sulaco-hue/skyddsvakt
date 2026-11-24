@@ -251,11 +251,6 @@
           "text": "Fråga om ni får se vad drönaren har filmat.",
           "handling": "fraga_frivilligt",
           "nasta": "visar"
-        },
-        {
-          "text": "Anropa CQ, rapportera och begär order.",
-          "handling": "rapportera_vaktchef",
-          "nasta": "vaktchef"
         }
       ]
     },
@@ -276,11 +271,6 @@
           "handling": "beslag",
           "stamning": 3,
           "nasta": "beslag"
-        },
-        {
-          "text": "Anropa CQ, rapportera och begär order.",
-          "handling": "rapportera_vaktchef",
-          "nasta": "vaktchef"
         }
       ]
     },
@@ -291,22 +281,6 @@
           "text": "Anteckna uppgifterna och tacka för samarbetet.",
           "handling": "dokumentera",
           "nasta": "avslut"
-        },
-        {
-          "text": "Anropa CQ och rapportera.",
-          "handling": "rapportera_vaktchef",
-          "nasta": "vaktchef"
-        }
-      ]
-    },
-    "vaktchef": {
-      "replik": "DU (radio): ”CQ, CQ.” – CQ: ”CQ kom.”\nDU: ”Från Grindposten, drönare över objektet, pilot anträffad vid sjön, kom.”\nCQ: ”Uppfattat. Be dem landa och radera bilderna om de medger det. Notera uppgifterna, slut kom.” – DU: ”Klart slut.”",
-      "alternativ": [
-        {
-          "text": "Be dem landa och radera bilderna frivilligt, och anteckna uppgifterna.",
-          "handling": "be_radera_frivilligt",
-          "nasta": "raderat",
-          "npc_beteende": "landa_dronare"
         }
       ]
     },
@@ -333,11 +307,6 @@
           "stamning": -2,
           "nasta": "raderat",
           "npc_beteende": "landa_dronare"
-        },
-        {
-          "text": "Anropa CQ och begär order.",
-          "handling": "rapportera_vaktchef",
-          "nasta": "vaktchef"
         }
       ]
     },
@@ -374,11 +343,6 @@
           "handling": "begara_identitet",
           "stamning": 1,
           "nasta": "skjuten_id"
-        },
-        {
-          "text": "Anropa CQ och rapportera vad som hänt.",
-          "handling": "rapportera_vaktchef",
-          "nasta": "skjuten_aq"
         }
       ]
     },
@@ -389,11 +353,6 @@
           "text": "Anteckna hans uppgifter och vad som hänt, och hänvisa till vaktchefen.",
           "handling": "dokumentera",
           "nasta": "skjuten_slut"
-        },
-        {
-          "text": "Anropa CQ och rapportera vad som hänt.",
-          "handling": "rapportera_vaktchef",
-          "nasta": "skjuten_aq"
         }
       ]
     },
@@ -401,22 +360,7 @@
       "replik": "MATS: – Mats Lindqvist. Och jag vill ha ERA namn. Det här kommer att få konsekvenser.",
       "alternativ": [
         {
-          "text": "Anropa CQ och rapportera vad som hänt.",
-          "handling": "rapportera_vaktchef",
-          "nasta": "skjuten_aq"
-        },
-        {
           "text": "Anteckna uppgifterna och vad som hänt.",
-          "handling": "dokumentera",
-          "nasta": "skjuten_slut"
-        }
-      ]
-    },
-    "skjuten_aq": {
-      "replik": "DU (radio): ”CQ, CQ.” – CQ: ”CQ kom.”\nDU: ”Från Grindposten, drönare nedskjuten över objektet, pilot med barn på plats vid sjön, kom.”\nCQ: ”…Uppfattat. Stanna där. Jag kommer ut. Slut kom.” – DU: ”Klart slut.”",
-      "alternativ": [
-        {
-          "text": "Anteckna vad som hänt och invänta CQ.",
           "handling": "dokumentera",
           "nasta": "skjuten_slut"
         }

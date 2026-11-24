@@ -149,11 +149,6 @@
           }
         },
         {
-          "text": "Anropa CQ och kontrollera om besöket är föranmält.",
-          "handling": "rapportera_vaktchef",
-          "nasta": "aq_kontroll"
-        },
-        {
           "text": "Öppna bommen och släpp in honom.",
           "handling": "slappa_in",
           "nasta": "inslappt"
@@ -163,11 +158,6 @@
     "leg_arlig": {
       "replik": "HANTVERKAREN: – Visst, här. Jonas Berg. Arbetsordern har chefen, men det är beställt, jag lovar.",
       "alternativ": [
-        {
-          "text": "Anropa CQ och kontrollera om besöket är föranmält.",
-          "handling": "rapportera_vaktchef",
-          "nasta": "aq_kontroll"
-        },
         {
           "text": "Be att få titta i servicebilen.",
           "handling": "undersoka_fordon",
@@ -183,11 +173,6 @@
     "fordon_arlig": {
       "replik": "HANTVERKAREN: – Kör hårt. Filter, verktyg och en termos. Inget konstigt.",
       "alternativ": [
-        {
-          "text": "Anropa CQ och kontrollera om besöket är föranmält.",
-          "handling": "rapportera_vaktchef",
-          "nasta": "aq_kontroll"
-        },
         {
           "text": "Släpp in honom.",
           "handling": "slappa_in",
@@ -206,11 +191,6 @@
           "text": "Be att få undersöka servicebilen.",
           "handling": "undersoka_fordon",
           "nasta": "fordon_oriktig"
-        },
-        {
-          "text": "Anropa CQ och kontrollera om besöket är föranmält.",
-          "handling": "rapportera_vaktchef",
-          "nasta": "aq_kontroll"
         },
         {
           "text": "Avvisa honom: han får inte komma in och ska lämna grinden.",
@@ -241,33 +221,6 @@
             "omhandertagande_genomfort": true
           },
           "nasta": "omhandertagen"
-        },
-        {
-          "text": "Anropa CQ och rapportera.",
-          "handling": "rapportera_vaktchef",
-          "nasta": "aq_kontroll"
-        }
-      ]
-    },
-    "aq_kontroll": {
-      "replik": "DU (radio): ”CQ, CQ.” – CQ: ”CQ kom.”\nDU: ”Från Grindposten, hantverkare från Ventservice vid grinden, begär kontroll av behörighet, kom.”\nCQ: ”Inget besök föranmält. Släpp inte in. Slut kom.” – DU: ”Klart slut.”",
-      "alternativ": [
-        {
-          "text": "Förklara att besöket inte är föranmält och att han inte får komma in.",
-          "handling": "neka_tilltrade",
-          "nasta": "nekad",
-          "npc_beteende": "ga_till_start"
-        },
-        {
-          "text": "Avvisa honom med stöd av 12 §.",
-          "handling": "avvisa",
-          "nasta": "avvisad",
-          "npc_beteende": "ga_till_start"
-        },
-        {
-          "text": "Släpp in honom ändå – han verkar schysst.",
-          "handling": "slappa_in",
-          "nasta": "inslappt"
         }
       ]
     },
@@ -293,8 +246,8 @@
   },
   "sambandstexter": {
     "svar": {
-      "kontakt": "Uppfattat",
-      "efter": "Uppfattat. Håll uppsikt och rapportera förändring",
+      "kontakt": "Uppfattat. Inget besök var föranmält",
+      "efter": "Uppfattat. Inget besök är föranmält i dag – släpp inte in",
       "fore": "Uppfattat"
     },
     "polis": {

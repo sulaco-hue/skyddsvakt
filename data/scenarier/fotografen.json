@@ -184,6 +184,11 @@
           "nasta": "visar"
         },
         {
+          "text": "”Kan du radera bilderna där staketet och {objekt_bestamd} syns? Det är frivilligt.”",
+          "handling": "be_radera_frivilligt",
+          "nasta": "raderat"
+        },
+        {
           "text": "Tacka för samarbetet, notera registreringsnumret och rapportera.",
           "handling": "dokumentera",
           "stamning": -1,
@@ -203,9 +208,9 @@
       "replik": "– Här. Lite träd… och ja, staketet och {objekt_bestamd} syns på några. Nöjd nu?",
       "alternativ": [
         {
-          "text": "Anropa CQ, rapportera och begär order.",
-          "handling": "rapportera_vaktchef",
-          "nasta": "vaktchef"
+          "text": "”Kan du radera bilderna där staketet och {objekt_bestamd} syns? Det är frivilligt.”",
+          "handling": "be_radera_frivilligt",
+          "nasta": "raderat"
         },
         {
           "text": "Notera registreringsnumret, tacka och låt honom gå.",
@@ -221,21 +226,6 @@
           "nasta": "vagrar"
         }
       }
-    },
-    "vaktchef": {
-      "replik": "DU (radio): ”CQ, CQ.” – CQ: ”CQ kom.”\nDU: ”Från Grindposten, person invid objektet har fotograferat det, begär order, kom.”\nCQ: ”Uppfattat. Polis underrättas. Notera hans uppgifter om han medger det, slut kom.” – DU: ”Klart slut.”\n\nMANNEN: – Visst, här är mitt körkort.",
-      "satt_fakta": {
-        "anmalan_polis": true
-      },
-      "alternativ": [
-        {
-          "text": "Notera uppgifterna och tacka för samarbetet.",
-          "handling": "dokumentera",
-          "stamning": -2,
-          "nasta": "lamnar_lugn",
-          "npc_beteende": "ga_till_start"
-        }
-      ]
     },
     "vagrar": {
       "replik": "– Glöm det! Det är min kamera. Jag går nu.",
@@ -289,11 +279,6 @@
         "id_lamnat": true
       },
       "alternativ": [
-        {
-          "text": "Anropa CQ, rapportera och begär order.",
-          "handling": "rapportera_vaktchef",
-          "nasta": "vaktchef"
-        },
         {
           "text": "Anteckna uppgifterna och registreringsnumret, låt honom gå.",
           "handling": "dokumentera",
@@ -350,6 +335,16 @@
           "stamning": -1,
           "nasta": "lamnar",
           "npc_beteende": "ga_till_start"
+        }
+      ]
+    },
+    "raderat": {
+      "replik": "– Visst, visst. Där. Borta. Kan jag gå nu?\n\nHan visar att bilderna är raderade.",
+      "alternativ": [
+        {
+          "text": "Notera registreringsnumret, tacka och låt honom gå.",
+          "handling": "dokumentera",
+          "nasta": "lamnar_lugn"
         }
       ]
     }
