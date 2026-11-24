@@ -867,7 +867,6 @@ func _ga_till_samtal(id: String) -> void:
 		return
 	if varld.ga_till(n.cell):
 		_vantar_samtal = id
-		hud.visa_meddelande("Går närmare…", 1.5)
 	else:
 		hud.visa_meddelande("Du kan inte ta dig närmare härifrån.")
 
