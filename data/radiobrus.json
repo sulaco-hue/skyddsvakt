@@ -9,12 +9,12 @@
     [
       {
         "fran": "CQ",
-        "text": "Rondpatrullen, Rondpatrullen.",
+        "text": "Hundpatrullen, Hundpatrullen.",
         "efter": 0.0
       },
       {
-        "fran": "Rondpatrullen",
-        "text": "Rondpatrullen kom.",
+        "fran": "Hundpatrullen",
+        "text": "Hundpatrullen kom.",
         "efter": 1.8
       },
       {
@@ -23,7 +23,7 @@
         "efter": 3.6
       },
       {
-        "fran": "Rondpatrullen",
+        "fran": "Hundpatrullen",
         "text": "Inget att rapportera, kom.",
         "efter": 5.4
       },
@@ -63,22 +63,22 @@
     [
       {
         "fran": "CQ",
-        "text": "Kökstjänst, Kökstjänst.",
+        "text": "QM, QM.",
         "efter": 0.0
       },
       {
-        "fran": "Kökstjänst",
-        "text": "Kökstjänst kom.",
+        "fran": "QM",
+        "text": "QM kom.",
         "efter": 1.8
       },
       {
         "fran": "CQ",
-        "text": "Från CQ, när kommer kvällsmålet, kom.",
+        "text": "Från CQ, när kommer kvällsmålet frågas, kom.",
         "efter": 3.6
       },
       {
-        "fran": "Kökstjänst",
-        "text": "Iso om tjugo minuter, kom.",
+        "fran": "QM",
+        "text": "Bedömt tjugo minuter, kom.",
         "efter": 5.4
       },
       {
