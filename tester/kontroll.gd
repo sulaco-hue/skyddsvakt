@@ -28,6 +28,8 @@ func _ready() -> void:
 	await _spela_yxmannen_skarp()
 	await _spela_yxmannen_for_tidigt()
 	await _spela_yxmannen_nar_fram()
+	await _spela_zombies(true)
+	await _spela_zombies(false)
 	await _bygg_alla_objekttyper()
 	print("--- Kompakt läge (pekskärm) ---")
 	UiKit.kompakt = true
@@ -558,4 +560,51 @@ func _spela_yxmannen_nar_fram() -> void:
 	if not await _vanta_tills(func() -> bool: return str(main._angripare.get("lage", "")) == "overmannad", 90.0):
 		_fel("angreppet nådde aldrig fram (avstånd %d)" % main.call("_avstand_angripare"))
 	await _avsluta_yxmannen(main, {"angrepp_nadde_fram": "bad"})
+
+
+# ------------------------------------------------------------- Zombies --
+
+## skjuter = true: halt, varningsskott och verkanseld mot varje zombie som
+## kommer inom 5 rutor. false: inget görs – de når fram och knuffas omkull.
+func _spela_zombies(skjuter: bool) -> void:
+	print("--- Scenario: Zombieapokalypsen (%s) ---" % ("skjuter" if skjuter else "gör inget"))
+	Spel.nollstall("res://data/scenarier/zombies.json")
+	var main = load("res://scenes/main.tscn").instantiate()
+	add_child(main)
+	await _vanta(5)
+	main.call("_starta_pass")
+	await _vanta(3)
+	main.call("_forcera_handelse", "1")
+	if not await _vanta_tills(func() -> bool: return "verkanseld" in main.hud.situationer()):
+		_fel("situationsknapparna visades aldrig i zombiescenariot")
+		main.queue_free()
+		return
+	_ok("zombierna upptäckta, knappar: " + ", ".join(PackedStringArray(main.hud.situationer())))
+	if skjuter:
+		main.call("_halt_order")
+	var varnat := false
+	var klart := false
+	var t := 0.0
+	while t < 240.0:
+		if bool(Spel.fakta.get("horde_nere", false)):
+			klart = true
+			break
+		var narmast := str(main._horde.get("narmast", ""))
+		var avst: int = main.varld.avstand(main.varld.spelare.cell, main.varld.npcer[narmast].cell) if narmast != "" else 999
+		if skjuter and not varnat and avst <= 6:
+			main.call("_varningsskott")
+			varnat = true
+		elif skjuter and avst <= 5:
+			main.call("_verkanseld")
+		await get_tree().create_timer(0.1).timeout
+		t += 0.1
+	if not klart:
+		_fel("alla zombies kom aldrig ner (%s)" % main.call("_debug_text"))
+	else:
+		_ok("alla tolv nere")
+	main.call("_visa_debriefing")
+	await _vanta(3)
+	_forvanta({"verkanseld": "ok", "halt_order": "ok", "varningsskott": "ok"} if skjuter else {"angrepp_nadde_fram": "bad"})
+	main.queue_free()
+	await _vanta(3)
 

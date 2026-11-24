@@ -1,0 +1,372 @@
+{
+  "id": "zombies",
+  "namn": "Zombieapokalypsen",
+  "ingress": "Ett skämtscenario. Något är mycket fel i skogen runt Granåsen – men reglerna för varning och verkanseld gäller fortfarande. Eller?",
+  "objekt": "Förråd Granåsen",
+  "passtid": "01:00–05:00",
+  "starttid": "03:13",
+  "tidsfaktor": 6,
+  "vader": "Natt · Dimma 2°C",
+  "vaderlag": [
+    "kallt",
+    "natt"
+  ],
+  "natt": true,
+  "beredskap": "NORMAL",
+  "karta": "res://data/kartor/granasen.json",
+  "omvarldslage": [
+    {
+      "tid": "21:40",
+      "kalla": "Lokal nyhet",
+      "text": "Fullmåne i natt och dimma i dalarna kring Granåsen."
+    },
+    {
+      "tid": "00:55",
+      "kalla": "Vaktchef",
+      "text": "Inga avvikelser. Nattpass: patrullera staketet och grinden."
+    }
+  ],
+  "briefing": {
+    "uppdrag": "Bevaka grind och staket under natten. Rapportera avvikelser till CQ.",
+    "objektinfo": "Skyddsobjektet omfattar området innanför staketet. Skyltat: tillträdesförbud och avbildningsförbud.",
+    "samband": "Vi: Grindposten (stridspar, två skyddsvakter). Vaktchef: CQ (Caesar Qvintus).",
+    "mal": []
+  },
+  "anropssignaler": {
+    "vaktchef": "CQ",
+    "du": "Grindposten"
+  },
+  "fakta": {
+    "skyltat_avbildningsforbud": true,
+    "motpart_inom": false,
+    "motpart_invid": false,
+    "vill_ha_tilltrade": false,
+    "flyr_fran_objekt": false,
+    "overtratt_forbud": false,
+    "vagrat_id": false,
+    "oriktiga_uppgifter": false,
+    "vagrat_visitation": false,
+    "vagrat_fordon": false,
+    "behov_avvisa": false,
+    "behov_avlagsna": false,
+    "behov_omhanderta": false,
+    "visitation_behovs": false,
+    "misstanke_13": false,
+    "beslag_betydelse": false,
+    "anmalan_polis": false,
+    "protokoll_upprattat": false,
+    "behorig": false,
+    "hot_svarare_vald": false,
+    "angrepp_pagar": false,
+    "angrepp_overhangande": false,
+    "angrepp_pagar_ej": false,
+    "varning_given": false,
+    "varningsskott_avlossat": false,
+    "varningsskott_foregick": false,
+    "verkanseld_avlossad": false,
+    "sjukvard_larmad": false,
+    "forsta_hjalp_given": false,
+    "brott_pa_bar_garning": false,
+    "skjutning_rapporterad": false,
+    "motpart_skjuten": false,
+    "motpart_gett_upp": false,
+    "motpart_overmannad": false,
+    "handlade_i_tid": false,
+    "envarsgripande_genomfort": false,
+    "aldrig": false,
+    "horde_nere": false
+  },
+  "bedomning": {
+    "halt_order": {
+      "diskutera": "Förstår en zombie ett tillrop? FFS 2010:7 8 § låter dig utelämna varningen om den uppenbart saknar verkan. Gäller det här? [Diskutera – med allvar eller inte]"
+    },
+    "varningsskott": {
+      "diskutera": "Varningsskott mot något som inte verkar kunna bli rädd – fyller det sin funktion? Och vart tog kulan vägen?"
+    },
+    "verkanseld": {
+      "diskutera": "Är en zombie en ”person” i förordningens mening, och är det ett ”brottsligt angrepp” (BrB 24:1)? Eller är det nöd (BrB 24:4)? [Jurist – lycka till]",
+      "text_ok": "Pågående och omedelbart förestående angrepp, tydlig varning och varningsskott först. Om angriparna nu är personer gäller nödvärn, och skjutvapen fick användas för att avvärja (förordning 1992:98 2 §). Patronvis eld, i första hand mot benen – SoldF säger inget om huvudet."
+    },
+    "angrepp_nadde_fram": {
+      "text_brist": "En av dem nådde ända fram till stridsparet innan ni agerade. Kamraten knuffade omkull den – den här gången."
+    }
+  },
+  "varianter": {},
+  "npc": {},
+  "handelser": [
+    {
+      "id": "1",
+      "namn": "Zombieapokalypsen",
+      "typ": "horde",
+      "tid": "03:15",
+      "sprite": "zombie",
+      "antal": 12,
+      "per_vag": 2,
+      "spawn_intervall_s": 5,
+      "start_avstand": 18,
+      "fart": 18,
+      "omvag_s": 1.0,
+      "upptacks_avstand": 15,
+      "overhangande_avstand": 6,
+      "ingen_tid_avstand": 2,
+      "repliker": [
+        "Uuuhhh…",
+        "Hjäääärnor…",
+        "Mmmrrgh.",
+        "Grrrhhh…",
+        "Aaaahh…",
+        "*släpande steg*"
+      ],
+      "replikvaxling": [
+        {
+          "t": 0,
+          "vem": "kamrat",
+          "text": "Du… är det där människor?"
+        },
+        {
+          "t": 4,
+          "vem": "du",
+          "text": "De går väldigt… konstigt."
+        },
+        {
+          "t": 8,
+          "vem": "kamrat",
+          "text": "Du, vad säger SoldF om zombies?"
+        },
+        {
+          "t": 11.5,
+          "vem": "du",
+          "text": "Vette fan. Eldstöt?"
+        },
+        {
+          "t": 14.5,
+          "vem": "kamrat",
+          "text": "Metkrok?"
+        },
+        {
+          "t": 18.5,
+          "vem": "du",
+          "text": "Markstridsreglementet tar inte upp odöda. Jag har kollat."
+        },
+        {
+          "t": 24,
+          "vem": "kamrat",
+          "text": "Hur rapporterar man det här till CQ? ”Ett dussin personer med avvikande hållning”?"
+        },
+        {
+          "t": 31,
+          "vem": "du",
+          "text": "Det här tog de inte upp på skyddsvaktsutbildningen."
+        },
+        {
+          "t": 38,
+          "vem": "kamrat",
+          "text": "Jag sa att det var något skumt med isomaten i kväll."
+        }
+      ],
+      "kamrat_efter_halt": "De lyssnar inte. Typiskt civila.",
+      "kamrat_efter_varningsskott": "Inte ens ett varningsskott. Det här står inte i SoldF.",
+      "kamrat_efter_verkanseld": "Han reste sig inte i alla fall. Skönt.",
+      "kamrat_nadde_fram": "Bort med dig! … Puh. Skjut, för sjutton!",
+      "kamrat_slut": "Det var nog alla. Jag tror jag behöver en Nocco.",
+      "missad_diskutera": "Ett dussin zombies kan inte missas."
+    }
+  ],
+  "samband": [],
+  "sambandsval": [
+    {
+      "etikett": "Prova förbindelsen med CQ",
+      "handling": "",
+      "meddelanden": [
+        {
+          "fran": "Grindposten",
+          "text": "CQ, CQ.",
+          "efter": 0
+        },
+        {
+          "fran": "CQ",
+          "text": "CQ kom.",
+          "efter": 1.5
+        },
+        {
+          "fran": "Grindposten",
+          "text": "Från Grindposten, sambandsprov, kom.",
+          "efter": 3.0
+        },
+        {
+          "fran": "CQ",
+          "text": "Hörbarhet femma, kom.",
+          "efter": 4.5
+        },
+        {
+          "fran": "Grindposten",
+          "text": "Hörbarhet femma, klart slut.",
+          "efter": 6.0
+        }
+      ]
+    },
+    {
+      "etikett": "Lägesrapport till CQ",
+      "handling": "rapportera_vaktchef",
+      "meddelanden": [
+        {
+          "fran": "Grindposten",
+          "text": "CQ, CQ.",
+          "efter": 0.0
+        },
+        {
+          "fran": "CQ",
+          "text": "CQ kom.",
+          "efter": 1.5
+        },
+        {
+          "fran": "Grindposten",
+          "text": "Från Grindposten, lägesrapport: {lage}, kom.",
+          "efter": 3.0
+        },
+        {
+          "fran": "CQ",
+          "text": "{svar}, kom.",
+          "efter": 4.5
+        },
+        {
+          "fran": "Grindposten",
+          "text": "Uppfattat, slut kom.",
+          "efter": 6.0
+        },
+        {
+          "fran": "CQ",
+          "text": "Klart slut.",
+          "efter": 7.5
+        }
+      ]
+    },
+    {
+      "etikett": "Larma sjukvård via CQ",
+      "handling": "larma_sjukvard",
+      "meddelanden": [
+        {
+          "fran": "Grindposten",
+          "text": "CQ, CQ.",
+          "efter": 0.0
+        },
+        {
+          "fran": "CQ",
+          "text": "CQ kom.",
+          "efter": 1.5
+        },
+        {
+          "fran": "Grindposten",
+          "text": "Från Grindposten, begär ambulans till grinden, en skadad person, kom.",
+          "efter": 3.0
+        },
+        {
+          "fran": "CQ",
+          "text": "Uppfattat, ambulans larmas, kom.",
+          "efter": 4.5
+        },
+        {
+          "fran": "Grindposten",
+          "text": "Uppfattat, slut kom.",
+          "efter": 6.0
+        },
+        {
+          "fran": "CQ",
+          "text": "Klart slut.",
+          "efter": 7.5
+        }
+      ]
+    },
+    {
+      "etikett": "Begär att CQ underrättar polis",
+      "handling": "anmala_polis",
+      "meddelanden": [
+        {
+          "fran": "Grindposten",
+          "text": "CQ, CQ.",
+          "efter": 0.0
+        },
+        {
+          "fran": "CQ",
+          "text": "CQ kom.",
+          "efter": 1.5
+        },
+        {
+          "fran": "Grindposten",
+          "text": "Från Grindposten, begär att polis underrättas om {polis}, kom.",
+          "efter": 3.0
+        },
+        {
+          "fran": "CQ",
+          "text": "Uppfattat, polis underrättas, kom.",
+          "efter": 4.5
+        },
+        {
+          "fran": "Grindposten",
+          "text": "Uppfattat, slut kom.",
+          "efter": 6.0
+        },
+        {
+          "fran": "CQ",
+          "text": "Klart slut.",
+          "efter": 7.5
+        }
+      ]
+    }
+  ],
+  "lagestext": {
+    "fakta:horde_nere": "tolv personer med avvikande beteende har oskadliggjorts vid grinden, inga egna skadade, begär förstärkning och en förklaring",
+    "fore": "inga avvikelser",
+    "efter": "ett dussin personer med… avvikande beteende närmar sig grinden från alla håll, uppträder hotfullt, svarar inte på tilltal"
+  },
+  "sambandstexter": {
+    "svar": {
+      "fakta:horde_nere": "Uppfattat… tror jag. Stanna kvar, jag skickar någon. Och ta inga bilder",
+      "efter": "Upprepa… sa du avvikande hållning? Håll avstånd och rapportera förändring",
+      "fore": "Uppfattat"
+    },
+    "polis": {
+      "fakta:horde_nere": "tolv personer som oskadliggjorts med vapen vid grinden",
+      "fore": "ett dussin personer som angriper grinden"
+    }
+  },
+  "radio": {
+    "kommentar": "Trafik mellan andra enheter som följer händelserna. Krokar: scripts/core/radiotrafik.gd.",
+    "upptackt": [
+      {
+        "efter_s": 20,
+        "meddelanden": [
+          {
+            "fran": "Västra posten",
+            "text": "CQ, CQ.",
+            "efter": 0
+          },
+          {
+            "fran": "CQ",
+            "text": "CQ kom.",
+            "efter": 1.5
+          },
+          {
+            "fran": "Västra posten",
+            "text": "Från Västra posten, det står… folk i skogskanten här. Många. De rör sig konstigt, kom.",
+            "efter": 3
+          },
+          {
+            "fran": "CQ",
+            "text": "…Upprepa, kom?",
+            "efter": 5.5
+          }
+        ]
+      }
+    ]
+  },
+  "slutkrav": [
+    {
+      "handling": "rapportera_vaktchef",
+      "lagrum": "Bevakningsinstruktion – rapportering · FFS 2010:7 13 §",
+      "text": "Händelsen rapporterades aldrig till CQ.",
+      "diskutera": "När ska CQ få veta? Före, under eller efter?"
+    }
+  ],
+  "dialog": {}
+}

@@ -3,7 +3,7 @@
 *Utbildningsspel för militära skyddsvakter (prototyp).*
 
 Ett isometriskt pixelspel för att träna militära skyddsvakter på att fatta beslut med rätt lagstöd.
-Prototypen har fyra scenarier (se nedan).
+Prototypen har fem scenarier (se nedan).
 
 > **Observera:** Lagstödet i `data/lagrum.json` är ett utkast och är **inte juridiskt granskat**.
 > Lagrum markerade `[§ – jurist]` ska fastställas av jurist. Spelet visar detta i debriefingen
@@ -29,6 +29,12 @@ Spelet startar med ett scenarioval (listan i `data/scenarier/index.json`):
    Efter verkanseld: **Larma sjukvård [S]** och **Första hjälpen [J]**. Två varianter: *skarp* (stannar
    inte) och *ger upp* (släpper yxan efter varning). Når han fram brottas han ner – men det bedöms
    som att ni agerade för sent. Efteråt: envarsgripande (BrB 24:7) och överlämning till polis.
+5. **Zombieapokalypsen** – ett skämtscenario. Ett dussin zombies kommer i vågor från olika håll.
+   Samma knappar som för yxmannen (**Halt-order**, **Varningsskott**, **Verkanseld**), men varningarna
+   biter inte. Verkanselden träffar närmaste zombie, och bedömningen följer samma regler (avstånd,
+   varning, varningsskott). Du och kamraten har svårt att tro det: *"Du, vad säger SoldF om zombies?"* –
+   *"Vette fan. Eldstöt?"* – *"Metkrok?"*. Debriefingen frågar om en zombie är en ”person” och om det är
+   nödvärn eller nöd.
 
 **Skyddsobjektet slumpas** vid varje genomförande: byggnaden, "helikoptern" (lastbil med HELIKOPTER målat på sidan), ett vapenförråd
 (lagerbyggnad i plåt) eller en radiomast med teknikbod. Typerna finns under `objekttyper` i kartfilen;

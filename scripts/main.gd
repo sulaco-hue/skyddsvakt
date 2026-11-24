@@ -31,6 +31,9 @@ var _lamnat: Dictionary = {}
 var _fordon: Dictionary = {}
 var _dronare_handelse: Dictionary = {}
 var radio: Radiotrafik
+## Horde (scenario Zombieapokalypsen): {h, zombies: {id: {lage, omvag_t}}, kvar_att_spawna,
+## spawn_t, upptackt, replik_t, banter_i, banter_t, kommenterat}
+var _horde: Dictionary = {}
 ## Frihetsberövade som sitter vid grinden och muttrar: id -> {t, i, repliker, intervall}
 var _sittande: Dictionary = {}
 ## Angripare (scenario Yxmannen): {h, id, lage, omvag_t, replik_t, replik_i, kamrat_nara}
@@ -201,6 +204,7 @@ func _process(delta: float) -> void:
 		return
 	_uppdatera_upptackt(delta)
 	_uppdatera_angripare(delta)
+	_uppdatera_horde(delta)
 	_uppdatera_sittande(delta)
 	radio.vanta = kontakt.visible
 	_uppdatera_brus(delta)
@@ -236,6 +240,13 @@ func _debug_text() -> String:
 		f.append("%s=%s" % [k, "ja" if Spel.fakta[k] else "nej"])
 	rader.append("Fakta: " + ", ".join(f))
 	rader.append(radio.status())
+	if not _horde.is_empty():
+		var nere := 0
+		for z in (_horde["zombies"] as Dictionary).values():
+			if str(z["lage"]) != "gar":
+				nere += 1
+		rader.append("Horde: %d ute, %d nere, %d kvar att komma, närmast %s" % [
+			(_horde["zombies"] as Dictionary).size(), nere, int(_horde["kvar"]), str(_horde.get("narmast", ""))])
 	rader.append("Kamratsnack: " + snack.status() + " · skyddsobjekt: " + Spel.objekttyp + " · variant: " + Spel.variant)
 	rader.append("Beslut i logg: %d · sambandsrader: %d · musik: %s" % [Spel.logg.size(), Spel.samband.size(),
 		"på" if Musik.ar_pa() else "av"])
@@ -299,6 +310,8 @@ func _utlos_handelse(h: Dictionary) -> void:
 			_starta_dronare(h)
 		"angripare":
 			_starta_angripare(h)
+		"horde":
+			_starta_horde(h)
 
 
 ## Väljer variant för händelser som har "varianter" (om ingen redan valts).
@@ -612,6 +625,9 @@ func _variantreplik(h: Dictionary, nyckel: String) -> String:
 
 
 func _halt_order() -> void:
+	if not _horde.is_empty():
+		_horde_halt()
+		return
 	if _angripare.is_empty():
 		return
 	var h: Dictionary = _angripare["h"]
@@ -644,6 +660,9 @@ func _skott(antal: int) -> void:
 
 
 func _varningsskott() -> void:
+	if not _horde.is_empty():
+		_horde_varningsskott()
+		return
 	if _angripare.is_empty():
 		return
 	var h: Dictionary = _angripare["h"]
@@ -664,6 +683,9 @@ func _varningsskott() -> void:
 
 
 func _verkanseld() -> void:
+	if not _horde.is_empty():
+		_horde_verkanseld()
+		return
 	if _angripare.is_empty() or str(_angripare["lage"]) in ["skjuten"]:
 		return
 	var h: Dictionary = _angripare["h"]
@@ -849,6 +871,9 @@ func _dolj_npc(id: String) -> void:
 # ----------------------------------------------------------- Kontakt --
 
 func _pa_npc_klickad(id: String) -> void:
+	if not _horde.is_empty() and (_horde["zombies"] as Dictionary).has(id):
+		_kamrat_sager("Jag tror inte han vill prata.")
+		return
 	if _sittande.has(id):
 		_sittande[id]["t"] = 0.0
 		return
@@ -959,6 +984,185 @@ func _pa_kontakt_stangd() -> void:
 		var data: Dictionary = _scenario.get("npc", {}).get(id, {})
 		n.framme.connect(_dolj_npc.bind(id), CONNECT_ONE_SHOT)
 		varld.flytta_npc(id, varld.punkt(data.get("start", [0, 0])))
+
+
+# -------------------------------------------------------------- Horde --
+# Scenario Zombieapokalypsen: ett dussin zombies kommer från olika håll.
+# Samma regler som för yxmannen (halt-order, varningsskott, verkanseld), men
+# varning och varningsskott biter inte. Kamraten och vi har svårt att tro det.
+
+func _starta_horde(h: Dictionary) -> void:
+	_horde = {"h": h, "zombies": {}, "kvar": int(h.get("antal", 12)), "spawn_t": 0.0, "nr": 0,
+		"upptackt": false, "replik_t": 2.0, "banter_i": 0, "banter_t": 0.0, "kommenterat": {}}
+	Spel.satt_fakta({"hot_svarare_vald": true, "angrepp_pagar": true})
+
+
+## En startruta i riktning vinkel från spelaren, en bit utanför synfältet.
+func _horde_startruta(vinkel: float, avst: int) -> Vector2i:
+	var p := varld.spelare.cell
+	for extra in range(0, 10):
+		for d: float in [0.0, 0.25, -0.25, 0.5, -0.5]:
+			var v := vinkel + d
+			var c := p + Vector2i(roundi(cos(v) * (avst + extra)), roundi(sin(v) * (avst + extra)))
+			c = c.clamp(Vector2i.ZERO, varld.storlek - Vector2i.ONE)
+			# Rutan måste ha en väg fram till oss (inte instängd bakom vatten eller staket).
+			if varld.ar_fri(c) and varld.avstand(c, p) >= avst - 2 and not varld.vag(c, p).is_empty():
+				return c
+	return Vector2i.ZERO
+
+
+func _uppdatera_horde(delta: float) -> void:
+	if _horde.is_empty():
+		return
+	var h: Dictionary = _horde["h"]
+	var zombies: Dictionary = _horde["zombies"]
+	# Nya zombies i vågor, från olika håll
+	_horde["spawn_t"] = float(_horde["spawn_t"]) - delta
+	if int(_horde["kvar"]) > 0 and float(_horde["spawn_t"]) <= 0.0:
+		_horde["spawn_t"] = float(h.get("spawn_intervall_s", 4.0))
+		for i in mini(int(h.get("per_vag", 2)), int(_horde["kvar"])):
+			var nr := int(_horde["nr"])
+			var vinkel := float(nr) * 2.4 + randf_range(-0.3, 0.3)  # gyllene vinkel: sprids runt om
+			var c := _horde_startruta(vinkel, int(h.get("start_avstand", 18)))
+			var id := "zombie_%d" % nr
+			var n := varld.skapa_npc(id, {"sprite": str(h.get("sprite", "zombie")), "start": [c.x, c.y], "synlig_fran_start": true})
+			n.hastighet = float(h.get("fart", 20)) * randf_range(0.85, 1.15)
+			n.vila_aktiv = false
+			zombies[id] = {"lage": "gar", "omvag_t": randf_range(0.0, 1.0)}
+			_horde["nr"] = nr + 1
+			_horde["kvar"] = int(_horde["kvar"]) - 1
+	# Rörelse, avstånd och framme
+	var narmast := 999
+	var narmast_id := ""
+	var gar := 0
+	for id: String in zombies:
+		var z: Dictionary = zombies[id]
+		if str(z["lage"]) != "gar":
+			continue
+		gar += 1
+		var n: Aktor = varld.npcer[id]
+		var avst := varld.avstand(varld.spelare.cell, n.cell)
+		if avst < narmast:
+			narmast = avst
+			narmast_id = id
+		if avst <= 1:
+			_horde_nadde_fram(id)
+			continue
+		z["omvag_t"] = float(z["omvag_t"]) - delta
+		if float(z["omvag_t"]) <= 0.0:
+			z["omvag_t"] = float(h.get("omvag_s", 1.0))
+			n.ga_langs(varld.vag_mot(n.cell, varld.spelare.cell))
+	_horde["narmast"] = narmast_id
+	Spel.satt_fakta({"angrepp_overhangande": narmast <= int(h.get("overhangande_avstand", 6))})
+	if not bool(_horde["upptackt"]) and narmast <= int(h.get("upptacks_avstand", 15)):
+		_horde_upptackt()
+	# Stön från en slumpvis zombie i närheten
+	_horde["replik_t"] = float(_horde["replik_t"]) - delta
+	if float(_horde["replik_t"]) <= 0.0 and narmast_id != "" and hud.visible:
+		_horde["replik_t"] = randf_range(2.5, 4.5)
+		var rep: Array = h.get("repliker", [])
+		var kandidater: Array = []
+		for id: String in zombies:
+			if str(zombies[id]["lage"]) == "gar" and varld.avstand(varld.spelare.cell, varld.npcer[id].cell) <= 12:
+				kandidater.append(id)
+		if not rep.is_empty() and not kandidater.is_empty():
+			hud.visa_bubbla(varld.npcer[kandidater.pick_random()], str(rep.pick_random()), 2.2)
+	# Replikväxling mellan oss och kamraten
+	if bool(_horde["upptackt"]):
+		var banter: Array = h.get("replikvaxling", [])
+		_horde["banter_t"] = float(_horde["banter_t"]) + delta
+		var bi := int(_horde["banter_i"])
+		if bi < banter.size() and float(_horde["banter_t"]) >= float(banter[bi].get("t", 0)):
+			_horde["banter_i"] = bi + 1
+			var b: Dictionary = banter[bi]
+			if str(b.get("vem", "")) == "du":
+				_spelaren_sager(str(b.get("text", "")))
+			else:
+				_kamrat_sager(str(b.get("text", "")))
+	# Alla nere
+	if gar == 0 and int(_horde["kvar"]) == 0 and not bool(Spel.fakta.get("horde_nere", false)):
+		Spel.satt_fakta({"horde_nere": true, "angrepp_pagar": false, "angrepp_overhangande": false, "angrepp_pagar_ej": true})
+		hud.satt_situationer([])
+		varld.satt_larm("")
+		_avsluta_handelse(h)
+		get_tree().create_timer(1.5).timeout.connect(_kamrat_sager.bind(str(h.get("kamrat_slut", ""))))
+
+
+func _horde_upptackt() -> void:
+	var h: Dictionary = _horde["h"]
+	_horde["upptackt"] = true
+	_markera_upptackt(h)
+	_larm_har_skett = true
+	snack.pausa(900.0)
+	radio.krok("upptackt")
+	varld.kollega.stanna()
+	_visa_horde_knappar()
+
+
+func _visa_horde_knappar() -> void:
+	var val: Array = []
+	if not bool(Spel.fakta.get("varning_given", false)):
+		val.append({"id": "halt", "text": "Halt-order", "tangent": "H", "farg": "barnsten"})
+	if not bool(Spel.fakta.get("varningsskott_avlossat", false)):
+		val.append({"id": "varningsskott", "text": "Varningsskott", "tangent": "V", "farg": "barnsten"})
+	val.append({"id": "verkanseld", "text": "Verkanseld", "tangent": "F", "farg": "rosa"})
+	hud.satt_situationer(val)
+
+
+func _horde_kommentar(nyckel: String, fordrojning := 2.0) -> void:
+	var kommenterat: Dictionary = _horde["kommenterat"]
+	var text := str((_horde["h"] as Dictionary).get(nyckel, ""))
+	if text == "" or kommenterat.has(nyckel):
+		return
+	kommenterat[nyckel] = true
+	get_tree().create_timer(fordrojning).timeout.connect(_kamrat_sager.bind(text))
+
+
+func _horde_halt() -> void:
+	Spel.utfor("halt_order", "Ropade: ”Halt! Militär skyddsvakt! Halt eller jag skjuter skarpt!”")
+	hud.visa_bubbla(varld.spelare, "HALT! MILITÄR SKYDDSVAKT! HALT ELLER JAG SKJUTER SKARPT!", 3.5)
+	_horde_kommentar("kamrat_efter_halt", 2.4)
+	_visa_horde_knappar()
+
+
+func _horde_varningsskott() -> void:
+	Spel.utfor("varningsskott", "Avlossade varningsskott (riktat så att ingen kan skadas)")
+	_skott(1)
+	_horde_kommentar("kamrat_efter_varningsskott", 1.6)
+	_visa_horde_knappar()
+
+
+func _horde_verkanseld() -> void:
+	var id := str(_horde.get("narmast", ""))
+	if id == "" or not (_horde["zombies"] as Dictionary).has(id):
+		return
+	var h: Dictionary = _horde["h"]
+	var n: Aktor = varld.npcer[id]
+	var avst := varld.avstand(varld.spelare.cell, n.cell)
+	if avst <= int(h.get("ingen_tid_avstand", 2)):
+		Spel.satt_fakta({"varningsskott_foregick": true})
+	Spel.satt_fakta({"angrepp_overhangande": avst <= int(h.get("overhangande_avstand", 6))})
+	Spel.utfor("verkanseld", "Avgav verkanseld mot närmaste… person (patronvis, mot benen)")
+	_skott(2)
+	_horde_falla(id)
+	_horde_kommentar("kamrat_efter_verkanseld", 1.4)
+	_visa_horde_knappar()
+
+
+func _horde_falla(id: String) -> void:
+	var n: Aktor = varld.npcer[id]
+	_horde["zombies"][id]["lage"] = "nere"
+	n.stanna()
+	n.vaxla_still = true
+	varld.byt_bilder(n, "zombie_ligger")
+
+
+func _horde_nadde_fram(id: String) -> void:
+	var n: Aktor = varld.npcer[id]
+	Spel.utfor("angrepp_nadde_fram", "En av dem nådde fram – knuffades omkull av kamraten")
+	hud.visa_ljud(n, "DUNS!", 1.4)
+	_horde_falla(id)
+	_horde_kommentar("kamrat_nadde_fram", 0.3)
 
 
 # ------------------------------------------------- Frihetsberövad --

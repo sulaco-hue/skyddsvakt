@@ -977,6 +977,63 @@ for i in range(2):
     figure(f"hantverkare_{i}", HANT_TOP, HANT_LEGS[i])
 
 
+# Zombie (scenario 5): grönaktig hud, röda ögon, trasig skjorta, armarna rakt
+# fram. D/d = hud, T/t = skjorta, V/l = byxor, L = ögon. Ingen gore.
+PAL.update({"D": (124, 152, 98), "d": (92, 116, 72), "T": (128, 114, 100), "t": (90, 80, 72),
+            "V": (62, 66, 84), "l": (44, 46, 58), "L": (214, 54, 40)})
+ZOMBIE_TOP = [
+    "....dddd....",
+    "...dDDDDd...",
+    "...DdDDDD...",
+    "...DLDDLD...",
+    "...DDDDDD...",
+    "....DdtD....",
+    "....DDDD....",
+    "..TTTTTTDDDD",
+    ".TTtTTTTTTdD",
+    ".TTTtTTT....",
+    ".TtTTTTt....",
+    "..TTt.TT....",
+    "..TT.TTt....",
+    "..VVVVVV....",
+]
+ZOMBIE_LEGS = [
+    ["..VVVVVVV...", "..VlV.VlV...", "..VlV.VlV...", "..VlV.VlV...", "..VlV.VlV...", "..VlV..VlV..",
+     "..bbb..bbb..", ".bbbb..bbbb."],
+    ["..VVVVVVV...", "..VlV..VlV..", "..VlV...VlV.", ".VlV....VlV.", ".VlV....VlV.", ".VlV.....VlV",
+     ".bbb.....bbb", "bbbb....bbbb"],
+]
+for i in range(2):
+    top = list(ZOMBIE_TOP)
+    if i == 1:  # huvudet lutar, armarna sjunker lite
+        top[1], top[2] = "....dDDDDd..", "....DdDDDD.."
+        top[7], top[8] = "..TTTTTTT...", ".TTtTTTTTDDD"
+    figure(f"zombie_{i}", top, ZOMBIE_LEGS[i])
+
+ZOMBIE_LIGGER = [
+    "........................",
+    ".dd.....................",
+    "dDDDD..TtTTTtTTT........",
+    "DLDDDD.TTTTtTTTTVVVVVVbb",
+    "DDDDDDdTtTTTTtTTVlVlVlbb",
+    ".DDDD..TTTtTTTT.VVVVVVbb",
+    "........DD..............",
+]
+for i in range(2):
+    w, h = 26, len(ZOMBIE_LIGGER) + 4
+    im = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    d.ellipse([0, h - 6, w - 1, h - 1], fill=(18, 26, 18, 140))
+    for r, row in enumerate(ZOMBIE_LIGGER):
+        for c, ch in enumerate(row):
+            if ch != ".":
+                d.point((1 + c, r + 1), fill=PAL[ch] + (255,))
+    if i == 1:  # en hand rycker
+        d.point((9, 8), fill=PAL["D"] + (255,))
+        d.point((10, 8), fill=(0, 0, 0, 0))
+    im.save(os.path.join(OUT, f"zombie_ligger_{i}.png"))
+    anchors[f"zombie_ligger_{i}"] = [13, h - 4]
+
 # Yxmannen (scenario 4, nödvärn): röd-svartrutig flanellskjorta, skägg,
 # grön mössa och en yxa höjd över huvudet. F/f = flanell, G = skägg, g = mössa,
 # I = yxans blad. Varianter: händerna uppe (ger upp), liggande och yxan på marken.
