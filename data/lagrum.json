@@ -101,7 +101,7 @@
       "diskutera": "Vad gör du om de säger nej till att radera?"
     },
     "anmala_polis": {
-      "namn": "Anmälde till polis",
+      "namn": "Begärde polis till platsen",
       "lagrum": "Skyddslagen 17 §",
       "krav": [
         "handelse_upptackt"
@@ -110,8 +110,8 @@
       "satter_fakta": {
         "anmalan_polis": true
       },
-      "text_ok": "Anmälan gjord. Ett omhändertagande, gripande eller beslag ska anmälas genast.",
-      "text_brist": "Det fanns ingen händelse att anmäla. En polisbegäran utan grund binder resurser och urholkar förtroendet för larmen.",
+      "text_ok": "Polis begärd – händelsen är därmed också anmäld. Ett omhändertagande, gripande eller beslag ska anmälas genast.",
+      "text_brist": "Det fanns ingen händelse som motiverade polis. En polisbegäran utan grund binder resurser och urholkar förtroendet för larmen.",
       "diskutera": "När är anmälan till polis obligatorisk och när är den bara lämplig?"
     },
     "uppratta_protokoll": {

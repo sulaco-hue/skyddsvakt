@@ -37,12 +37,12 @@
       "meddelanden": [
         {
           "fran": "Grindposten",
-          "text": "Begär att polis underrättas om {polis}, kom.",
+          "text": "Begär polis till grinden med anledning av {polis}, kom.",
           "efter": 0
         },
         {
           "fran": "CQ",
-          "text": "Uppfattat, polis underrättas, kom.",
+          "text": "Uppfattat, polis begärs till grinden, kom.",
           "efter": 2.0
         }
       ]
