@@ -31,6 +31,8 @@ var _lamnat: Dictionary = {}
 var _fordon: Dictionary = {}
 var _dronare_handelse: Dictionary = {}
 var radio: Radiotrafik
+## Frihetsberövade som sitter vid grinden och muttrar: id -> {t, i, repliker, intervall}
+var _sittande: Dictionary = {}
 ## Angripare (scenario Yxmannen): {h, id, lage, omvag_t, replik_t, replik_i, kamrat_nara}
 ## lage: "anfaller", "gett_upp", "skjuten", "overmannad".
 var _angripare: Dictionary = {}
@@ -199,6 +201,7 @@ func _process(delta: float) -> void:
 		return
 	_uppdatera_upptackt(delta)
 	_uppdatera_angripare(delta)
+	_uppdatera_sittande(delta)
 	radio.vanta = kontakt.visible
 	_uppdatera_brus(delta)
 	if hud.debug_info_synlig():
@@ -846,6 +849,9 @@ func _dolj_npc(id: String) -> void:
 # ----------------------------------------------------------- Kontakt --
 
 func _pa_npc_klickad(id: String) -> void:
+	if _sittande.has(id):
+		_sittande[id]["t"] = 0.0
+		return
 	if not _angripare.is_empty() and str(_angripare["id"]) == id and str(_angripare["lage"]) == "anfaller":
 		hud.visa_meddelande("Han anfaller! Halt-order [H], varningsskott [V] eller verkanseld [F].")
 		return
@@ -942,6 +948,8 @@ func _pa_kontakt_stangd() -> void:
 	snack.aktiv = true
 	snack.pausa(30.0)
 	hud.visa_meddelande("Kom ihåg: rapportera och dokumentera händelsen.", 4.0)
+	if _npc_efter_samtal.get(id, "") != "ga_till_start" and _frihetsberovad():
+		_satt_vid_grinden(id)
 	if _npc_efter_samtal.get(id, "") == "ga_till_start":
 		var n: Aktor = varld.npcer[id]
 		# Angriparen går därifrån utan yxa.
@@ -951,6 +959,59 @@ func _pa_kontakt_stangd() -> void:
 		var data: Dictionary = _scenario.get("npc", {}).get(id, {})
 		n.framme.connect(_dolj_npc.bind(id), CONNECT_ONE_SHOT)
 		varld.flytta_npc(id, varld.punkt(data.get("start", [0, 0])))
+
+
+# ------------------------------------------------- Frihetsberövad --
+# Den som omhändertagits eller gripits förs till grinden, sätter sig och
+# muttrar surt (personens "frihetsberovad" i scenariofilen).
+
+func _frihetsberovad() -> bool:
+	for f in ["omhandertagande_genomfort", "gripande_genomfort", "envarsgripande_genomfort"]:
+		if bool(Spel.fakta.get(f, false)):
+			return true
+	return false
+
+
+func _satt_vid_grinden(id: String) -> void:
+	var cfg: Dictionary = _scenario.get("npc", {}).get(id, {}).get("frihetsberovad", {})
+	if cfg.is_empty() or _sittande.has(id):
+		return
+	var n: Aktor = varld.npcer[id]
+	_sittande[id] = {"t": 4.0, "i": 0, "repliker": cfg.get("repliker", []), "sitter": false,
+		"intervall": cfg.get("intervall_s", [7.0, 12.0]), "sprite": str(cfg.get("sprite", ""))}
+	var repl: Array = _sittande[id]["repliker"]
+	repl.shuffle()
+	n.framme.connect(_satter_sig.bind(id), CONNECT_ONE_SHOT)
+	varld.flytta_npc(id, varld.punkt(cfg.get("plats", "grind_ute")))
+
+
+func _satter_sig(id: String) -> void:
+	var n: Aktor = varld.npcer[id]
+	var s: Dictionary = _sittande[id]
+	if str(s["sprite"]) != "":
+		varld.byt_bilder(n, str(s["sprite"]))
+	n.vila_aktiv = false
+	n.vand_mot(varld.spelare.global_position)
+	s["sitter"] = true
+
+
+func _uppdatera_sittande(delta: float) -> void:
+	for id: String in _sittande:
+		var s: Dictionary = _sittande[id]
+		if not bool(s["sitter"]):
+			continue
+		s["t"] = float(s["t"]) - delta
+		if float(s["t"]) > 0.0:
+			continue
+		var iv: Array = s["intervall"]
+		s["t"] = randf_range(float(iv[0]), float(iv[1]))
+		var rep: Array = s["repliker"]
+		if rep.is_empty() or not hud.visible:
+			continue
+		hud.visa_bubbla(varld.npcer[id], str(rep[int(s["i"]) % rep.size()]), 3.0)
+		s["i"] = int(s["i"]) + 1
+		varld.npcer[id].vaxla_still = false
+		varld.npcer[id]._sprite.texture = varld.npcer[id]._bilder[int(s["i"]) % 2]
 
 
 # -------------------------------------------------------- Debriefing --

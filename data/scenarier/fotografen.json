@@ -89,7 +89,30 @@
         "Motparten: utanför staketet, invid skyddsobjektet",
         "Skylt: Tillträdesförbud · Avbildningsförbud"
       ],
-      "lamnar_replik": "Nä, nu får det räcka."
+      "lamnar_replik": "Nä, nu får det räcka.",
+      "frihetsberovad": {
+        "kommentar": "Efter omhändertagande eller gripande: förs till grinden, sitter och muttrar.",
+        "plats": "grind_ute",
+        "sprite": "civil_sitter",
+        "intervall_s": [
+          7,
+          12
+        ],
+        "repliker": [
+          "Fullständigt löjligt…",
+          "Höstlöv. Jag fotograferade HÖSTLÖV.",
+          "Jag ska anmäla er till JO.",
+          "Mm. Jättefarligt med en kamera.",
+          "Hur länge ska jag sitta här?",
+          "Kaffet kallnar i bilen…",
+          "*mummel mummel*",
+          "Skattepengar i arbete, ser jag.",
+          "Min advokat kommer att älska det här.",
+          "Det är ju bara ett förråd…",
+          "Kallt i ändan, det här.",
+          "Suck."
+        ]
+      }
     }
   },
   "handelser": [

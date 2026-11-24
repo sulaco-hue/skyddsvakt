@@ -836,6 +836,12 @@ CIV_LEGS = [
      "bbb.....bbb.", "bbbb....bbbb"],
 ]
 
+# Sittande på marken (t.ex. omhändertagen vid grinden): benen rakt fram.
+CIV_SITTER_LEGS = ["..nnnnnnn...", ".nnNnnnNnn..", "bbnNnnnNnbb.", ".bb.....bb.."]
+CIV_TOP_LAP = [r for r in CIV_TOP]
+CIV_TOP_LAP[5], CIV_TOP_LAP[6], CIV_TOP_LAP[7] = "...sssess...", "....ssss....", "..jSSSSj...."
+CIV_TOP_LAP[11], CIV_TOP_LAP[12] = "jjKKJjjjJjj.", ".jKKJjjjJjj."
+
 
 def figure(name, top, legs):
     art = top + legs
@@ -897,6 +903,8 @@ anga.save(os.path.join(OUT, "anga.png"))
 anchors["anga"] = [1, 1]
 for i in range(2):
     figure(f"civil_{i}", CIV_TOP, CIV_LEGS[i])
+figure("civil_sitter_0", CIV_TOP, CIV_SITTER_LEGS)
+figure("civil_sitter_1", CIV_TOP_LAP, CIV_SITTER_LEGS)
 
 # Piloten (pappa med keps, glasögon och handkontroll) och dottern Elsa
 PAPPA_TOP = [

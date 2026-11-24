@@ -170,6 +170,9 @@ func _utfor(steg: Dictionary) -> void:
 		await _vanta(0.5)
 		var sc := _forsta_scroll(main.kontakt) if main.kontakt.visible else null
 		logg.append("  scroll efter drag: %s, nod: %s" % [sc.scroll_vertical if sc else "-", main.kontakt._nod_id])
+	if steg.has("npc"):
+		var n: Node2D = main.varld.npcer.get(str(steg["npc"]))
+		logg.append("  npc %s: cell %s synlig %s vag %s" % [steg["npc"], n.cell, n.visible, n._vag.size()])
 	if steg.has("debriefing"):
 		main.call("_visa_debriefing")
 		await _vanta(1.0)
