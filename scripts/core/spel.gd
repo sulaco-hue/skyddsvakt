@@ -85,6 +85,12 @@ func nollstall(sokvag: String = "", tvinga_objekttyp: String = "") -> void:
 	var k: Variant = scenario.get("karta", {})
 	karta = Datafil.las_json(str(k)) if k is String else (k if k is Dictionary else {})
 	_valj_objekttyp(tvinga_objekttyp)
+	# Passnumret följer scenariots plats i listan (index.json), så att
+	# "Pass 1" alltid är det första scenariot i scenariovalet.
+	var lista := Datafil.las_json(SCENARIO_INDEX).get("scenarier", []) as Array
+	var nr := lista.find(scenario_sokvag.get_file())
+	if nr >= 0 and not scenario.is_empty():
+		scenario["pass"] = "Pass %d" % (nr + 1)
 	variant = ""
 	missade = []
 	var bed: Dictionary = scenario.get("bedomning", {})
