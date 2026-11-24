@@ -28,10 +28,10 @@ func bygg(scenarier: Array) -> void:
 
 	var logga := TextureRect.new()
 	logga.texture = load("res://assets/gfx/logga.png")
-	logga.custom_minimum_size = Vector2(220, 64) * (1.0 if UiKit.kompakt else 2.0)
+	logga.custom_minimum_size = Vector2(660, 192) * (0.3333 if UiKit.kompakt else 0.6667)
 	logga.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	logga.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT
-	logga.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	logga.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	kol.add_child(logga)
 	kol.add_child(UiKit.rubrik("VÄLJ SCENARIO", 14, UiKit.DAMPAD))
 

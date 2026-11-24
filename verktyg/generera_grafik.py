@@ -1550,28 +1550,39 @@ hogtalare("hogtalare_av", [(7 + i, 3 + i, 1) for i in range(5)] + [(11 - i, 3 + 
 
 # ========================================================= Startskärm ==
 def logga():
-    """Spelets namn i pixelstil: ritas litet med Jersey 15 och skalas upp utan utjämning."""
+    """Spelets namn i pixelstil (Jersey 15), ritat i 660x192 – tre gånger så
+    många pixlar som första versionen – med skarpa kanter (ingen utjämning)."""
     from PIL import ImageFont
-    font_stor = ImageFont.truetype(os.path.join(os.path.dirname(OUT), "fonts", "Jersey15-Regular.ttf"), 30)
-    font_mellan = ImageFont.truetype(os.path.join(os.path.dirname(OUT), "fonts", "Jersey15-Regular.ttf"), 17)
-    W_, H_ = 220, 64
+    fontfil = os.path.join(os.path.dirname(OUT), "fonts", "Jersey15-Regular.ttf")
+    font_stor = ImageFont.truetype(fontfil, 90)
+    font_mellan = ImageFont.truetype(fontfil, 51)
+    W_, H_ = 660, 192
     im = Image.new("RGBA", (W_, H_), (0, 0, 0, 0))
     d = ImageDraw.Draw(im)
 
-    def text_med_kant(xy, text, font, fyll, kant, skugga):
+    def text_med_kant(xy, text, font, fyll, kant, skugga, ljus):
         x, y = xy
-        d.text((x + 2, y + 2), text, font=font, fill=skugga)
-        for dx in (-1, 0, 1):
-            for dy in (-1, 0, 1):
-                if dx or dy:
+        d.text((x + 6, y + 6), text, font=font, fill=skugga)
+        for dx in range(-3, 4):
+            for dy in range(-3, 4):
+                if (dx or dy) and dx * dx + dy * dy <= 10:
                     d.text((x + dx, y + dy), text, font=font, fill=kant)
         d.text((x, y), text, font=font, fill=fyll)
+        # ljus överkant: ger bokstäverna lite relief
+        lager = Image.new("RGBA", (W_, H_), (0, 0, 0, 0))
+        ImageDraw.Draw(lager).text((x, y), text, font=font, fill=ljus)
+        mask = Image.new("L", (W_, H_), 0)
+        ImageDraw.Draw(mask).text((x, y + 3), text, font=font, fill=255)
+        from PIL import ImageChops
+        topp = ImageChops.subtract(lager.split()[3], mask)
+        im.paste(ljus, (0, 0), topp)
 
     bredd = d.textlength("HALT,", font=font_stor)
-    text_med_kant(((W_ - bredd) / 2, 0), "HALT,", font_stor, (242, 177, 52, 255), (40, 24, 8, 255), (0, 0, 0, 160))
+    text_med_kant(((W_ - bredd) / 2, 0), "HALT,", font_stor, (242, 177, 52, 255), (40, 24, 8, 255),
+                  (0, 0, 0, 160), (255, 214, 120, 255))
     bredd2 = d.textlength("MILITÄR SKYDDSVAKT!", font=font_mellan)
-    text_med_kant(((W_ - bredd2) / 2, 36), "MILITÄR SKYDDSVAKT!", font_mellan, (230, 235, 224, 255),
-                  (18, 24, 34, 255), (0, 0, 0, 160))
+    text_med_kant(((W_ - bredd2) / 2, 108), "MILITÄR SKYDDSVAKT!", font_mellan, (230, 235, 224, 255),
+                  (18, 24, 34, 255), (0, 0, 0, 160), (255, 255, 255, 255))
     # Binarisera alfa för skarpa pixelkanter
     px = im.load()
     for y in range(H_):

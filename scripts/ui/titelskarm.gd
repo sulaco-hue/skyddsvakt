@@ -17,10 +17,10 @@ func bygg() -> void:
 
 	# Bakgrund: objektskartan, nedtonad
 	var karta := TextureRect.new()
-	karta.texture = load("res://assets/gfx/objektskarta_byggnad.png")
+	karta.texture = load("res://assets/gfx/titelbakgrund.png")  # kartan i full upplösning
 	karta.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	karta.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
-	karta.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	karta.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	karta.modulate = Color(0.45, 0.5, 0.6)
 	UiKit.helskarm(karta)
 	karta.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -41,11 +41,11 @@ func bygg() -> void:
 	rad.add_child(kol)
 	var logga := TextureRect.new()
 	logga.texture = load("res://assets/gfx/logga.png")
-	var lskala := 3 if not UiKit.kompakt else 2
-	logga.custom_minimum_size = Vector2(220, 64) * lskala
+	# Loggan är ritad i 660x192; visas i den storleken (mindre på mobil).
+	logga.custom_minimum_size = Vector2(660, 192) * (1.0 if not UiKit.kompakt else 0.6667)
 	logga.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	logga.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	logga.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	logga.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR if UiKit.kompakt else CanvasItem.TEXTURE_FILTER_NEAREST
 	kol.add_child(logga)
 	kol.add_child(UiKit.ruta_farg(Color(0, 0, 0, 0), Vector2(0, 20)))
 	_uppmaning = UiKit.rubrik("TRYCK FÖR ATT BÖRJA", 16, UiKit.BARNSTEN)
