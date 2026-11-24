@@ -249,6 +249,7 @@ func visa_bubbla(mal: Node2D, text: String, sek := 4.5) -> void:
 	if text.length() > 26:
 		l.custom_minimum_size = Vector2(220, 0)
 	p.add_child(l)
+	p.modulate.a = 0.0  # visas först när den har storlek och plats (annars blinkar den i hörnet)
 	add_child(p)
 	_bubblor.append({"nod": p, "mal": mal, "t": sek, "hojd": 34.0, "stig": false, "typ": "prat"})
 
@@ -260,6 +261,7 @@ func visa_ljud(mal: Node2D, text: String, sek := 1.3, hojd := 40.0) -> void:
 	l.add_theme_color_override("font_outline_color", UiKit.MORK)
 	l.add_theme_constant_override("outline_size", 5)
 	l.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	l.modulate.a = 0.0
 	add_child(l)
 	_bubblor.append({"nod": l, "mal": mal, "t": sek, "hojd": hojd, "stig": true, "typ": "ljud", "start": sek})
 
@@ -320,6 +322,7 @@ func _undvik_overlapp() -> void:
 		b["dy"] = r.position.y + 3.0 - naturlig_y
 		placerade.append(r)
 		nod.position = (r.position + Vector2(3.0, 3.0)).round()
+		nod.modulate.a = 1.0
 
 
 func _pa_debug_knapp(id: String) -> void:

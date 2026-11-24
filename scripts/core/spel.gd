@@ -38,7 +38,8 @@ func _ready() -> void:
 		version = "v%d" % int(v["version"])
 	_visa_version()
 	# Pekskärm (t.ex. iPhone/iPad i Safari): mindre basupplösning = större text och knappar.
-	if DisplayServer.is_touchscreen_available():
+	# "-- --kompakt" på kommandoraden tvingar mobilläget (för skärmdumpar).
+	if DisplayServer.is_touchscreen_available() or "--kompakt" in OS.get_cmdline_user_args():
 		UiKit.kompakt = true
 		get_tree().root.content_scale_size = Vector2i(800, 450)
 

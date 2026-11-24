@@ -516,16 +516,19 @@
     "kommentar": "Standardreaktioner på åtgärdsraden i kontaktläget. Ett dialogsteg kan ersätta dem med egna \"atgarder\". \"nasta\" = nästa steg, annars \"replik\" och samtalet står kvar.",
     "begara_identitet": {
       "text": "Begär att han uppger namn, födelsetid och hemvist.",
+      "du": "Jag behöver ditt namn, födelsetid och hemvist.",
       "stamning": 1,
       "nasta": "id_fraga"
     },
     "kroppsvisitera": {
       "text": "Beslutar om kroppsvisitation.",
+      "du": "Vi kommer att kroppsvisitera dig.",
       "stamning": 2,
       "replik": "– Visitera mig? För att jag tog bilder på några träd? Glöm det!"
     },
     "undersoka_fordon": {
       "text": "Beslutar om undersökning av hans bil.",
+      "du": "Vi kommer att undersöka din bil.",
       "stamning": 2,
       "replik": "– Bilen står på allmän väg. Den rör du inte!"
     },
@@ -536,17 +539,20 @@
     },
     "avvisa": {
       "text": "Avvisar honom från skyddsobjektet.",
+      "du": "Du avvisas från skyddsobjektet.",
       "stamning": 1,
       "replik": "– Avvisa? Jag vill ju inte in någonstans. Jag står på en skogsväg."
     },
     "avlagsna": {
       "text": "Avlägsnar honom: beordrar honom att lämna platsen och sluta fotografera.",
+      "du": "Du måste lämna platsen nu och sluta fotografera.",
       "stamning": 1,
       "nasta": "lamnar",
       "npc_beteende": "ga_till_start"
     },
     "tillfalligt_omhanderta": {
       "text": "Omhändertar honom tillfälligt.",
+      "du": "Du omhändertas tillfälligt. Följ med oss.",
       "stamning": 3,
       "satt_fakta": {
         "omhandertagande_genomfort": true
@@ -563,6 +569,7 @@
     },
     "lata_ga": {
       "text": "Låter honom gå. Noterar registreringsnumret.",
+      "du": "Okej. Du kan gå.",
       "nasta": "lamnar",
       "npc_beteende": "ga_till_start"
     }

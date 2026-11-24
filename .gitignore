@@ -9,3 +9,7 @@ __pycache__/
 
 # Skrivs av bygget (versionsnummer)
 data/version.json
+
+# Lokalt importerat av Godot (bygget importerar själv)
+*.import
+*.uid

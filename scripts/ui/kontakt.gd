@@ -40,7 +40,8 @@ var _anvanda: Dictionary = {}
 var stamning := 3
 
 var _replik: Label
-## Det vi själva sa just före motpartens replik (nodens "du", eller ett citerat svar).
+## Det vi själva sa just före motpartens replik: nodens "du", valets "du"
+## (åtgärderna) eller citatet i det valda svaret.
 var _du: Label
 var _senast_sagt := ""
 var _alternativ_lista: VBoxContainer
@@ -254,6 +255,8 @@ func _bygg_atgarder(nod: Dictionary) -> void:
 		alt["handling"] = id
 		if not alt.has("text"):
 			alt["text"] = str(a[1])
+		if not alt.has("du") and (atgarder.get(id, {}) as Dictionary).has("du"):
+			alt["du"] = atgarder[id]["du"]
 		var etikett := str(a[1])
 		if Spel.debug:
 			etikett += "\n" + _spar(alt)
@@ -345,7 +348,9 @@ func _valj_alt(alt: Dictionary) -> void:
 	_uppdatera_stamning()
 	# Citat i svaret (”…”) visas som det vi sa ovanför motpartens svar.
 	var text := str(alt.get("text", ""))
-	if text.count("”") >= 2:
+	if alt.has("du"):
+		_senast_sagt = str(alt["du"])
+	elif text.count("”") >= 2:
 		_senast_sagt = text.get_slice("”", 1).strip_edges()
 	val_gjort.emit(alt)
 	var nasta := _nasta(alt)

@@ -78,6 +78,17 @@ Arbetsflödet `.github/workflows/bygg-och-publicera.yml` körs vid varje push ti
    *Actions → senaste körningen → Artifacts → skyddsvakt-windows*).
 4. Skriver resultatet till grenen `ci-status` (filen `status.md`).
 
+**Spela efter manus med skärmdumpar:** `tester/spela.tscn` kör spelet med grafik efter ett manus
+(JSON-lista med steg: starta scenario, forcera händelse, ta kontakt, välj åtgärd, ta bild …) och
+sparar skärmdumpar och beslutslogg. Stegen beskrivs överst i `tester/spela.gd`. Exempel (Linux utan
+skärm, med xvfb):
+
+```
+xvfb-run -a godot --path . --resolution 1334x750 res://tester/spela.tscn -- --manus=manus.json --ut=/tmp/bilder --kompakt
+```
+
+`--kompakt` ger mobilläget. Så kan spelet provas utan att någon sitter vid skärmen.
+
 **Versionsnummer:** bygget skriver `data/version.json` med antalet commits, och spelet visar det
 (t.ex. *v44*) i nedre högra hörnet. Varje push ger en högre siffra. Lokalt visas *dev*.
 
