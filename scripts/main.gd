@@ -215,7 +215,9 @@ func _uppdatera_rimlighet() -> void:
 	if _larm_har_skett and not bool(f.get("handelse_upptackt", false)):
 		f["handelse_upptackt"] = true
 	if not bool(f.get("skadad_person", false)):
-		var skadad := bool(f.get("motpart_skjuten", false))
+		# Skjuten, nedbrottad (han klagar på armen) eller någon vi gett första hjälpen.
+		var skadad := bool(f.get("motpart_skjuten", false)) or bool(f.get("forsta_hjalp_given", false)) \
+			or (not _angripare.is_empty() and str(_angripare.get("lage", "")) == "overmannad")
 		if not _horde.is_empty():
 			for z in (_horde["zombies"] as Dictionary).values():
 				if str(z["lage"]) == "nere":

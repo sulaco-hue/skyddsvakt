@@ -624,7 +624,9 @@ func _spela_yxmannen_nar_fram() -> void:
 	var main = await _starta_yxmannen("skarp")
 	if not await _vanta_tills(func() -> bool: return str(main._angripare.get("lage", "")) == "overmannad", 90.0):
 		_fel("angreppet nådde aldrig fram (avstånd %d)" % main.call("_avstand_angripare"))
-	await _avsluta_yxmannen(main, {"angrepp_nadde_fram": "bad"})
+	# Nedbrottad och klagar på armen: ambulans är rimligt.
+	main.call("_pa_hud_handling", "larma_sjukvard", "Begär sjukvård (samband med CQ)")
+	await _avsluta_yxmannen(main, {"angrepp_nadde_fram": "bad", "larma_sjukvard": "ok"})
 
 
 # ------------------------------------------------------------- Zombies --
