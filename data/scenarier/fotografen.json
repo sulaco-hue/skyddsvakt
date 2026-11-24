@@ -75,6 +75,7 @@
   "npc": {
     "fotografen": {
       "namn": "Okänd man, ca 40 år",
+      "benamning": "mannen",
       "beskrivning": "Kamera i handen",
       "sprite": "civil",
       "portratt": "portratt_civil",
@@ -86,8 +87,7 @@
       },
       "kontakt_info": [
         "Motparten: utanför staketet, invid skyddsobjektet",
-        "Skylt: Tillträdesförbud · Avbildningsförbud",
-        "Stridsparskamrat: skyddar"
+        "Skylt: Tillträdesförbud · Avbildningsförbud"
       ],
       "lamnar_replik": "Nä, nu får det räcka."
     }
@@ -123,7 +123,7 @@
   "dialog": {
     "start": {
       "du": "Hej! Vi är militära skyddsvakter. Det här är ett skyddsobjekt – vad gör du här?",
-      "replik": "FOTOGRAFEN: – Vadå? Jag fotograferar bara höstlöven. Det är väl ändå inte förbjudet att stå på en skogsväg?",
+      "replik": "– Vadå? Jag fotograferar bara höstlöven. Det är väl ändå inte förbjudet att stå på en skogsväg?",
       "alternativ": [
         {
           "text": "Förklara lugnt att området är skyddsobjekt och att skylten anger avbildningsförbud.",

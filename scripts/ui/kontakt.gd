@@ -51,6 +51,11 @@ var _stamning_text: Label
 var _namn: Label
 var _beskrivning: Label
 var _portratt: TextureRect
+var _vanster: VBoxContainer
+var _stamning_etikett: Label
+var _motpart_rubrik: Label
+## Efter första valet krymper porträttet så att dialogen får mer plats.
+var _krympt := false
 var _tid_label: Label
 var _aktuella: Array = []
 var _slut := false
@@ -96,6 +101,7 @@ func bygg(scenario: Dictionary) -> void:
 
 	# Motpart
 	var vanster := UiKit.vbox(12)
+	_vanster = vanster
 	var portr := 180 if UiKit.kompakt else 320
 	vanster.custom_minimum_size = Vector2(portr + 6, 0)
 	mitt.add_child(vanster)
@@ -116,6 +122,7 @@ func bygg(scenario: Dictionary) -> void:
 	iv.add_child(_beskrivning)
 	var sr := UiKit.hbox(8)
 	var sl := UiKit.etikett("Stämning", 19, UiKit.DAMPAD)
+	_stamning_etikett = sl
 	sl.custom_minimum_size = Vector2(76, 0)
 	sr.add_child(sl)
 	var staplar := UiKit.hbox(3)
@@ -144,7 +151,8 @@ func bygg(scenario: Dictionary) -> void:
 	bubbla.add_child(bv)
 	_du = UiKit.etikett("", 21 if UiKit.kompakt else 25, Color("2E4A1E"), true)
 	bv.add_child(_du)
-	bv.add_child(UiKit.rubrik("MOTPARTEN", 14, Color("5A3B12")))
+	_motpart_rubrik = UiKit.rubrik("MOTPARTEN", 14, Color("5A3B12"))
+	bv.add_child(_motpart_rubrik)
 	_replik = UiKit.etikett("", 24 if UiKit.kompakt else 30, UiKit.MORK, true)
 	bv.add_child(_replik)
 	hoger.add_child(bubbla)
@@ -180,9 +188,7 @@ func bygg(scenario: Dictionary) -> void:
 func _bygg_chips(rader: Array) -> void:
 	for c in _chips.get_children():
 		c.queue_free()
-	var k := UiKit.panel(UiKit.BARNSTEN, UiKit.PANEL, 14, 4)
-	k.add_child(UiKit.rubrik("KONTAKT", 14, UiKit.BARNSTEN))
-	_chips.add_child(k)
+	_chips.visible = not rader.is_empty()
 	for t in rader:
 		var c := UiKit.panel(UiKit.KANT, UiKit.PANEL, 10 if UiKit.kompakt else 14, 3)
 		c.add_child(UiKit.etikett(str(t), 17 if UiKit.kompakt else 20))
@@ -190,7 +196,10 @@ func _bygg_chips(rader: Array) -> void:
 
 
 func oppna(npc: Dictionary, start_nod: String) -> void:
-	_bygg_chips(npc.get("kontakt_info", ["Stridsparskamrat: skyddar"]))
+	_bygg_chips(npc.get("kontakt_info", []))
+	# Rubriken över repliken: MANNEN, KVINNAN, FLICKAN, POJKEN …
+	_motpart_rubrik.text = str(npc.get("benamning", "MOTPARTEN")).to_upper()
+	_satt_krympt(false)
 	_namn.text = str(npc.get("namn", "Okänd person"))
 	_beskrivning.text = str(npc.get("beskrivning", ""))
 	_portratt.texture = load("res://assets/gfx/%s.png" % npc.get("portratt", "portratt_civil"))
@@ -199,6 +208,22 @@ func oppna(npc: Dictionary, start_nod: String) -> void:
 	_uppdatera_stamning()
 	visible = true
 	visa_nod(start_nod)
+
+
+## Litet porträtt (efter första valet): ger dialogen mer plats.
+func _satt_krympt(k: bool) -> void:
+	_krympt = k
+	var portr := (180 if UiKit.kompakt else 320) if not k else (88 if UiKit.kompakt else 150)
+	_portratt.custom_minimum_size = Vector2(portr, portr)
+	_vanster.custom_minimum_size = Vector2(portr + 6, 0)
+	_beskrivning.visible = not k
+	_stamning_etikett.visible = not k
+	_stamning_text.visible = not k
+	var ruta := Vector2(9, 10) if k else Vector2(20, 14)
+	for rr in _stamning_rutor:
+		rr.custom_minimum_size = ruta
+	_namn.add_theme_font_size_override("font_size", 14 if k else 17)
+	_namn.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART if k else TextServer.AUTOWRAP_OFF
 
 
 func visa_nod(nod_id: String, replik_override := "") -> void:
@@ -340,6 +365,8 @@ func _nasta(alt: Dictionary) -> String:
 
 
 func _valj_alt(alt: Dictionary) -> void:
+	if not _krympt:
+		_satt_krympt(true)
 	var h := str(alt.get("handling", ""))
 	if h != "" and _anvanda.has(h):
 		return

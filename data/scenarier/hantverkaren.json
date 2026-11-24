@@ -79,6 +79,7 @@
   "npc": {
     "hantverkaren": {
       "namn": "Hantverkare, ca 35 år",
+      "benamning": "mannen",
       "beskrivning": "Varselväst, servicebil",
       "sprite": "hantverkare",
       "portratt": "portratt_hantverkare",
@@ -88,8 +89,7 @@
       "dialog_start": "start",
       "kontakt_info": [
         "Motparten: vid bommen, vill komma in",
-        "Passerlistan: inga besök föranmälda",
-        "Stridsparskamrat: skyddar"
+        "Passerlistan: inga besök föranmälda"
       ],
       "lamnar_replik": "Jag åker till nästa jobb. Ring kontoret."
     }

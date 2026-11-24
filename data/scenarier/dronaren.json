@@ -99,6 +99,7 @@
   "npc": {
     "piloten": {
       "namn": "Mats, ca 45 år",
+      "benamning": "mannen",
       "beskrivning": "Handkontroll, glad",
       "sprite": "pappa",
       "portratt": "portratt_pappa",
@@ -108,8 +109,7 @@
       "dialog_start": "start",
       "kontakt_info": [
         "Motparten: vid sjön, en bra bit från objektet",
-        "Drönaren: över skyddsobjektet",
-        "Stridsparskamrat: skyddar"
+        "Drönaren: över skyddsobjektet"
       ],
       "efter_skott": "Vad gör ni?! Det står ett barn här!",
       "dialog_start_om": [
@@ -121,6 +121,7 @@
     },
     "dottern": {
       "namn": "Elsa, 10 år",
+      "benamning": "flickan",
       "beskrivning": "Födelsedagsbarn",
       "sprite": "barn",
       "portratt": "portratt_barn",
@@ -129,8 +130,7 @@
       "stamning": 0,
       "dialog_start": "elsa",
       "kontakt_info": [
-        "Ett barn, 10 år",
-        "Stridsparskamrat: skyddar"
+        "Ett barn, 10 år"
       ],
       "efter_skott": "BUHUUU! Min drönare!",
       "dialog_start_om": [
