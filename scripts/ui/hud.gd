@@ -437,7 +437,19 @@ func _bygg_handlingar() -> void:
 	add_child(_situationer)
 
 
+# ------------------------------------------------------------ Samband --
+# Uppropet: ett anrop öppnar förbindelsen med CQ, sedan kan flera ärenden
+# tas i samma samtal (data/samband.json), och samtalet avslutas med Klart slut.
+
+var _samband_data: Dictionary = {}
+var _samtal_pagar := false
+var _samtal_anvanda: Dictionary = {}
+var _samband_knappar: Dictionary = {}  # id -> Button
+var _samband_lista_v: VBoxContainer
+
+
 func _bygg_sambandsmeny() -> void:
+	_samband_data = Datafil.las_json("res://data/samband.json")
 	_sambandsmeny = UiKit.panel(UiKit.BARNSTEN, UiKit.PANEL, 14, 12)
 	_sambandsmeny.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
 	_sambandsmeny.grow_horizontal = Control.GROW_DIRECTION_BOTH
@@ -454,33 +466,92 @@ func _bygg_sambandsmeny() -> void:
 		_sambandsmeny.offset_bottom = -92
 	_sambandsmeny.visible = false
 	add_child(_sambandsmeny)
-	var v := UiKit.vbox(8)
-	_sambandsmeny.add_child(v)
-	v.add_child(UiKit.rubrik("SAMBAND", 13, UiKit.BARNSTEN))
-	for val in scenario.get("sambandsval", []):
+	_samband_lista_v = UiKit.vbox(8)
+	_sambandsmeny.add_child(_samband_lista_v)
+	_visa_sambandsmeny_innehall()
+
+
+func _visa_sambandsmeny_innehall() -> void:
+	for c in _samband_lista_v.get_children():
+		c.queue_free()
+	_samband_knappar.clear()
+	var v := _samband_lista_v
+	if not _samtal_pagar:
+		v.add_child(UiKit.rubrik("SAMBAND", 13, UiKit.BARNSTEN))
+		var anropa := UiKit.knapp("Anropa CQ", true)
+		anropa.pressed.connect(radio_anropa)
+		v.add_child(anropa)
+		var stang := UiKit.knapp("Stäng")
+		stang.pressed.connect(func() -> void: _sambandsmeny.visible = false)
+		v.add_child(stang)
+		return
+	v.add_child(UiKit.rubrik("SAMBAND · CQ PÅ LINJEN", 13, UiKit.GRON))
+	var rutnat := GridContainer.new()
+	rutnat.columns = 2
+	rutnat.add_theme_constant_override("h_separation", 8)
+	rutnat.add_theme_constant_override("v_separation", 8)
+	v.add_child(rutnat)
+	for val: Dictionary in _samband_data.get("val", []):
 		var b := UiKit.knapp(str(val.get("etikett", "")))
-		b.pressed.connect(_pa_sambandsval.bind(val))
-		v.add_child(b)
-	var stang := UiKit.knapp("Stäng")
-	stang.pressed.connect(func() -> void: _sambandsmeny.visible = false)
-	v.add_child(stang)
+		b.pressed.connect(radio_valj.bind(str(val.get("id", ""))))
+		b.disabled = _samtal_anvanda.has(str(val.get("id", "")))
+		rutnat.add_child(b)
+		_samband_knappar[str(val.get("id", ""))] = b
+	var slut := UiKit.knapp("Klart slut", true, UiKit.GRON)
+	slut.pressed.connect(radio_avsluta)
+	v.add_child(slut)
+	_samband_knappar["__slut"] = slut
 
 
-func _pa_sambandsval(val: Dictionary) -> void:
-	_sambandsmeny.visible = false
-	# Har CQ tystnat (t.ex. överkörd av zombies) får vi inget svar.
+## Anropa CQ. Har CQ tystnat (scenariots "samband_tyst") svarar ingen.
+func radio_anropa() -> void:
 	var tyst: Dictionary = scenario.get("samband_tyst", {})
 	if not tyst.is_empty() and bool(Spel.fakta.get(str(tyst.get("om_fakta", "")), false)):
-		# Försöket räknas: vi försökte rapportera/larma, men ingen svarade.
-		if str(val.get("handling", "")) != "":
-			handling.emit(str(val.get("handling", "")), str(val.get("etikett", "")) + " – inget svar")
+		_sambandsmeny.visible = false
 		Spel.spela_samband(tyst.get("meddelanden", []), {})
 		samband_utan_svar.emit()
 		return
-	if str(val.get("handling", "")) != "":
-		handling.emit(str(val.get("handling", "")), str(val.get("etikett", "")))
-	var byt: Dictionary = ersattningar.call() if ersattningar.is_valid() else {}
-	Spel.spela_samband(val.get("meddelanden", []), byt)
+	_samtal_pagar = true
+	_samtal_anvanda.clear()
+	Spel.spela_samband(_samband_data.get("anrop", []), {})
+	_visa_sambandsmeny_innehall()
+	_sambandsmeny.visible = true
+
+
+## Ett ärende i samtalet (id i data/samband.json). Varje ärende en gång per samtal.
+func radio_valj(id: String) -> void:
+	if not _samtal_pagar or _samtal_anvanda.has(id):
+		return
+	for val: Dictionary in _samband_data.get("val", []):
+		if str(val.get("id", "")) != id:
+			continue
+		_samtal_anvanda[id] = true
+		if str(val.get("handling", "")) != "":
+			handling.emit(str(val.get("handling", "")), str(val.get("etikett", "")) + " (samband med CQ)")
+		var byt: Dictionary = ersattningar.call() if ersattningar.is_valid() else {}
+		Spel.spela_samband(val.get("meddelanden", []), byt)
+		if _samband_knappar.has(id):
+			(_samband_knappar[id] as Button).disabled = true
+
+
+func radio_avsluta() -> void:
+	if not _samtal_pagar:
+		_sambandsmeny.visible = false
+		return
+	_samtal_pagar = false
+	Spel.spela_samband(_samband_data.get("avslut", []), {})
+	_sambandsmeny.visible = false
+	_visa_sambandsmeny_innehall()
+
+
+## Knapparna väntar medan någon pratar på kanalen.
+func _uppdatera_sambandsknappar() -> void:
+	if not _samtal_pagar or not _sambandsmeny.visible:
+		return
+	var upptagen := Spel.kanal_upptagen()
+	for id: String in _samband_knappar:
+		var b: Button = _samband_knappar[id]
+		b.disabled = upptagen or _samtal_anvanda.has(id)
 
 
 ## Instruktion [I]: två flikar – bevakningsinstruktionen och lagstödskortet
@@ -607,6 +678,10 @@ func _anteckna() -> void:
 
 
 func _vaxla_sambandsmeny() -> void:
+	# Stängs menyn mitt i ett samtal avslutas samtalet ordentligt (Klart slut).
+	if _sambandsmeny.visible and _samtal_pagar:
+		radio_avsluta()
+		return
 	_sambandsmeny.visible = not _sambandsmeny.visible
 
 
@@ -657,6 +732,7 @@ func _bleka_samband(delta: float) -> void:
 
 
 func _process(delta: float) -> void:
+	_uppdatera_sambandsknappar()
 	if not visible:
 		return
 	_klocka.text = Spel.klockstrang()

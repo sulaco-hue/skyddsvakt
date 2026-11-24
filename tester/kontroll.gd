@@ -113,10 +113,10 @@ func _kontrollera_scenario(sokvag: String, handlingar: Dictionary, karta: Dictio
 				_fel("%s: åtgärd '%s' pekar på okänd nod '%s'" % [par[0], h, nasta])
 			if nasta == "" and not par[1][h].has("replik"):
 				_fel("%s: åtgärd '%s' saknar både nasta och replik" % [par[0], h])
-	for val in scenario.get("sambandsval", []):
+	for val in Datafil.las_json("res://data/samband.json").get("val", []):
 		var h := str(val.get("handling", ""))
 		if h != "" and not handlingar.has(h):
-			_fel("sambandsval pekar på okänd handling '%s'" % h)
+			_fel("samband.json pekar på okänd handling '%s'" % h)
 	_kontrollera_radio(scenario, handlingar, sokvag)
 	_ok("data och dialogkopplingar: " + sokvag.get_file())
 

@@ -38,7 +38,10 @@
       "angrepp_pagar_ej": "angreppet hade upphört och platsen var säkrad",
       "handlade_i_tid": "stridsparet avvärjde angreppet innan det nådde fram",
       "kamraten_skyddad": "stridsparskamraten skyddades och överlevde",
-      "spelaren_vid_liv": "du överlevde och kunde fortsätta bevakningsuppgiften"
+      "spelaren_vid_liv": "du överlevde och kunde fortsätta bevakningsuppgiften",
+      "handelse_upptackt": "det hade hänt något att anmäla (en händelse var upptäckt)",
+      "skadad_person": "någon var skadad",
+      "behov_forstarkning": "hotet var större än stridsparet ensamt kunde hantera"
     }
   },
   "handlingar": {
@@ -99,13 +102,15 @@
     "anmala_polis": {
       "namn": "Anmälde till polis",
       "lagrum": "Skyddslagen 17 §",
-      "krav": [],
-      "vid_brist": "ok",
+      "krav": [
+        "handelse_upptackt"
+      ],
+      "vid_brist": "warn",
       "satter_fakta": {
         "anmalan_polis": true
       },
       "text_ok": "Anmälan gjord. Ett omhändertagande, gripande eller beslag ska anmälas genast.",
-      "text_brist": "",
+      "text_brist": "Det fanns ingen händelse att anmäla. En polisbegäran utan grund binder resurser och urholkar förtroendet för larmen.",
       "diskutera": "När är anmälan till polis obligatorisk och när är den bara lämplig?"
     },
     "uppratta_protokoll": {
@@ -554,14 +559,27 @@
     "larma_sjukvard": {
       "namn": "Larmade sjukvård (112) via CQ",
       "lagrum": "Allmän hjälpskyldighet · VaktB",
-      "krav": [],
-      "vid_brist": "ok",
+      "krav": [
+        "skadad_person"
+      ],
+      "vid_brist": "warn",
       "satter_fakta": {
         "sjukvard_larmad": true
       },
       "text_ok": "Rätt. En skadad person ska få vård så snabbt som möjligt – även den som nyss angrep dig.",
-      "text_brist": "",
+      "text_brist": "Ingen var skadad. Ett ambulanslarm utan skadade binder sjukvård som kan behövas någon annanstans.",
       "diskutera": "Vem gör vad: en säkrar, en larmar och ger första hjälpen?"
+    },
+    "begar_forstarkning": {
+      "namn": "Begärde förstärkning via CQ",
+      "lagrum": "Bevakningsinstruktionen – larm och förstärkning",
+      "krav": [
+        "behov_forstarkning"
+      ],
+      "vid_brist": "warn",
+      "text_ok": "Rätt: hotet var större än stridsparet ensamt klarar. Begär förstärkning i tid – hellre för tidigt än för sent.",
+      "text_brist": "Inget i läget motiverade förstärkning. Onödiga förstärkningar lämnar andra poster obemannade.",
+      "diskutera": "När är ett läge för stort för stridsparet? Vad gör ni medan förstärkningen är på väg?"
     },
     "forsta_hjalpen": {
       "namn": "Gav första hjälpen",

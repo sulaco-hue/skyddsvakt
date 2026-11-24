@@ -16,7 +16,7 @@ extends Node
 ##   {"valj": 0} / {"atgard": "avvisa"} / {"stang": true}    val i kontaktläget
 ##   {"anropa": "_halt_order"}                               anropar en funktion i main
 ##   {"tangent": "R"}                                        trycker en tangent
-##   {"samband": 1}                                          väljer i sambandsmenyn
+##   {"samband": ["lagesrapport", "polis"]}                  anropar CQ och tar ärendena
 ##   {"debriefing": true}                                    avslutar passet
 ##   {"titel": true} / {"scenarioval": true}                 startskärm / scenarioval
 ##   {"debug": true}                                         slår på debugraden
@@ -132,7 +132,14 @@ func _utfor(steg: Dictionary) -> void:
 		Input.parse_input_event(e)
 		await _vanta(0.3)
 	if steg.has("samband"):
-		main.hud.call("_pa_sambandsval", Spel.scenario.get("sambandsval", [])[int(steg["samband"])])
+		# "samband": ["lagesrapport", "polis"] – anropar CQ, tar ärendena och avslutar.
+		var arenden: Array = steg["samband"] if steg["samband"] is Array else [str(steg["samband"])]
+		main.hud.radio_anropa()
+		await _vanta(2.5)
+		for id in arenden:
+			main.hud.radio_valj(str(id))
+			await _vanta(3.5)
+		main.hud.radio_avsluta()
 		await _vanta(0.5)
 	if steg.has("hjul"):
 		# Mushjul nedåt på en punkt (fönsterkoordinater) – visar om händelsen når scrollningen.

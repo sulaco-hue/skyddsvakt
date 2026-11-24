@@ -270,147 +270,6 @@
     }
   ],
   "samband": [],
-  "sambandsval": [
-    {
-      "etikett": "Prova förbindelsen med CQ",
-      "handling": "",
-      "meddelanden": [
-        {
-          "fran": "Grindposten",
-          "text": "CQ, CQ.",
-          "efter": 0
-        },
-        {
-          "fran": "CQ",
-          "text": "CQ kom.",
-          "efter": 1.5
-        },
-        {
-          "fran": "Grindposten",
-          "text": "Från Grindposten, sambandsprov, kom.",
-          "efter": 3.0
-        },
-        {
-          "fran": "CQ",
-          "text": "Hörbarhet femma, kom.",
-          "efter": 4.5
-        },
-        {
-          "fran": "Grindposten",
-          "text": "Hörbarhet femma, klart slut.",
-          "efter": 6.0
-        }
-      ]
-    },
-    {
-      "etikett": "Lägesrapport till CQ",
-      "handling": "rapportera_vaktchef",
-      "meddelanden": [
-        {
-          "fran": "Grindposten",
-          "text": "CQ, CQ.",
-          "efter": 0.0
-        },
-        {
-          "fran": "CQ",
-          "text": "CQ kom.",
-          "efter": 1.5
-        },
-        {
-          "fran": "Grindposten",
-          "text": "Från Grindposten, lägesrapport: {lage}, kom.",
-          "efter": 3.0
-        },
-        {
-          "fran": "CQ",
-          "text": "{svar}, kom.",
-          "efter": 4.5
-        },
-        {
-          "fran": "Grindposten",
-          "text": "Uppfattat, slut kom.",
-          "efter": 6.0
-        },
-        {
-          "fran": "CQ",
-          "text": "Klart slut.",
-          "efter": 7.5
-        }
-      ]
-    },
-    {
-      "etikett": "Larma sjukvård via CQ",
-      "handling": "larma_sjukvard",
-      "meddelanden": [
-        {
-          "fran": "Grindposten",
-          "text": "CQ, CQ.",
-          "efter": 0.0
-        },
-        {
-          "fran": "CQ",
-          "text": "CQ kom.",
-          "efter": 1.5
-        },
-        {
-          "fran": "Grindposten",
-          "text": "Från Grindposten, begär ambulans till grinden, {skadade}, kom.",
-          "efter": 3.0
-        },
-        {
-          "fran": "CQ",
-          "text": "Uppfattat… sa du avvikande hälsotillstånd? Ambulans larmas, kom.",
-          "efter": 4.5
-        },
-        {
-          "fran": "Grindposten",
-          "text": "Uppfattat, slut kom.",
-          "efter": 6.0
-        },
-        {
-          "fran": "CQ",
-          "text": "Klart slut.",
-          "efter": 7.5
-        }
-      ]
-    },
-    {
-      "etikett": "Begär att CQ underrättar polis",
-      "handling": "anmala_polis",
-      "meddelanden": [
-        {
-          "fran": "Grindposten",
-          "text": "CQ, CQ.",
-          "efter": 0.0
-        },
-        {
-          "fran": "CQ",
-          "text": "CQ kom.",
-          "efter": 1.5
-        },
-        {
-          "fran": "Grindposten",
-          "text": "Från Grindposten, begär att polis underrättas om {polis}, kom.",
-          "efter": 3.0
-        },
-        {
-          "fran": "CQ",
-          "text": "Uppfattat, polis underrättas, kom.",
-          "efter": 4.5
-        },
-        {
-          "fran": "Grindposten",
-          "text": "Uppfattat, slut kom.",
-          "efter": 6.0
-        },
-        {
-          "fran": "CQ",
-          "text": "Klart slut.",
-          "efter": 7.5
-        }
-      ]
-    }
-  ],
   "lagestext": {
     "fakta:kamrat_dod": "min stridsparskamrat är uppäten. Jag är ensam. Ett dussin personer med avvikande beteende vid grinden",
     "fakta:horde_nere": "tolv personer med avvikande beteende har oskadliggjorts vid grinden, inga egna skadade, begär förstärkning och en förklaring",
@@ -426,6 +285,13 @@
     "polis": {
       "fakta:horde_nere": "tolv personer som oskadliggjorts med vapen vid grinden",
       "fore": "ett dussin personer som angriper grinden"
+    },
+    "svar_forstarkning": {
+      "fakta:cq_fallen": "…",
+      "fore": "Förstärkning? Alla är… upptagna. Ni får klara er"
+    },
+    "svar_sjukvard": {
+      "fore": "Uppfattat… sa du avvikande hälsotillstånd? Ambulans larmas"
     }
   },
   "radio": {

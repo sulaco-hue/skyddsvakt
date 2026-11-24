@@ -1,0 +1,36 @@
+{
+  "kommentar": "Uppropet till vaktchefen. Ett anrop öppnar förbindelsen; därefter kan flera ärenden tas i samma samtal, och samtalet avslutas med Klart slut. Alla val finns alltid – orimliga val (t.ex. ambulans utan skadade) får kritik i debriefingen via lagrum.json. Platshållare: {lage}, {svar}, {polis}, {skadade}, {svar_sjukvard}, {svar_forstarkning} (scenariots sambandstexter eller standardvärden nedan).",
+  "anrop": [
+    {"fran": "Grindposten", "text": "CQ, CQ.", "efter": 0},
+    {"fran": "CQ", "text": "CQ kom.", "efter": 1.5}
+  ],
+  "val": [
+    {"id": "lagesrapport", "etikett": "Lägesrapport", "handling": "rapportera_vaktchef", "meddelanden": [
+      {"fran": "Grindposten", "text": "Från Grindposten, lägesrapport: {lage}, kom.", "efter": 0},
+      {"fran": "CQ", "text": "{svar}, kom.", "efter": 2.0}]},
+    {"id": "polis", "etikett": "Begär polis", "handling": "anmala_polis", "meddelanden": [
+      {"fran": "Grindposten", "text": "Begär att polis underrättas om {polis}, kom.", "efter": 0},
+      {"fran": "CQ", "text": "Uppfattat, polis underrättas, kom.", "efter": 2.0}]},
+    {"id": "sjukvard", "etikett": "Begär sjukvård", "handling": "larma_sjukvard", "meddelanden": [
+      {"fran": "Grindposten", "text": "Begär ambulans till grinden, {skadade}, kom.", "efter": 0},
+      {"fran": "CQ", "text": "{svar_sjukvard}, kom.", "efter": 2.0}]},
+    {"id": "forstarkning", "etikett": "Begär förstärkning", "handling": "begar_forstarkning", "meddelanden": [
+      {"fran": "Grindposten", "text": "Begär förstärkning till grinden, kom.", "efter": 0},
+      {"fran": "CQ", "text": "{svar_forstarkning}, kom.", "efter": 2.0}]},
+    {"id": "prov", "etikett": "Sambandsprov", "handling": "", "meddelanden": [
+      {"fran": "Grindposten", "text": "Sambandsprov, kom.", "efter": 0},
+      {"fran": "CQ", "text": "Hörbarhet femma, kom.", "efter": 1.5}]}
+  ],
+  "avslut": [
+    {"fran": "Grindposten", "text": "Inget mer, slut kom.", "efter": 0},
+    {"fran": "CQ", "text": "Klart slut.", "efter": 1.5}
+  ],
+  "standard": {
+    "lage": "inga avvikelser",
+    "svar": "Uppfattat",
+    "polis": "en händelse vid grinden",
+    "skadade": "en skadad person",
+    "svar_sjukvard": "Uppfattat, ambulans larmas",
+    "svar_forstarkning": "Uppfattat, förstärkning skickas från vaktlokalen"
+  }
+}

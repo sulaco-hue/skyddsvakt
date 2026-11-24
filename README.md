@@ -46,6 +46,16 @@ Scenarierna delar kartan `data/kartor/granasen.json` och använder namngivna pla
 Varje scenario kan ha `varianter` (egna fakta och bedömningar), `bedomning` (scenariospecifik
 bedömning av en handling) och `slutkrav` (t.ex. att händelsen måste rapporteras till CQ).
 
+### Uppropet till CQ
+
+**Samband [R] → Anropa CQ** öppnar förbindelsen ("CQ, CQ." – "CQ kom."). Därefter kan flera ärenden tas i
+samma samtal: **Lägesrapport, Begär polis, Begär sjukvård, Begär förstärkning, Sambandsprov**, och
+samtalet avslutas med **Klart slut**. Alla val finns alltid (`data/samband.json`), men orimliga val får
+kritik i debriefingen: polis utan händelse, ambulans utan skadade eller förstärkning utan hot bedöms som
+*diskutabla* (rekvisiten `handelse_upptackt`, `skadad_person`, `behov_forstarkning` i `lagrum.json`).
+Scenariot fyller i texterna med `sambandstexter` ({lage}, {svar}, {polis}, {skadade}, {svar_sjukvard},
+{svar_forstarkning}); annars används standardtexterna i `samband.json`.
+
 ### Radiotrafik som följer läget
 
 CQ ropar inte själv upp Grindposten, det är vi som larmar. Men det vi säger, och CQ:s svar, följer

@@ -141,6 +141,7 @@ func _valj_scenario(sokvag: String) -> void:
 
 
 func _pa_hud_handling(id: String, beskrivning: String) -> void:
+	_uppdatera_rimlighet()
 	# "Anteckna" blir protokoll enligt 16 § när en åtgärd kräver det.
 	if id == "dokumentera" and Spel.protokoll_kravs():
 		Spel.utfor("uppratta_protokoll", "Upprättade protokoll över åtgärden")
@@ -167,7 +168,33 @@ func _radio_ersattningar() -> Dictionary:
 	var st: Dictionary = _scenario.get("sambandstexter", {})
 	for nyckel: String in st:
 		byt[nyckel] = _fasvarde(st[nyckel])
+	# Standardtexter för uppropet (data/samband.json) där scenariot inget sagt.
+	var standard: Dictionary = Datafil.las_json("res://data/samband.json").get("standard", {})
+	for nyckel: String in standard:
+		if not byt.has(nyckel) or str(byt[nyckel]) == "":
+			byt[nyckel] = standard[nyckel]
 	return byt
+
+
+## Fakta som avgör om ett radioärende är rimligt (polis, sjukvård, förstärkning).
+## De blir sanna när läget kräver det och förblir sanna.
+func _uppdatera_rimlighet() -> void:
+	var f := Spel.fakta
+	if _larm_har_skett and not bool(f.get("handelse_upptackt", false)):
+		f["handelse_upptackt"] = true
+	if not bool(f.get("skadad_person", false)):
+		var skadad := bool(f.get("motpart_skjuten", false))
+		if not _horde.is_empty():
+			for z in (_horde["zombies"] as Dictionary).values():
+				if str(z["lage"]) == "nere":
+					skadad = true
+		if skadad:
+			f["skadad_person"] = true
+	if not bool(f.get("behov_forstarkning", false)):
+		var stort := (not _angripare.is_empty() and str(_angripare["lage"]) == "anfaller" and bool(_angripare.get("upptackt", false))) \
+			or (not _horde.is_empty() and bool(_horde.get("upptackt", false)))
+		if stort:
+			f["behov_forstarkning"] = true
 
 
 func _lagestext() -> String:
@@ -214,6 +241,7 @@ func _process(delta: float) -> void:
 	if not Spel.klocka_igang:
 		return
 	_uppdatera_upptackt(delta)
+	_uppdatera_rimlighet()
 	_uppdatera_angripare(delta)
 	_uppdatera_horde(delta)
 	_uppdatera_sittande(delta)
@@ -776,6 +804,7 @@ func _angrepp_upphort(extra: Dictionary) -> void:
 
 
 func _larma_sjukvard() -> void:
+	_uppdatera_rimlighet()
 	Spel.utfor("larma_sjukvard", "Larmade sjukvård via CQ")
 	Spel.spela_samband([
 		{"fran": "Grindposten", "text": "CQ, CQ.", "efter": 0},
@@ -989,6 +1018,7 @@ func _dialogstart(data: Dictionary) -> String:
 
 
 func _pa_val(alt: Dictionary) -> void:
+	_uppdatera_rimlighet()
 	Spel.satt_fakta(alt.get("satt_fakta", {}))
 	var handling := str(alt.get("handling", ""))
 	if handling != "":
