@@ -1118,6 +1118,15 @@ func _horde_kommentar(nyckel: String, fordrojning := 2.0) -> void:
 	get_tree().create_timer(fordrojning).timeout.connect(_kamrat_sager.bind(text))
 
 
+## Avståndet till närmaste zombie just nu (inte från förra bildrutan).
+func _horde_narmast_fakta() -> void:
+	var narmast := 999
+	for id: String in _horde["zombies"]:
+		if str(_horde["zombies"][id]["lage"]) == "gar":
+			narmast = mini(narmast, varld.avstand(varld.spelare.cell, varld.npcer[id].cell))
+	Spel.satt_fakta({"angrepp_overhangande": narmast <= int((_horde["h"] as Dictionary).get("overhangande_avstand", 6))})
+
+
 func _horde_halt() -> void:
 	Spel.utfor("halt_order", "Ropade: ”Halt! Militär skyddsvakt! Halt eller jag skjuter skarpt!”")
 	hud.visa_bubbla(varld.spelare, "HALT! MILITÄR SKYDDSVAKT! HALT ELLER JAG SKJUTER SKARPT!", 3.5)
@@ -1126,6 +1135,7 @@ func _horde_halt() -> void:
 
 
 func _horde_varningsskott() -> void:
+	_horde_narmast_fakta()
 	Spel.utfor("varningsskott", "Avlossade varningsskott (riktat så att ingen kan skadas)")
 	_skott(1)
 	_horde_kommentar("kamrat_efter_varningsskott", 1.6)
