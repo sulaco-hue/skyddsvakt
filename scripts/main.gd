@@ -516,7 +516,7 @@ func _bekampa_dronare() -> void:
 		_upptackt = {}
 	Spel.utfor("vald_mot_farkost", "Bekämpade drönaren med automatkarbin")
 	Spel.satt_fakta({"dronare_nedskjuten": true})
-	hud.visa_ljud(varld.spelare, "PANG PANG", 1.5)
+	hud.visa_ljud(varld.spelare, "PANG", 1.5)
 	dronare.krascha()
 	varld.kollega.vand_mot(dronare.global_position)
 	var efter := str(_dronare_handelse.get("kamrat_efter_skott", "…Det där kommer CQ inte gilla."))
@@ -665,8 +665,9 @@ func _angripare_sager(text: String) -> void:
 		_angripare["replik_t"] = 3.0
 
 
-func _skott(antal: int) -> void:
-	hud.visa_ljud(varld.spelare, "PANG" if antal == 1 else "PANG PANG", 1.4)
+## Ett skott (patronvis eld, FFS 2010:7 11 §): ett "PANG" per avfyrning.
+func _skott(_antal := 1) -> void:
+	hud.visa_ljud(varld.spelare, "PANG", 1.4)
 	var flamma := varld.lagg_foremal("mynningsflamma", varld.spelare.cell)
 	flamma.position += Vector2(-8 if varld.spelare.position.x > varld.kollega.position.x else 8, -14)
 	get_tree().create_timer(0.12).timeout.connect(flamma.queue_free)
@@ -709,7 +710,7 @@ func _verkanseld() -> void:
 	if str(_angripare["lage"]) == "anfaller":
 		Spel.satt_fakta({"angrepp_overhangande": _avstand_angripare() <= int(h.get("overhangande_avstand", 6))})
 	Spel.utfor("verkanseld", "Avgav verkanseld mot mannen (patronvis, mot benen)")
-	_skott(2)
+	_skott(1)
 	_angripare["lage"] = "skjuten"
 	n.stanna()
 	n.vaxla_still = true
@@ -1199,7 +1200,7 @@ func _horde_verkanseld() -> void:
 		Spel.satt_fakta({"varningsskott_foregick": true})
 	Spel.satt_fakta({"angrepp_overhangande": avst <= int(h.get("overhangande_avstand", 6))})
 	Spel.utfor("verkanseld", "Avgav verkanseld mot närmaste… person (patronvis, mot benen)")
-	_skott(2)
+	_skott(1)
 	_blodstank(n)
 	# Det krävs ett slumpvis antal träffar (1–5) innan den faller.
 	var z: Dictionary = _horde["zombies"][id]
