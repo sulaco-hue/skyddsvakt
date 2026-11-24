@@ -153,8 +153,7 @@ func _valj_objekttyp(tvinga: String) -> void:
 	if typer.is_empty():
 		objekttyp = ""
 		return
-	var nycklar := typer.keys()
-	objekttyp = tvinga if typer.has(tvinga) else str(nycklar[randi() % nycklar.size()])
+	objekttyp = tvinga if typer.has(tvinga) else _nasta_objekttyp(typer.keys())
 	var info: Dictionary = typer[objekttyp]
 	scenario = _ersatt(scenario, {
 		"{objekt}": str(info.get("namn", "")),
@@ -163,6 +162,33 @@ func _valj_objekttyp(tvinga: String) -> void:
 	scenario["objekt"] = str(info.get("namn", scenario.get("objekt", "")))
 	var b: Dictionary = scenario.get("briefing", {})
 	b["objektinfo"] = str(info.get("beskrivning", "")) + " " + str(b.get("objektinfo", ""))
+
+
+## "Påse": alla objekttyper kommer en gång var i slumpad ordning innan någon
+## kommer igen, så att alla blir lika vanliga och samma inte kommer flera gånger
+## i rad. Påsen sparas mellan sessioner (user://objektpase.json).
+const OBJEKTPASE := "user://objektpase.json"
+
+
+func _nasta_objekttyp(nycklar: Array) -> String:
+	var pase: Array = []
+	var f := FileAccess.open(OBJEKTPASE, FileAccess.READ)
+	if f:
+		var d: Variant = JSON.parse_string(f.get_as_text())
+		if d is Array:
+			pase = (d as Array).filter(func(x: Variant) -> bool: return nycklar.has(str(x)))
+		f.close()
+	if pase.is_empty():
+		pase = nycklar.duplicate()
+		pase.shuffle()
+		# Inte samma som förra gången direkt efter en ny blandning.
+		if pase.size() > 1 and str(pase[0]) == objekttyp:
+			pase.push_back(pase.pop_front())
+	var val := str(pase.pop_front())
+	var w := FileAccess.open(OBJEKTPASE, FileAccess.WRITE)
+	if w:
+		w.store_string(JSON.stringify(pase))
+	return val
 
 
 func _ersatt(v: Variant, byten: Dictionary) -> Variant:
