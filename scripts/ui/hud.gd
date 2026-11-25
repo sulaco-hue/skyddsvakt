@@ -284,6 +284,9 @@ func _visa_bubbla_nu(mal: Node2D, text: String, sek: float) -> void:
 	var l := UiKit.etikett(text, 19, UiKit.MORK, text.length() > 26)
 	if text.length() > 26:
 		l.custom_minimum_size = Vector2(220, 0)
+	if UiKit.ar_kyrillisk(text):
+		UiKit.kyrillisk_etikett(l)
+		l.add_theme_font_size_override("font_size", 15)
 	p.add_child(l)
 	p.modulate.a = 0.0  # visas först när den har storlek och plats (annars blinkar den i hörnet)
 	add_child(p)
@@ -295,6 +298,8 @@ func _visa_bubbla_nu(mal: Node2D, text: String, sek: float) -> void:
 func visa_ljud(mal: Node2D, text: String, sek := 1.3, hojd := 40.0) -> void:
 	_ta_bort_bubbla(mal, "ljud")
 	var l := UiKit.rubrik(text.to_upper(), 14, UiKit.BARNSTEN)
+	if UiKit.ar_kyrillisk(text):
+		UiKit.kyrillisk_etikett(l)
 	l.add_theme_color_override("font_outline_color", UiKit.MORK)
 	l.add_theme_constant_override("outline_size", 5)
 	l.mouse_filter = Control.MOUSE_FILTER_IGNORE
