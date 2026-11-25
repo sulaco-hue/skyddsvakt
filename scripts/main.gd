@@ -978,8 +978,7 @@ func _pa_npc_klickad(id: String) -> void:
 	if _sittande.has(id):
 		_sittande[id]["t"] = 0.0
 	if not _angripare.is_empty() and str(_angripare["id"]) == id and str(_angripare["lage"]) == "anfaller":
-		hud.visa_meddelande("Han anfaller! Halt-order [H], varningsskott [V] eller verkanseld [F].")
-		return
+		return  # han anfaller – inget samtal (och ingen ledtråd om vad man ska göra)
 	if _lamnat.has(id):
 		hud.visa_meddelande("Personen har lämnat platsen.")
 		return
@@ -1077,7 +1076,6 @@ func _pa_kontakt_stangd() -> void:
 	varld.interaktion_aktiv = true
 	snack.aktiv = true
 	snack.pausa(30.0)
-	hud.visa_meddelande("Kom ihåg: rapportera och dokumentera händelsen.", 4.0)
 	if _npc_efter_samtal.get(id, "") != "ga_till_start" and _frihetsberovad() and not _sittande.has(id):
 		_satt_vid_grinden(id)
 	if _npc_efter_samtal.get(id, "") == "ga_till_start":
