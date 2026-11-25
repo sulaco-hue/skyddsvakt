@@ -13,6 +13,8 @@ var _larm_npc := ""
 var _samtal_klara: Dictionary = {}
 ## Scenario Slagsmålet (null i andra scenarier).
 var _slagsmal: Slagsmal = null
+## Smygaren som väntar på att slagsmålet ska dra igång (scenario Slagsmålet).
+var _vantande_smygare: Dictionary = {}
 ## Startpunkten yxmannen kom från (för lägestexten).
 var _angripare_start := ""
 ## Dialogsteget där samtalet med varje person senast avslutades.
@@ -255,6 +257,28 @@ func _lagestext() -> String:
 ## "lamnat" (personen gav sig av), "kontakt" (efter avslutad kontakt),
 ## "efter" (efter upptäckt) och "fore"; alla även per variant, t.ex. "kontakt_oriktig".
 func _fasvarde(lt: Dictionary) -> String:
+	# "delar": texten byggs av alla delar vars villkor stämmer just nu, t.ex.
+	# "en man nedslagen" + "gärningsmannen har flytt" + "varningsskott avlossat".
+	# {"om": [fakta som ska vara sanna], "inte": [fakta som ska vara falska], "text": "…"}
+	if lt.has("delar"):
+		var bitar: PackedStringArray = []
+		for d: Dictionary in lt["delar"]:
+			var ok := true
+			for f in d.get("om", []):
+				if not bool(Spel.fakta.get(str(f), false)):
+					ok = false
+			for f in d.get("inte", []):
+				if bool(Spel.fakta.get(str(f), false)):
+					ok = false
+			if ok:
+				bitar.append(str(d.get("text", "")))
+		if not bitar.is_empty():
+			var text := str(lt.get("skarv", ", ")).join(bitar)
+			var sista := str(lt.get("sista_skarv", ""))
+			if sista != "" and bitar.size() > 1:
+				var fore := str(lt.get("skarv", ", ")).join(bitar.slice(0, bitar.size() - 1))
+				text = fore + sista + bitar[bitar.size() - 1]
+			return str(lt.get("prefix", "")) + text
 	for nyckel: String in lt:
 		if nyckel.begins_with("fakta:") and bool(Spel.fakta.get(nyckel.substr(6), false)):
 			return str(lt[nyckel])
@@ -305,6 +329,52 @@ func _redigerar() -> bool:
 	return false
 
 
+## Kalas i en stuga (scenariots "kalas"): ljus som pulserar i takt och
+## musik som text som stiger ur huset. Pågår hela passet.
+var _kalas: Dictionary = {}
+
+
+func _starta_kalas() -> void:
+	var k: Dictionary = _scenario.get("kalas", {})
+	if k.is_empty():
+		return
+	var sken: Array = []
+	for c in k.get("ljus", []):
+		sken.append(varld.lagg_ljussken(varld.punkt(c), Color(1.0, 0.8, 0.5), float(k.get("ljus_skala", 1.5))))
+	# Alla fönster tända i stugan.
+	if k.has("hus"):
+		varld.byt_objektbild(varld.punkt(k["hus"]), str(k.get("hus_bild", "hus_rod_kalas")))
+	var kalla := Node2D.new()
+	kalla.position = varld.cell_pos(varld.punkt(k.get("plats", [0, 0]))) + Vector2(0, -26)
+	varld.add_child(kalla)
+	_kalas = {"k": k, "sken": sken, "kalla": kalla, "t": 0.5, "takt": 0.0, "i": 0}
+
+
+func _uppdatera_kalas(delta: float) -> void:
+	if _kalas.is_empty():
+		return
+	var k: Dictionary = _kalas["k"]
+	# Ljuset pulserar i takt med musiken och skiftar färg (diskolampa).
+	_kalas["takt"] = float(_kalas["takt"]) + delta
+	var slag := fmod(float(_kalas["takt"]), float(k.get("takt_s", 0.5))) / float(k.get("takt_s", 0.5))
+	var farger: Array = [Color(1.0, 0.8, 0.5), Color(1.0, 0.5, 0.75), Color(0.6, 0.7, 1.0), Color(1.0, 0.8, 0.5)]
+	var fi := int(float(_kalas["takt"]) / (float(k.get("takt_s", 0.5)) * 4.0)) % farger.size()
+	for sp: Sprite2D in _kalas["sken"]:
+		if is_instance_valid(sp):
+			var f: Color = farger[fi]
+			var styrka := float(k.get("styrka", 1.7))
+			sp.modulate = Color(f.r * styrka, f.g * styrka, f.b * styrka, lerpf(1.0, 0.6, slag))
+	_kalas["t"] = float(_kalas["t"]) - delta
+	if float(_kalas["t"]) <= 0.0:
+		_kalas["t"] = randf_range(float(k.get("ljud_min_s", 1.4)), float(k.get("ljud_max_s", 2.4)))
+		var ljud: Array = k.get("ljud", [])
+		if not ljud.is_empty() and hud.visible:
+			var kalla: Node2D = _kalas["kalla"]
+			kalla.position.x = varld.cell_pos(varld.punkt(k.get("plats", [0, 0]))).x + randf_range(-10.0, 10.0)
+			hud.visa_ljud(kalla, str(ljud[int(_kalas["i"]) % ljud.size()]), 1.8, 0.0)
+			_kalas["i"] = int(_kalas["i"]) + 1
+
+
 func _starta_pass() -> void:
 	briefing.queue_free()
 	briefing = null
@@ -313,6 +383,7 @@ func _starta_pass() -> void:
 	varld.kamrat_folj = true
 	snack.aktiv = true
 	Spel.klocka_igang = true
+	_starta_kalas()
 
 
 func _process(delta: float) -> void:
@@ -324,6 +395,7 @@ func _process(delta: float) -> void:
 	_uppdatera_angripare(delta)
 	_uppdatera_horde(delta)
 	_uppdatera_sittande(delta)
+	_uppdatera_kalas(delta)
 	radio.vanta = kontakt.visible
 	_uppdatera_brus(delta)
 	if hud.debug_info_synlig():
@@ -401,7 +473,21 @@ func _forcera_handelse(id: String) -> void:
 				h["vald_variant"] = delar[1]
 			_utlos_handelse(h)
 			return
+	# Smygaren väntar på slagsmålet: debugraden kan tvinga fram honom direkt.
+	if not _vantande_smygare.is_empty() and str(_vantande_smygare.get("id", "")) == delar[0]:
+		if delar.size() > 1:
+			_vantande_smygare["vald_variant"] = delar[1]
+		_starta_vantande_smygare()
+		return
 	hud.visa_meddelande("Händelse %s har redan startat." % id, 2.0)
+
+
+func _starta_vantande_smygare() -> void:
+	if _vantande_smygare.is_empty():
+		return
+	var h2 := _vantande_smygare
+	_vantande_smygare = {}
+	_utlos_handelse(h2)
 
 
 func _utlos_handelse(h: Dictionary) -> void:
@@ -439,9 +525,11 @@ func _utlos_handelse(h: Dictionary) -> void:
 			_slagsmal.setup(self, h)
 			# Ibland smyger någon fram till staketet medan vi tittar på bråket.
 			for h2 in _handelser_kvar.duplicate():
-				if str(h2.get("typ", "")) == "smygare" and randf() < float(h2.get("chans", 0.5)):
+				if str(h2.get("typ", "")) == "smygare":
 					_handelser_kvar.erase(h2)
-					get_tree().create_timer(float(h2.get("efter_s", 8))).timeout.connect(_utlos_handelse.bind(h2))
+					_vantande_smygare = h2
+					if randf() < float(h2.get("chans", 0.5)):
+						get_tree().create_timer(float(h2.get("efter_s", 8))).timeout.connect(_starta_vantande_smygare)
 		"smygare":
 			if _slagsmal:
 				_slagsmal.starta_smygare(h)

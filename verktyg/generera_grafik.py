@@ -396,6 +396,8 @@ def gavelhus(namn, bredd, djup, vagg, tak, takhojd, vagghojd, fonster_tant, dorr
     save_obj(namn, f, (bredd - 0.5, djup - 0.5))
 
 gavelhus("hus_rod", 2, 2, (150, 44, 36), (46, 46, 50), 12, 18, {0, 2})
+# Samma stuga med alla fönster tända (kalas).
+gavelhus("hus_rod_kalas", 2, 2, (150, 44, 36), (46, 46, 50), 12, 18, set(range(8)))
 gavelhus("hus_gul", 2, 2, (204, 170, 84), (60, 58, 62), 12, 18, {1})
 gavelhus("lada", 3, 2, (118, 50, 40), (88, 74, 66), 14, 22, set(), dorr=False, port=True)
 

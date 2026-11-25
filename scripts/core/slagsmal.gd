@@ -168,6 +168,7 @@ func _slag(b: Aktor, o: Aktor) -> void:
 
 func _upptack_slagsmal() -> void:
 	upptackt = true
+	Spel.satt_fakta({"slagsmal_upptackt": true})
 	main._markera_upptackt(h)
 	main._larm_har_skett = true
 	main.snack.pausa(600.0)
@@ -242,6 +243,7 @@ func _offret_gar_in() -> void:
 	o.framme.connect(func() -> void:
 		if offret_lage == "gar_in":
 			offret_lage = "inne"
+			Spel.satt_fakta({"offret_inne": true})
 			o.visible = false
 			visa_knappar(), CONNECT_ONE_SHOT)
 	main.varld.flytta_npc(str(h.get("offer", "offret")), main.varld.punkt(h.get("hem", "stuga_dorr")))
@@ -253,6 +255,7 @@ func _brakare_borta() -> void:
 		return
 	brakare_lage = "borta"
 	_brakare().visible = false
+	Spel.satt_fakta({"brakare_flytt": true})
 	main.varld.satt_larm("")
 	main._avsluta_handelse(h)
 	Spel.satt_fakta({"angrepp_pagar": false, "angrepp_overhangande": false, "angrepp_pagar_ej": true})
@@ -306,14 +309,26 @@ func _uppdatera_smygare(delta: float) -> void:
 		_smyg_t -= delta
 		if _smyg_t <= 0.0:
 			_smyg_t = 1.1
-			var ljud := "KLICK KLICK" if Spel.variant == "foto" else "SKRUV SKRUV"
-			if main.hud.visible:
+			var ljud := "KLICK KLICK" if Spel.variant == "foto" else "*skruv skruv*"
+			# Skruvandet hörs bara på nära håll.
+			var hors: bool = main.varld.avstand(main.varld.spelare.cell, n.cell) <= int(smyg_h.get("ljud_hors_inom", 8))
+			if main.hud.visible and hors:
 				main.hud.visa_ljud(n, ljud, 0.9, 30.0)
 		_jobb_t -= delta
 		if _jobb_t <= 0.0:
 			if Spel.variant == "skylt":
 				main.varld.ta_bort_skylt(main.varld.punkt(smyg_h.get("skylt", [26, 18])))
 				Spel.satt_fakta({"skylt_stulen": true})
+				if smyg_upptackt:
+					Spel.satt_fakta({"skylt_stold_kand": true})
+				# Han bär skylten under armen när han springer.
+				var skylt := Sprite2D.new()
+				skylt.name = "BurenSkylt"
+				skylt.texture = load("res://assets/gfx/skylt.png")
+				skylt.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+				skylt.scale = Vector2(0.55, 0.55)
+				skylt.position = Vector2(7, -15)
+				n.add_child(skylt)
 			else:
 				Spel.satt_fakta({"objekt_fotograferat": true})
 			_smygare_flyr("klar")
@@ -322,7 +337,7 @@ func _uppdatera_smygare(delta: float) -> void:
 		var c: Vector2i = main.varld.punkt(smyg_h.get("skylt", [26, 18]))
 		if main.varld.avstand(main.varld.spelare.cell, c) <= 6 and main.hud.visible:
 			_skylt_saknad_sagd = true
-			Spel.satt_fakta({"skylt_saknas_upptackt": true})
+			Spel.satt_fakta({"skylt_saknas_upptackt": true, "skylt_stold_kand": true})
 			main._kamrat_sager(str(smyg_h.get("kamrat_skylt_borta", "")))
 
 
@@ -354,6 +369,7 @@ func _smygare_flyr(orsak: String) -> void:
 ## Kamraten har sett smygaren (huvudskriptets upptäckt).
 func smygare_upptackt() -> void:
 	smyg_upptackt = true
+	Spel.satt_fakta({"smygare_sedd": true})
 	visa_knappar()
 
 
@@ -456,12 +472,14 @@ func _brakare_stannar() -> void:
 	var b := _brakare()
 	var o := _offret()
 	brakare_lage = "stannat"
+	if offret_lage != "nere":
+		Spel.satt_fakta({"offret_lindrigt_skadat": true})
 	b.stanna()
 	o.stanna()
 	b.vaxla_still = true
 	main.varld.byt_bilder(b, "yxman_upp")
 	Spel.satt_fakta({"angrepp_pagar": false, "angrepp_overhangande": false, "angrepp_pagar_ej": true,
-		"motpart_gett_upp": true})
+		"motpart_gett_upp": true, "brakare_stannat": true})
 	if main.hud.visible:
 		main.hud.visa_bubbla(b, str(h.get("brakare_stannar", "SKJUT INTE!")), 3.5)
 		if offret_lage != "nere":
@@ -512,6 +530,7 @@ func _verkanseld(mal: String) -> void:
 		else:
 			_smygare_flyr("skott")
 		return
+	Spel.satt_fakta({"brakare_skjuten" if mal == "brakare" else "smygare_skjuten": true})
 	if mal == "brakare":
 		brakare_lage = "skjuten"
 	else:

@@ -42,12 +42,14 @@ static func brodfont() -> Font:
 
 ## Kyrilliska tecken (t.ex. ryska repliker) finns inte i pixeltypsnitten;
 ## Pixelify Sans tar dem (webbversionen har inga systemtypsnitt att falla tillbaka på).
+## Pixelify saknar versalerna О och П, så Press Start 2P tar dem.
 static func _lagg_fallback(f: Font) -> void:
-	var fb: Font = load("res://assets/fonts/PixelifySans.ttf")
-	if fb and not f.fallbacks.has(fb):
-		var lista := f.fallbacks.duplicate()
-		lista.append(fb)
-		f.fallbacks = lista
+	var lista := f.fallbacks.duplicate()
+	for sokvag in ["res://assets/fonts/PixelifySans.ttf", "res://assets/fonts/PressStart2P-Regular.ttf"]:
+		var fb: Font = load(sokvag)
+		if fb and not lista.has(fb):
+			lista.append(fb)
+	f.fallbacks = lista
 
 
 static func rubrikfont(spatierad := false) -> Font:

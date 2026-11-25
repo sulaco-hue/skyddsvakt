@@ -576,6 +576,11 @@ func _spela_slagsmal(fall: String) -> void:
 				_fel("bråkaren varken flydde eller stannade efter halt och varningsskott")
 			else:
 				_ok("bråkaren efter halt + varningsskott: %s (offret: %s)" % [sm.brakare_lage, sm.offret_lage])
+			var lt := str(main.call("_lagestext"))
+			if lt.contains("skylt") or not (lt.contains("slagsmål") or lt.contains("slåss")):
+				_fel("lägesrapporten följer inte läget: " + lt)
+			else:
+				_ok("lägesrapport: " + lt)
 			await _avsluta_yxmannen(main, {"halt_order": "ok", "varningsskott": "bad"})
 		"lamnar":
 			main.varld.ga_till(main.varld.punkt("slagsmal_mal") + Vector2i(-1, 0))
@@ -597,6 +602,11 @@ func _spela_slagsmal(fall: String) -> void:
 			await _vanta(2)
 			if bool(Spel.fakta.get("skylt_stulen", false)) and sm.smyg_lage == "skjuten":
 				_fel("skylten stals trots att smygaren sköts")
+			var lt2 := str(main.call("_lagestext"))
+			var sk := str(main.call("_radio_ersattningar").get("skadade", ""))
+			_ok("lägesrapport: %s · ambulans: %s" % [lt2, sk])
+			if sm.smyg_lage == "skjuten" and not (lt2.contains("staketet") and sk.contains("skottskada")):
+				_fel("rapporterna nämner inte den skjutne vid staketet")
 			await _avsluta_yxmannen(main, {"verkanseld": "bad"})
 
 

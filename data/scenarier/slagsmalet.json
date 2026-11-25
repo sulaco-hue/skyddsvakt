@@ -81,7 +81,15 @@
     "objekt_fotograferat": false,
     "skylt_saknas_upptackt": false,
     "skott_utan_risk": false,
-    "mal_inom_skyddsobjekt": false
+    "mal_inom_skyddsobjekt": false,
+    "brakare_flytt": false,
+    "brakare_skjuten": false,
+    "smygare_skjuten": false,
+    "smygare_sedd": false,
+    "skylt_stold_kand": false,
+    "offret_inne": false,
+    "brakare_stannat": false,
+    "slagsmal_upptackt": false
   },
   "bedomning": {
     "verkanseld": {
@@ -162,6 +170,42 @@
       "stamning": 5
     }
   },
+  "kalas": {
+    "kommentar": "Fest i stugan där bråket börjar: pulserande ljus ur fönster och dörr, och musik som text.",
+    "plats": "stuga_dorr",
+    "ljus": [
+      [
+        38,
+        22
+      ],
+      [
+        38,
+        23
+      ],
+      [
+        37,
+        23
+      ]
+    ],
+    "takt_s": 0.5,
+    "ljud_min_s": 1.3,
+    "ljud_max_s": 2.2,
+    "ljud": [
+      "*dunka dunka*",
+      "*la la laa*",
+      "*dunka dunka*",
+      "*Калинка, Калинка!*",
+      "*dunka dunka*",
+      "Ура!"
+    ],
+    "ljus_skala": 1.5,
+    "styrka": 1.7,
+    "hus": [
+      37,
+      21
+    ],
+    "hus_bild": "hus_rod_kalas"
+  },
   "handelser": [
     {
       "id": "1",
@@ -193,21 +237,23 @@
         "DUNSS"
       ],
       "repliker_slass": [
-        "Ах ты, сволочь…!",
-        "Что ты сказал про неё?!",
+        "Ах ты, сука…!",
+        "Что ты сказал про неё, блядь?!",
         "Давай, давай!",
-        "Я тебя убью!",
-        "Отпусти!"
+        "Я тебя убью, сука!",
+        "Отпусти, блядь!",
+        "Пиздец тебе!"
       ],
       "repliker_offret": [
-        "Хватит!",
+        "Хватит, блядь!",
         "Ай! Перестань!",
         "Это был не я!",
-        "Помогите!"
+        "Помогите!",
+        "Сука, больно!"
       ],
       "repliker_sparkar": [
-        "Лежи!",
-        "Получил?!",
+        "Лежи, сука!",
+        "Получил, блядь?!",
         "Ну что, поговорим теперь?!"
       ],
       "kamrat": "Bråk vid stugan! Två snubbar – de slåss!",
@@ -215,10 +261,10 @@
       "kamrat_flyr": "Han sticker in i skogen!",
       "kamrat_skjuten_brakare": "Han ligger… Du sköt honom. Där. På vägen.",
       "kamrat_skjuten_smygare": "Va fan… du sköt honom? Han sprang ju bara!",
-      "brakare_flyr_halt": "Чёрт! Полиция!",
-      "brakare_flyr_skott": "ОНИ СТРЕЛЯЮТ?!",
-      "brakare_flyr_efter_sparkar": "Это тебе за Лену!",
-      "offret_tack": "Спасибо… Он совсем больной.",
+      "brakare_flyr_halt": "Блядь! Полиция!",
+      "brakare_flyr_skott": "ОНИ СТРЕЛЯЮТ?! БЛЯДЬ!",
+      "brakare_flyr_efter_sparkar": "Это тебе за Лену, сука!",
+      "offret_tack": "Спасибо… Он совсем больной, сука.",
       "forsta_hjalpen_replik": "Ligg still. Hör du mig? Ambulansen är på väg.",
       "missad_diskutera": "Ett slagsmål vid stugan alldeles intill grinden. Hur kunde det gå obemärkt förbi?",
       "mal": "slagsmal_mal",
@@ -226,21 +272,22 @@
       "fart_jakt": 40,
       "chans_stanna_varningsskott": 0.5,
       "stannar_s": 14,
-      "brakare_stannar": "НЕ СТРЕЛЯЙТЕ! Всё, всё – я не двигаюсь!",
-      "brakare_drar": "Я сваливаю!",
+      "brakare_stannar": "НЕ СТРЕЛЯЙТЕ! Всё, всё, блядь – я не двигаюсь!",
+      "brakare_drar": "Я сваливаю, нахуй!",
       "repliker_brak": [
-        "Чего уставился?!",
-        "Выходи, давай!",
-        "Ты и я, сейчас!"
+        "Чего уставился, сука?!",
+        "Выходи, давай, блядь!",
+        "Ты и я, сейчас!",
+        "Иди сюда, сука!"
       ],
       "kamrat_jakt": "Nu springer de nerför vägen!",
-      "offret_springer": "Хватит! ХВАТИТ!",
-      "offret_skott": "Господи… они стреляют?!",
+      "offret_springer": "Хватит! ХВАТИТ, БЛЯДЬ!",
+      "offret_skott": "Блядь… они стреляют?!",
       "hem": "stuga_dorr",
       "offret_muttrar": [
         "Идиот… Чёртов идиот.",
-        "Ну и вечер…",
-        "Всё, я домой."
+        "Ну и вечер, блядь…",
+        "Всё, я домой. Пиздец."
       ]
     },
     {
@@ -282,10 +329,104 @@
   ],
   "samband": [],
   "lagestext": {
-    "fakta:skylt_stulen": "skyddsobjektsskylten vid norra staketet stulen, gärningsman mörkklädd man som sprang norrut",
-    "fakta:motpart_skjuten": "verkanseld avgiven, en man skadad",
-    "fakta:offret_nere": "misshandel på vägen sydost om grinden, en man nedslagen och sparkad i huvudet, gärningsmannen sprang in i skogen",
-    "efter": "två män slåss vid stugan öster om grinden, rör sig söderut längs vägen",
+    "delar": [
+      {
+        "om": [
+          "angrepp_pagar"
+        ],
+        "inte": [
+          "offret_nere"
+        ],
+        "text": "två män slåss vid stugan öster om grinden"
+      },
+      {
+        "om": [
+          "slagsmal_upptackt"
+        ],
+        "inte": [
+          "angrepp_pagar",
+          "offret_nere",
+          "offret_lindrigt_skadat"
+        ],
+        "text": "slagsmål vid stugan öster om grinden"
+      },
+      {
+        "om": [
+          "offret_nere"
+        ],
+        "text": "en man nedslagen och sparkad i huvudet på vägen söder om grinden"
+      },
+      {
+        "om": [
+          "offret_lindrigt_skadat"
+        ],
+        "inte": [
+          "offret_inne"
+        ],
+        "text": "en man lindrigt skadad efter slagsmål vid stugan öster om grinden"
+      },
+      {
+        "om": [
+          "offret_lindrigt_skadat",
+          "offret_inne"
+        ],
+        "text": "en man lindrigt skadad efter slagsmål, har gått in i stugan"
+      },
+      {
+        "om": [
+          "brakare_stannat"
+        ],
+        "inte": [
+          "brakare_flytt",
+          "brakare_skjuten"
+        ],
+        "text": "gärningsmannen har stannat efter varningsskott"
+      },
+      {
+        "om": [
+          "brakare_flytt"
+        ],
+        "text": "gärningsmannen har flytt in i skogen"
+      },
+      {
+        "om": [
+          "brakare_skjuten"
+        ],
+        "text": "verkanseld avgiven mot gärningsmannen, han är skadad"
+      },
+      {
+        "om": [
+          "varningsskott_avlossat"
+        ],
+        "inte": [
+          "brakare_skjuten",
+          "smygare_skjuten"
+        ],
+        "text": "varningsskott avlossat"
+      },
+      {
+        "om": [
+          "skylt_stold_kand"
+        ],
+        "text": "skyddsobjektsskylten vid norra staketet stulen av mörkklädd man"
+      },
+      {
+        "om": [
+          "smygare_sedd"
+        ],
+        "inte": [
+          "skylt_stulen",
+          "smygare_skjuten"
+        ],
+        "text": "mörkklädd man vid norra staketet har flytt norrut"
+      },
+      {
+        "om": [
+          "smygare_skjuten"
+        ],
+        "text": "verkanseld avgiven mot mörkklädd man vid norra staketet, han är skadad"
+      }
+    ],
     "fore": "inga avvikelser vid grinden"
   },
   "radio": {
@@ -293,19 +434,88 @@
   },
   "sambandstexter": {
     "svar": {
-      "fakta:motpart_skjuten": "Uppfattat. Säkra platsen och rapportera förändring",
+      "fakta:brakare_skjuten": "Uppfattat. Säkra platsen och rapportera förändring",
+      "fakta:smygare_skjuten": "Uppfattat. Säkra platsen och rapportera förändring",
       "efter": "Uppfattat. Håll uppsikt och rapportera förändring",
       "fore": "Uppfattat"
     },
     "polis": {
-      "fakta:skylt_stulen": "stöld av skyddsobjektsskylt och misshandel på vägen öster om grinden",
-      "fakta:offret_nere": "misshandel på vägen öster om grinden, gärningsmannen har sprungit in i skogen",
-      "efter": "slagsmål på vägen öster om grinden",
+      "skarv": ", ",
+      "sista_skarv": " och ",
+      "delar": [
+        {
+          "om": [
+            "offret_nere"
+          ],
+          "text": "misshandel på vägen söder om grinden"
+        },
+        {
+          "om": [
+            "offret_lindrigt_skadat"
+          ],
+          "inte": [
+            "offret_nere"
+          ],
+          "text": "slagsmål vid stugan öster om grinden"
+        },
+        {
+          "om": [
+            "brakare_flytt"
+          ],
+          "text": "gärningsmannen har flytt in i skogen"
+        },
+        {
+          "om": [
+            "brakare_skjuten"
+          ],
+          "text": "verkanseld avgiven mot gärningsmannen"
+        },
+        {
+          "om": [
+            "skylt_stold_kand"
+          ],
+          "text": "stöld av skyddsobjektsskylt"
+        },
+        {
+          "om": [
+            "smygare_skjuten"
+          ],
+          "text": "verkanseld avgiven mot man vid staketet"
+        }
+      ],
+      "efter": "slagsmål vid stugan öster om grinden",
       "fore": "händelse vid grinden"
     },
     "skadade": {
-      "fakta:offret_nere": ", en man nedslagen och sparkad i huvudet",
-      "fakta:offret_lindrigt_skadat": ", en man lindrigt skadad efter slagsmål",
+      "prefix": ", ",
+      "skarv": ", ",
+      "sista_skarv": " och ",
+      "delar": [
+        {
+          "om": [
+            "offret_nere"
+          ],
+          "text": "en man nedslagen och sparkad i huvudet på vägen söder om grinden"
+        },
+        {
+          "om": [
+            "offret_lindrigt_skadat"
+          ],
+          "text": "en man lindrigt skadad efter slagsmål"
+        },
+        {
+          "om": [
+            "brakare_skjuten"
+          ],
+          "text": "en man med skottskada på vägen"
+        },
+        {
+          "om": [
+            "smygare_skjuten"
+          ],
+          "text": "en man med skottskada vid norra staketet"
+        }
+      ],
       "fore": ""
     },
     "svar_forstarkning": {

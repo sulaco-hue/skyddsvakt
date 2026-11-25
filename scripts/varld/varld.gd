@@ -174,7 +174,7 @@ func _skapa_objekt(rader: Array) -> void:
 				"V":
 					_kollega_start = c
 			if OBJEKT_SPRITES.has(tecken) and tecken != "L":
-				_sprite(str(OBJEKT_SPRITES[tecken]), c)
+				objektsprites[c] = _sprite(str(OBJEKT_SPRITES[tecken]), c)
 			if tecken in OBJEKT_HINDER or c in _mark_hinder:
 				astar.set_point_solid(c)
 			if tecken in OBJEKT_HINDER or tecken == "G" or c in _mark_hinder:
@@ -496,6 +496,32 @@ func _fri_granne(c: Vector2i) -> Vector2i:
 
 
 ## Ställer ut ett fordon (sprite) på en ruta och gör rutan till hinder.
+## Ljussken på marken (samma som under lyktorna), t.ex. från fönster och dörr.
+func lagg_ljussken(c: Vector2i, farg := Color(1.0, 0.85, 0.55), skala := 1.0) -> Sprite2D:
+	var ljus := _sprite("ljus", c, dekal_lager)
+	var mat := CanvasItemMaterial.new()
+	mat.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+	ljus.material = mat
+	ljus.modulate = farg
+	ljus.scale = Vector2(skala, skala)
+	return ljus
+
+
+## Objekten på kartan (cell -> sprite), t.ex. för att tända fönstren i en stuga.
+var objektsprites: Dictionary = {}
+
+
+## Byter bild på objektet i cellen (samma förankring). Sant om det fanns ett.
+func byt_objektbild(c: Vector2i, namn: String) -> bool:
+	var s: Variant = objektsprites.get(c)
+	if s == null or not is_instance_valid(s):
+		return false
+	var ny := _sprite(namn, c)
+	(s as Node).queue_free()
+	objektsprites[c] = ny
+	return true
+
+
 ## Skyltarna på staketet (cell -> sprite), så att en kan skruvas ner och tas.
 var skyltsprites: Dictionary = {}
 
