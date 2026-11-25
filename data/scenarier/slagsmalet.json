@@ -325,7 +325,8 @@
       "replik_drar": "…",
       "efter_slagsmalet_s": 30,
       "kommentar": "Kommer alltid, 30 s efter att slagsmålet är slut (bråkaren har flytt eller skjutits).",
-      "i_debug": false
+      "i_debug": false,
+      "ljud_hors_inom": 16
     }
   ],
   "samband": [],
