@@ -1178,8 +1178,21 @@ func _uppdatera_horde(delta: float) -> void:
 			n.ga_langs(varld.vag_mot(n.cell, mal.cell))
 	_horde["narmast"] = narmast_id
 	Spel.satt_fakta({"angrepp_overhangande": narmast <= int(h.get("overhangande_avstand", 6))})
-	if not bool(_horde["upptackt"]) and narmast <= int(h.get("upptacks_avstand", 15)):
-		_horde_upptackt()
+	# Upptäckt först när en zombie syns på skärmen och har gjort det i 2 s (annars
+	# drar replikerna och knapparna igång innan man ser något). Kommer de ändå
+	# riktigt nära räknas det som upptäckt direkt.
+	if not bool(_horde["upptackt"]):
+		var synlig := false
+		var ruta := get_viewport().get_visible_rect().grow(-8.0)
+		for id: String in zombies:
+			if str(zombies[id]["lage"]) == "gar" and ruta.has_point(
+					(varld.npcer[id] as Node2D).get_global_transform_with_canvas().origin):
+				synlig = true
+				break
+		_horde["sedd_t"] = float(_horde.get("sedd_t", 0.0)) + delta if synlig else 0.0
+		if float(_horde["sedd_t"]) >= float(h.get("upptackt_efter_synlig_s", 2.0)) \
+				or narmast <= int(h.get("ingen_tid_avstand", 2)) + 1:
+			_horde_upptackt()
 	# Stön från en slumpvis zombie i närheten
 	_horde["replik_t"] = float(_horde["replik_t"]) - delta
 	if float(_horde["replik_t"]) <= 0.0 and narmast_id != "" and hud.visible:
