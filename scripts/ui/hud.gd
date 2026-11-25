@@ -31,6 +31,8 @@ var _debug_info_text: Label
 var _bubblor: Array = []
 ## Köade repliker per figur: mal -> [{text, sek, ms}]
 var _talko: Dictionary = {}
+## Lager för pratbubblor och ljudtexter (underst i HUD:en).
+var _bubbellager: Control
 ## Eget lager för radiomenyn (överst).
 var _radiolager: Control
 var _samband_lista: VBoxContainer
@@ -56,6 +58,11 @@ func bygg(p_scenario: Dictionary, p_varld: Varld) -> void:
 	varld = p_varld
 	UiKit.helskarm(self)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	# Pratbubblor och ljudtexter ligger underst i HUD:en, under alla rutor och knappar.
+	_bubbellager = Control.new()
+	UiKit.helskarm(_bubbellager)
+	_bubbellager.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_bubbellager)
 	_bygg_toppfalt()
 	# Uppdragsrutan är borttagen tills vidare (ersätts av något bättre).
 	_bygg_debug()
@@ -292,7 +299,7 @@ func _visa_bubbla_nu(mal: Node2D, text: String, sek: float) -> void:
 		l.add_theme_font_size_override("font_size", 15)
 	p.add_child(l)
 	p.modulate.a = 0.0  # visas först när den har storlek och plats (annars blinkar den i hörnet)
-	add_child(p)
+	_bubbellager.add_child(p)
 	_bubblor.append({"nod": p, "mal": mal, "t": maxf(sek, 0.5), "hojd": 34.0, "stig": false, "typ": "prat",
 		"text": text, "visad": 0.0, "las_t": minf(lastid(text), sek)})
 
@@ -307,7 +314,7 @@ func visa_ljud(mal: Node2D, text: String, sek := 1.3, hojd := 40.0) -> void:
 	l.add_theme_constant_override("outline_size", 5)
 	l.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	l.modulate.a = 0.0
-	add_child(l)
+	_bubbellager.add_child(l)
 	_bubblor.append({"nod": l, "mal": mal, "t": sek, "hojd": hojd, "stig": true, "typ": "ljud", "start": sek})
 
 
