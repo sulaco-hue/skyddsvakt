@@ -211,6 +211,12 @@ func _radio_ersattningar() -> Dictionary:
 	for nyckel: String in standard:
 		if not byt.has(nyckel):
 			byt[nyckel] = standard[nyckel]
+	# Har vi gett första hjälpen ska det med i rapporten, till polis och till sjukvården.
+	if bool(Spel.fakta.get("forsta_hjalp_given", false)):
+		for nyckel in ["lage", "skadade", "polis"]:
+			var t := str(byt.get(nyckel, ""))
+			if t != "" and not t.contains("första hjälpen"):
+				byt[nyckel] = t + ", första hjälpen given"
 	return byt
 
 
@@ -527,9 +533,8 @@ func _utlos_handelse(h: Dictionary) -> void:
 			for h2 in _handelser_kvar.duplicate():
 				if str(h2.get("typ", "")) == "smygare":
 					_handelser_kvar.erase(h2)
+					# Smygaren kommer en stund efter att slagsmålet är slut (Slagsmal säger till).
 					_vantande_smygare = h2
-					if randf() < float(h2.get("chans", 0.5)):
-						get_tree().create_timer(float(h2.get("efter_s", 8))).timeout.connect(_starta_vantande_smygare)
 		"smygare":
 			if _slagsmal:
 				_slagsmal.starta_smygare(h)

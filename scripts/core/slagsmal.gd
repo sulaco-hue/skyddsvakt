@@ -256,10 +256,24 @@ func _brakare_borta() -> void:
 	brakare_lage = "borta"
 	_brakare().visible = false
 	Spel.satt_fakta({"brakare_flytt": true})
+	_slagsmal_slut()
 	main.varld.satt_larm("")
 	main._avsluta_handelse(h)
 	Spel.satt_fakta({"angrepp_pagar": false, "angrepp_overhangande": false, "angrepp_pagar_ej": true})
 	visa_knappar()
+
+
+## Slagsmålet är över: en stund senare (lite fippel, lite radiotrafik) kommer smygaren.
+var _slut_meddelat := false
+
+
+func _slagsmal_slut() -> void:
+	if _slut_meddelat:
+		return
+	_slut_meddelat = true
+	var ms: Dictionary = main._vantande_smygare
+	var sek := float(ms.get("efter_slagsmalet_s", 30)) if not ms.is_empty() else 30.0
+	main.get_tree().create_timer(sek).timeout.connect(main._starta_vantande_smygare)
 
 
 ## Fakta för bedömningen följer slagsmålet (gäller när målet är slagsmålet).
@@ -533,6 +547,7 @@ func _verkanseld(mal: String) -> void:
 	Spel.satt_fakta({"brakare_skjuten" if mal == "brakare" else "smygare_skjuten": true})
 	if mal == "brakare":
 		brakare_lage = "skjuten"
+		_slagsmal_slut()
 	else:
 		if smyg_lage == "jobbar" and _jobb_t > 0.0:
 			Spel.satt_fakta({"skylt_raddad": true})

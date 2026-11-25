@@ -295,8 +295,6 @@
       "namn": "Smygaren vid skylten",
       "typ": "smygare",
       "tid": "23:59",
-      "chans": 0.5,
-      "efter_s": 9,
       "npc": "smygaren",
       "varianter": [
         "skylt"
@@ -324,7 +322,9 @@
       "chans_stanna_varningsskott": 0.5,
       "stannar_s": 10,
       "replik_stannar": "AAH! Skjut inte! Skjut inte!",
-      "replik_drar": "…"
+      "replik_drar": "…",
+      "efter_slagsmalet_s": 30,
+      "kommentar": "Kommer alltid, 30 s efter att slagsmålet är slut (bråkaren har flytt eller skjutits)."
     }
   ],
   "samband": [],
