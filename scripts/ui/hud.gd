@@ -29,6 +29,8 @@ var _debug_info: PanelContainer
 var _debug_info_text: Label
 ## Aktiva pratbubblor/ljudtexter: {nod, mal, t, hojd, stig, typ}
 var _bubblor: Array = []
+## Köade repliker per figur: mal -> [{text, sek, ms}]
+var _talko: Dictionary = {}
 ## Eget lager för radiomenyn (överst).
 var _radiolager: Control
 var _samband_lista: VBoxContainer
@@ -244,9 +246,36 @@ func satt_debug_info(text: String) -> void:
 	_debug_info_text.text = text
 
 
-## Pratbubbla ovanför en figur i världen (ersätter figurens förra bubbla).
+## Pratbubbla ovanför en figur i världen. Pratar figuren redan köas den nya
+## repliken: den pågående får stå kvar tills den hunnit läsas (kortas av till
+## läsminimum) och sedan kommer nästa – repliker avbryter inte varandra.
 func visa_bubbla(mal: Node2D, text: String, sek := 4.5) -> void:
-	_ta_bort_bubbla(mal, "prat")
+	if text.strip_edges() == "":
+		return
+	var pagaende: Dictionary = {}
+	for b in _bubblor:
+		if b["mal"] == mal and b["typ"] == "prat":
+			pagaende = b
+	if not pagaende.is_empty():
+		var ko: Array = _talko.get(mal, [])
+		if str(pagaende.get("text", "")) == text or ko.any(func(k: Dictionary) -> bool: return str(k["text"]) == text):
+			return
+		ko.append({"text": text, "sek": sek, "ms": Time.get_ticks_msec()})
+		while ko.size() > 3:
+			ko.pop_front()
+		_talko[mal] = ko
+		# Den pågående står kvar tills den hunnit läsas, inte längre.
+		pagaende["t"] = maxf(0.0, minf(float(pagaende["t"]), float(pagaende["las_t"]) - float(pagaende["visad"])))
+		return
+	_visa_bubbla_nu(mal, text, sek)
+
+
+## Hur länge en replik minst ska synas för att hinna läsas.
+static func lastid(text: String) -> float:
+	return clampf(1.2 + text.length() * 0.055, 1.6, 4.5)
+
+
+func _visa_bubbla_nu(mal: Node2D, text: String, sek: float) -> void:
 	var p := UiKit.panel(UiKit.MORK, UiKit.TEXT, 8, 3)
 	p.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var l := UiKit.etikett(text, 19, UiKit.MORK, text.length() > 26)
@@ -255,7 +284,8 @@ func visa_bubbla(mal: Node2D, text: String, sek := 4.5) -> void:
 	p.add_child(l)
 	p.modulate.a = 0.0  # visas först när den har storlek och plats (annars blinkar den i hörnet)
 	add_child(p)
-	_bubblor.append({"nod": p, "mal": mal, "t": sek, "hojd": 34.0, "stig": false, "typ": "prat"})
+	_bubblor.append({"nod": p, "mal": mal, "t": maxf(sek, 0.5), "hojd": 34.0, "stig": false, "typ": "prat",
+		"text": text, "visad": 0.0, "las_t": minf(lastid(text), sek)})
 
 
 ## Ljud som text ovanför en figur, t.ex. "klick klick", "klipp klipp", "brak".
@@ -270,6 +300,18 @@ func visa_ljud(mal: Node2D, text: String, sek := 1.3, hojd := 40.0) -> void:
 	_bubblor.append({"nod": l, "mal": mal, "t": sek, "hojd": hojd, "stig": true, "typ": "ljud", "start": sek})
 
 
+## Nästa köade replik för figuren (för gamla repliker hoppas över).
+func _nasta_i_ko(mal: Node2D) -> void:
+	var ko: Array = _talko.get(mal, [])
+	while not ko.is_empty():
+		var k: Dictionary = ko.pop_front()
+		if Time.get_ticks_msec() - int(k["ms"]) <= 12000:
+			_visa_bubbla_nu(mal, str(k["text"]), float(k["sek"]))
+			break
+	if ko.is_empty():
+		_talko.erase(mal)
+
+
 func _ta_bort_bubbla(mal: Node2D, typ: String) -> void:
 	for b in _bubblor.duplicate():
 		if b["mal"] == mal and b["typ"] == typ:
@@ -282,10 +324,15 @@ func _uppdatera_bubblor(delta: float) -> void:
 	for b in _bubblor.duplicate():
 		var nod: Control = b["nod"]
 		b["t"] = float(b["t"]) - delta
+		b["visad"] = float(b.get("visad", 0.0)) + delta
 		var mal_ok := is_instance_valid(b["mal"]) and (b["mal"] as Node2D).visible
 		if float(b["t"]) <= 0.0 or not mal_ok:
 			nod.queue_free()
 			_bubblor.erase(b)
+			if b["typ"] == "prat" and mal_ok:
+				_nasta_i_ko(b["mal"])
+			elif not mal_ok:
+				_talko.erase(b["mal"])
 			continue
 		var mal: Node2D = b["mal"]
 		# Är personen själv utanför bild? Då står bubblan still vid kanten tills han syns.

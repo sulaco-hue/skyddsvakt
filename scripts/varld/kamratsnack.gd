@@ -19,6 +19,8 @@ var _timer := 0.0
 ## Tvåans små ljud ("fippel fippel", "skrammel skrammel"), även när han är tyst.
 var _ljud_timer := 0.0
 var _tyst_kvar := 0.0
+## Pausat på grund av en händelse (pausa()), till skillnad från "tystnad" när man bett honom vara tyst.
+var _pausad_kvar := 0.0
 var _senaste: Array[int] = []
 ## Scenariots väderläge, t.ex. ["regn", "kallt"]. Repliker med "nar" kräver att
 ## alla deras villkor finns här.
@@ -39,12 +41,15 @@ func setup(p_hud: Hud, p_varld: Varld, scenario: Dictionary = {}) -> void:
 func _process(delta: float) -> void:
 	if not aktiv or _data.is_empty():
 		return
-	_ljud_timer -= delta
+	# Fippel och skrammel bara i lugnt läge – inte under en händelse (då är snacket pausat).
+	if _pausad_kvar <= 0.0:
+		_ljud_timer -= delta
 	if _ljud_timer <= 0.0:
 		_ljud_timer = _rng.randf_range(float(_inst.get("ljud_min_s", 20)), float(_inst.get("ljud_max_s", 50)))
 		var ljud: Array = _data.get("ljud", [])
 		if not ljud.is_empty() and hud.visible:
 			hud.visa_ljud(varld.kollega, _slumpa(ljud), 1.6)
+	_pausad_kvar = maxf(0.0, _pausad_kvar - delta)
 	if _tyst_kvar > 0.0:
 		_tyst_kvar -= delta
 		return
@@ -57,6 +62,7 @@ func _process(delta: float) -> void:
 ## Pausa pratet i sek sekunder (t.ex. efter att en händelse upptäckts).
 func pausa(sek: float) -> void:
 	_tyst_kvar = maxf(_tyst_kvar, sek)
+	_pausad_kvar = maxf(_pausad_kvar, sek)
 
 
 ## Ettan säger åt tvåan att vara tyst.
