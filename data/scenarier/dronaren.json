@@ -78,7 +78,7 @@
       "diskutera": "Räcker det att drönaren är över objektet för att piloten ska anses vara ”invid”?"
     },
     "beslag": {
-      "text_brist": "Bilderna kan visa objektet, men det är ett barns födelsedagspresent och pappan samarbetar. Ett beslag ska stå i proportion till vad det gäller (14 §). Att be dem radera bilderna frivilligt, anteckna uppgifterna och anmäla till polis räcker ofta.",
+      "text_brist": "Att flyga en drönare över objektet är obehörigt tillträde (7 § första stycket, 30 §) – även av oaktsamhet – så drönaren kan ha betydelse för utredningen och ett beslag är formellt möjligt (14 §). Men det är ett barns födelsedagspresent och pappan samarbetar: står beslaget i proportion till vad det gäller? Att be dem radera bilderna, anteckna uppgifterna och anmäla till polis räcker ofta.",
       "diskutera": "När har drönaren eller minneskortet betydelse för en utredning – och när är det bättre att låta polisen ta ställning?"
     },
     "envarsgripande": {
@@ -90,18 +90,19 @@
         "proportionerligt": "warn"
       },
       "text_krav": {
-        "proportionerligt": "Olovlig avbildning av skyddsobjekt har fängelse i straffskalan och han påträffades på bar gärning – formellt möjligt. Men är ett gripande proportionerligt mot en man med drönare? Avvisning, beslag av minneskortet och polis kan räcka. [Jurist]"
+        "proportionerligt": "Obehörigt tillträde med drönare (30 §) och olovlig avbildning (30 a §) har fängelse i straffskalan, och den som flyger påträffas på bar gärning – ett envarsgripande är formellt möjligt. Men är det proportionerligt mot en man med drönare (eller en pappa med sin tioåring)? Landning, uppgifter, beslag och polis räcker ofta. [Jurist]"
       }
     },
     "gripa": {
-      "text_brist": "Gripande enligt 13 § gäller vissa allvarliga brott (t.ex. sabotage, spioneri). Att flyga drönare över objektet räcker inte i sig för skälig misstanke om sådant brott. [Jurist]"
+      "text_brist": "Gripande enligt 13 § kräver skäl att anhålla för spioneri, sabotage, terroristbrott, grovt rån eller förberedelse till sådant brott. Att flyga drönare över objektet räcker inte i sig. [Jurist]"
     }
   },
   "varianter": {
     "kommentar": "med_pilot: Mats och Elsa vid sjön (långt från objektet, inte invid). utan_pilot: ingen pilot syns, drönaren flyger bort efter en minut. dold_pilot: en man i skogskanten norr om staketet (invid) flyger, är undvikande och har ett minneskort med bilder på objektet.",
     "med_pilot": {
       "fakta": {
-        "pilot_antraffbar": true
+        "pilot_antraffbar": true,
+        "brott_pa_bar_garning": true
       }
     },
     "utan_pilot": {
@@ -880,6 +881,19 @@
           "npc_beteende": "ga_till_start"
         }
       }
+    },
+    "undersoka_fordon": {
+      "text": "Begär att få undersöka drönaren.",
+      "du": "Vi behöver undersöka drönaren.",
+      "replik": "MATS: – Drönaren? Visst, här… fast vad ska ni med den till?",
+      "variant": {
+        "dold_pilot": {
+          "replik": "– Jag är inte skyldig… okej då.\n\nPå surfplattan syns senaste flygningen: lugna svep över {objekt_bestamd}, staketet och grinden. Inga fåglar.",
+          "satt_fakta": {
+            "bilder_visar_objekt": true
+          }
+        }
+      }
     }
   },
   "atgarder_lista": [
@@ -887,6 +901,7 @@
     "be_om_legitimation",
     "kroppsvisitera",
     "skyddsvisitera",
+    "undersoka_fordon",
     "beslag",
     "avvisa",
     "avlagsna",

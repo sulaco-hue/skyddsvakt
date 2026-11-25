@@ -168,7 +168,7 @@
   ],
   "samband": [],
   "lagestext": {
-    "fakta:gripande_genomfort": "man gripen vid grinden misstänkt för olovlig underrättelseverksamhet, kamera, flygbild över objektet och anteckningar om vaktbyten i hans bil",
+    "fakta:gripande_genomfort": "man gripen vid grinden misstänkt för förberedelse till spioneri eller sabotage, kamera, flygbild över objektet och anteckningar om vaktbyten i hans bil",
     "fakta:misstanke_13": "man vid grinden med kamera, flygbild över objektet och anteckningar om våra vaktbyten i bilen",
     "fakta:omhandertagande_genomfort": "man tillfälligt omhändertagen vid grinden",
     "fakta:vagrat_fordon": "man som uppger sig komma från Ventservice vägrar undersökning av sin bil vid grinden",
@@ -372,7 +372,9 @@
         "oriktig": {
           "replik": "– Här… ja, det står Peter Ström. Det är min kollegas, jag glömde min. Men jag heter Jonas, alltså.",
           "satt_fakta": {
-            "oriktiga_uppgifter": true
+            "oriktiga_uppgifter": true,
+            "brott_pa_bar_garning": true,
+            "beslag_betydelse": true
           },
           "stamning": 2
         },
@@ -468,7 +470,7 @@
       "fore": "Uppfattat"
     },
     "polis": {
-      "fakta:gripande_genomfort": "man som gripits vid grinden, misstänkt för olovlig underrättelseverksamhet",
+      "fakta:gripande_genomfort": "man som gripits vid grinden, misstänkt för förberedelse till spioneri eller sabotage",
       "fakta:misstanke_13": "man vid grinden med kamera, flygbild och anteckningar om objektet",
       "fakta:oriktiga_uppgifter": "person som lämnat sannolikt oriktiga uppgifter vid grinden",
       "efter": "händelse vid grinden",
@@ -477,11 +479,23 @@
   },
   "bedomning": {
     "gripa": {
-      "text_ok": "Kamera med teleobjektiv, en flygbild med staketet inritat och anteckningar om era vaktbyten ger skälig misstanke om t.ex. olovlig underrättelseverksamhet eller förberedelse till sabotage – brott som ger skyddsvakten samma befogenhet som en polisman att gripa (13 §). Gripandet ska genast anmälas till polis (17 §) och protokollföras (16 §). [Jurist]",
-      "diskutera": "Vilka brott räknas upp i 13 §, och räckte fynden i bilen för skälig misstanke? Skyddsvisiterade ni honom efter gripandet?"
+      "text_ok": "Kamera med teleobjektiv, en flygbild med staketet inritat och anteckningar om era vaktbyten kan ge skäl att anhålla honom för förberedelse till spioneri eller sabotage. Då har en skyddsvakt samma befogenhet som en polisman att gripa honom och ta i beslag det han för med sig (13 §). Gripandet ska genast anmälas till polis (17 §) och protokollföras (16 §). [Jurist]",
+      "diskutera": "13 § kräver att det finns skäl att anhålla för spioneri, sabotage, terroristbrott, grovt rån eller förberedelse till sådant brott – inte bara att något verkar misstänkt. Räckte fynden i bilen? Skyddsvisiterade ni honom efter gripandet?"
     },
     "slappa_in": {
       "diskutera": "Han var trevlig, hade körkort och ett trovärdigt ärende. Varför räcker inte det? Vad står i dagens passerlista?"
+    },
+    "envarsgripande": {
+      "krav": [
+        "brott_pa_bar_garning",
+        "proportionerligt"
+      ],
+      "krav_utfall": {
+        "proportionerligt": "warn"
+      },
+      "text_krav": {
+        "proportionerligt": "Att lämna oriktiga uppgifter för att få tillträde är ett brott (31 §, lämnande av osann uppgift vid skyddsobjekt) med fängelse i straffskalan – ett envarsgripande är formellt möjligt. Men är det proportionerligt? Avvisning (12 § p. 2) och anmälan till polis räcker ofta. [Jurist]"
+      }
     }
   }
 }

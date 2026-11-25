@@ -178,15 +178,20 @@
       "diskutera": "Vad säger du om personen frågar vad som händer om han vägrar?"
     },
     "undersoka_fordon": {
-      "namn": "Begärde att få undersöka fordonet",
-      "lagrum": "Skyddslagen 10–11 §§",
-      "krav": [
-        "vill_ha_tilltrade"
-      ],
-      "vid_brist": "warn",
-      "text_ok": "Den som vill ha tillträde är skyldig att låta undersöka fordon som han eller hon för med sig.",
-      "text_brist": "Skyldigheten att låta undersöka fordon gäller den som vill ha tillträde till objektet.",
-      "diskutera": "Vad letar du efter, och när behövs undersökningen?"
+      "namn": "Begärde att få undersöka fordonet (eller drönaren)",
+      "lagrum": "Skyddslagen 10 § p. 3 och 11 § (fordon, fartyg och luftfartyg som medförts till platsen)",
+      "krav": [],
+      "vid_brist": "bad",
+      "text_ok": "Den som vill ha tillträde till objektet eller uppehåller sig invid det är skyldig att låta undersöka fordon, fartyg och luftfartyg (även drönare) som medförts till platsen (10 § p. 3), när det behövs för bevakningsuppgiften (11 §).",
+      "text_brist": "Skyldigheten gäller den som vill ha tillträde till objektet eller uppehåller sig invid det (10 §). Längre bort finns ingen sådan skyldighet – men du kan alltid fråga.",
+      "diskutera": "Vad letar du efter, och när behövs undersökningen?",
+      "krav_grupper": [
+        [
+          "vill_ha_tilltrade",
+          "motpart_invid",
+          "motpart_inom"
+        ]
+      ]
     },
     "kroppsvisitera": {
       "namn": "Kroppsvisiterade personen",
