@@ -601,10 +601,10 @@ func _spela_lamna_posten() -> void:
 	await _vanta(5)
 	main.call("_starta_pass")
 	await _vanta(3)
-	main.varld.ga_till(main.varld.punkt("stig_nord"))
+	main.varld.ga_till(main.varld.punkt("yx_syd"))
 	if not await _vanta_tills(func() -> bool: return Spel.logg.any(func(p: Dictionary) -> bool:
-			return p.get("handling", "") == "lamnade_posten"), 60.0):
-		_fel("att båda lämnade objektet registrerades inte")
+			return p.get("handling", "") == "lamnade_posten"), 120.0):
+		_fel("att stridsparet lämnade objektet registrerades inte")
 	main.call("_visa_debriefing")
 	await _vanta(3)
 	_forvanta({"lamnade_posten": "warn"})

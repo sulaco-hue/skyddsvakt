@@ -365,20 +365,18 @@ func _starta_kalas() -> void:
 
 
 ## Lämnar båda skyddsobjektet (längre bort än "posten_avstand" rutor från området)
-## blir det en bedömning (diskutabelt) – en gång per pass – och tvåan reagerar.
+## blir det en bedömning (diskutabelt) – en gång per pass. Inga ledtrådar från tvåan.
 var _posten_lamnad := false
 
 
 func _bevaka_posten() -> void:
 	if _posten_lamnad or varld == null or not Spel.klocka_igang:
 		return
-	var grans := int(_scenario.get("posten_avstand", 6))
+	var grans := int(_scenario.get("posten_avstand", 15))
 	if varld.avstand_till_objekt(varld.spelare.cell) <= grans or varld.avstand_till_objekt(varld.kollega.cell) <= grans:
 		return
 	_posten_lamnad = true
-	Spel.utfor("lamnade_posten", "Lämnade skyddsobjektet – båda, ca %d meter bort" % (varld.avstand_till_objekt(varld.spelare.cell) * 5))
-	var replik := str(_scenario.get("kamrat_lamnar_posten", "Vänta… nu står ingen vid objektet. Är det verkligen okej?"))
-	get_tree().create_timer(0.6).timeout.connect(_kamrat_sager.bind(replik))
+	Spel.utfor("lamnade_posten", "Lämnade skyddsobjektet – ca %d meter bort" % (varld.avstand_till_objekt(varld.spelare.cell) * 5))
 
 
 func _uppdatera_kalas(delta: float) -> void:

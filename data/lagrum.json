@@ -687,8 +687,8 @@
       ],
       "vid_brist": "warn",
       "text_ok": "Posten fick lämnas.",
-      "text_brist": "Båda lämnade skyddsobjektet, som då stod obevakat. Det kan finnas skäl att gå ut – men då bör en gå och en stanna, och CQ informeras innan. Något som drar uppmärksamheten bort från objektet kan också vara en avledning.",
-      "diskutera": "Varför lämnade ni objektet? Kunde en av er ha stannat? Vad säger bevakningsinstruktionen om att lämna posten, och vem ska informeras?"
+      "text_brist": "Stridsparet lämnade skyddsobjektet, som då stod obevakat. Ni är alltid två och lämnar aldrig varandra – men inte heller objektet utan order. Rapportera till CQ, som beslutar om någon ska skickas. Något som drar uppmärksamheten bort från objektet kan också vara en avledning.",
+      "diskutera": "Varför lämnade ni objektet? Vad hade CQ kunnat göra om ni rapporterat först? Vad säger bevakningsinstruktionen om att lämna posten?"
     }
   }
 }

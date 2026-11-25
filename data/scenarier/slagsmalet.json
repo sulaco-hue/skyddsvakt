@@ -138,8 +138,8 @@
       }
     },
     "lamnade_posten": {
-      "text_brist": "Båda lämnade grinden för att gå till slagsmålet – långt utanför skyddsobjektet, där skyddslagens befogenheter inte gäller och ni agerar som envar. Under tiden var objektet obevakat. Ett bråk utanför är en klassisk avledning. Att larma CQ, begära polis och ambulans och hålla uppsikt från posten hade skyddat både objektet och den skadade.",
-      "diskutera": "Vad väger tyngst: att hjälpa en misshandlad man eller att bevaka objektet? Kunde en av er gå medan den andra stannade? Vad säger bevakningsinstruktionen om att lämna posten?"
+      "text_brist": "Ni lämnade grinden för att gå till slagsmålet – långt utanför skyddsobjektet, där skyddslagens befogenheter inte gäller och ni agerar som envar. Under tiden var objektet obevakat. Ett bråk utanför är en klassisk avledning. Att larma CQ, begära polis och ambulans och hålla uppsikt från posten hade skyddat både objektet och den skadade.",
+      "diskutera": "Vad väger tyngst: att hjälpa en misshandlad man eller att bevaka objektet? Vad hade CQ kunnat göra om ni rapporterat i stället för att gå dit?"
     }
   },
   "varianter": {
@@ -575,6 +575,5 @@
       "text": "Händelsen rapporterades aldrig till CQ.",
       "diskutera": "När ska CQ få veta? Före, under eller efter?"
     }
-  ],
-  "kamrat_lamnar_posten": "Vänta… nu står ingen vid grinden. Tänk om det här är en avledning?"
+  ]
 }
