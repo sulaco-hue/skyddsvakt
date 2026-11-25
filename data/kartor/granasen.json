@@ -38,8 +38,12 @@
  },
  "punkter": {
   "fotograf_start": [
-   33,
-   19
+   21,
+   7
+  ],
+  "fotograf_bil": [
+   21,
+   4
   ],
   "fotograf_mal": [
    27,

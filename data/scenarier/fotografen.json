@@ -120,6 +120,10 @@
       "typ": "npc_gar_till",
       "npc": "fotografen",
       "mal": "fotograf_mal",
+      "fordon": {
+        "sprite": "bil",
+        "plats": "fotograf_bil"
+      },
       "vid_framme": "fotograferar",
       "kamrat": "Där, vid staketet! Han fotograferar mot {objekt_bestamd}.",
       "kamrat_per_objekttyp": {
@@ -361,7 +365,7 @@
     "fore": "inga avvikelser vid sektor NO",
     "efter": "person invid objektet sektor NO har fotograferat objektet, bil parkerad vid skogskanten",
     "kontakt": "kontakt tagen med personen som fotograferade objektet vid sektor NO",
-    "lamnat": "personen som fotograferade objektet lämnade platsen innan kontakt, mörk personbil västerut på Granåsvägen"
+    "lamnat": "personen som fotograferade objektet lämnade platsen innan kontakt, röd personbil norrut på skogsstigen"
   },
   "ingress": "Kväll vid grinden. En man med kamera dyker upp vid staketet. Avbildningsförbud, identitet och gränsen för ingripande.",
   "slutkrav": [
@@ -394,7 +398,7 @@
           },
           {
             "fran": "Norra grinden",
-            "text": "Från Norra grinden, mörk personbil lämnar skogskanten västerut på Granåsvägen, hög fart, kom.",
+            "text": "Från Norra grinden, röd personbil kommer ut från skogsstigen norr om er, hög fart, kom.",
             "efter": 3
           },
           {
@@ -419,7 +423,7 @@
       "fore": "Uppfattat"
     },
     "polis": {
-      "lamnat": "person som fotograferat objektet vid sektor NO och lämnat platsen i mörk personbil västerut",
+      "lamnat": "person som fotograferat objektet vid sektor NO och lämnat platsen i röd personbil norrut",
       "kontakt": "person som fotograferat objektet vid sektor NO",
       "fore": "händelse vid sektor NO"
     }
