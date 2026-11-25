@@ -494,7 +494,7 @@ func _spela_missad_handelse() -> void:
 		_fel("fotografen gick aldrig iväg")
 	else:
 		_ok("fotografen gav sig av utan kontakt")
-	if await _vanta_radio("Granåsvägen"):
+	if await _vanta_radio("skogsstigen"):
 		_ok("Norra grinden rapporterar bilen som åker")
 	else:
 		_fel("radioinslaget när fotografen lämnar spelades inte")
