@@ -31,7 +31,6 @@ var _replik_t := 0.0
 var _fas_t := 0.0
 var _smyg_t := 0.0
 var _jobb_t := 0.0
-var _lamnat_rapporterat := false
 ## Offret har tackat nej till första hjälpen.
 var _fh_avbojd := false
 ## Halt-order och varningsskott ges en gång per person (mål).
@@ -78,7 +77,6 @@ func _process(delta: float) -> void:
 	_t += delta
 	_uppdatera_slagsmal(delta)
 	_uppdatera_smygare(delta)
-	_bevaka_posten()
 
 
 # ------------------------------------------------------------ Slagsmålet --
@@ -644,16 +642,3 @@ func _forsta_hjalpen() -> void:
 	main.varld.ga_till(n.cell)
 	main.hud.visa_bubbla(main.varld.spelare, str(h.get("forsta_hjalpen_replik", "Ligg still, hjälp är på väg.")), 3.0)
 	visa_knappar()
-
-
-# ------------------------------------------------------------ Posten --
-
-## Lämnar stridsparet skyddsobjektet medan det pågår något? (Avledning.)
-func _bevaka_posten() -> void:
-	if _lamnat_rapporterat or not upptackt:
-		return
-	var grind: Vector2i = main.varld.punkt("grind")
-	if main.varld.avstand(main.varld.spelare.cell, grind) > int(h.get("posten_radie", 9)) \
-			and main.varld.avstand(main.varld.kollega.cell, grind) > int(h.get("posten_radie", 9)):
-		_lamnat_rapporterat = true
-		Spel.utfor("lamnade_posten", "Lämnade skyddsobjektet (båda) för att gå till slagsmålet")

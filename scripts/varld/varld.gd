@@ -369,6 +369,15 @@ func ar_inom_skyddsomrade(c: Vector2i) -> bool:
 
 
 ## "pa" = på/inom skyddsobjektet, "invid" = invid (bedömningsfråga), annars "utanfor".
+## Avstånd i rutor från cellen till skyddsområdet (0 = på objektet).
+func avstand_till_objekt(c: Vector2i) -> int:
+	if skyddsomrade.has_point(c):
+		return 0
+	var dx := maxi(maxi(skyddsomrade.position.x - c.x, c.x - skyddsomrade.end.x + 1), 0)
+	var dy := maxi(maxi(skyddsomrade.position.y - c.y, c.y - skyddsomrade.end.y + 1), 0)
+	return maxi(dx, dy)
+
+
 func zon(c: Vector2i) -> String:
 	if skyddsomrade.has_point(c):
 		return "pa"

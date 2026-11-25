@@ -43,6 +43,7 @@ func _ready() -> void:
 	await _spela_slagsmal("lamnar")
 	await _spela_slagsmal("smygare")
 	await _spela_slagsmal("smygare_flykt")
+	await _spela_lamna_posten()
 	await _spela_yxmannen_for_tidigt()
 	await _spela_yxmannen_nar_fram()
 	await _spela_zombies(true)
@@ -587,6 +588,26 @@ func _spela_hantverkaren(variant: String, val: Array, forvantat: Dictionary) -> 
 	main.call("_visa_debriefing")
 	await _vanta(3)
 	_forvanta(forvantat)
+	main.queue_free()
+	await _vanta(3)
+
+
+## Gäller alla scenarier: går båda långt från objektet blir det en bedömning.
+func _spela_lamna_posten() -> void:
+	print("--- Lämna posten (fotografen) ---")
+	Spel.nollstall("res://data/scenarier/fotografen.json")
+	var main = load("res://scenes/main.tscn").instantiate()
+	add_child(main)
+	await _vanta(5)
+	main.call("_starta_pass")
+	await _vanta(3)
+	main.varld.ga_till(main.varld.punkt("stig_nord"))
+	if not await _vanta_tills(func() -> bool: return Spel.logg.any(func(p: Dictionary) -> bool:
+			return p.get("handling", "") == "lamnade_posten"), 60.0):
+		_fel("att båda lämnade objektet registrerades inte")
+	main.call("_visa_debriefing")
+	await _vanta(3)
+	_forvanta({"lamnade_posten": "warn"})
 	main.queue_free()
 	await _vanta(3)
 
