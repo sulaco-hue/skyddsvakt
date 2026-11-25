@@ -32,6 +32,9 @@ var _fas_t := 0.0
 var _smyg_t := 0.0
 var _jobb_t := 0.0
 var _lamnat_rapporterat := false
+## Halt-order och varningsskott ges en gång per person (mål).
+var _halt_givet: Dictionary = {}
+var _varn_givet: Dictionary = {}
 var _skylt_saknad_sagd := false
 
 
@@ -412,9 +415,12 @@ func hanterar() -> bool:
 
 func visa_knappar() -> void:
 	var val: Array = []
-	if _aktuellt_mal() != "":
-		val.append({"id": "halt", "text": "Halt-order", "tangent": "H", "farg": "barnsten"})
-		val.append({"id": "varningsskott", "text": "Varningsskott", "tangent": "V", "farg": "barnsten"})
+	var mal := _aktuellt_mal()
+	if mal != "":
+		if not _halt_givet.has(mal):
+			val.append({"id": "halt", "text": "Halt-order", "tangent": "H", "farg": "barnsten"})
+		if not _varn_givet.has(mal):
+			val.append({"id": "varningsskott", "text": "Varningsskott", "tangent": "V", "farg": "barnsten"})
 		val.append({"id": "verkanseld", "text": "Verkanseld", "tangent": "F", "farg": "rosa"})
 	var skadad := offret_lage in ["nere", "staende"] or brakare_lage == "skjuten" or smyg_lage == "skjuten"
 	if skadad and not bool(Spel.fakta.get("forsta_hjalp_given", false)):
@@ -426,8 +432,15 @@ func situation(id: String) -> void:
 	var mal := _aktuellt_mal()
 	match id:
 		"halt":
+			if mal == "" or _halt_givet.has(mal):
+				return
+			_halt_givet[mal] = true
 			_halt(mal)
+			visa_knappar()
 		"varningsskott":
+			if mal == "" or _varn_givet.has(mal):
+				return
+			_varn_givet[mal] = true
 			_varningsskott(mal)
 		"verkanseld":
 			_verkanseld(mal)
@@ -437,6 +450,8 @@ func situation(id: String) -> void:
 
 ## Fakta för det mål vi agerar mot, innan beslutet bedöms.
 func _fakta_for(mal: String) -> void:
+	# Varning och varningsskott räknas per person.
+	Spel.satt_fakta({"varning_given": _halt_givet.has(mal), "varningsskott_foregick": _varn_givet.has(mal)})
 	if mal == "brakare":
 		_uppdatera_fakta()
 		var avst: int = main.varld.avstand(main.varld.spelare.cell, _brakare().cell)
