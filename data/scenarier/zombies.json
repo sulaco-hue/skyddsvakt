@@ -146,12 +146,12 @@
         {
           "t": 0,
           "vem": "kamrat",
-          "text": "Du… är det där människor?"
+          "text": "Öh… vad är det där för tjommar?"
         },
         {
           "t": 4,
           "vem": "du",
-          "text": "De går väldigt… konstigt."
+          "text": "De går… konstigt."
         },
         {
           "t": 8,
@@ -186,7 +186,7 @@
         {
           "t": 38,
           "vem": "kamrat",
-          "text": "Jag sa att det var något skumt med isomaten i kväll."
+          "text": "Jag sa ju att det var något skumt med ison förut."
         }
       ],
       "kamrat_efter_halt": "De lyssnar inte. Typiskt civila.",
@@ -194,7 +194,7 @@
       "kamrat_efter_verkanseld": "Han reste sig inte i alla fall. Skönt.",
       "kamrat_reser_sig_efter_traff": "Träff! … Han går ju fortfarande!?",
       "kamrat_nadde_fram": "Bort med dig! … Puh. Skjut, för sjutton!",
-      "kamrat_reser_sig": "Han reser sig igen! Det där funkar bara med skarp ammunition.",
+      "kamrat_reser_sig": "Han reser sig igen! Nä nu jävlar.",
       "reser_sig_efter_s": [
         3,
         6
