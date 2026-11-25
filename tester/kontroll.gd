@@ -572,13 +572,13 @@ func _spela_slagsmal(fall: String) -> void:
 			main.call("_pa_situation", "halt")
 			await _vanta(0.5)
 			main.call("_pa_situation", "varningsskott")
-			if not await _vanta_tills(func() -> bool: return sm.brakare_lage in ["flyr", "borta"], 10.0):
-				_fel("bråkaren flydde inte efter halt-order")
+			if not await _vanta_tills(func() -> bool: return sm.brakare_lage in ["flyr", "borta", "stannat"], 10.0):
+				_fel("bråkaren varken flydde eller stannade efter halt och varningsskott")
 			else:
-				_ok("bråkaren flyr efter halt-order (offret: %s)" % sm.offret_lage)
+				_ok("bråkaren efter halt + varningsskott: %s (offret: %s)" % [sm.brakare_lage, sm.offret_lage])
 			await _avsluta_yxmannen(main, {"halt_order": "ok", "varningsskott": "bad"})
 		"lamnar":
-			main.varld.ga_till(main.varld.punkt("slagsmal") + Vector2i(-1, 0))
+			main.varld.ga_till(main.varld.punkt("slagsmal_mal") + Vector2i(-1, 0))
 			if not await _vanta_tills(func() -> bool: return Spel.logg.any(func(p: Dictionary) -> bool:
 					return p.get("handling", "") == "lamnade_posten"), 40.0):
 				_fel("att båda lämnade posten registrerades inte")

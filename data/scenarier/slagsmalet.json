@@ -128,10 +128,7 @@
     }
   },
   "varianter": {
-    "kommentar": "Varianterna gäller smygaren (om han kommer): foto = fotograferar objektet, skylt = skruvar ner skyddsobjektsskylten och tar den.",
-    "foto": {
-      "fakta": {}
-    },
+    "kommentar": "Smygaren (om han kommer) skruvar alltid ner skyddsobjektsskylten och tar den – om han inte skräms iväg.",
     "skylt": {
       "fakta": {}
     }
@@ -196,34 +193,55 @@
         "DUNSS"
       ],
       "repliker_slass": [
-        "Din jävla…!",
-        "Vad sa du om henne?!",
-        "Kom igen då!",
-        "Jag ska krossa dig!",
-        "Släpp!"
+        "Ах ты, сволочь…!",
+        "Что ты сказал про неё?!",
+        "Давай, давай!",
+        "Я тебя убью!",
+        "Отпусти!"
       ],
       "repliker_offret": [
-        "Lägg av!",
-        "Aj! Sluta!",
-        "Det var inte jag!",
-        "Hjälp!"
+        "Хватит!",
+        "Ай! Перестань!",
+        "Это был не я!",
+        "Помогите!"
       ],
       "repliker_sparkar": [
-        "Ligg still!",
-        "Där fick du!",
-        "Ska du snacka nu?!"
+        "Лежи!",
+        "Получил?!",
+        "Ну что, поговорим теперь?!"
       ],
-      "kamrat": "Det slåss nere på vägen! Två snubbar – det ser rejält ut!",
+      "kamrat": "Bråk vid stugan! Två snubbar – de slåss!",
       "kamrat_nere": "Han slog ner honom! Han sparkar honom – i huvudet!",
       "kamrat_flyr": "Han sticker in i skogen!",
       "kamrat_skjuten_brakare": "Han ligger… Du sköt honom. Där. På vägen.",
       "kamrat_skjuten_smygare": "Va fan… du sköt honom? Han sprang ju bara!",
-      "brakare_flyr_halt": "Fan! Polisen!",
-      "brakare_flyr_skott": "SKJUTER DE?!",
-      "brakare_flyr_efter_sparkar": "Det där var för Linda!",
-      "offret_tack": "Tack… Han är helt dum i huvudet.",
+      "brakare_flyr_halt": "Чёрт! Полиция!",
+      "brakare_flyr_skott": "ОНИ СТРЕЛЯЮТ?!",
+      "brakare_flyr_efter_sparkar": "Это тебе за Лену!",
+      "offret_tack": "Спасибо… Он совсем больной.",
       "forsta_hjalpen_replik": "Ligg still. Hör du mig? Ambulansen är på väg.",
-      "missad_diskutera": "Ett slagsmål på vägen, tio meter utanför grinden. Hur kunde det gå obemärkt förbi?"
+      "missad_diskutera": "Ett slagsmål vid stugan alldeles intill grinden. Hur kunde det gå obemärkt förbi?",
+      "mal": "slagsmal_mal",
+      "brak_s": 3.5,
+      "fart_jakt": 40,
+      "chans_stanna_varningsskott": 0.5,
+      "stannar_s": 14,
+      "brakare_stannar": "НЕ СТРЕЛЯЙТЕ! Всё, всё – я не двигаюсь!",
+      "brakare_drar": "Я сваливаю!",
+      "repliker_brak": [
+        "Чего уставился?!",
+        "Выходи, давай!",
+        "Ты и я, сейчас!"
+      ],
+      "kamrat_jakt": "Nu springer de nerför vägen!",
+      "offret_springer": "Хватит! ХВАТИТ!",
+      "offret_skott": "Господи… они стреляют?!",
+      "hem": "stuga_dorr",
+      "offret_muttrar": [
+        "Идиот… Чёртов идиот.",
+        "Ну и вечер…",
+        "Всё, я домой."
+      ]
     },
     {
       "id": "2",
@@ -234,7 +252,6 @@
       "efter_s": 9,
       "npc": "smygaren",
       "varianter": [
-        "foto",
         "skylt"
       ],
       "mal": "skylt_ute",
@@ -256,16 +273,19 @@
       "kamrat": "Vänta… vid skylten! Det står någon vid staketet där borta!",
       "kamrat_skylt_borta": "Vänta… skylten. Skylten är borta! Någon har skruvat ner den!",
       "replik_flyr": "Skit!",
-      "missad_diskutera": "Medan ni tittade på slagsmålet var någon vid staketet. Var bråket en avledning? Vem höll uppsikt över objektet?"
+      "missad_diskutera": "Medan ni tittade på slagsmålet var någon vid staketet. Var bråket en avledning? Vem höll uppsikt över objektet?",
+      "chans_stanna_varningsskott": 0.5,
+      "stannar_s": 10,
+      "replik_stannar": "AAH! Skjut inte! Skjut inte!",
+      "replik_drar": "…"
     }
   ],
   "samband": [],
   "lagestext": {
     "fakta:skylt_stulen": "skyddsobjektsskylten vid norra staketet stulen, gärningsman mörkklädd man som sprang norrut",
-    "fakta:objekt_fotograferat": "mörkklädd man har fotograferat objektet vid norra staketet och sprungit norrut",
     "fakta:motpart_skjuten": "verkanseld avgiven, en man skadad",
-    "fakta:offret_nere": "misshandel på vägen öster om grinden, en man nedslagen och sparkad i huvudet, gärningsmannen sprang in i skogen",
-    "efter": "två män slåss på vägen öster om grinden",
+    "fakta:offret_nere": "misshandel på vägen sydost om grinden, en man nedslagen och sparkad i huvudet, gärningsmannen sprang in i skogen",
+    "efter": "två män slåss vid stugan öster om grinden, rör sig söderut längs vägen",
     "fore": "inga avvikelser vid grinden"
   },
   "radio": {

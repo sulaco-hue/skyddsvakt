@@ -36,12 +36,24 @@ static var _rubrik_spatierad: Font
 static func brodfont() -> Font:
 	if _brod == null:
 		_brod = load("res://assets/fonts/VT323-Regular.ttf")
+		_lagg_fallback(_brod)
 	return _brod
+
+
+## Kyrilliska tecken (t.ex. ryska repliker) finns inte i pixeltypsnitten;
+## Pixelify Sans tar dem (webbversionen har inga systemtypsnitt att falla tillbaka på).
+static func _lagg_fallback(f: Font) -> void:
+	var fb: Font = load("res://assets/fonts/PixelifySans.ttf")
+	if fb and not f.fallbacks.has(fb):
+		var lista := f.fallbacks.duplicate()
+		lista.append(fb)
+		f.fallbacks = lista
 
 
 static func rubrikfont(spatierad := false) -> Font:
 	if _rubrik == null:
 		var bas: Font = load("res://assets/fonts/Jersey15-Regular.ttf")
+		_lagg_fallback(bas)
 		_rubrik = bas
 		var fv := FontVariation.new()
 		fv.base_font = bas

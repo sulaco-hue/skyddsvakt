@@ -16,11 +16,11 @@ var main  # Main (otypad: vi använder dess hjälpfunktioner)
 var h: Dictionary
 var smyg_h: Dictionary = {}
 
-## Lägen: vantar, slass, sparkar, flyr, borta, skjuten
+## Lägen: vantar, brak (vid stugan), jagar (nerför vägen), slass, sparkar, stannat, flyr, borta, skjuten
 var brakare_lage := "vantar"
 ## Lägen: slass, nere, staende
 var offret_lage := "slass"
-## Lägen: vantar, gar_dit, jobbar, flyr, borta, skjuten
+## Lägen: vantar, gar_dit, jobbar, stannat, flyr, borta, skjuten
 var smyg_lage := "vantar"
 var upptackt := false
 var smyg_upptackt := false
@@ -42,15 +42,16 @@ func setup(p_main, p_h: Dictionary) -> void:
 	var o: Aktor = _offret()
 	var plats: Vector2i = main.varld.punkt(h.get("plats", "slagsmal"))
 	b.cell = plats
-	o.cell = plats + Vector2i(1, 0)
+	o.cell = plats + Vector2i(0, 1)
 	for n: Aktor in [b, o]:
 		n.stanna()
 		n.visible = true
 		n.vila_aktiv = false
 	b.vand_mot(o.global_position)
 	o.vand_mot(b.global_position)
-	brakare_lage = "slass"
-	_fas_t = randf_range(float(h.get("slass_min_s", 12)), float(h.get("slass_max_s", 18)))
+	# Det börjar med bråk vid stugan, nära oss; sedan drar de iväg nerför vägen.
+	brakare_lage = "brak"
+	_fas_t = float(h.get("brak_s", 3.5))
 	Spel.satt_fakta({"angrepp_pagar": true, "brott_pa_bar_garning": true})
 
 
@@ -83,10 +84,19 @@ func _uppdatera_slagsmal(delta: float) -> void:
 	if b == null or o == null:
 		return
 	# Upptäckt: bråket hörs och syns långt.
-	if not upptackt and brakare_lage in ["slass", "sparkar"]:
+	if not upptackt and brakare_lage in AKTIVA:
 		var avst: int = main.varld.avstand(main.varld.spelare.cell, b.cell)
 		if avst <= int(h.get("upptacks_avstand", 18)):
 			_upptack_slagsmal()
+	if brakare_lage == "brak":
+		_replik_t -= delta
+		if _replik_t <= 0.0 and main.hud.visible:
+			_replik_t = 1.6
+			main.hud.visa_bubbla(b, str((h.get("repliker_brak", ["Kom igen då!"]) as Array).pick_random()), 1.6)
+			main.hud.visa_ljud(o, "PUFF", 0.7, 30.0)
+		_fas_t -= delta
+		if _fas_t <= 0.0:
+			_borja_jakt()
 	if brakare_lage in ["slass", "sparkar"]:
 		_slag_t -= delta
 		if _slag_t <= 0.0:
@@ -109,6 +119,38 @@ func _uppdatera_slagsmal(delta: float) -> void:
 			else:
 				_flyr("efter_sparkar")
 	_uppdatera_fakta()
+
+
+const AKTIVA := ["brak", "jagar", "slass", "sparkar"]
+
+
+## Offret springer nerför vägen och bråkaren efter – bort från skyddsobjektet.
+func _borja_jakt() -> void:
+	var b := _brakare()
+	var o := _offret()
+	brakare_lage = "jagar"
+	var mal: Vector2i = main.varld.punkt(h.get("mal", "slagsmal_mal"))
+	o.hastighet = float(h.get("fart_jakt", 40))
+	b.hastighet = float(h.get("fart_jakt", 40)) * 0.95
+	o.framme.connect(_framme_nerfor, CONNECT_ONE_SHOT)
+	main.varld.flytta_npc(str(h.get("offer", "offret")), mal)
+	main.varld.flytta_npc(str(h.get("brakare", "brakaren")), mal + Vector2i(0, -1))
+	if main.hud.visible:
+		main.hud.visa_bubbla(o, str(h.get("offret_springer", "Lägg av! LÄGG AV!")), 2.0)
+	if upptackt:
+		main.get_tree().create_timer(1.0).timeout.connect(main._kamrat_sager.bind(str(h.get("kamrat_jakt", ""))))
+
+
+func _framme_nerfor() -> void:
+	if brakare_lage != "jagar":
+		return
+	var b := _brakare()
+	var o := _offret()
+	b.stanna()
+	o.vand_mot(b.global_position)
+	b.vand_mot(o.global_position)
+	brakare_lage = "slass"
+	_fas_t = randf_range(float(h.get("slass_min_s", 12)), float(h.get("slass_max_s", 18)))
 
 
 func _slag(b: Aktor, o: Aktor) -> void:
@@ -161,8 +203,12 @@ func _flyr(orsak: String) -> void:
 	if brakare_lage in ["flyr", "borta", "skjuten"]:
 		return
 	var b := _brakare()
-	var stoppad_tidigt := brakare_lage == "slass"
+	var stoppad_tidigt := brakare_lage in ["brak", "jagar", "slass"] or (brakare_lage == "stannat" and offret_lage != "nere")
+	if brakare_lage == "stannat":
+		main.varld.byt_bilder(b, "yxman_utan")
+		b.vaxla_still = false
 	brakare_lage = "flyr"
+	_offret().stanna()
 	Spel.satt_fakta({"angrepp_pagar": false, "angrepp_overhangande": false, "angrepp_pagar_ej": true})
 	b.hastighet = float(h.get("fart_flykt", 46))
 	var replik := str(h.get("brakare_flyr_" + orsak, h.get("brakare_flyr", "")))
@@ -176,10 +222,29 @@ func _flyr(orsak: String) -> void:
 		main.get_tree().create_timer(1.6).timeout.connect(func() -> void:
 			if main.hud.visible:
 				main.hud.visa_bubbla(o, str(h.get("offret_tack", "")), 3.0))
+		# Han muttrar och går in i stugan igen i stället för att bli stående på vägen.
+		main.get_tree().create_timer(5.0).timeout.connect(_offret_gar_in)
 	b.framme.connect(_brakare_borta, CONNECT_ONE_SHOT)
 	main.varld.flytta_npc(str(h.get("brakare", "brakaren")), main.varld.punkt(h.get("flykt", "kant_nordost")))
 	if upptackt:
 		main.get_tree().create_timer(1.4).timeout.connect(main._kamrat_sager.bind(str(h.get("kamrat_flyr", ""))))
+	visa_knappar()
+
+
+func _offret_gar_in() -> void:
+	if offret_lage != "staende":
+		return
+	var o := _offret()
+	offret_lage = "gar_in"
+	o.hastighet = 26.0
+	if main.hud.visible:
+		main.hud.visa_bubbla(o, str((h.get("offret_muttrar", ["…"]) as Array).pick_random()), 2.5)
+	o.framme.connect(func() -> void:
+		if offret_lage == "gar_in":
+			offret_lage = "inne"
+			o.visible = false
+			visa_knappar(), CONNECT_ONE_SHOT)
+	main.varld.flytta_npc(str(h.get("offer", "offret")), main.varld.punkt(h.get("hem", "stuga_dorr")))
 	visa_knappar()
 
 
@@ -199,9 +264,9 @@ func _uppdatera_fakta() -> void:
 	if _aktuellt_mal() != "brakare":
 		return
 	Spel.satt_fakta({
-		"angrepp_pagar": brakare_lage in ["slass", "sparkar"],
-		"angrepp_pagar_ej": not brakare_lage in ["slass", "sparkar"],
-		"angrepp_overhangande": brakare_lage in ["slass", "sparkar"],
+		"angrepp_pagar": brakare_lage in AKTIVA,
+		"angrepp_pagar_ej": not brakare_lage in AKTIVA,
+		"angrepp_overhangande": brakare_lage in AKTIVA,
 		"hot_svarare_vald": brakare_lage == "sparkar",
 	})
 
@@ -266,6 +331,8 @@ func _smygare_flyr(orsak: String) -> void:
 		return
 	var n := _smygaren()
 	var tidigt := smyg_lage != "jobbar" or _jobb_t > 0.0
+	if orsak == "drar":
+		tidigt = false
 	if smyg_lage == "jobbar" and orsak != "klar" and Spel.variant == "skylt":
 		Spel.satt_fakta({"skylt_raddad": true})
 	smyg_lage = "flyr"
@@ -295,9 +362,9 @@ func smygare_upptackt() -> void:
 ## Det hot som är närmast spelaren: "brakare", "smygare" eller "".
 func _aktuellt_mal() -> String:
 	var kandidater: Array = []
-	if upptackt and brakare_lage in ["slass", "sparkar", "flyr"]:
+	if upptackt and brakare_lage in AKTIVA + ["stannat", "flyr"]:
 		kandidater.append(["brakare", _brakare()])
-	if smyg_upptackt and smyg_lage in ["gar_dit", "jobbar", "flyr"]:
+	if smyg_upptackt and smyg_lage in ["gar_dit", "jobbar", "stannat", "flyr"]:
 		kandidater.append(["smygare", _smygaren()])
 	var basta := ""
 	var minst := 9999
@@ -355,9 +422,9 @@ func _halt(mal: String) -> void:
 	Spel.utfor("halt_order", "Ropade: ”Halt! Militär skyddsvakt! Halt eller jag skjuter skarpt!”" +
 		(" (mot mannen vid skylten)" if mal == "smygare" else " (mot slagsmålet)" if mal == "brakare" else ""))
 	main.hud.visa_bubbla(main.varld.spelare, "HALT! MILITÄR SKYDDSVAKT! HALT ELLER JAG SKJUTER SKARPT!", 3.5)
-	if mal == "brakare" and brakare_lage in ["slass", "sparkar"]:
+	if mal == "brakare" and brakare_lage in AKTIVA:
 		main.get_tree().create_timer(1.2).timeout.connect(_flyr.bind("halt"))
-	elif mal == "smygare":
+	elif mal == "smygare" and smyg_lage in ["gar_dit", "jobbar"]:
 		main.get_tree().create_timer(0.9).timeout.connect(_smygare_flyr.bind("halt"))
 
 
@@ -368,10 +435,64 @@ func _varningsskott(mal: String) -> void:
 	Spel.utfor("varningsskott", "Avlossade varningsskott" +
 		(" mot mannen vid skylten" if mal == "smygare" else " mot slagsmålet på vägen"))
 	main._skott(1)
-	if mal == "brakare":
-		main.get_tree().create_timer(0.6).timeout.connect(_flyr.bind("skott"))
-	else:
-		main.get_tree().create_timer(0.5).timeout.connect(_smygare_flyr.bind("skott"))
+	# Ibland stannar de tvärt (och reagerar kraftigt), annars springer de.
+	if mal == "brakare" and brakare_lage in AKTIVA:
+		if randf() < float(h.get("chans_stanna_varningsskott", 0.5)):
+			main.get_tree().create_timer(0.5).timeout.connect(_brakare_stannar)
+		else:
+			main.get_tree().create_timer(0.6).timeout.connect(_flyr.bind("skott"))
+	elif mal == "smygare" and smyg_lage in ["gar_dit", "jobbar"]:
+		if randf() < float(smyg_h.get("chans_stanna_varningsskott", 0.5)):
+			main.get_tree().create_timer(0.4).timeout.connect(_smygare_stannar)
+		else:
+			main.get_tree().create_timer(0.5).timeout.connect(_smygare_flyr.bind("skott"))
+	visa_knappar()
+
+
+## Varningsskottet fick honom att tvärstanna: händerna upp, skräckslagen.
+func _brakare_stannar() -> void:
+	if not brakare_lage in AKTIVA:
+		return
+	var b := _brakare()
+	var o := _offret()
+	brakare_lage = "stannat"
+	b.stanna()
+	o.stanna()
+	b.vaxla_still = true
+	main.varld.byt_bilder(b, "yxman_upp")
+	Spel.satt_fakta({"angrepp_pagar": false, "angrepp_overhangande": false, "angrepp_pagar_ej": true,
+		"motpart_gett_upp": true})
+	if main.hud.visible:
+		main.hud.visa_bubbla(b, str(h.get("brakare_stannar", "SKJUT INTE!")), 3.5)
+		if offret_lage != "nere":
+			main.get_tree().create_timer(2.0).timeout.connect(func() -> void:
+				if main.hud.visible:
+					main.hud.visa_bubbla(o, str(h.get("offret_skott", "Herregud… skjuter de?!")), 2.5))
+	main.get_tree().create_timer(2.2).timeout.connect(main._kamrat_sager.bind(str(h.get("kamrat_stannat", "Han stannade. Händerna upp!"))))
+	# En stund senare tar han chansen och drar.
+	main.get_tree().create_timer(float(h.get("stannar_s", 14))).timeout.connect(func() -> void:
+		if brakare_lage == "stannat":
+			if main.hud.visible:
+				main.hud.visa_bubbla(b, str(h.get("brakare_drar", "Jag drar!")), 2.0)
+			_flyr("drar"))
+	visa_knappar()
+
+
+func _smygare_stannar() -> void:
+	if not smyg_lage in ["gar_dit", "jobbar"]:
+		return
+	var n := _smygaren()
+	if smyg_lage == "jobbar":
+		Spel.satt_fakta({"skylt_raddad": true})
+	smyg_lage = "stannat"
+	n.stanna()
+	if main._upptackt.get("nod") == n:
+		main._upptackt = {}
+	if main.hud.visible:
+		main.hud.visa_bubbla(n, str(smyg_h.get("replik_stannar", "SKJUT INTE!")), 3.5)
+	main.get_tree().create_timer(float(smyg_h.get("stannar_s", 10))).timeout.connect(func() -> void:
+		if smyg_lage == "stannat":
+			_smygare_flyr("drar"))
 	visa_knappar()
 
 
@@ -394,6 +515,8 @@ func _verkanseld(mal: String) -> void:
 	if mal == "brakare":
 		brakare_lage = "skjuten"
 	else:
+		if smyg_lage == "jobbar" and _jobb_t > 0.0:
+			Spel.satt_fakta({"skylt_raddad": true})
 		smyg_lage = "skjuten"
 	n.stanna()
 	n.vaxla_still = true

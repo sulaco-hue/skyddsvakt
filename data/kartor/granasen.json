@@ -86,12 +86,12 @@
    51
   ],
   "slagsmal": [
-   39,
-   24
+   38,
+   23
   ],
   "slagsmal_flykt": [
-   50,
-   12
+   48,
+   36
   ],
   "smyg_start": [
    27,
@@ -124,6 +124,14 @@
   "stig_nord": [
    21,
    3
+  ],
+  "slagsmal_mal": [
+   42,
+   33
+  ],
+  "stuga_dorr": [
+   38,
+   22
   ]
  },
  "mark": [
