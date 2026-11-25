@@ -197,6 +197,9 @@ func _bygg_debug() -> void:
 	rub.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	h.add_child(rub)
 	for hd in scenario.get("handelser", []):
+		# Delhändelser (t.ex. smygaren som följer på slagsmålet) startas av huvudhändelsen.
+		if not bool(hd.get("i_debug", true)):
+			continue
 		var id := str(hd.get("id", "?"))
 		var varianter: Array = hd.get("varianter", [])
 		var val: Array = [[id, str(hd.get("namn", ""))]]
