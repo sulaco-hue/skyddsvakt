@@ -227,7 +227,7 @@ func _flyr(orsak: String) -> void:
 			if main.hud.visible:
 				main.hud.visa_bubbla(o, str(h.get("offret_tack", "")), 3.0))
 		# Han muttrar och går in i stugan igen i stället för att bli stående på vägen.
-		main.get_tree().create_timer(5.0).timeout.connect(_offret_gar_in)
+		main.get_tree().create_timer(float(h.get("offret_stannar_s", 9.0))).timeout.connect(_offret_gar_in)
 	b.framme.connect(_brakare_borta, CONNECT_ONE_SHOT)
 	main.varld.flytta_npc(str(h.get("brakare", "brakaren")), main.varld.punkt(h.get("flykt", "kant_nordost")))
 	if upptackt:
@@ -422,7 +422,7 @@ func visa_knappar() -> void:
 		if not _varn_givet.has(mal):
 			val.append({"id": "varningsskott", "text": "Varningsskott", "tangent": "V", "farg": "barnsten"})
 		val.append({"id": "verkanseld", "text": "Verkanseld", "tangent": "F", "farg": "rosa"})
-	var skadad := offret_lage in ["nere", "staende"] or brakare_lage == "skjuten" or smyg_lage == "skjuten"
+	var skadad := offret_lage in ["nere", "staende", "gar_in"] or brakare_lage == "skjuten" or smyg_lage == "skjuten"
 	if skadad and not bool(Spel.fakta.get("forsta_hjalp_given", false)):
 		val.append({"id": "forsta_hjalpen", "text": "Första hjälpen", "tangent": "J", "farg": "gron"})
 	main.hud.satt_situationer(val)
@@ -585,7 +585,7 @@ func _verkanseld(mal: String) -> void:
 ## Första hjälpen till den som ligger närmast (vi går dit).
 func _forsta_hjalpen() -> void:
 	var kandidater: Array = []
-	if offret_lage in ["nere", "staende"]:
+	if offret_lage in ["nere", "staende", "gar_in"]:
 		kandidater.append(_offret())
 	if brakare_lage == "skjuten":
 		kandidater.append(_brakare())
@@ -596,6 +596,15 @@ func _forsta_hjalpen() -> void:
 	kandidater.sort_custom(func(a: Aktor, b: Aktor) -> bool:
 		return main.varld.avstand(main.varld.spelare.cell, a.cell) < main.varld.avstand(main.varld.spelare.cell, b.cell))
 	var n: Aktor = kandidater[0]
+	# Offret som klarade sig lindrigt tackar nej (på ryska, engelska och svenska) och går hem.
+	if n == _offret() and offret_lage in ["staende", "gar_in"]:
+		Spel.utfor("forsta_hjalpen", "Erbjöd första hjälpen – mannen avböjde")
+		main.hud.visa_bubbla(main.varld.spelare, "Är du skadad? Behöver du hjälp?", 2.5)
+		main.get_tree().create_timer(1.8).timeout.connect(func() -> void:
+			if main.hud.visible and n.visible:
+				main.hud.visa_bubbla(n, str((h.get("offret_nej_tack", ["Нет, спасибо. No thank you. Nej tack!"]) as Array).pick_random()), 3.0))
+		visa_knappar()
+		return
 	Spel.utfor("forsta_hjalpen", "Gav första hjälpen")
 	main.varld.ga_till(n.cell)
 	main.hud.visa_bubbla(main.varld.spelare, str(h.get("forsta_hjalpen_replik", "Ligg still, hjälp är på väg.")), 3.0)
