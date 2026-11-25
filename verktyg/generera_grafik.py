@@ -1554,6 +1554,40 @@ def portrait_barn():
 
 
 portrait("civil").save(os.path.join(OUT, "portratt_civil.png"))
+
+
+def portrait_smygare():
+    """Mörkklädd: civilporträttet med svart mössa och mörkgrå jacka."""
+    im = portrait("civil")
+    px = im.load()
+    for y in range(im.height):
+        for x in range(im.width):
+            r, g, b = px[x, y][:3]
+            if r > 120 and g < 80 and b < 80:          # röd mössa -> svart
+                px[x, y] = (34, 34, 38)
+            elif r > 100 and r > g + 25 and g > b + 15 and y > 50:  # brun jacka -> mörkgrå
+                v = (r + g + b) // 3
+                px[x, y] = (v // 3 + 30, v // 3 + 32, v // 3 + 36)
+    return im
+
+
+portrait_smygare().save(os.path.join(OUT, "portratt_smygare.png"))
+# Smygaren liggande (skjuten): mörk mössa och mörka kläder.
+LIGGER_SMYG = [r.replace("g", "K").replace("G", "x").replace("F", "Q").replace("f", "x").replace("n", "x").replace("N", "K") for r in LIGGER]
+for i in range(2):
+    w, h = 26, len(LIGGER_SMYG) + 4
+    im = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    d.ellipse([0, h - 6, w - 1, h - 1], fill=(18, 26, 18, 140))
+    for r, row in enumerate(LIGGER_SMYG):
+        for c, ch in enumerate(row):
+            if ch != ".":
+                d.point((1 + c, r + 1), fill=PAL[ch] + (255,))
+    if i == 1:
+        for c in range(8, 15):
+            d.point((1 + c, 2), fill=PAL["Q"] + (255,))
+    im.save(os.path.join(OUT, f"smygare_ligger_{i}.png"))
+    anchors[f"smygare_ligger_{i}"] = [13, h - 4]
 portrait("vakt").save(os.path.join(OUT, "portratt_vakt.png"))
 portrait("pappa").save(os.path.join(OUT, "portratt_pappa.png"))
 portrait_barn().save(os.path.join(OUT, "portratt_barn.png"))

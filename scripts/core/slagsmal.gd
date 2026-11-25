@@ -569,7 +569,7 @@ func _verkanseld(mal: String) -> void:
 		smyg_lage = "skjuten"
 	n.stanna()
 	n.vaxla_still = true
-	main.varld.byt_bilder(n, "yxman_ligger" if mal == "brakare" else "civil_ligger")
+	main.varld.byt_bilder(n, "yxman_ligger" if mal == "brakare" else "smygare_ligger")
 	main._blodstank(n)
 	var blod: Sprite2D = main.varld.lagg_dekal("blod", n.cell)
 	blod.modulate.a = 0.0
