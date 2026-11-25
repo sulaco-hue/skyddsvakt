@@ -306,6 +306,8 @@ func starta_smygare(p_h: Dictionary) -> void:
 	n.hastighet = float(smyg_h.get("fart", 26))
 	n.framme.connect(_smygare_framme, CONNECT_ONE_SHOT)
 	main.varld.flytta_npc(str(smyg_h.get("npc", "smygaren")), main.varld.punkt(smyg_h.get("mal", "skylt_ute")))
+	# Han kan upptäckas redan när han kommer ur skogen.
+	main._starta_upptackt(smyg_h, n, str(smyg_h.get("npc", "smygaren")))
 
 
 func _smygare_framme() -> void:
@@ -315,7 +317,6 @@ func _smygare_framme() -> void:
 	smyg_lage = "jobbar"
 	n.vand_mot(main.varld.cell_pos(main.varld.punkt(smyg_h.get("skylt", [26, 18]))))
 	_jobb_t = float(smyg_h.get("jobbar_s", 7))
-	main._starta_upptackt(smyg_h, n, str(smyg_h.get("npc", "smygaren")))
 
 
 func _uppdatera_smygare(delta: float) -> void:
@@ -350,7 +351,8 @@ func _uppdatera_smygare(delta: float) -> void:
 				Spel.satt_fakta({"objekt_fotograferat": true})
 			_smygare_flyr("klar")
 	# Skylten saknas: upptäcks i efterhand när man kommer tillbaka.
-	if bool(Spel.fakta.get("skylt_stulen", false)) and not smyg_upptackt and not _skylt_saknad_sagd:
+	if bool(Spel.fakta.get("skylt_stulen", false)) and not smyg_upptackt and not _skylt_saknad_sagd \
+			and not bool(Spel.fakta.get("skylt_tappad", false)):
 		var c: Vector2i = main.varld.punkt(smyg_h.get("skylt", [26, 18]))
 		if main.varld.avstand(main.varld.spelare.cell, c) <= 6 and main.hud.visible:
 			_skylt_saknad_sagd = true
@@ -371,22 +373,38 @@ func _smygare_flyr(orsak: String) -> void:
 	n.hastighet = float(smyg_h.get("fart_flykt", 48))
 	if orsak != "klar" and main.hud.visible and tidigt:
 		main.hud.visa_bubbla(n, str(smyg_h.get("replik_flyr", "")), 2.0)
-	if main._upptackt.get("nod") == n:
-		main._upptackt = {}
 	n.framme.connect(func() -> void:
 		if smyg_lage == "flyr":
 			smyg_lage = "borta"
 			n.visible = false
+			if main._upptackt.get("nod") == n:
+				main._upptackt = {}
 			main._avsluta_handelse(smyg_h)
 			visa_knappar(), CONNECT_ONE_SHOT)
 	main.varld.flytta_npc(str(smyg_h.get("npc", "smygaren")), main.varld.punkt(smyg_h.get("flykt", "kant_nordost")))
 	visa_knappar()
 
 
+## Han tappar skylten i flykten: den blir liggande på marken.
+func _tappa_skylten() -> void:
+	var n := _smygaren()
+	if n == null or not n.has_node("BurenSkylt"):
+		return
+	n.get_node("BurenSkylt").queue_free()
+	main.varld.lagg_foremal("skylt", n.cell)
+	Spel.satt_fakta({"skylt_raddad": true, "skylt_tappad": true})
+	if main.hud.visible:
+		main.hud.visa_ljud(n, "*klonk*", 1.0, 20.0)
+		main.hud.visa_bubbla(n, str(smyg_h.get("replik_tappar", "Fan!")), 1.8)
+	main.get_tree().create_timer(1.6).timeout.connect(main._kamrat_sager.bind(str(smyg_h.get("kamrat_tappar", ""))))
+
+
 ## Kamraten har sett smygaren (huvudskriptets upptäckt).
 func smygare_upptackt() -> void:
 	smyg_upptackt = true
 	Spel.satt_fakta({"smygare_sedd": true})
+	if bool(Spel.fakta.get("skylt_stulen", false)):
+		Spel.satt_fakta({"skylt_stold_kand": true})
 	visa_knappar()
 
 
@@ -471,6 +489,9 @@ func _halt(mal: String) -> void:
 		main.get_tree().create_timer(1.2).timeout.connect(_flyr.bind("halt"))
 	elif mal == "smygare" and smyg_lage in ["gar_dit", "jobbar"]:
 		main.get_tree().create_timer(0.9).timeout.connect(_smygare_flyr.bind("halt"))
+	elif mal == "smygare" and smyg_lage == "flyr":
+		# Halt-ordern får honom att tappa skylten (han springer vidare).
+		main.get_tree().create_timer(0.7).timeout.connect(_tappa_skylten)
 
 
 func _varningsskott(mal: String) -> void:
@@ -486,6 +507,9 @@ func _varningsskott(mal: String) -> void:
 			main.get_tree().create_timer(0.5).timeout.connect(_brakare_stannar)
 		else:
 			main.get_tree().create_timer(0.6).timeout.connect(_flyr.bind("skott"))
+	elif mal == "smygare" and smyg_lage == "flyr":
+		if randf() < float(smyg_h.get("chans_tappa_varningsskott", 0.5)):
+			main.get_tree().create_timer(0.4).timeout.connect(_tappa_skylten)
 	elif mal == "smygare" and smyg_lage in ["gar_dit", "jobbar"]:
 		if randf() < float(smyg_h.get("chans_stanna_varningsskott", 0.5)):
 			main.get_tree().create_timer(0.4).timeout.connect(_smygare_stannar)
@@ -533,8 +557,6 @@ func _smygare_stannar() -> void:
 		Spel.satt_fakta({"skylt_raddad": true})
 	smyg_lage = "stannat"
 	n.stanna()
-	if main._upptackt.get("nod") == n:
-		main._upptackt = {}
 	if main.hud.visible:
 		main.hud.visa_bubbla(n, str(smyg_h.get("replik_stannar", "SKJUT INTE!")), 3.5)
 	main.get_tree().create_timer(float(smyg_h.get("stannar_s", 10))).timeout.connect(func() -> void:

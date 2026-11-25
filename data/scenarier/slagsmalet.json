@@ -89,7 +89,8 @@
     "skylt_stold_kand": false,
     "offret_inne": false,
     "brakare_stannat": false,
-    "slagsmal_upptackt": false
+    "slagsmal_upptackt": false,
+    "skylt_tappad": false
   },
   "bedomning": {
     "verkanseld": {
@@ -332,10 +333,13 @@
       "stannar_s": 10,
       "replik_stannar": "AAH! Skjut inte! Skjut inte!",
       "replik_drar": "…",
-      "efter_slagsmalet_s": 30,
-      "kommentar": "Kommer alltid, 30 s efter att slagsmålet är slut (bråkaren har flytt eller skjutits).",
+      "efter_slagsmalet_s": 20,
+      "kommentar": "Kommer alltid, 20 s efter att slagsmålet är slut (bråkaren har flytt eller skjutits).",
       "i_debug": false,
-      "ljud_hors_inom": 16
+      "ljud_hors_inom": 16,
+      "chans_tappa_varningsskott": 0.5,
+      "replik_tappar": "Fan!",
+      "kamrat_tappar": "Han tappade skylten! Den ligger där borta."
     }
   ],
   "samband": [],
@@ -419,7 +423,16 @@
         "om": [
           "skylt_stold_kand"
         ],
-        "text": "skyddsobjektsskylten vid norra staketet stulen av mörkklädd man"
+        "text": "skyddsobjektsskylten vid norra staketet stulen av mörkklädd man",
+        "inte": [
+          "skylt_tappad"
+        ]
+      },
+      {
+        "om": [
+          "skylt_tappad"
+        ],
+        "text": "mörkklädd man skruvade ner skyddsobjektsskylten vid norra staketet men tappade den när han flydde norrut"
       },
       {
         "om": [
@@ -427,7 +440,8 @@
         ],
         "inte": [
           "skylt_stulen",
-          "smygare_skjuten"
+          "smygare_skjuten",
+          "skylt_tappad"
         ],
         "text": "mörkklädd man vid norra staketet har flytt norrut"
       },
@@ -485,13 +499,22 @@
           "om": [
             "skylt_stold_kand"
           ],
-          "text": "stöld av skyddsobjektsskylt"
+          "text": "stöld av skyddsobjektsskylt",
+          "inte": [
+            "skylt_tappad"
+          ]
         },
         {
           "om": [
             "smygare_skjuten"
           ],
           "text": "verkanseld avgiven mot man vid staketet"
+        },
+        {
+          "om": [
+            "skylt_tappad"
+          ],
+          "text": "försök till stöld av skyddsobjektsskylt"
         }
       ],
       "efter": "slagsmål vid stugan längs vägen öster om grinden",
