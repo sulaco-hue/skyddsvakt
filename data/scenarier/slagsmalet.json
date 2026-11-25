@@ -7,6 +7,7 @@
   "passtid": "21:00–01:00",
   "starttid": "21:18",
   "tidsfaktor": 6,
+  "brus_tyst_forsta_s": 60,
   "vader": "Mörkt · Blåsigt 3°C",
   "vaderlag": [
     "natt"

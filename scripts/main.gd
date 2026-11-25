@@ -338,6 +338,8 @@ func _redigerar() -> bool:
 ## Kalas i en stuga (scenariots "kalas"): ljus som pulserar i takt och
 ## musik som text som stiger ur huset. Pågår hela passet.
 var _kalas: Dictionary = {}
+## När passet startade (för scenariots tysta början på radion).
+var _pass_start_ms := 0
 
 
 func _starta_kalas() -> void:
@@ -389,6 +391,7 @@ func _starta_pass() -> void:
 	varld.kamrat_folj = true
 	snack.aktiv = true
 	Spel.klocka_igang = true
+	_pass_start_ms = Time.get_ticks_msec()
 	_starta_kalas()
 
 
@@ -453,6 +456,10 @@ func _debug_text() -> String:
 func _uppdatera_brus(delta: float) -> void:
 	# Ingen vardaglig radiotrafik under zombieangreppet.
 	if not _horde.is_empty() and bool(_horde.get("upptackt", false)):
+		return
+	# Scenariot kan hålla radion tyst i början ("brus_tyst_forsta_s"), t.ex. så att
+	# sambandsrutan inte skymmer slagsmålet.
+	if (Time.get_ticks_msec() - _pass_start_ms) / 1000.0 < float(_scenario.get("brus_tyst_forsta_s", 0)):
 		return
 	if _brus.is_empty():
 		_brus = Datafil.las_json("res://data/radiobrus.json")
