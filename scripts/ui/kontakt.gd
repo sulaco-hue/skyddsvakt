@@ -61,6 +61,8 @@ var _stamning_etikett: Label
 var _motpart_rubrik: Label
 ## Efter första valet krymper porträttet så att dialogen får mer plats.
 var _krympt := false
+## Bredd på vänsterspalten (porträtt + åtgärdsknappar) i mobilläget.
+const VANSTER_KOMPAKT := 236
 var _tid_label: Label
 var _aktuella: Array = []
 var _slut := false
@@ -85,12 +87,12 @@ func bygg(scenario: Dictionary) -> void:
 	var marg := MarginContainer.new()
 	UiKit.helskarm(marg)
 	for s in ["margin_left", "margin_right"]:
-		marg.add_theme_constant_override(s, 32)
+		marg.add_theme_constant_override(s, 14 if UiKit.kompakt else 32)
 	for s in ["margin_top", "margin_bottom"]:
-		marg.add_theme_constant_override(s, 24)
+		marg.add_theme_constant_override(s, 10 if UiKit.kompakt else 24)
 	marg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(marg)
-	var kol := UiKit.vbox(20)
+	var kol := UiKit.vbox(10 if UiKit.kompakt else 20)
 	marg.add_child(kol)
 
 	# Lägesrad
@@ -101,16 +103,26 @@ func bygg(scenario: Dictionary) -> void:
 	_chips.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	kol.add_child(_chips)
 
-	var mitt := UiKit.hbox(32)
+	var mitt := UiKit.hbox(14 if UiKit.kompakt else 32)
 	mitt.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	kol.add_child(mitt)
 
 	# Motpart
 	var vanster := UiKit.vbox(12)
 	_vanster = vanster
-	var portr := 180 if UiKit.kompakt else 320
+	var portr := 88 if UiKit.kompakt else 320
 	vanster.custom_minimum_size = Vector2(portr + 6, 0)
-	mitt.add_child(vanster)
+	if UiKit.kompakt:
+		# Mobil: litet porträtt och åtgärdsknapparna under det, i en egen
+		# rullbar spalt – så att repliken och svaren får hela högersidan.
+		vanster.custom_minimum_size = Vector2(VANSTER_KOMPAKT, 0)
+		var vscroll := ScrollContainer.new()
+		vscroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+		vscroll.custom_minimum_size = Vector2(VANSTER_KOMPAKT, 0)
+		mitt.add_child(vscroll)
+		vscroll.add_child(vanster)
+	else:
+		mitt.add_child(vanster)
 	var ram := UiKit.panel(UiKit.KANT2, Color("22303D"), 0, 0)
 	_portratt = TextureRect.new()
 	_portratt.custom_minimum_size = Vector2(portr, portr)
@@ -168,11 +180,12 @@ func bygg(scenario: Dictionary) -> void:
 	_alternativ_lista = UiKit.vbox(8)
 	hoger.add_child(_alternativ_lista)
 	_atgard_rubrik = UiKit.rubrik("ÅTGÄRDER", 14, UiKit.BARNSTEN)
-	hoger.add_child(_atgard_rubrik)
 	_atgard_rad = HFlowContainer.new()
-	_atgard_rad.add_theme_constant_override("h_separation", 8)
-	_atgard_rad.add_theme_constant_override("v_separation", 8)
-	hoger.add_child(_atgard_rad)
+	_atgard_rad.add_theme_constant_override("h_separation", 6 if UiKit.kompakt else 8)
+	_atgard_rad.add_theme_constant_override("v_separation", 6 if UiKit.kompakt else 8)
+	var atgard_hem: VBoxContainer = vanster if UiKit.kompakt else hoger
+	atgard_hem.add_child(_atgard_rubrik)
+	atgard_hem.add_child(_atgard_rad)
 
 	# Spelaren
 	var botten := UiKit.hbox(16)
@@ -225,9 +238,9 @@ func oppna(npc: Dictionary, start_nod: String) -> void:
 ## Litet porträtt (efter första valet): ger dialogen mer plats.
 func _satt_krympt(k: bool) -> void:
 	_krympt = k
-	var portr := (180 if UiKit.kompakt else 320) if not k else (88 if UiKit.kompakt else 150)
+	var portr := (88 if UiKit.kompakt else 320) if not k else (88 if UiKit.kompakt else 150)
 	_portratt.custom_minimum_size = Vector2(portr, portr)
-	_vanster.custom_minimum_size = Vector2(portr + 6, 0)
+	_vanster.custom_minimum_size = Vector2(VANSTER_KOMPAKT if UiKit.kompakt else portr + 6, 0)
 	_beskrivning.visible = not k
 	_stamning_etikett.visible = not k
 	_stamning_text.visible = not k
@@ -314,8 +327,8 @@ func _bygg_atgarder(nod: Dictionary) -> void:
 		if Spel.debug:
 			etikett += "\n" + _spar(alt)
 		var b := UiKit.knapp(etikett, true, UiKit.BARNSTEN)
-		b.add_theme_font_size_override("font_size", 18 if UiKit.kompakt else 20)
-		b.custom_minimum_size = Vector2(0, 40)
+		b.add_theme_font_size_override("font_size", 15 if UiKit.kompakt else 20)
+		b.custom_minimum_size = Vector2(0, 34 if UiKit.kompakt else 40)
 		# Knappen tar inte emot tryck själv; omslaget släpper igenom dragningar
 		# till scrollningen och räknar bara ett "tryck" (släpp utan att dra) som val.
 		b.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -329,8 +342,8 @@ func _bygg_atgarder(nod: Dictionary) -> void:
 		_atgard_rad.add_child(omslag)
 	# Man kan alltid avsluta samtalet utan att välja något.
 	var avsluta := UiKit.knapp("Avsluta samtalet")
-	avsluta.add_theme_font_size_override("font_size", 18 if UiKit.kompakt else 20)
-	avsluta.custom_minimum_size = Vector2(0, 40)
+	avsluta.add_theme_font_size_override("font_size", 15 if UiKit.kompakt else 20)
+	avsluta.custom_minimum_size = Vector2(0, 34 if UiKit.kompakt else 40)
 	avsluta.pressed.connect(_stang)
 	_atgard_rad.add_child(avsluta)
 

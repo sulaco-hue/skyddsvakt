@@ -1,6 +1,6 @@
 {
   "id": "yxmannen",
-  "namn": "Yxmannen vid norra stigen",
+  "namn": "Yxmannen i natten",
   "ingress": "Mitt i natten kommer en man ut ur skogen med en yxa över huvudet och vrålar att han ska döda er. Osannolikt – men just därför värt att öva. Nödvärn, varning, varningsskott och verkanseld.",
   "objekt": "Förråd Granåsen",
   "passtid": "01:00–05:00",
@@ -133,6 +133,13 @@
         "skarp",
         "ger_upp"
       ],
+      "startpunkter": [
+        "yx_nord",
+        "yx_vast",
+        "yx_sjo",
+        "yx_syd",
+        "yx_ost"
+      ],
       "fart": 30,
       "omvag_s": 0.8,
       "upptacks_avstand": 18,
@@ -159,8 +166,10 @@
       "svar_varningsskott": {
         "skarp": "JAG ÄR INTE RÄDD FÖR ER!"
       },
+      "svar_varningsskott_efter": "AAH! Vad fan gör du?! Jag har ju lagt ner den!",
       "kamrat_efter_verkanseld": "Han är nere! Jag tar yxan – larma sjukvård!",
       "kamrat_ger_upp": "Yxan ligger. Jag har honom. Händerna synliga!",
+      "kamrat_varningsskott_efter": "Va fan! Han hade ju gett upp – vad sköt du för?!",
       "kamrat_nadde_fram": "NER MED HONOM!",
       "missad_diskutera": "Det här kan inte missas – han går rakt mot er."
     }
@@ -171,7 +180,7 @@
     "fakta:motpart_overmannad": "man med yxa anföll och har brottats ner vid grinden, yxan omhändertagen",
     "fakta:motpart_gett_upp": "man som hotade att döda oss med yxa har gett upp, yxan ligger på marken, mannen under uppsikt",
     "fore": "inga avvikelser",
-    "efter": "man med yxa på väg mot grinden från norra stigen, hotar att döda oss"
+    "efter": "man med yxa på väg mot grinden, hotar att döda oss"
   },
   "radio": {
     "kommentar": "Trafik mellan andra enheter som följer händelserna. CQ ropar inte själv upp Grindposten. Krokar och villkor: scripts/core/radiotrafik.gd."

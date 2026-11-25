@@ -11,6 +11,8 @@ var debriefing: Debriefing
 var _handelser_kvar: Array = []
 var _larm_npc := ""
 var _samtal_klara: Dictionary = {}
+## Startpunkten yxmannen kom från (för lägestexten).
+var _angripare_start := ""
 ## Dialogsteget där samtalet med varje person senast avslutades.
 var _senaste_nod: Dictionary = {}
 var _vantar_samtal := ""
@@ -612,6 +614,13 @@ func _starta_angripare(h: Dictionary) -> void:
 	if n == null:
 		return
 	_valj_variant(h)
+	# Varifrån han kommer slumpas bland startpunkterna.
+	var starter: Array = h.get("startpunkter", [])
+	if not starter.is_empty():
+		var sp := str(starter.pick_random())
+		n.cell = varld.punkt(sp)
+		n.stanna()
+		_angripare_start = sp
 	n.visible = true
 	n.hastighet = float(h.get("fart", 30))
 	n.vila_aktiv = false
@@ -766,6 +775,14 @@ func _varningsskott() -> void:
 			var n := _angripare_nod()
 			n.stanna()
 			_angripare["omvag_t"] = 0.8
+	elif str(_angripare["lage"]) in ["gett_upp", "overmannad", "skjuten"]:
+		# Han har redan gett upp (eller ligger): skottet är obefogat, och det märks.
+		var hans := str(h.get("svar_varningsskott_efter", ""))
+		if hans != "":
+			get_tree().create_timer(0.8).timeout.connect(_angripare_sager.bind(hans))
+		var kam := str(h.get("kamrat_varningsskott_efter", ""))
+		if kam != "":
+			get_tree().create_timer(2.6).timeout.connect(_kamrat_sager.bind(kam))
 	_visa_angripar_knappar()
 
 
@@ -788,7 +805,13 @@ func _verkanseld() -> void:
 	n.stanna()
 	n.vaxla_still = true
 	varld.byt_bilder(n, "yxman_ligger")
-	_tappa_yxa(n)
+	_tappa_yxa(n, false)
+	# Träffad: stön och blod (inget "klonk").
+	_blodstank(n)
+	var blod := varld.lagg_dekal("blod", n.cell)
+	blod.modulate.a = 0.0
+	create_tween().tween_property(blod, "modulate:a", 1.0, 1.5)
+	hud.visa_ljud(n, "UHHH…", 1.4, 4.0)
 	_angrepp_upphort({"motpart_skjuten": true})
 	get_tree().create_timer(1.4).timeout.connect(_kamrat_sager.bind(str(h.get("kamrat_efter_verkanseld", ""))))
 	radio.krok("motpart_skjuten")
@@ -830,8 +853,9 @@ func _angrepp_nadde_fram() -> void:
 	_visa_angripar_knappar()
 
 
-func _tappa_yxa(n: Aktor) -> void:
-	hud.visa_ljud(n, "KLONK", 1.2, 4.0)
+func _tappa_yxa(n: Aktor, ljud := true) -> void:
+	if ljud:
+		hud.visa_ljud(n, "KLONK", 1.2, 4.0)
 	var c := n.cell + Vector2i(1, 0)
 	varld.lagg_foremal("yxa", c if varld.ar_fri(c) else n.cell)
 

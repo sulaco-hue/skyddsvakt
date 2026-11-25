@@ -569,7 +569,7 @@ func _starta_yxmannen(variant: String) -> Variant:
 	await _vanta(2)
 	if Spel.variant != variant:
 		_fel("fel variant: %s" % Spel.variant)
-	if not await _vanta_tills(func() -> bool: return "verkanseld" in main.hud.situationer()):
+	if not await _vanta_tills(func() -> bool: return "verkanseld" in main.hud.situationer(), 150.0):
 		_fel("situationsknapparna visades aldrig (avstånd %d)" % main.call("_avstand_angripare"))
 	else:
 		_ok("kamraten upptäcker yxmannen, knappar: %s (avstånd %d)" % [
@@ -587,7 +587,7 @@ func _avsluta_yxmannen(main: Node, forvantat: Dictionary) -> void:
 
 func _spela_yxmannen_ger_upp() -> void:
 	var main = await _starta_yxmannen("ger_upp")
-	await _vanta_tills(func() -> bool: return main.call("_avstand_angripare") <= 12)
+	await _vanta_tills(func() -> bool: return main.call("_avstand_angripare") <= 12, 150.0)
 	main.call("_halt_order")
 	if not await _vanta_tills(func() -> bool: return str(main._angripare.get("lage", "")) == "gett_upp", 10.0):
 		_fel("yxmannen gav inte upp efter halt-order")
@@ -617,11 +617,11 @@ func _spela_yxmannen_ger_upp() -> void:
 func _spela_yxmannen_skarp() -> void:
 	var main = await _starta_yxmannen("skarp")
 	main.call("_halt_order")
-	await _vanta_tills(func() -> bool: return main.call("_avstand_angripare") <= 5)
+	await _vanta_tills(func() -> bool: return main.call("_avstand_angripare") <= 5, 150.0)
 	main.call("_varningsskott")
 	if str(main._angripare.get("lage", "")) != "anfaller":
 		_fel("yxmannen slutade anfalla trots variant skarp")
-	await _vanta_tills(func() -> bool: return main.call("_avstand_angripare") <= 3)
+	await _vanta_tills(func() -> bool: return main.call("_avstand_angripare") <= 3, 150.0)
 	main.call("_verkanseld")
 	if str(main._angripare.get("lage", "")) != "skjuten":
 		_fel("yxmannen föll inte efter verkanseld")
@@ -669,7 +669,7 @@ func _spela_zombies(skjuter: bool) -> void:
 	main.call("_starta_pass")
 	await _vanta(3)
 	main.call("_forcera_handelse", "1")
-	if not await _vanta_tills(func() -> bool: return "verkanseld" in main.hud.situationer()):
+	if not await _vanta_tills(func() -> bool: return "verkanseld" in main.hud.situationer(), 150.0):
 		_fel("situationsknapparna visades aldrig i zombiescenariot")
 		main.queue_free()
 		return
