@@ -1136,6 +1136,10 @@ func _pa_val(alt: Dictionary) -> void:
 	if handling != "":
 		Spel.utfor(handling, str(alt.get("text", "")))
 	var beteende := str(alt.get("npc_beteende", ""))
+	# Ett val som leder till ett "lamnar…"-steg betyder att personen går därifrån,
+	# även om scenariot glömt att säga det.
+	if beteende == "" and str(alt.get("nasta", "")).begins_with("lamnar"):
+		beteende = "ga_till_start"
 	if beteende == "landa_dronare":
 		_landa_dronare()
 	elif beteende != "":

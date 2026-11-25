@@ -353,7 +353,8 @@
         {
           "text": "Notera registreringsnumret, tacka och låt honom gå.",
           "handling": "dokumentera",
-          "nasta": "lamnar_lugn"
+          "nasta": "lamnar_lugn",
+          "npc_beteende": "ga_till_start"
         }
       ]
     }
