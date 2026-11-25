@@ -337,10 +337,11 @@
       "kommentar": "Kommer alltid, 20 s efter att slagsmålet är slut (bråkaren har flytt eller skjutits).",
       "i_debug": false,
       "ljud_hors_inom": 16,
-      "chans_tappa_varningsskott": 0.5,
+      "chans_tappa_varningsskott": 1.0,
       "replik_tappar": "Fan!",
       "kamrat_tappar": "Han tappade skylten! Den ligger där borta.",
-      "kamrat_kom_undan": "Helvete. Det här kommer vi få skit för."
+      "kamrat_kom_undan": "Helvete. Det här kommer vi få skit för.",
+      "chans_tappa_halt": 0.5
     }
   ],
   "samband": [],

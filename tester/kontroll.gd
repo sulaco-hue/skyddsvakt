@@ -616,21 +616,21 @@ func _spela_slagsmal(fall: String) -> void:
 				_fel("rapporterna nämner inte den skjutne vid staketet")
 			await _avsluta_yxmannen(main, {"verkanseld": "bad"})
 		"smygare_flykt":
-			# Han tar skylten och springer; halt-order i flykten får honom att tappa den.
+			# Han tar skylten och springer; varningsskott i flykten får honom alltid att tappa den.
 			main.call("_forcera_handelse", "2:skylt")
 			if not await _vanta_tills(func() -> bool: return sm.smyg_lage == "flyr", 60.0):
 				_fel("smygaren flydde aldrig med skylten (läge %s)" % sm.smyg_lage)
 			sm.smygare_upptackt()
 			if sm._aktuellt_mal() != "smygare":
 				_fel("närmaste mål borde vara smygaren, var '%s'" % sm._aktuellt_mal())
-			main.call("_pa_situation", "halt")
+			main.call("_pa_situation", "varningsskott")
 			await _vanta_tills(func() -> bool: return bool(Spel.fakta.get("skylt_tappad", false)), 5.0)
 			if not bool(Spel.fakta.get("skylt_tappad", false)):
-				_fel("smygaren tappade inte skylten efter halt-order i flykten (läge %s, bär skylt %s, halt %s, stulen %s)" % [
+				_fel("smygaren tappade inte skylten efter varningsskott i flykten (läge %s, bär skylt %s, halt %s, stulen %s)" % [
 					sm.smyg_lage, main.varld.npcer["smygaren"].has_node("BurenSkylt"), str(sm._halt_givet), Spel.fakta.get("skylt_stulen")])
 			else:
 				_ok("smygaren tappade skylten; lägesrapport: " + str(main.call("_lagestext")))
-			await _avsluta_yxmannen(main, {"halt_order": "ok"})
+			await _avsluta_yxmannen(main, {"varningsskott": "bad"})
 
 
 # ------------------------------------------------------------ Yxmannen --

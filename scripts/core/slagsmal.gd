@@ -494,8 +494,9 @@ func _halt(mal: String) -> void:
 	elif mal == "smygare" and smyg_lage in ["gar_dit", "jobbar"]:
 		main.get_tree().create_timer(0.9).timeout.connect(_smygare_flyr.bind("halt"))
 	elif mal == "smygare" and smyg_lage == "flyr":
-		# Halt-ordern får honom att tappa skylten (han springer vidare).
-		main.get_tree().create_timer(0.7).timeout.connect(_tappa_skylten)
+		# Halt-ordern får honom ibland att tappa skylten (han springer vidare).
+		if randf() < float(smyg_h.get("chans_tappa_halt", 0.5)):
+			main.get_tree().create_timer(0.7).timeout.connect(_tappa_skylten)
 
 
 func _varningsskott(mal: String) -> void:
