@@ -1834,6 +1834,12 @@ func _visa_debriefing() -> void:
 			"diskutera": str(h.get("missad_diskutera", "Var borde stridsparet ha befunnit sig? Hur fördelar ni uppmärksamheten under en rond?")),
 			"saknade_krav": [],
 		})
+	# Följder som visade sig efteråt läggs till bedömningen (fortfarande samma utfall).
+	if bool(Spel.fakta.get("skylt_stulen", false)):
+		for post: Dictionary in Spel.logg:
+			if str(post.get("handling", "")) == "lamnade_posten" and not str(post.get("kommentar", "")).contains("skylten"):
+				post["kommentar"] = str(post.get("kommentar", "")) + \
+					" Medan ni var borta skruvades skyddsobjektsskylten vid norra staketet ner och stals."
 	debriefing = Debriefing.new()
 	rot.add_child(debriefing)
 	var meta := Spel.regelmotor.meta

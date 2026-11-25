@@ -590,6 +590,12 @@ func _spela_slagsmal(fall: String) -> void:
 			await _vanta_tills(func() -> bool: return sm.offret_lage == "nere" and sm.brakare_lage in ["flyr", "borta"], 40.0)
 			main.call("_pa_situation", "forsta_hjalpen")
 			await _vanta(2)
+			Spel.satt_fakta({"skylt_stulen": true})
+			main.call("_visa_debriefing")
+			await _vanta(1)
+			var lp: Array = Spel.logg.filter(func(p: Dictionary) -> bool: return p.get("handling", "") == "lamnade_posten")
+			if lp.is_empty() or not str(lp[0].get("kommentar", "")).contains("skylten"):
+				_fel("debriefingen om lämnad post nämner inte den stulna skylten")
 			await _avsluta_yxmannen(main, {"lamnade_posten": "warn", "forsta_hjalpen": "ok"})
 		"smygare":
 			main.call("_forcera_handelse", "2:skylt")
