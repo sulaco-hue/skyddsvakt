@@ -365,10 +365,17 @@ func _uppdatera_bubblor(delta: float) -> void:
 func _undvik_overlapp() -> void:
 	var placerade: Array[Rect2] = []
 	var skarm := get_viewport_rect().size
+	# Personer i händelser (alla synliga figurer utom vi själva) får inte skymmas:
+	# bubblor flyttas undan från dem, precis som från andra bubblor.
+	var hinder := _handelsefigurer()
 	for b in _bubblor:
 		var nod: Control = b["nod"]
 		if not is_instance_valid(nod) or nod.size == Vector2.ZERO:
 			continue
+		var egna: Array[Rect2] = placerade.duplicate()
+		for hf: Array in hinder:
+			if hf[0] != b["mal"]:
+				egna.append(hf[1])
 		if b.has("fast_pos"):
 			nod.position = b["fast_pos"]
 			placerade.append(Rect2(nod.position - Vector2(3.0, 3.0), nod.size).grow(3.0))
@@ -380,14 +387,14 @@ func _undvik_overlapp() -> void:
 		var krock := true
 		while krock and varv < 8:
 			krock = false
-			for p in placerade:
+			for p in egna:
 				if r.intersects(p):
 					r.position.y = p.position.y - r.size.y - 1.0
 					krock = true
 			varv += 1
 		if r.position.y < 70.0:
 			r.position.y = 70.0
-			for p in placerade:
+			for p in egna:
 				if r.intersects(p):
 					r.position.y = p.end.y + 1.0
 		r.position.x = clampf(r.position.x, 4.0, skarm.x - r.size.x - 4.0)
@@ -398,6 +405,26 @@ func _undvik_overlapp() -> void:
 		nod.modulate.a = 1.0
 		if bool(b.get("utanfor", false)):
 			b["fast_pos"] = nod.position
+
+
+## Skärmrutor för synliga figurer som inte är stridsparet: [nod, Rect2].
+func _handelsefigurer() -> Array:
+	var ut: Array = []
+	if varld == null:
+		return ut
+	var kamera := get_viewport().get_canvas_transform()
+	var skala := kamera.get_scale().x
+	var skarm := get_viewport_rect()
+	for n: Node2D in varld.npcer.values():
+		if not n.visible:
+			continue
+		var fot := kamera * n.global_position
+		if not skarm.has_point(fot):
+			continue
+		# Figuren: ca 16x28 bildpunkter från fötterna och uppåt (ligger: bredare och lägre).
+		var storlek := Vector2(18, 30) * skala
+		ut.append([n, Rect2(fot - Vector2(storlek.x / 2.0, storlek.y), storlek).grow(2.0)])
+	return ut
 
 
 func _pa_debug_knapp(id: String) -> void:
