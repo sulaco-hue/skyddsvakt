@@ -377,6 +377,10 @@ func _smygare_flyr(orsak: String) -> void:
 		if smyg_lage == "flyr":
 			smyg_lage = "borta"
 			n.visible = false
+			# Vi såg honom men stoppade honom inte – skylten är borta.
+			if smyg_upptackt and bool(Spel.fakta.get("skylt_stulen", false)) \
+					and not bool(Spel.fakta.get("skylt_tappad", false)):
+				main._kamrat_sager(str(smyg_h.get("kamrat_kom_undan", "")))
 			if main._upptackt.get("nod") == n:
 				main._upptackt = {}
 			main._avsluta_handelse(smyg_h)

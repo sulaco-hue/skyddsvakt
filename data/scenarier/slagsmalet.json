@@ -339,7 +339,8 @@
       "ljud_hors_inom": 16,
       "chans_tappa_varningsskott": 0.5,
       "replik_tappar": "Fan!",
-      "kamrat_tappar": "Han tappade skylten! Den ligger där borta."
+      "kamrat_tappar": "Han tappade skylten! Den ligger där borta.",
+      "kamrat_kom_undan": "Helvete. Det här kommer vi få skit för."
     }
   ],
   "samband": [],
