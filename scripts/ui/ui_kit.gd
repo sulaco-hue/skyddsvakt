@@ -2,6 +2,8 @@ class_name UiKit
 extends RefCounted
 ## Gemensamt utseende (pixelstil) och byggstenar för gränssnittet.
 
+## Beredskapsnivån visas inte tills vidare (HUD och briefing). Sätt true för att visa den igen.
+const VISA_BEREDSKAP := false
 const BG := Color("121822")
 const PANEL := Color(0.047, 0.067, 0.094, 0.93)
 const RUTA := Color("1A232D")
@@ -229,3 +231,23 @@ static func helskarm(c: Control) -> void:
 	c.offset_top = 0
 	c.offset_right = 0
 	c.offset_bottom = 0
+
+
+## Ljudknapp (musik av/på) – samma som i HUD:en, för menyerna.
+static func ljudknapp() -> Button:
+	var b := Button.new()
+	b.custom_minimum_size = Vector2(52, 52)
+	b.focus_mode = Control.FOCUS_NONE
+	b.expand_icon = true
+	b.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	b.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	b.tooltip_text = "Musik av/på [M]"
+	b.add_theme_stylebox_override("normal", ruta(PANEL, KANT, 3, 10, 10))
+	var pa := preload("res://assets/gfx/hogtalare_pa.png")
+	var av := preload("res://assets/gfx/hogtalare_av.png")
+	b.icon = pa if Musik.ar_pa() else av
+	b.pressed.connect(func() -> void: Musik.vaxla())
+	Musik.andrad.connect(func(p: bool) -> void:
+		if is_instance_valid(b):
+			b.icon = pa if p else av)
+	return b

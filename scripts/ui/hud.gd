@@ -112,7 +112,10 @@ func _bygg_toppfalt() -> void:
 	var bl := UiKit.rubrik("BEREDSKAP: " + str(scenario.get("beredskap", "")), 15, UiKit.BARNSTEN)
 	bl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	bh.add_child(bl)
-	rad.add_child(bered)
+	if UiKit.VISA_BEREDSKAP:
+		rad.add_child(bered)
+	else:
+		bered.free()
 
 	rad.add_child(UiKit.fyllnad())
 

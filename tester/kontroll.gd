@@ -37,6 +37,9 @@ func _ready() -> void:
 	await _spela_hantverkaren("rekognosering", ["gripa"], {"gripa": "bad"})
 	await _spela_yxmannen_ger_upp()
 	await _spela_yxmannen_skarp()
+	await _spela_slagsmal("stannar")
+	await _spela_slagsmal("lamnar")
+	await _spela_slagsmal("smygare")
 	await _spela_yxmannen_for_tidigt()
 	await _spela_yxmannen_nar_fram()
 	await _spela_zombies(true)
@@ -542,6 +545,59 @@ func _spela_hantverkaren(variant: String, val: Array, forvantat: Dictionary) -> 
 	_forvanta(forvantat)
 	main.queue_free()
 	await _vanta(3)
+
+
+# ------------------------------------------------------------ Slagsmålet --
+
+## stannar: vid posten, halt-order och varningsskott mot slagsmålet (knytnävar: inget svårare våld).
+## lamnar: båda går till slagsmålet (lämnar objektet).
+## smygare: smygaren vid skylten, halt och verkanseld mot honom.
+func _spela_slagsmal(fall: String) -> void:
+	print("--- Scenario: Slagsmålet (%s) ---" % fall)
+	Spel.nollstall("res://data/scenarier/slagsmalet.json")
+	var main = load("res://scenes/main.tscn").instantiate()
+	add_child(main)
+	await _vanta(5)
+	main.call("_starta_pass")
+	await _vanta(3)
+	main.call("_forcera_handelse", "1")
+	if not await _vanta_tills(func() -> bool: return main._slagsmal != null and main._slagsmal.upptackt, 30.0):
+		_fel("slagsmålet upptäcktes aldrig")
+		main.queue_free()
+		return
+	_ok("slagsmålet upptäckt, knappar: %s" % ", ".join(PackedStringArray(main.hud.situationer())))
+	var sm: Slagsmal = main._slagsmal
+	match fall:
+		"stannar":
+			main.call("_pa_situation", "halt")
+			await _vanta(0.5)
+			main.call("_pa_situation", "varningsskott")
+			if not await _vanta_tills(func() -> bool: return sm.brakare_lage in ["flyr", "borta"], 10.0):
+				_fel("bråkaren flydde inte efter halt-order")
+			else:
+				_ok("bråkaren flyr efter halt-order (offret: %s)" % sm.offret_lage)
+			await _avsluta_yxmannen(main, {"halt_order": "ok", "varningsskott": "bad"})
+		"lamnar":
+			main.varld.ga_till(main.varld.punkt("slagsmal") + Vector2i(-1, 0))
+			if not await _vanta_tills(func() -> bool: return Spel.logg.any(func(p: Dictionary) -> bool:
+					return p.get("handling", "") == "lamnade_posten"), 40.0):
+				_fel("att båda lämnade posten registrerades inte")
+			await _vanta_tills(func() -> bool: return sm.offret_lage == "nere" and sm.brakare_lage in ["flyr", "borta"], 40.0)
+			main.call("_pa_situation", "forsta_hjalpen")
+			await _vanta(2)
+			await _avsluta_yxmannen(main, {"lamnade_posten": "warn", "forsta_hjalpen": "ok"})
+		"smygare":
+			main.call("_forcera_handelse", "2:skylt")
+			if not await _vanta_tills(func() -> bool: return sm.smyg_lage == "jobbar", 40.0):
+				_fel("smygaren kom aldrig fram till skylten (läge %s)" % sm.smyg_lage)
+			sm.smygare_upptackt()
+			if sm._aktuellt_mal() != "smygare":
+				_fel("närmaste mål borde vara smygaren, var '%s'" % sm._aktuellt_mal())
+			main.call("_pa_situation", "verkanseld")
+			await _vanta(2)
+			if bool(Spel.fakta.get("skylt_stulen", false)) and sm.smyg_lage == "skjuten":
+				_fel("skylten stals trots att smygaren sköts")
+			await _avsluta_yxmannen(main, {"verkanseld": "bad"})
 
 
 # ------------------------------------------------------------ Yxmannen --

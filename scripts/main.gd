@@ -11,6 +11,8 @@ var debriefing: Debriefing
 var _handelser_kvar: Array = []
 var _larm_npc := ""
 var _samtal_klara: Dictionary = {}
+## Scenario Slagsmålet (null i andra scenarier).
+var _slagsmal: Slagsmal = null
 ## Startpunkten yxmannen kom från (för lägestexten).
 var _angripare_start := ""
 ## Dialogsteget där samtalet med varje person senast avslutades.
@@ -224,13 +226,16 @@ func _uppdatera_rimlighet() -> void:
 			for z in (_horde["zombies"] as Dictionary).values():
 				if str(z["lage"]) == "nere":
 					skadad = true
+		if _slagsmal and (bool(f.get("offret_nere", false)) or bool(f.get("offret_lindrigt_skadat", false))):
+			skadad = true
 		if skadad:
 			f["skadad_person"] = true
 	# Förstärkning: posten ska kunna fortsätta bevakningen. Motiverat när
 	# stridsparet är (eller har varit) bundet av ett hot, skottlossning eller en
 	# frihetsberövad/skadad person – även om hotet inte längre är aktivt.
 	if not bool(f.get("behov_forstarkning", false)):
-		var bundet := (not _angripare.is_empty() and bool(_angripare.get("upptackt", false))) \
+		var bundet := (_slagsmal != null and _slagsmal.upptackt) \
+			or (not _angripare.is_empty() and bool(_angripare.get("upptackt", false))) \
 			or (not _horde.is_empty() and bool(_horde.get("upptackt", false))) \
 			or bool(f.get("skadad_person", false))
 		for nyckel in ["omhandertagande_genomfort", "gripande_genomfort", "envarsgripande_genomfort",
@@ -271,6 +276,35 @@ func _fasvarde(lt: Dictionary) -> String:
 	return ""
 
 
+## Ljudknappen i menyerna (startskärm, scenarioval, briefing, debriefing).
+## Under passet finns HUD:ens egen; den här visas när HUD:en är dold.
+var _menyljud: CanvasLayer
+
+
+func _uppdatera_menyljud() -> void:
+	if _menyljud == null:
+		_menyljud = CanvasLayer.new()
+		_menyljud.layer = 8
+		add_child(_menyljud)
+		var k := UiKit.ljudknapp()
+		k.anchor_left = 1.0
+		k.anchor_right = 1.0
+		k.offset_left = -68.0 if not UiKit.kompakt else -60.0
+		k.offset_right = -16.0 if not UiKit.kompakt else -8.0
+		k.offset_top = 16.0 if not UiKit.kompakt else 8.0
+		k.offset_bottom = k.offset_top + 52.0
+		k.theme = UiKit.skapa_tema()
+		_menyljud.add_child(k)
+	_menyljud.visible = not (hud != null and hud.visible) and not (kontakt != null and kontakt.visible) and not _redigerar()
+
+
+func _redigerar() -> bool:
+	for c in rot.get_children():
+		if c is Redigerare:
+			return true
+	return false
+
+
 func _starta_pass() -> void:
 	briefing.queue_free()
 	briefing = null
@@ -282,6 +316,7 @@ func _starta_pass() -> void:
 
 
 func _process(delta: float) -> void:
+	_uppdatera_menyljud()
 	if not Spel.klocka_igang:
 		return
 	_uppdatera_upptackt(delta)
@@ -398,6 +433,18 @@ func _utlos_handelse(h: Dictionary) -> void:
 			_starta_angripare(h)
 		"horde":
 			_starta_horde(h)
+		"slagsmal":
+			_slagsmal = Slagsmal.new()
+			add_child(_slagsmal)
+			_slagsmal.setup(self, h)
+			# Ibland smyger någon fram till staketet medan vi tittar på bråket.
+			for h2 in _handelser_kvar.duplicate():
+				if str(h2.get("typ", "")) == "smygare" and randf() < float(h2.get("chans", 0.5)):
+					_handelser_kvar.erase(h2)
+					get_tree().create_timer(float(h2.get("efter_s", 8))).timeout.connect(_utlos_handelse.bind(h2))
+		"smygare":
+			if _slagsmal:
+				_slagsmal.starta_smygare(h)
 
 
 ## Väljer variant för händelser som har "varianter" (om ingen redan valts).
@@ -567,6 +614,9 @@ func _landa_dronare() -> void:
 
 
 func _pa_situation(id: String) -> void:
+	if _slagsmal and _slagsmal.hanterar():
+		_slagsmal.situation(id)
+		return
 	match id:
 		"dronare":
 			_bekampa_dronare()
@@ -979,6 +1029,8 @@ func _kamrat_reagerar() -> void:
 		get_tree().create_timer(5.5).timeout.connect(_kamrat_sager.bind(ledtrad))
 	if dronare and dronare.i_luften():
 		hud.satt_situation(str(_dronare_handelse.get("situationsknapp", "Bekämpa drönaren")), true)
+	if _slagsmal and str(h.get("typ", "")) == "smygare":
+		_slagsmal.smygare_upptackt()
 
 
 func _dolj_npc(id: String) -> void:
@@ -1385,7 +1437,7 @@ func _fipplar(vem: Aktor, sek: float) -> void:
 	while t < sek - 0.8:
 		get_tree().create_timer(t).timeout.connect(func() -> void:
 			if not _horde.is_empty() and hud.visible:
-				hud.visa_ljud(vem, "fipplar", 1.2))
+				hud.visa_ljud(vem, "*fipplar*", 1.2))
 		t += 1.7
 
 

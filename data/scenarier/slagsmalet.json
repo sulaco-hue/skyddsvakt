@@ -1,0 +1,303 @@
+{
+  "id": "slagsmalet",
+  "namn": "Sent kvällspass",
+  "namn_efterat": "Bråket på vägen",
+  "ingress": "Blåsig sen kväll. Stugorna längs vägen har helggäster, och det hörs musik långt bort.",
+  "objekt": "Förråd Granåsen",
+  "passtid": "21:00–01:00",
+  "starttid": "21:18",
+  "tidsfaktor": 6,
+  "vader": "Mörkt · Blåsigt 3°C",
+  "vaderlag": [
+    "natt"
+  ],
+  "natt": true,
+  "beredskap": "NORMAL",
+  "karta": "res://data/kartor/granasen.json",
+  "omvarldslage": [
+    {
+      "tid": "17:40",
+      "kalla": "Lokal nyhet",
+      "text": "Fest i stugbyn vid Granåsen i helgen – grannar klagar på oväsen."
+    },
+    {
+      "tid": "20:55",
+      "kalla": "Vaktchef",
+      "text": "Inga avvikelser. Kvällspass: bevaka grinden och staketet."
+    }
+  ],
+  "briefing": {
+    "uppdrag": "Bevaka grind och staket under kvällen. Rapportera avvikelser till CQ.",
+    "objektinfo": "Skyddsobjektet omfattar området innanför staketet. Skyltat: tillträdesförbud och avbildningsförbud.",
+    "samband": "Vi: Grindposten. Vaktchef: CQ (Caesar Qvintus).",
+    "mal": []
+  },
+  "anropssignaler": {
+    "vaktchef": "CQ",
+    "du": "Grindposten"
+  },
+  "fakta": {
+    "skyltat_avbildningsforbud": true,
+    "motpart_inom": false,
+    "motpart_invid": false,
+    "vill_ha_tilltrade": false,
+    "flyr_fran_objekt": false,
+    "overtratt_forbud": false,
+    "vagrat_id": false,
+    "oriktiga_uppgifter": false,
+    "vagrat_visitation": false,
+    "vagrat_fordon": false,
+    "behov_avvisa": false,
+    "behov_avlagsna": false,
+    "behov_omhanderta": false,
+    "visitation_behovs": false,
+    "misstanke_13": false,
+    "beslag_betydelse": false,
+    "anmalan_polis": false,
+    "protokoll_upprattat": false,
+    "behorig": false,
+    "hot_svarare_vald": false,
+    "angrepp_pagar": false,
+    "angrepp_overhangande": false,
+    "angrepp_pagar_ej": false,
+    "varning_given": false,
+    "varningsskott_avlossat": false,
+    "varningsskott_foregick": false,
+    "verkanseld_avlossad": false,
+    "sjukvard_larmad": false,
+    "forsta_hjalp_given": false,
+    "brott_pa_bar_garning": false,
+    "skjutning_rapporterad": false,
+    "motpart_skjuten": false,
+    "motpart_gett_upp": false,
+    "motpart_overmannad": false,
+    "handlade_i_tid": false,
+    "envarsgripande_genomfort": false,
+    "aldrig": false,
+    "offret_nere": false,
+    "offret_lindrigt_skadat": false,
+    "skylt_stulen": false,
+    "skylt_raddad": false,
+    "objekt_fotograferat": false,
+    "skylt_saknas_upptackt": false,
+    "skott_utan_risk": false,
+    "mal_inom_skyddsobjekt": false
+  },
+  "bedomning": {
+    "verkanseld": {
+      "krav": [
+        "angrepp_pagar",
+        "hot_svarare_vald",
+        "angrepp_overhangande",
+        "varning_given",
+        "varningsskott_foregick",
+        "skott_utan_risk"
+      ],
+      "krav_utfall": {
+        "angrepp_pagar": "bad",
+        "hot_svarare_vald": "bad",
+        "angrepp_overhangande": "bad",
+        "varning_given": "warn",
+        "varningsskott_foregick": "warn",
+        "skott_utan_risk": "warn"
+      },
+      "text_krav": {
+        "hot_svarare_vald": "Ett knytnävsslagsmål är inte ”svårare våld”. Skjutvapen i nödvärn får bara användas för att avvärja svårare våld mot sig själv eller någon annan (förordning 1992:98 2 §). Mot den som bara flyr – eller fotograferar och stjäl en skylt – finns inget angrepp alls, och att skjuta för en tjänsteåtgärd kräver att det är absolut nödvändigt med hänsyn till åtgärdens vikt (3 §).",
+        "skott_utan_risk": "Långt håll, mörker och en väg med stugor runt omkring: risken att träffa någon annan ska särskilt beaktas, och skottlossning där människor vistas ska undvikas i det längsta (förordning 1992:98 4 §)."
+      },
+      "diskutera": "Sparkar mot huvudet på en som ligger kan vara svårare våld – men ni stod långt bort, utanför skyddsobjektet. Fanns det andra sätt att stoppa det?"
+    },
+    "varningsskott": {
+      "krav": [
+        "angrepp_pagar",
+        "hot_svarare_vald",
+        "angrepp_overhangande",
+        "varning_given",
+        "skott_utan_risk"
+      ],
+      "krav_utfall": {
+        "angrepp_pagar": "bad",
+        "hot_svarare_vald": "bad",
+        "angrepp_overhangande": "warn",
+        "varning_given": "warn",
+        "skott_utan_risk": "warn"
+      },
+      "text_krav": {
+        "hot_svarare_vald": "Varningsskott förutsätter att det finns grund för verkanseld – alltså svårare våld. Ett slagsmål med knytnävar, eller en man som springer från staketet, räcker inte."
+      }
+    }
+  },
+  "varianter": {
+    "kommentar": "Varianterna gäller smygaren (om han kommer): foto = fotograferar objektet, skylt = skruvar ner skyddsobjektsskylten och tar den.",
+    "foto": {
+      "fakta": {}
+    },
+    "skylt": {
+      "fakta": {}
+    }
+  },
+  "npc": {
+    "brakaren": {
+      "namn": "Man, ca 30 år",
+      "benamning": "mannen",
+      "beskrivning": "Flanellskjorta",
+      "sprite": "yxman_utan",
+      "start": "slagsmal",
+      "synlig_fran_start": false,
+      "stamning": 7
+    },
+    "offret": {
+      "namn": "Man, ca 25 år",
+      "benamning": "mannen",
+      "beskrivning": "Röd mössa",
+      "sprite": "civil",
+      "start": "slagsmal",
+      "synlig_fran_start": false,
+      "stamning": 5
+    },
+    "smygaren": {
+      "namn": "Man, okänd ålder",
+      "benamning": "mannen",
+      "beskrivning": "Mörkklädd",
+      "sprite": "smygare",
+      "start": "smyg_start",
+      "synlig_fran_start": false,
+      "stamning": 5
+    }
+  },
+  "handelser": [
+    {
+      "id": "1",
+      "namn": "Slagsmålet på vägen",
+      "typ": "slagsmal",
+      "tid": "21:21",
+      "plats": "slagsmal",
+      "brakare": "brakaren",
+      "offer": "offret",
+      "offer_ligger": "civil_ligger",
+      "flykt": "slagsmal_flykt",
+      "upptacks_avstand": 18,
+      "slass_min_s": 12,
+      "slass_max_s": 17,
+      "sparkar_min_s": 4,
+      "sparkar_max_s": 6,
+      "fart_flykt": 46,
+      "sakert_skjutavstand": 6,
+      "posten_radie": 6,
+      "ljud_slag": [
+        "SMACK",
+        "DUNS",
+        "KLATSCH",
+        "SMACK"
+      ],
+      "ljud_sparkar": [
+        "DUNK",
+        "DUNK",
+        "DUNSS"
+      ],
+      "repliker_slass": [
+        "Din jävla…!",
+        "Vad sa du om henne?!",
+        "Kom igen då!",
+        "Jag ska krossa dig!",
+        "Släpp!"
+      ],
+      "repliker_offret": [
+        "Lägg av!",
+        "Aj! Sluta!",
+        "Det var inte jag!",
+        "Hjälp!"
+      ],
+      "repliker_sparkar": [
+        "Ligg still!",
+        "Där fick du!",
+        "Ska du snacka nu?!"
+      ],
+      "kamrat": "Det slåss nere på vägen! Två snubbar – det ser rejält ut!",
+      "kamrat_nere": "Han slog ner honom! Han sparkar honom – i huvudet!",
+      "kamrat_flyr": "Han sticker in i skogen!",
+      "kamrat_skjuten_brakare": "Han ligger… Du sköt honom. Där. På vägen.",
+      "kamrat_skjuten_smygare": "Va fan… du sköt honom? Han sprang ju bara!",
+      "brakare_flyr_halt": "Fan! Polisen!",
+      "brakare_flyr_skott": "SKJUTER DE?!",
+      "brakare_flyr_efter_sparkar": "Det där var för Linda!",
+      "offret_tack": "Tack… Han är helt dum i huvudet.",
+      "forsta_hjalpen_replik": "Ligg still. Hör du mig? Ambulansen är på väg.",
+      "missad_diskutera": "Ett slagsmål på vägen, tio meter utanför grinden. Hur kunde det gå obemärkt förbi?"
+    },
+    {
+      "id": "2",
+      "namn": "Smygaren vid skylten",
+      "typ": "smygare",
+      "tid": "23:59",
+      "chans": 0.5,
+      "efter_s": 9,
+      "npc": "smygaren",
+      "varianter": [
+        "foto",
+        "skylt"
+      ],
+      "mal": "skylt_ute",
+      "skylt": [
+        26,
+        18
+      ],
+      "flykt": "smyg_start",
+      "fart": 26,
+      "fart_flykt": 48,
+      "jobbar_s": 8,
+      "upptackt": {
+        "min_s": 2,
+        "max_s": 7,
+        "referensavstand": 6,
+        "max_avstand": 12,
+        "paus_snack_s": 120
+      },
+      "kamrat": "Vänta… vid skylten! Det står någon vid staketet där borta!",
+      "kamrat_skylt_borta": "Vänta… skylten. Skylten är borta! Någon har skruvat ner den!",
+      "replik_flyr": "Skit!",
+      "missad_diskutera": "Medan ni tittade på slagsmålet var någon vid staketet. Var bråket en avledning? Vem höll uppsikt över objektet?"
+    }
+  ],
+  "samband": [],
+  "lagestext": {
+    "fakta:skylt_stulen": "skyddsobjektsskylten vid norra staketet stulen, gärningsman mörkklädd man som sprang norrut",
+    "fakta:objekt_fotograferat": "mörkklädd man har fotograferat objektet vid norra staketet och sprungit norrut",
+    "fakta:motpart_skjuten": "verkanseld avgiven, en man skadad",
+    "fakta:offret_nere": "misshandel på vägen öster om grinden, en man nedslagen och sparkad i huvudet, gärningsmannen sprang in i skogen",
+    "efter": "två män slåss på vägen öster om grinden",
+    "fore": "inga avvikelser vid grinden"
+  },
+  "radio": {
+    "kommentar": "Trafik mellan andra enheter. CQ ropar inte själv upp Grindposten."
+  },
+  "sambandstexter": {
+    "svar": {
+      "fakta:motpart_skjuten": "Uppfattat. Säkra platsen och rapportera förändring",
+      "efter": "Uppfattat. Håll uppsikt och rapportera förändring",
+      "fore": "Uppfattat"
+    },
+    "polis": {
+      "fakta:skylt_stulen": "stöld av skyddsobjektsskylt och misshandel på vägen öster om grinden",
+      "fakta:offret_nere": "misshandel på vägen öster om grinden, gärningsmannen har sprungit in i skogen",
+      "efter": "slagsmål på vägen öster om grinden",
+      "fore": "händelse vid grinden"
+    },
+    "skadade": {
+      "fakta:offret_nere": ", en man nedslagen och sparkad i huvudet",
+      "fakta:offret_lindrigt_skadat": ", en man lindrigt skadad efter slagsmål",
+      "fore": ""
+    },
+    "svar_forstarkning": {
+      "fore": "Uppfattat, rondpatrullen skickas till grinden"
+    }
+  },
+  "slutkrav": [
+    {
+      "handling": "rapportera_vaktchef",
+      "lagrum": "Bevakningsinstruktion – rapportering · FFS 2010:7 13 §",
+      "text": "Händelsen rapporterades aldrig till CQ.",
+      "diskutera": "När ska CQ få veta? Före, under eller efter?"
+    }
+  ]
+}

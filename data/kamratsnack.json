@@ -14,8 +14,8 @@
     "ljud_max_s": 50
   },
   "ljud": [
-    "fippel fippel",
-    "skrammel skrammel"
+    "*fippel fippel*",
+    "*skrammel skrammel*"
   ],
   "snack": [
     {
@@ -325,6 +325,7 @@
     {
       "amne": "utrustning",
       "kamrat": "När tror du vi får nya bössan då?",
+      "alltid_svar": true,
       "svar": [
         "Den heter ju Ak 24, så troligen år 2124."
       ]

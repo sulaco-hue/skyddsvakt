@@ -193,7 +193,7 @@ func _skapa_objekt(rader: Array) -> void:
 				if typ == "G":
 					_bom_stangd.append(bit)
 	for c in skyltar:
-		_sprite("skylt", c)
+		skyltsprites[c] = _sprite("skylt", c)
 
 	# Bommens gångjärn: grindrutan med störst y (bilden förutsätter grind längs y-axeln).
 	if not _grindceller.is_empty():
@@ -496,6 +496,20 @@ func _fri_granne(c: Vector2i) -> Vector2i:
 
 
 ## Ställer ut ett fordon (sprite) på en ruta och gör rutan till hinder.
+## Skyltarna på staketet (cell -> sprite), så att en kan skruvas ner och tas.
+var skyltsprites: Dictionary = {}
+
+
+## Tar bort skylten vid cellen (stulen). Sant om det fanns en.
+func ta_bort_skylt(c: Vector2i) -> bool:
+	var s: Variant = skyltsprites.get(c)
+	if s == null or not is_instance_valid(s):
+		return false
+	(s as Node).queue_free()
+	skyltsprites.erase(c)
+	return true
+
+
 func placera_fordon(namn: String, c: Vector2i) -> Sprite2D:
 	var s := _sprite(namn, c)
 	astar.set_point_solid(c)

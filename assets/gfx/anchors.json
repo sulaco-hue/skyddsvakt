@@ -67,6 +67,14 @@
   8,
   22
  ],
+ "civil_ligger_0": [
+  13,
+  7
+ ],
+ "civil_ligger_1": [
+  13,
+  7
+ ],
  "civil_sitter_0": [
   8,
   18
@@ -177,6 +185,14 @@
  ],
  "skylt": [
   10,
+  22
+ ],
+ "smygare_0": [
+  8,
+  22
+ ],
+ "smygare_1": [
+  8,
   22
  ],
  "staket_stolpe": [

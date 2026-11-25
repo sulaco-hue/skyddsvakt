@@ -46,7 +46,10 @@ func bygg(scenario: Dictionary) -> void:
 	bered.add_child(bv)
 	bv.add_child(UiKit.rubrik("BEREDSKAPSNIVÅ", 13, UiKit.DAMPAD))
 	bv.add_child(UiKit.titel(str(scenario.get("beredskap", "")), 22, UiKit.BARNSTEN))
-	vanster.add_child(bered)
+	if UiKit.VISA_BEREDSKAP:
+		vanster.add_child(bered)
+	else:
+		bered.free()
 
 	vanster.add_child(UiKit.rubrik("SENASTE DYGNET", 13, UiKit.DAMPAD))
 	for n in scenario.get("omvarldslage", []):
@@ -205,7 +208,11 @@ func _sida_uppdrag(scenario: Dictionary, b: Dictionary) -> Control:
 	rad.add_child(UiKit.rubrik("BEREDSKAPSNIVÅ", 13, UiKit.DAMPAD))
 	var niva := UiKit.rubrik(str(scenario.get("beredskap", "")), 13, UiKit.BARNSTEN)
 	rad.add_child(niva)
-	v.add_child(rad)
+	if UiKit.VISA_BEREDSKAP:
+		v.add_child(rad)
+	else:
+		rad.free()
+
 	return v
 
 

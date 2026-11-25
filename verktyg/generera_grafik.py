@@ -1145,6 +1145,29 @@ for i in range(2):
     im.save(os.path.join(OUT, f"yxman_ligger_{i}.png"))
     anchors[f"yxman_ligger_{i}"] = [13, h - 4]
 
+# Civil som ligger (nedslagen i slagsmålet): samma pose, mössa och jacka som civil.
+LIGGER_CIV = [r.replace("g", "R").replace("G", "r").replace("F", "j").replace("f", "J") for r in LIGGER]
+for i in range(2):
+    w, h = 26, len(LIGGER_CIV) + 4
+    im = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    d.ellipse([0, h - 6, w - 1, h - 1], fill=(18, 26, 18, 140))
+    for r, row in enumerate(LIGGER_CIV):
+        for c, ch in enumerate(row):
+            if ch != ".":
+                d.point((1 + c, r + 1), fill=PAL[ch] + (255,))
+    if i == 1:
+        for c in range(8, 15):
+            d.point((1 + c, 2), fill=PAL["j"] + (255,))
+    im.save(os.path.join(OUT, f"civil_ligger_{i}.png"))
+    anchors[f"civil_ligger_{i}"] = [13, h - 4]
+
+# Smygaren: mörk mössa, mörk jacka och byxor (smälter in i skogen).
+SMYG_TOP = [r.replace("R", "K").replace("r", "x").replace("j", "Q").replace("J", "x") for r in CIV_TOP]
+SMYG_LEGS = [[r.replace("n", "x").replace("N", "K") for r in ben] for ben in CIV_LEGS]
+for i in range(2):
+    figure(f"smygare_{i}", SMYG_TOP, SMYG_LEGS[i])
+
 # Yxan på marken
 yxa = Image.new("RGBA", (12, 6), (0, 0, 0, 0))
 yd = ImageDraw.Draw(yxa)

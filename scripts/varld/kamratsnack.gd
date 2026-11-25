@@ -124,7 +124,13 @@ func _prata() -> void:
 
 
 func _reagera(rad: Dictionary) -> void:
-	if not aktiv or _tyst_kvar > 0.0:
+	if not aktiv:
+		return
+	# "alltid_svar": den här frågan får alltid sitt eget svar (aldrig suck, tystnad eller allmänt svar).
+	if bool(rad.get("alltid_svar", false)) and not (rad.get("svar", []) as Array).is_empty():
+		hud.visa_bubbla(varld.spelare, _slumpa(rad["svar"]), 3.5)
+		return
+	if _tyst_kvar > 0.0:
 		return
 	var r := _rng.randf()
 	var suck := float(_inst.get("chans_suck", 0.3))

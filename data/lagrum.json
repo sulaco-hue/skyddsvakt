@@ -46,7 +46,9 @@
       "omhandertagande_genomfort": "personen var tillfälligt omhändertagen",
       "gripande_genomfort": "personen var gripen",
       "envarsgripande_genomfort": "personen var envarsgripen",
-      "avlagsnande_genomfort": "personen avlägsnades"
+      "avlagsnande_genomfort": "personen avlägsnades",
+      "posten_fick_lamnas": "det fanns order eller skäl att lämna posten",
+      "skott_utan_risk": "skottet kunde avlossas utan risk för utomstående"
     }
   },
   "handlingar": {
@@ -676,6 +678,17 @@
       "text_ok": "",
       "text_brist": "Du är död. Du lät angriparna komma inpå dig gång på gång utan att avvärja angreppet i tid. Hur tänker du dig att du ska kunna fortsätta lösa din bevakningsuppgift om du är död – eller zombiefierad?",
       "diskutera": "Vid vilket avstånd borde du ha agerat? Vad säger förordningen om att avvärja svårare våld – och vad säger sunt förnuft?"
+    },
+    "lamnade_posten": {
+      "namn": "Lämnade skyddsobjektet",
+      "lagrum": "Bevakningsinstruktion · FFS 2010:6 (VaktB)",
+      "krav": [
+        "posten_fick_lamnas"
+      ],
+      "vid_brist": "warn",
+      "text_ok": "Posten fick lämnas.",
+      "text_brist": "Båda lämnade grinden för att gå till slagsmålet – långt utanför skyddsobjektet, där skyddslagens befogenheter inte gäller och ni agerar som envar. Under tiden var objektet obevakat. Ett bråk utanför är en klassisk avledning. Att larma CQ, begära polis och ambulans och hålla uppsikt från posten hade skyddat både objektet och den skadade.",
+      "diskutera": "Vad väger tyngst: att hjälpa en misshandlad man eller att bevaka objektet? Kunde en av er gå medan den andra stannade? Vad säger bevakningsinstruktionen om att lämna posten?"
     }
   }
 }
