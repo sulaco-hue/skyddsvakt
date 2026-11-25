@@ -212,11 +212,17 @@ func _radio_ersattningar() -> Dictionary:
 		if not byt.has(nyckel):
 			byt[nyckel] = standard[nyckel]
 	# Har vi gett första hjälpen ska det med i rapporten, till polis och till sjukvården.
+	# Erbjöds den men avböjdes säger vi det i stället (inte till polisen).
 	if bool(Spel.fakta.get("forsta_hjalp_given", false)):
 		for nyckel in ["lage", "skadade", "polis"]:
 			var t := str(byt.get(nyckel, ""))
 			if t != "" and not t.contains("första hjälpen"):
 				byt[nyckel] = t + ", första hjälpen given"
+	elif bool(Spel.fakta.get("forsta_hjalp_avbojd", false)):
+		for nyckel in ["lage", "skadade"]:
+			var t := str(byt.get(nyckel, ""))
+			if t != "" and not t.contains("första hjälpen"):
+				byt[nyckel] = t + ", första hjälpen erbjuden men avböjd"
 	return byt
 
 

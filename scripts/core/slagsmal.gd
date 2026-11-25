@@ -32,6 +32,8 @@ var _fas_t := 0.0
 var _smyg_t := 0.0
 var _jobb_t := 0.0
 var _lamnat_rapporterat := false
+## Offret har tackat nej till första hjälpen.
+var _fh_avbojd := false
 ## Halt-order och varningsskott ges en gång per person (mål).
 var _halt_givet: Dictionary = {}
 var _varn_givet: Dictionary = {}
@@ -444,7 +446,8 @@ func visa_knappar() -> void:
 		if not _varn_givet.has(mal):
 			val.append({"id": "varningsskott", "text": "Varningsskott", "tangent": "V", "farg": "barnsten"})
 		val.append({"id": "verkanseld", "text": "Verkanseld", "tangent": "F", "farg": "rosa"})
-	var skadad := offret_lage in ["nere", "staende", "gar_in"] or brakare_lage == "skjuten" or smyg_lage == "skjuten"
+	var skadad := offret_lage == "nere" or (offret_lage in ["staende", "gar_in"] and not _fh_avbojd) \
+		or brakare_lage == "skjuten" or smyg_lage == "skjuten"
 	if skadad and not bool(Spel.fakta.get("forsta_hjalp_given", false)):
 		val.append({"id": "forsta_hjalpen", "text": "Första hjälpen", "tangent": "J", "farg": "gron"})
 	main.hud.satt_situationer(val)
@@ -612,7 +615,7 @@ func _verkanseld(mal: String) -> void:
 ## Första hjälpen till den som ligger närmast (vi går dit).
 func _forsta_hjalpen() -> void:
 	var kandidater: Array = []
-	if offret_lage in ["nere", "staende", "gar_in"]:
+	if offret_lage == "nere" or (offret_lage in ["staende", "gar_in"] and not _fh_avbojd):
 		kandidater.append(_offret())
 	if brakare_lage == "skjuten":
 		kandidater.append(_brakare())
@@ -626,6 +629,9 @@ func _forsta_hjalpen() -> void:
 	# Offret som klarade sig lindrigt tackar nej (på ryska, engelska och svenska) och går hem.
 	if n == _offret() and offret_lage in ["staende", "gar_in"]:
 		Spel.utfor("forsta_hjalpen", "Erbjöd första hjälpen – mannen avböjde")
+		# Erbjuden men inte given: rapporterna ska säga just det.
+		Spel.satt_fakta({"forsta_hjalp_given": false, "forsta_hjalp_avbojd": true})
+		_fh_avbojd = true
 		# Först på svenska, sedan ett tafatt försök på ryska (köas efter varandra).
 		main.hud.visa_bubbla(main.varld.spelare, "Är du skadad? Behöver du hjälp?", 2.5)
 		main.hud.visa_bubbla(main.varld.spelare, str((h.get("fraga_ryska", ["Ööhm… ty nusjen pomosjtj?"]) as Array).pick_random()), 2.8)
