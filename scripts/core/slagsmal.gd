@@ -626,8 +626,10 @@ func _forsta_hjalpen() -> void:
 	# Offret som klarade sig lindrigt tackar nej (på ryska, engelska och svenska) och går hem.
 	if n == _offret() and offret_lage in ["staende", "gar_in"]:
 		Spel.utfor("forsta_hjalpen", "Erbjöd första hjälpen – mannen avböjde")
+		# Först på svenska, sedan ett tafatt försök på ryska (köas efter varandra).
 		main.hud.visa_bubbla(main.varld.spelare, "Är du skadad? Behöver du hjälp?", 2.5)
-		main.get_tree().create_timer(1.8).timeout.connect(func() -> void:
+		main.hud.visa_bubbla(main.varld.spelare, str((h.get("fraga_ryska", ["Ööhm… ty nusjen pomosjtj?"]) as Array).pick_random()), 2.8)
+		main.get_tree().create_timer(4.6).timeout.connect(func() -> void:
 			if main.hud.visible and n.visible:
 				main.hud.visa_bubbla(n, str((h.get("offret_nej_tack", ["Нет, спасибо. No thank you. Nej tack!"]) as Array).pick_random()), 3.0))
 		visa_knappar()
