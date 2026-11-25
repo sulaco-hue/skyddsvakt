@@ -1,7 +1,7 @@
 {
   "id": "dronaren",
   "namn": "Kvällspass i mulet väder",
-  "namn_efterat": "Drönaren vid sjön",
+  "namn_efterat": "Drönaren över objektet",
   "ingress": "Mulet och vindstilla. Sjön ligger blank nedanför skogen, och kvällen är lugn.",
   "objekt": "Förråd Granåsen",
   "passtid": "19:00–23:00",
@@ -32,14 +32,8 @@
   ],
   "briefing": {
     "uppdrag": "Bevaka grind och staket. Rapportera avvikelser till CQ.",
-    "objektinfo": "Skyddsobjektet omfattar området innanför staketet. Skyltat: tillträdesförbud och avbildningsförbud.",
+    "objektinfo": "Skyddsobjektet omfattar området innanför staketet. Skyltat: tillträdesförbud (gäller även obemannade luftfartyg) och avbildningsförbud.",
     "samband": "Vi: Grindposten. Vaktchef: CQ (Caesar Qvintus).",
-    "lagstod_fokus": [
-      "Tillträdesförbud – även drönare",
-      "Identitet 10 §",
-      "Våld mot farkost 11 §",
-      "Anmälan 17 §"
-    ],
     "mal": []
   },
   "anropssignaler": {
@@ -68,16 +62,43 @@
     "behorig": false,
     "dronare_inom_objekt": true,
     "andra_medel_otillrackliga": false,
-    "dronare_nedskjuten": false
+    "dronare_nedskjuten": false,
+    "bilder_visar_objekt": false,
+    "dronare_landad": false,
+    "dronare_borta": false,
+    "pilot_gick": false,
+    "brott_pa_bar_garning": false,
+    "proportionerligt": false,
+    "beslag_genomfort": false
   },
   "bedomning": {
     "begara_identitet": {
       "vid_brist": "warn",
       "text_brist": "Piloten stod vid sjön, en bra bit från objektet – uppehåller han sig ”invid”? Hans drönare befann sig över objektet. Att fråga frivilligt går alltid; att kräva uppgifterna med stöd av 10 § är en bedömningsfråga. [Jurist]",
       "diskutera": "Räcker det att drönaren är över objektet för att piloten ska anses vara ”invid”?"
+    },
+    "beslag": {
+      "text_brist": "Bilderna kan visa objektet, men det är ett barns födelsedagspresent och pappan samarbetar. Ett beslag ska stå i proportion till vad det gäller (14 §). Att be dem radera bilderna frivilligt, anteckna uppgifterna och anmäla till polis räcker ofta.",
+      "diskutera": "När har drönaren eller minneskortet betydelse för en utredning – och när är det bättre att låta polisen ta ställning?"
+    },
+    "envarsgripande": {
+      "krav": [
+        "brott_pa_bar_garning",
+        "proportionerligt"
+      ],
+      "krav_utfall": {
+        "proportionerligt": "warn"
+      },
+      "text_krav": {
+        "proportionerligt": "Olovlig avbildning av skyddsobjekt har fängelse i straffskalan och han påträffades på bar gärning – formellt möjligt. Men är ett gripande proportionerligt mot en man med drönare? Avvisning, beslag av minneskortet och polis kan räcka. [Jurist]"
+      }
+    },
+    "gripa": {
+      "text_brist": "Gripande enligt 13 § gäller vissa allvarliga brott (t.ex. sabotage, spioneri). Att flyga drönare över objektet räcker inte i sig för skälig misstanke om sådant brott. [Jurist]"
     }
   },
   "varianter": {
+    "kommentar": "med_pilot: Mats och Elsa vid sjön (långt från objektet, inte invid). utan_pilot: ingen pilot syns, drönaren flyger bort efter en minut. dold_pilot: en man i skogskanten norr om staketet (invid) flyger, är undvikande och har ett minneskort med bilder på objektet.",
     "med_pilot": {
       "fakta": {
         "pilot_antraffbar": true
@@ -93,6 +114,18 @@
           "text_brist": "Utan pilot på plats kan andra medel vara otillräckliga – men en vapeninsats med automatkarbin mot ett luftmål innebär stora risker (rikoschetter, nedfall över bostäder och vägar). Vem fattar ett sådant beslut? [Bedömning – jurist]",
           "diskutera": "Vad hade varit rätt ordning: observera, rapportera, invänta order?"
         }
+      }
+    },
+    "dold_pilot": {
+      "fakta": {
+        "pilot_antraffbar": true,
+        "motpart_invid": true,
+        "behov_avvisa": true,
+        "behov_avlagsna": false,
+        "beslag_betydelse": true,
+        "bilder_visar_objekt": true,
+        "brott_pa_bar_garning": true,
+        "visitation_behovs": true
       }
     }
   },
@@ -132,6 +165,41 @@
           "nod": "elsa_skjuten"
         }
       ]
+    },
+    "dronpiloten": {
+      "namn": "Man, ca 40 år",
+      "benamning": "mannen",
+      "beskrivning": "Surfplatta, ryggsäck",
+      "sprite": "dronpilot",
+      "portratt": "portratt_dronpilot",
+      "start": "dronpilot",
+      "synlig_fran_start": false,
+      "stamning": 4,
+      "dialog_start": "dold_start",
+      "efter_skott": "Är ni galna?! Det där var en drönare för tjugotusen!",
+      "dialog_start_om": [
+        {
+          "fakta": "dronare_nedskjuten",
+          "nod": "dold_skjuten"
+        }
+      ],
+      "frihetsberovad": {
+        "kommentar": "Efter omhändertagande eller gripande: förs till grinden, sitter och muttrar.",
+        "plats": "grind_ute",
+        "sprite": "dronpilot_sitter",
+        "intervall_s": [
+          7,
+          12
+        ],
+        "repliker": [
+          "Jag har inte gjort något olagligt.",
+          "Jag vill ha ett kvitto på drönaren.",
+          "*suck*",
+          "Det här kommer ni att få förklara.",
+          "Hur länge ska jag sitta här?",
+          "Jag säger ingenting mer."
+        ]
+      }
     }
   },
   "handelser": [
@@ -142,18 +210,11 @@
       "tid": "19:15",
       "varianter": [
         "med_pilot",
-        "utan_pilot"
+        "utan_pilot",
+        "dold_pilot"
       ],
-      "chans_utan_pilot": 0.3,
-      "start_med_pilot": "sjo_pilot",
-      "start_utan_pilot": "kant_nordost",
       "mal": "objekt_mitt",
       "bort_utan_pilot": "kant_sydvast",
-      "utan_pilot_flyger_s": 60,
-      "visa_npc_med_pilot": [
-        "piloten",
-        "dottern"
-      ],
       "upptackt": {
         "min_s": 1.5,
         "max_s": 6,
@@ -164,228 +225,99 @@
       },
       "kamrat": "Hör du surret? Drönare – rakt över {objekt_bestamd}!",
       "kamrat_ledtrad": {
-        "med_pilot": "Den kom från sjöhållet. Det står folk nere vid stranden.",
-        "utan_pilot": "Jag ser ingen pilot någonstans. Den kom från nordost."
+        "med_pilot": "Den kom från sjöhållet.",
+        "utan_pilot": "Den kom från nordost.",
+        "dold_pilot": "Den kom norrifrån, lågt över skogen."
       },
       "kamrat_efter_skott": "Oj. Ööh… lagstöd frågas, kom?",
-      "situationsknapp": "Bekämpa drönaren"
+      "situationsknapp": "Bekämpa drönaren",
+      "variant_vikter": {
+        "med_pilot": 0.4,
+        "utan_pilot": 0.25,
+        "dold_pilot": 0.35
+      },
+      "piloter": {
+        "med_pilot": {
+          "start": "sjo_pilot",
+          "visa": [
+            "piloten",
+            "dottern"
+          ],
+          "landa": "sjo_pilot"
+        },
+        "utan_pilot": {
+          "start": "kant_nordost",
+          "visa": [],
+          "flyger_bort_s": 60
+        },
+        "dold_pilot": {
+          "start": "dronpilot",
+          "visa": [
+            "dronpiloten"
+          ],
+          "landa": "dronpilot_landa",
+          "lamnar_efter_s": 90,
+          "gar_till": "stig_nord"
+        }
+      }
     }
   ],
   "samband": [],
   "lagestext": {
-    "fakta:dronare_nedskjuten": "drönaren bekämpad med automatkarbin och nedskjuten, vrak invid {objekt_bestamd}",
-    "fakta:dronare_landad": "drönare som flugit över skyddsobjektet har landat vid sjön, piloten anträffad",
-    "fakta:dronare_borta": "drönare som cirklat över {objekt_bestamd} har lämnat området mot sydväst, ingen pilot anträffad",
-    "fore": "inga avvikelser",
-    "efter": "drönare över skyddsobjektet, cirklar över {objekt_bestamd}",
-    "kontakt": "drönarpiloten vid sjön kontaktad"
-  },
-  "slutkrav": [
-    {
-      "handling": "rapportera_vaktchef",
-      "lagrum": "Bevakningsinstruktion – rapportering",
-      "text": "Drönaren rapporterades aldrig till CQ.",
-      "diskutera": "Varför ska en drönare alltid rapporteras, även om piloten verkar ofarlig?"
-    }
-  ],
-  "dialog": {
-    "start": {
-      "du": "Hej! Vi är militära skyddsvakter. Är det er drönare som flög över området?",
-      "replik": "MATS: – Hej hej! Vi testar bara kameran, Elsa fyllde tio i går. Visst flyger den fint?\n\nELSA: – Pappa, de har gevär!",
-      "alternativ": [
-        {
-          "text": "Be honom landa drönaren direkt – den flyger över ett skyddsobjekt.",
-          "handling": "be_landa",
-          "nasta": "landar",
-          "npc_beteende": "landa_dronare"
-        },
-        {
-          "text": "Begär att han uppger namn, födelsetid och hemvist.",
-          "handling": "begara_identitet",
-          "stamning": 1,
-          "nasta": "id"
-        },
-        {
-          "text": "”Ta ner den där NU, annars skjuter vi ner den.”",
-          "handling": "hota_vald",
-          "stamning": 4,
-          "nasta": "radd",
-          "npc_beteende": "landa_dronare"
-        },
-        {
-          "text": "Fråga Elsa om hon vill visa vad drönaren har filmat.",
-          "handling": "fraga_frivilligt",
-          "nasta": "visar"
-        }
-      ]
-    },
-    "landar": {
-      "replik": "MATS: – Oj! Förlåt, det visste vi inte. Elsa, vi landar. Nu.\n\nDrönaren svänger tillbaka mot sjön.",
-      "alternativ": [
-        {
-          "text": "Begär att han uppger namn, födelsetid och hemvist.",
-          "handling": "begara_identitet",
-          "nasta": "id"
-        },
-        {
-          "text": "Fråga om ni får se vad drönaren har filmat.",
-          "handling": "fraga_frivilligt",
-          "nasta": "visar"
-        },
-        {
-          "text": "Notera vad som hänt, förklara förbudet och låt dem gå.",
-          "handling": "dokumentera",
-          "nasta": "avslut"
-        }
-      ]
-    },
-    "id": {
-      "replik": "MATS: – Visst. Mats Lindqvist, född -81, vi bor i gula huset vid vägen. Är det något fel?",
-      "alternativ": [
-        {
-          "text": "Be honom landa drönaren.",
-          "handling": "be_landa",
-          "nasta": "landar",
-          "npc_beteende": "landa_dronare"
-        },
-        {
-          "text": "Fråga om ni får se vad drönaren har filmat.",
-          "handling": "fraga_frivilligt",
-          "nasta": "visar"
-        }
-      ]
-    },
-    "visar": {
-      "replik": "ELSA: – Kolla! Där är taket, och där är ni! Ni ser jättesmå ut.\n\nPå skärmen syns {objekt_bestamd} och hela staketet.",
-      "satt_fakta": {
-        "bilder_visar_objekt": true
+    "delar": [
+      {
+        "om": [
+          "dronare_nedskjuten"
+        ],
+        "text": "drönaren bekämpad med automatkarbin och nedskjuten, vrak invid {objekt_bestamd}"
       },
-      "alternativ": [
-        {
-          "text": "Be dem radera bilderna på objektet – frivilligt.",
-          "handling": "be_radera_frivilligt",
-          "nasta": "raderat",
-          "npc_beteende": "landa_dronare"
-        },
-        {
-          "text": "Ta drönaren i beslag.",
-          "handling": "beslag",
-          "stamning": 3,
-          "nasta": "beslag"
-        }
-      ]
-    },
-    "raderat": {
-      "replik": "MATS: – Självklart. Kolla, nu är de borta. Vi flyger vid fotbollsplanen i stället.",
-      "alternativ": [
-        {
-          "text": "Anteckna uppgifterna och tacka för samarbetet.",
-          "handling": "dokumentera",
-          "nasta": "avslut"
-        }
-      ]
-    },
-    "radd": {
-      "replik": "ELSA: – BUHUUU!\n\nMATS: – Lugna ner dig! Vi landar ju! Hon är tio år…",
-      "alternativ": [
-        {
-          "text": "Be om ursäkt för tonen och förklara varför den måste landa.",
-          "nasta": "landar"
-        },
-        {
-          "text": "Begär att han uppger namn, födelsetid och hemvist.",
-          "handling": "begara_identitet",
-          "nasta": "id"
-        }
-      ]
-    },
-    "beslag": {
-      "replik": "MATS: – Va? Det är hennes födelsedagspresent! Det tänker jag inte gå med på.",
-      "alternativ": [
-        {
-          "text": "Släpp det. Be dem radera bilderna frivilligt i stället.",
-          "handling": "be_radera_frivilligt",
-          "stamning": -2,
-          "nasta": "raderat",
-          "npc_beteende": "landa_dronare"
-        }
-      ]
-    },
-    "avslut": {
-      "replik": "MATS: – Tack, och förlåt igen. Elsa, säg hej då.\n\nELSA: – Hej då! Kan jag få en sån där hjälm?",
-      "slut": true
-    },
-    "elsa": {
-      "du": "Hej på dig! Är det din pappa som styr drönaren?",
-      "replik": "ELSA: – Är det där ett riktigt gevär? Får jag hålla i det?",
-      "alternativ": [
-        {
-          "text": "”Nej, men det är bra att du frågar. Var är din pappa?”",
-          "nasta": "elsa_slut"
-        }
-      ]
-    },
-    "elsa_slut": {
-      "replik": "ELSA: – Där! Han flyger drönaren. Fast den är min egentligen.",
-      "slut": true
-    },
-    "skjuten": {
-      "du": "Hej, militära skyddsvakter. Är det er drönare?",
-      "replik": "MATS: – Vad håller ni på med?! Ni sköt ner hennes drönare! Det står ett barn här!\n\nELSA: – BUHUUU! Min drönare!",
-      "stamning": 7,
-      "alternativ": [
-        {
-          "text": "Förklara lugnt att drönaren flög över ett skyddsobjekt, där även drönare omfattas av tillträdesförbudet.",
-          "stamning": -1,
-          "nasta": "skjuten_forklarat"
-        },
-        {
-          "text": "Begär att han uppger namn, födelsetid och hemvist.",
-          "handling": "begara_identitet",
-          "stamning": 1,
-          "nasta": "skjuten_id"
-        }
-      ]
-    },
-    "skjuten_forklarat": {
-      "replik": "MATS: – Men ni kunde väl bara ha sagt till? Vi stod ju här hela tiden! Jag kommer att anmäla det här.",
-      "alternativ": [
-        {
-          "text": "Anteckna hans uppgifter och vad som hänt, och hänvisa till vaktchefen.",
-          "handling": "dokumentera",
-          "nasta": "skjuten_slut"
-        }
-      ]
-    },
-    "skjuten_id": {
-      "replik": "MATS: – Mats Lindqvist. Och jag vill ha ERA namn. Det här kommer att få konsekvenser.",
-      "alternativ": [
-        {
-          "text": "Anteckna uppgifterna och vad som hänt.",
-          "handling": "dokumentera",
-          "nasta": "skjuten_slut"
-        }
-      ]
-    },
-    "skjuten_slut": {
-      "replik": "ELSA: – Den var ny…\n\nMATS: – Kom, gumman. Vi väntar på chefen deras.",
-      "slut": true
-    },
-    "elsa_skjuten": {
-      "du": "Hej… hur är det med dig?",
-      "replik": "ELSA: – Varför sköt du den? Den gjorde ju inget!",
-      "stamning": 7,
-      "alternativ": [
-        {
-          "text": "”Förlåt. Det var inte meningen att göra dig ledsen. Var är din pappa?”",
-          "nasta": "elsa_skjuten_slut"
-        }
-      ]
-    },
-    "elsa_skjuten_slut": {
-      "replik": "ELSA: – Där. Han är jättearg.",
-      "slut": true
-    }
+      {
+        "inte": [
+          "dronare_nedskjuten",
+          "dronare_landad",
+          "dronare_borta",
+          "pilot_gick"
+        ],
+        "om": [
+          "handelse_upptackt"
+        ],
+        "text": "drönare över skyddsobjektet, cirklar över {objekt_bestamd}"
+      },
+      {
+        "om": [
+          "dronare_landad"
+        ],
+        "inte": [
+          "dronare_nedskjuten"
+        ],
+        "text": "drönaren har landat"
+      },
+      {
+        "om": [
+          "pilot_gick"
+        ],
+        "text": "pilot i skogskanten norr om staketet har tagit ner drönaren och gått norrut"
+      },
+      {
+        "om": [
+          "dronare_borta"
+        ],
+        "text": "drönare som cirklat över {objekt_bestamd} har lämnat området mot sydväst, ingen pilot anträffad"
+      },
+      {
+        "om": [
+          "oriktiga_uppgifter"
+        ],
+        "text": "piloten har lämnat sannolikt oriktiga uppgifter"
+      },
+      {
+        "om": [
+          "beslag_genomfort"
+        ],
+        "text": "drönare och minneskort tagna i beslag"
+      }
+    ],
+    "fore": "inga avvikelser"
   },
   "radio": {
     "kommentar": "Trafik mellan andra enheter som följer händelserna. CQ ropar inte själv upp Grindposten. Krokar och villkor: scripts/core/radiotrafik.gd.",
@@ -458,10 +390,509 @@
       "fore": "Uppfattat"
     },
     "polis": {
-      "fakta:dronare_nedskjuten": "drönare som flugit över objektet och bekämpats med vapen, vrak invid {objekt_bestamd}",
-      "fakta:dronare_landad": "drönare som flugit över objektet, landad, piloten anträffad vid sjön",
-      "fakta:dronare_borta": "drönare som flugit över objektet och försvunnit mot sydväst",
+      "skarv": ", ",
+      "delar": [
+        {
+          "om": [
+            "dronare_nedskjuten"
+          ],
+          "text": "drönare som flugit över objektet och bekämpats med vapen, vrak invid {objekt_bestamd}"
+        },
+        {
+          "inte": [
+            "dronare_nedskjuten"
+          ],
+          "om": [
+            "handelse_upptackt"
+          ],
+          "text": "drönare som flugit över skyddsobjektet"
+        },
+        {
+          "om": [
+            "beslag_genomfort"
+          ],
+          "text": "drönare och minneskort i beslag"
+        },
+        {
+          "om": [
+            "pilot_gick"
+          ],
+          "text": "piloten har gått norrut från skogskanten"
+        },
+        {
+          "om": [
+            "dronare_borta"
+          ],
+          "text": "drönaren har försvunnit mot sydväst"
+        }
+      ],
       "fore": "drönare över objektet"
     }
-  }
+  },
+  "slutkrav": [
+    {
+      "handling": "rapportera_vaktchef",
+      "lagrum": "Bevakningsinstruktion – rapportering",
+      "text": "Drönaren rapporterades aldrig till CQ.",
+      "diskutera": "Varför ska en drönare alltid rapporteras, även om piloten verkar ofarlig?"
+    }
+  ],
+  "dialog": {
+    "start": {
+      "du": "Hej! Vi är militära skyddsvakter. Är det er drönare som flög över området?",
+      "replik": "MATS: – Hej hej! Vi testar bara kameran, Elsa fyllde tio i går. Visst flyger den fint?\n\nELSA: – Pappa, de har gevär!",
+      "alternativ": [
+        {
+          "text": "Be honom landa drönaren direkt – den flyger över ett skyddsobjekt.",
+          "handling": "be_landa",
+          "nasta": "landar",
+          "npc_beteende": "landa_dronare"
+        },
+        {
+          "text": "”Ta ner den där NU, annars skjuter vi ner den.”",
+          "handling": "hota_vald",
+          "stamning": 4,
+          "nasta": "radd",
+          "npc_beteende": "landa_dronare"
+        },
+        {
+          "text": "Fråga Elsa om hon vill visa vad drönaren har filmat.",
+          "handling": "fraga_frivilligt",
+          "nasta": "visar"
+        }
+      ]
+    },
+    "landar": {
+      "replik": "MATS: – Oj! Förlåt, det visste vi inte. Elsa, vi landar. Nu.\n\nDrönaren svänger tillbaka mot sjön.",
+      "alternativ": [
+        {
+          "text": "Fråga om ni får se vad drönaren har filmat.",
+          "handling": "fraga_frivilligt",
+          "nasta": "visar"
+        },
+        {
+          "text": "Notera vad som hänt, förklara förbudet och låt dem gå.",
+          "handling": "dokumentera",
+          "nasta": "avslut"
+        }
+      ]
+    },
+    "id": {
+      "replik": "MATS: – Visst. Mats Lindqvist, född -81, vi bor i gula huset vid vägen. Är det något fel?",
+      "alternativ": [
+        {
+          "text": "Be honom landa drönaren.",
+          "handling": "be_landa",
+          "nasta": "landar",
+          "npc_beteende": "landa_dronare"
+        },
+        {
+          "text": "Fråga om ni får se vad drönaren har filmat.",
+          "handling": "fraga_frivilligt",
+          "nasta": "visar"
+        }
+      ]
+    },
+    "visar": {
+      "replik": "ELSA: – Kolla! Där är taket, och där är ni! Ni ser jättesmå ut.\n\nPå skärmen syns {objekt_bestamd} och hela staketet.",
+      "satt_fakta": {
+        "bilder_visar_objekt": true
+      },
+      "alternativ": [
+        {
+          "text": "Be dem radera bilderna på objektet – frivilligt.",
+          "handling": "be_radera_frivilligt",
+          "nasta": "raderat",
+          "npc_beteende": "landa_dronare"
+        }
+      ]
+    },
+    "raderat": {
+      "replik": "MATS: – Självklart. Kolla, nu är de borta. Vi flyger vid fotbollsplanen i stället.",
+      "alternativ": [
+        {
+          "text": "Anteckna uppgifterna och tacka för samarbetet.",
+          "handling": "dokumentera",
+          "nasta": "avslut"
+        }
+      ]
+    },
+    "radd": {
+      "replik": "ELSA: – BUHUUU!\n\nMATS: – Lugna ner dig! Vi landar ju! Hon är tio år…",
+      "alternativ": [
+        {
+          "text": "Be om ursäkt för tonen och förklara varför den måste landa.",
+          "nasta": "landar"
+        }
+      ]
+    },
+    "beslag": {
+      "replik": "MATS: – Va? Det är hennes födelsedagspresent! Det tänker jag inte gå med på.",
+      "alternativ": [
+        {
+          "text": "Släpp det. Be dem radera bilderna frivilligt i stället.",
+          "handling": "be_radera_frivilligt",
+          "stamning": -2,
+          "nasta": "raderat",
+          "npc_beteende": "landa_dronare"
+        }
+      ]
+    },
+    "avslut": {
+      "replik": "MATS: – Tack, och förlåt igen. Elsa, säg hej då.\n\nELSA: – Hej då! Kan jag få en sån där hjälm?",
+      "slut": true
+    },
+    "elsa": {
+      "du": "Hej på dig! Är det din pappa som styr drönaren?",
+      "replik": "ELSA: – Är det där ett riktigt gevär? Får jag hålla i det?",
+      "alternativ": [
+        {
+          "text": "”Nej, men det är bra att du frågar. Var är din pappa?”",
+          "nasta": "elsa_slut"
+        }
+      ],
+      "atgarder": false
+    },
+    "elsa_slut": {
+      "replik": "ELSA: – Där! Han flyger drönaren. Fast den är min egentligen.",
+      "slut": true,
+      "atgarder": false
+    },
+    "skjuten": {
+      "du": "Hej, militära skyddsvakter. Är det er drönare?",
+      "replik": "MATS: – Vad håller ni på med?! Ni sköt ner hennes drönare! Det står ett barn här!\n\nELSA: – BUHUUU! Min drönare!",
+      "stamning": 7,
+      "alternativ": [
+        {
+          "text": "Förklara lugnt att drönaren flög över ett skyddsobjekt, där även drönare omfattas av tillträdesförbudet.",
+          "stamning": -1,
+          "nasta": "skjuten_forklarat"
+        },
+        {
+          "text": "Anteckna vad som hänt och hänvisa till vaktchefen.",
+          "handling": "dokumentera",
+          "nasta": "skjuten_slut"
+        }
+      ]
+    },
+    "skjuten_forklarat": {
+      "replik": "MATS: – Men ni kunde väl bara ha sagt till? Vi stod ju här hela tiden! Jag kommer att anmäla det här.",
+      "alternativ": [
+        {
+          "text": "Anteckna hans uppgifter och vad som hänt, och hänvisa till vaktchefen.",
+          "handling": "dokumentera",
+          "nasta": "skjuten_slut"
+        }
+      ]
+    },
+    "skjuten_id": {
+      "replik": "MATS: – Mats Lindqvist. Och jag vill ha ERA namn. Det här kommer att få konsekvenser.",
+      "alternativ": [
+        {
+          "text": "Anteckna uppgifterna och vad som hänt.",
+          "handling": "dokumentera",
+          "nasta": "skjuten_slut"
+        }
+      ]
+    },
+    "skjuten_slut": {
+      "replik": "ELSA: – Den var ny…\n\nMATS: – Kom, gumman. Vi väntar på chefen deras.",
+      "slut": true
+    },
+    "elsa_skjuten": {
+      "du": "Hej… hur är det med dig?",
+      "replik": "ELSA: – Varför sköt du den? Den gjorde ju inget!",
+      "stamning": 7,
+      "alternativ": [
+        {
+          "text": "”Förlåt. Det var inte meningen att göra dig ledsen. Var är din pappa?”",
+          "nasta": "elsa_skjuten_slut"
+        }
+      ],
+      "atgarder": false
+    },
+    "elsa_skjuten_slut": {
+      "replik": "ELSA: – Där. Han är jättearg.",
+      "slut": true,
+      "atgarder": false
+    },
+    "mats_frihetsberovad": {
+      "replik": "MATS: – Är ni inte kloka? För en drönare?!\n\nELSA: – PAPPA! BUHUUU!",
+      "stamning": 8
+    },
+    "dold_start": {
+      "du": "Hej, militära skyddsvakter. Är det din drönare som flyger över området?",
+      "replik": "– Vilken drönare? … Jaså, den. Jag filmar naturen. Fåglar och sånt.",
+      "alternativ": [
+        {
+          "text": "Be honom landa drönaren direkt – den flyger över ett skyddsobjekt.",
+          "handling": "be_landa",
+          "nasta": "dold_landar",
+          "npc_beteende": "landa_dronare"
+        },
+        {
+          "text": "Fråga om du får se vad drönaren har filmat.",
+          "handling": "fraga_frivilligt",
+          "nasta": "dold_visar_inte"
+        },
+        {
+          "text": "Upplys honom om att han står invid ett skyddsobjekt och att tillträdesförbudet gäller även drönare.",
+          "handling": "upplysa_forbud",
+          "nasta": "dold_upplyst"
+        }
+      ]
+    },
+    "dold_upplyst": {
+      "replik": "– Det står ingenting om drönare på någon skylt här ute. Jag står ju i skogen.",
+      "alternativ": [
+        {
+          "text": "Be honom landa drönaren nu.",
+          "handling": "be_landa",
+          "nasta": "dold_landar",
+          "npc_beteende": "landa_dronare"
+        },
+        {
+          "text": "Fråga om du får se vad drönaren har filmat.",
+          "handling": "fraga_frivilligt",
+          "nasta": "dold_visar_inte"
+        }
+      ]
+    },
+    "dold_landar": {
+      "replik": "– Okej, okej. Den kommer.\n\nDrönaren landar i gräset bredvid honom. Han plockar snabbt ut minneskortet och stoppar det i jackfickan.",
+      "alternativ": [
+        {
+          "text": "Fråga om du får se vad drönaren har filmat.",
+          "handling": "fraga_frivilligt",
+          "nasta": "dold_visar_inte"
+        },
+        {
+          "text": "Fråga vad han stoppade i fickan.",
+          "nasta": "dold_ficka"
+        },
+        {
+          "text": "Anteckna vad som hänt och låt honom gå.",
+          "handling": "dokumentera",
+          "nasta": "dold_lamnar",
+          "npc_beteende": "ga_till_start"
+        }
+      ]
+    },
+    "dold_visar_inte": {
+      "replik": "– Nej. Det har ni inget med att göra. Jag har inte gjort något olagligt.",
+      "alternativ": [
+        {
+          "text": "Upplys om avbildningsförbudet och att bilder på objektet inte får tas.",
+          "handling": "upplysa_forbud",
+          "nasta": "dold_tjurig"
+        },
+        {
+          "text": "Anteckna vad som hänt och låt honom gå.",
+          "handling": "dokumentera",
+          "nasta": "dold_lamnar",
+          "npc_beteende": "ga_till_start"
+        }
+      ]
+    },
+    "dold_ficka": {
+      "replik": "– Ett minneskort. Mitt. Privat.",
+      "alternativ": [
+        {
+          "text": "Be honom frivilligt lämna över minneskortet.",
+          "handling": "fraga_frivilligt",
+          "nasta": "dold_tjurig"
+        },
+        {
+          "text": "Anteckna vad som hänt och låt honom gå.",
+          "handling": "dokumentera",
+          "nasta": "dold_lamnar",
+          "npc_beteende": "ga_till_start"
+        }
+      ]
+    },
+    "dold_tjurig": {
+      "replik": "– Glöm det. Jag går nu.",
+      "stamning": 5,
+      "alternativ": [
+        {
+          "text": "Anteckna vad som hänt och låt honom gå.",
+          "handling": "dokumentera",
+          "nasta": "dold_lamnar",
+          "npc_beteende": "ga_till_start"
+        }
+      ]
+    },
+    "dold_lamnar": {
+      "replik": "Mannen fäller ihop drönaren, stoppar den i ryggsäcken och går upp mot stigen.",
+      "slut": true
+    },
+    "dold_beslag": {
+      "replik": "Han räcker motvilligt över drönaren och minneskortet.\n\n– Jag vill ha ett kvitto. Och era namn.",
+      "stamning": 6,
+      "satt_fakta": {
+        "beslag_genomfort": true
+      }
+    },
+    "dold_frihetsberovad": {
+      "replik": "Mannen sätter sig ner i gräset.\n\n– Det här är ett stort misstag."
+    },
+    "dold_skjuten": {
+      "du": "Hej, militära skyddsvakter. Är det din drönare?",
+      "replik": "– Är ni galna?! Ni sköt ner den! Den kostade tjugotusen!",
+      "stamning": 8,
+      "alternativ": [
+        {
+          "text": "Anteckna vad som hänt och hänvisa till vaktchefen.",
+          "handling": "dokumentera",
+          "nasta": "dold_lamnar"
+        }
+      ]
+    }
+  },
+  "atgarder": {
+    "kommentar": "Svar på åtgärdsraden. 'variant' ger olika svar för Mats (med_pilot) och mannen i skogskanten (dold_pilot).",
+    "begara_identitet": {
+      "text": "Begär namn, födelsetid och hemvist.",
+      "du": "Jag behöver ditt namn, födelsetid och var du bor.",
+      "replik": "MATS: – Visst. Mats Lindqvist, född -81, vi bor i gula huset vid vägen. Är det något fel?",
+      "variant": {
+        "dold_pilot": {
+          "replik": "– Erik… Andersson. Född… -85. Bor i Stockholm. Nöjda?"
+        }
+      }
+    },
+    "be_om_legitimation": {
+      "text": "Ber att få se legitimation.",
+      "du": "Har du legitimation?",
+      "replik": "MATS: – Här, körkortet.\n\nMats Lindqvist, född 1981. Det stämmer.",
+      "variant": {
+        "dold_pilot": {
+          "replik": "– Jag är inte skyldig att visa leg… Här då.\n\nKörkortet: Johan Berg, född 1984.",
+          "satt_fakta": {
+            "oriktiga_uppgifter": true
+          },
+          "stamning": 2
+        }
+      }
+    },
+    "kroppsvisitera": {
+      "text": "Beslutar om kroppsvisitation.",
+      "du": "Vi kommer att kroppsvisitera dig.",
+      "stamning": 3,
+      "replik": "MATS: – Va? Jag står vid sjön med min dotter!",
+      "variant": {
+        "dold_pilot": {
+          "replik": "– Det här är trakasserier. … Plånbok, nycklar, telefon. Och ett minneskort i jackfickan."
+        }
+      }
+    },
+    "skyddsvisitera": {
+      "text": "Skyddsvisiterar efter vapen och farliga föremål.",
+      "du": "Stå still, jag känner igenom dig efter vapen.",
+      "stamning": 3,
+      "replik": "MATS: – Vapen?! Elsa, det är ingen fara…",
+      "variant": {
+        "dold_pilot": {
+          "replik": "– Jag har inga vapen. Det här är helt sjukt."
+        }
+      }
+    },
+    "beslag": {
+      "text": "Tar drönaren och minneskortet i beslag.",
+      "du": "Drönaren och minneskortet tar vi i beslag.",
+      "stamning": 4,
+      "replik": "MATS: – Va? Det är hennes födelsedagspresent! Det tänker jag inte gå med på.",
+      "variant": {
+        "dold_pilot": {
+          "replik": "",
+          "nasta": "dold_beslag"
+        }
+      }
+    },
+    "avvisa": {
+      "text": "Avvisar honom.",
+      "du": "Ni måste lämna platsen nu.",
+      "replik": "MATS: – Lämna? Vi står ju vid sjön… Okej, vi går hem då.",
+      "nasta": "avslut",
+      "variant": {
+        "dold_pilot": {
+          "du": "Du får inte vara här. Lämna platsen nu.",
+          "replik": "– Fine. Jag går.",
+          "nasta": "dold_lamnar",
+          "npc_beteende": "ga_till_start"
+        }
+      }
+    },
+    "avlagsna": {
+      "text": "Avlägsnar honom.",
+      "du": "Du ska härifrån – nu.",
+      "stamning": 4,
+      "replik": "MATS: – Rör mig inte! Det står ett barn här!",
+      "variant": {
+        "dold_pilot": {
+          "replik": "– Rör mig inte! Jag går ju!",
+          "nasta": "dold_lamnar",
+          "npc_beteende": "ga_till_start"
+        }
+      }
+    },
+    "tillfalligt_omhanderta": {
+      "text": "Omhändertar honom tillfälligt.",
+      "du": "Du är tillfälligt omhändertagen.",
+      "stamning": 4,
+      "nasta": "mats_frihetsberovad",
+      "variant": {
+        "dold_pilot": {
+          "nasta": "dold_frihetsberovad"
+        }
+      }
+    },
+    "gripa": {
+      "text": "Griper honom.",
+      "du": "Du är gripen.",
+      "stamning": 4,
+      "nasta": "mats_frihetsberovad",
+      "variant": {
+        "dold_pilot": {
+          "nasta": "dold_frihetsberovad"
+        }
+      }
+    },
+    "envarsgripande": {
+      "text": "Griper honom (envarsgripande).",
+      "du": "Du är gripen!",
+      "stamning": 4,
+      "nasta": "mats_frihetsberovad",
+      "variant": {
+        "dold_pilot": {
+          "nasta": "dold_frihetsberovad"
+        }
+      }
+    },
+    "lata_ga": {
+      "text": "Låter honom gå.",
+      "du": "Okej. Ni kan gå.",
+      "nasta": "avslut",
+      "variant": {
+        "dold_pilot": {
+          "du": "Okej. Du kan gå.",
+          "nasta": "dold_lamnar",
+          "npc_beteende": "ga_till_start"
+        }
+      }
+    }
+  },
+  "atgarder_lista": [
+    "begara_identitet",
+    "be_om_legitimation",
+    "kroppsvisitera",
+    "skyddsvisitera",
+    "beslag",
+    "avvisa",
+    "avlagsna",
+    "tillfalligt_omhanderta",
+    "gripa",
+    "envarsgripande",
+    "lata_ga"
+  ]
 }

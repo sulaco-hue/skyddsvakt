@@ -645,29 +645,72 @@ func _starta_upptackt(h: Dictionary, nod: Node2D, npc_id: String) -> void:
 
 # ------------------------------------------------------------ Drönare --
 
+## Drönarens pilot(er) per variant: "piloter": {variant: {start, visa: [npc], landa, flyger_bort_s, lamnar_efter_s, gar_till}}.
+func _pilotdata() -> Dictionary:
+	var pd: Dictionary = _dronare_handelse.get("piloter", {})
+	if pd.has(Spel.variant):
+		return pd[Spel.variant]
+	# Äldre format (med/utan pilot).
+	var med := Spel.variant != "utan_pilot"
+	return {"start": _dronare_handelse.get("start_med_pilot" if med else "start_utan_pilot", [0, 0]),
+		"visa": _dronare_handelse.get("visa_npc_med_pilot", []) if med else [],
+		"landa": _dronare_handelse.get("start_med_pilot", [0, 0]),
+		"flyger_bort_s": 0.0 if med else float(_dronare_handelse.get("utan_pilot_flyger_s", 60))}
+
+
+## Alla personer som kan vara piloter (eller följa med en pilot) i någon variant.
+func _alla_dronarpersoner(h: Dictionary) -> Array:
+	var ut: Array = h.get("visa_npc_med_pilot", []).duplicate()
+	for v: Dictionary in (h.get("piloter", {}) as Dictionary).values():
+		for id in v.get("visa", []):
+			if not ut.has(id):
+				ut.append(id)
+	return ut
+
+
 func _starta_dronare(h: Dictionary) -> void:
 	_dronare_handelse = h
 	var varianter: Array = h.get("varianter", ["med_pilot"])
 	var variant := str(h.get("vald_variant", ""))
 	if variant == "":
 		_rng.randomize()
-		variant = "utan_pilot" if _rng.randf() < float(h.get("chans_utan_pilot", 0.3)) else str(varianter[0])
+		var vikter: Dictionary = h.get("variant_vikter", {})
+		if vikter.is_empty():
+			variant = "utan_pilot" if _rng.randf() < float(h.get("chans_utan_pilot", 0.3)) else str(varianter[0])
+		else:
+			var summa := 0.0
+			for v in vikter:
+				summa += float(vikter[v])
+			var r := _rng.randf() * summa
+			for v in vikter:
+				r -= float(vikter[v])
+				if r <= 0.0:
+					variant = str(v)
+					break
+			if variant == "":
+				variant = str(vikter.keys().back())
 	Spel.satt_variant(variant)
-	var med_pilot := variant != "utan_pilot"
-	for id: String in h.get("visa_npc_med_pilot", []):
+	var pd := _pilotdata()
+	var synliga: Array = pd.get("visa", [])
+	for id: String in _alla_dronarpersoner(h):
 		var n: Aktor = varld.npcer.get(id)
 		if n:
-			n.visible = med_pilot
-	var start := varld.punkt(h.get("start_med_pilot" if med_pilot else "start_utan_pilot", [0, 0]))
+			n.visible = id in synliga
+			if n.visible and pd.has("plats_" + id):
+				n.cell = varld.punkt(pd["plats_" + id])
+				n.stanna()
+	var start := varld.punkt(pd.get("start", [0, 0]))
 	dronare = Dronare.new()
 	varld.add_child(dronare)
 	dronare.setup(varld.cell_pos(start) + Vector2(10, 0), varld.dekal_lager)
 	dronare.ljud.connect(_pa_dronarljud)
 	dronare.framme.connect(_pa_dronare_framme, CONNECT_ONE_SHOT)
 	dronare.flyg_till(varld.cell_pos(varld.punkt(h.get("mal", "objekt_mitt"))))
-	if not med_pilot:
-		var sek := float(h.get("utan_pilot_flyger_s", 60))
-		get_tree().create_timer(sek).timeout.connect(_dronare_flyger_bort)
+	if float(pd.get("flyger_bort_s", 0)) > 0.0:
+		get_tree().create_timer(float(pd["flyger_bort_s"])).timeout.connect(_dronare_flyger_bort)
+	# En pilot som inte blir kontaktad tar hem drönaren och går därifrån.
+	if float(pd.get("lamnar_efter_s", 0)) > 0.0:
+		get_tree().create_timer(float(pd["lamnar_efter_s"])).timeout.connect(_dronarpilot_gar)
 
 
 func _kamrat_sager(text: String) -> void:
@@ -713,10 +756,39 @@ func _landa_dronare() -> void:
 	if dronare == null or not dronare.i_luften():
 		return
 	hud.satt_situation("", false)
-	var plats := varld.punkt(_dronare_handelse.get("start_med_pilot", [0, 0]))
+	var plats := varld.punkt(_pilotdata().get("landa", _pilotdata().get("start", [0, 0])))
 	dronare.landa_vid(varld.cell_pos(plats) + Vector2(10, 4))
 	Spel.satt_fakta({"dronare_landad": true})
 	radio.krok("dronare_landar")
+
+
+## Piloten (som inte blivit kontaktad) landar drönaren och går därifrån.
+func _dronarpilot_gar() -> void:
+	var pd := _pilotdata()
+	var synliga: Array = pd.get("visa", [])
+	if synliga.is_empty():
+		return
+	var id := str(synliga[0])
+	var n: Aktor = varld.npcer.get(id)
+	if n == null or not n.visible or _samtal_klara.has(id):
+		return
+	if kontakt.visible and str(kontakt.get_meta("npc", "")) == id:
+		return
+	if dronare and dronare.i_luften():
+		_landa_dronare()
+		Spel.satt_fakta({"dronare_landad": false})
+	_lamnat[id] = true
+	_samtal_klara[id] = true
+	Spel.satt_fakta({"pilot_gick": true})
+	if _larm_npc == id:
+		varld.satt_larm("")
+	_avsluta_handelse(_dronare_handelse)
+	radio.krok("npc_lamnar")
+	get_tree().create_timer(4.0).timeout.connect(func() -> void:
+		if dronare and not dronare.i_luften():
+			_ta_bort_dronare()
+		n.framme.connect(_dolj_npc.bind(id), CONNECT_ONE_SHOT)
+		varld.flytta_npc(id, varld.punkt(pd.get("gar_till", "stig_nord"))))
 
 
 func _pa_situation(id: String) -> void:
@@ -751,7 +823,7 @@ func _bekampa_dronare() -> void:
 	varld.kollega.vand_mot(dronare.global_position)
 	var efter := str(_dronare_handelse.get("kamrat_efter_skott", "…Det där kommer CQ inte gilla."))
 	get_tree().create_timer(1.8).timeout.connect(_kamrat_sager.bind(efter))
-	for id: String in _dronare_handelse.get("visa_npc_med_pilot", []):
+	for id: String in _alla_dronarpersoner(_dronare_handelse):
 		var n: Aktor = varld.npcer.get(id)
 		var replik := str(_scenario.get("npc", {}).get(id, {}).get("efter_skott", ""))
 		if n and n.visible and replik != "":
@@ -1207,7 +1279,7 @@ func _oppna_kontakt(id: String) -> void:
 	for hid: String in _handelse_status:
 		var hs: Dictionary = _handelse_status[hid]
 		var h: Dictionary = hs["h"]
-		var inblandade: Array = h.get("visa_npc_med_pilot", []) + [str(h.get("npc", ""))]
+		var inblandade: Array = _alla_dronarpersoner(h) + [str(h.get("npc", ""))]
 		if id in inblandade:
 			_markera_upptackt(h)
 	if not _upptackt.is_empty() and str(_upptackt["npc"]) in [id, ""]:

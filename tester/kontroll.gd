@@ -23,6 +23,8 @@ func _ready() -> void:
 	await _spela_scenario_1()
 	await _spela_dronaren_med_pilot()
 	await _spela_dronaren_utan_pilot()
+	await _spela_dronaren_dold_pilot(true)
+	await _spela_dronaren_dold_pilot(false)
 	await _spela_missad_handelse()
 	# Steg: tal = svarsalternativ, text = åtgärd i åtgärdsraden.
 	await _spela_hantverkaren("arlig", ["begara_identitet", 0, 0, 0, 0],
@@ -389,13 +391,54 @@ func _spela_dronaren_med_pilot() -> void:
 	await _vanta(2)
 	if main.dronare and main.dronare.lage == "cirklar":
 		_fel("drönaren landade inte efter uppmaning")
-	kontakt.call("_valj", 2)  # Notera och låt gå
+	kontakt.call("_valj", 1)  # Notera och låt gå
 	await _vanta(2)
 	kontakt.call("_stang")
 	await _vanta(3)
 	main.call("_visa_debriefing")
 	await _vanta(3)
 	_forvanta({"be_landa": "ok", "dokumentera": "ok", "slutkrav_rapportera_vaktchef": "bad"})
+	main.queue_free()
+	await _vanta(3)
+
+
+## Mannen i skogskanten (invid): landa, beslag, uppgifter, avvisning – eller så går han själv.
+func _spela_dronaren_dold_pilot(kontakt_tas: bool) -> void:
+	print("--- Scenario: Drönaren (dold pilot, %s) ---" % ("kontakt" if kontakt_tas else "ingen kontakt"))
+	var main = await _starta_dronaren("dold_pilot")
+	var pilot: Aktor = main.varld.npcer.get("dronpiloten")
+	if pilot == null or not pilot.visible:
+		_fel("piloten i skogskanten syns inte")
+		main.queue_free()
+		return
+	if main.varld.npcer.get("piloten").visible:
+		_fel("Mats syns trots variant dold_pilot")
+	if not kontakt_tas:
+		if not await _vanta_tills(func() -> bool: return bool(Spel.fakta.get("pilot_gick", false)), 120.0):
+			_fel("piloten gick aldrig därifrån")
+		else:
+			_ok("piloten tog ner drönaren och gick; lägesrapport: " + str(main.call("_lagestext")))
+		main.queue_free()
+		await _vanta(3)
+		return
+	main.call("_oppna_kontakt", "dronpiloten")
+	await _vanta(3)
+	var kontakt: Kontakt = main.kontakt
+	kontakt.call("_valj", 0)  # Be honom landa
+	await _vanta(2)
+	for atg in ["begara_identitet", "be_om_legitimation", "beslag"]:
+		if not kontakt.valj_atgard(atg):
+			_fel("åtgärden %s saknas (steg %s)" % [atg, kontakt._nod_id])
+		await _vanta(2)
+	if not kontakt.valj_atgard("avvisa"):
+		_fel("åtgärden avvisa saknas (steg %s)" % kontakt._nod_id)
+	await _vanta(2)
+	kontakt.call("_stang")
+	await _vanta(3)
+	_ok("lägesrapport: " + str(main.call("_lagestext")))
+	main.call("_visa_debriefing")
+	await _vanta(3)
+	_forvanta({"be_landa": "ok", "begara_identitet": "ok", "be_om_legitimation": "ok", "beslag": "ok", "avvisa": "ok"})
 	main.queue_free()
 	await _vanta(3)
 

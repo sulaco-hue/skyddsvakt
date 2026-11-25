@@ -1164,6 +1164,13 @@ for i in range(2):
     im.save(os.path.join(OUT, f"civil_ligger_{i}.png"))
     anchors[f"civil_ligger_{i}"] = [13, h - 4]
 
+# Drönarpiloten i skogskanten: grå keps, grön friluftsjacka.
+DP_TOP = [r.replace("R", "Q").replace("r", "x").replace("j", "E").replace("J", "C") for r in CIV_TOP]
+for i in range(2):
+    figure(f"dronpilot_{i}", DP_TOP, CIV_LEGS[i])
+figure("dronpilot_sitter_0", DP_TOP, CIV_SITTER_LEGS)
+figure("dronpilot_sitter_1", DP_TOP, CIV_SITTER_LEGS)
+
 # Smygaren: mörk mössa, mörk jacka och byxor (smälter in i skogen).
 SMYG_TOP = [r.replace("R", "K").replace("r", "x").replace("j", "Q").replace("J", "x") for r in CIV_TOP]
 SMYG_LEGS = [[r.replace("n", "x").replace("N", "K") for r in ben] for ben in CIV_LEGS]
@@ -1572,6 +1579,24 @@ def portrait_smygare():
 
 
 portrait_smygare().save(os.path.join(OUT, "portratt_smygare.png"))
+
+
+def portrait_dronpilot():
+    """Grå mössa, grön friluftsjacka."""
+    im = portrait("civil")
+    px = im.load()
+    for y in range(im.height):
+        for x in range(im.width):
+            r, g, b = px[x, y][:3]
+            if r > 120 and g < 80 and b < 80:          # röd mössa -> grå
+                px[x, y] = (92, 96, 104)
+            elif r > 100 and r > g + 25 and g > b + 15 and y > 50:  # brun jacka -> grön
+                v = (r + g + b) // 3
+                px[x, y] = (v // 3 + 20, v // 2 + 30, v // 3 + 16)
+    return im
+
+
+portrait_dronpilot().save(os.path.join(OUT, "portratt_dronpilot.png"))
 # Smygaren liggande (skjuten): mörk mössa och mörka kläder.
 LIGGER_SMYG = [r.replace("g", "K").replace("G", "x").replace("F", "Q").replace("f", "x").replace("n", "x").replace("N", "K") for r in LIGGER]
 for i in range(2):
