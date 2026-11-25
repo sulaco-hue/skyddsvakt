@@ -1,7 +1,8 @@
 {
   "id": "dronaren",
-  "namn": "Drönaren vid sjön",
-  "ingress": "Ett surr över skyddsobjektet. Någon flyger drönare över skyddsobjektet – men var är piloten? Tillträdesförbud i luften och när våld mot en farkost är tillåtet.",
+  "namn": "Kvällspass i mulet väder",
+  "namn_efterat": "Drönaren vid sjön",
+  "ingress": "Mulet och vindstilla. Sjön ligger blank nedanför skogen, och kvällen är lugn.",
   "objekt": "Förråd Granåsen",
   "passtid": "19:00–23:00",
   "starttid": "19:12",

@@ -330,7 +330,7 @@ func spara_logg() -> String:
 	var tid := Time.get_datetime_string_from_system().replace(":", "-")
 	var sokvag := "user://debriefing_%s_%s.json" % [scenario.get("id", "scenario"), tid]
 	var innehall := JSON.stringify({
-		"scenario": scenario.get("namn", ""),
+		"scenario": scenario.get("namn_efterat", scenario.get("namn", "")),
 		"objekt": scenario.get("objekt", ""),
 		"sparad": Time.get_datetime_string_from_system(),
 		"lagstod_granskat": regelmotor.ar_granskad(),

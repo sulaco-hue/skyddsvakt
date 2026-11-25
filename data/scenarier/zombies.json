@@ -1,7 +1,8 @@
 {
   "id": "zombies",
-  "namn": "Zombieapokalypsen",
-  "ingress": "Ett skämtscenario. Något är mycket fel i skogen runt Granåsen – men reglerna för varning och verkanseld gäller fortfarande. Eller?",
+  "namn": "Nattpass i dimma",
+  "namn_efterat": "Zombieapokalypsen",
+  "ingress": "Tät dimma ligger i skogen. Ljudet bär konstigt i natt.",
   "objekt": "Förråd Granåsen",
   "passtid": "01:00–05:00",
   "starttid": "03:13",

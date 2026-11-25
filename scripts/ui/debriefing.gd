@@ -49,7 +49,8 @@ func bygg(poster: Array, scenario: Dictionary, granskad: bool, kommentar: String
 		topp.add_child(UiKit.titel("GAME OVER", 22 if k else 26, UiKit.ROSA))
 	topp.add_child(UiKit.titel("Debriefing · " + str(scenario.get("pass", "")), 22 if k else 26))
 	if not k:
-		var under := UiKit.etikett(str(scenario.get("namn", "")), 22, UiKit.DAMPAD)
+		# Efteråt får scenariot sitt avslöjande namn (i listan är det neutralt).
+		var under := UiKit.etikett(str(scenario.get("namn_efterat", scenario.get("namn", ""))), 22, UiKit.DAMPAD)
 		under.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		under.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		topp.add_child(under)

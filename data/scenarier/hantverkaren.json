@@ -1,7 +1,8 @@
 {
   "id": "hantverkaren",
-  "namn": "Hantverkaren vid grinden",
-  "ingress": "En klar morgon stannar en servicebil vid bommen. ”Ska bara byta filter i ventilationen.”",
+  "namn": "Förmiddagspass",
+  "namn_efterat": "Hantverkaren vid grinden",
+  "ingress": "Klar morgon. Grinden är bemannad och passerkontrollen gäller som vanligt.",
   "objekt": "Förråd Granåsen",
   "passtid": "07:00–11:00",
   "starttid": "08:10",

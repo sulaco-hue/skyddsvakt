@@ -1,6 +1,7 @@
 {
   "id": "fotografen",
-  "namn": "Fotografen vid staketet",
+  "namn": "Kvällspass i duggregn",
+  "namn_efterat": "Fotografen vid staketet",
   "objekt": "Förråd Granåsen",
   "passtid": "18:00–22:00",
   "starttid": "18:36",
@@ -367,7 +368,7 @@
     "kontakt": "kontakt tagen med personen som fotograferade objektet vid sektor NO",
     "lamnat": "personen som fotograferade objektet lämnade platsen innan kontakt, röd personbil norrut på skogsstigen"
   },
-  "ingress": "Kväll vid grinden. En man med kamera dyker upp vid staketet. Avbildningsförbud, identitet och gränsen för ingripande.",
+  "ingress": "Skymning och duggregn över Granåsen. Fyra timmar vid grinden innan avlösningen.",
   "slutkrav": [
     {
       "handling": "rapportera_vaktchef",

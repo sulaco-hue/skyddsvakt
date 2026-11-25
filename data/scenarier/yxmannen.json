@@ -1,7 +1,8 @@
 {
   "id": "yxmannen",
-  "namn": "Yxmannen i natten",
-  "ingress": "Mitt i natten kommer en man ut ur skogen med en yxa över huvudet och vrålar att han ska döda er. Osannolikt – men just därför värt att öva. Nödvärn, varning, varningsskott och verkanseld.",
+  "namn": "Nattpass",
+  "namn_efterat": "Yxmannen i natten",
+  "ingress": "Klart och kallt. Granåsen sover, och natten är lång.",
   "objekt": "Förråd Granåsen",
   "passtid": "01:00–05:00",
   "starttid": "02:14",
