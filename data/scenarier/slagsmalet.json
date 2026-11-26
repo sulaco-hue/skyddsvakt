@@ -228,6 +228,7 @@
       "offer_ligger": "civil_ligger",
       "flykt": "slagsmal_flykt",
       "upptacks_avstand": 18,
+      "upptacks_fordrojning_s": 2,
       "slass_min_s": 12,
       "slass_max_s": 17,
       "sparkar_min_s": 4,

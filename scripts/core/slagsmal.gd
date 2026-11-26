@@ -24,6 +24,7 @@ var offret_lage := "slass"
 var smyg_lage := "vantar"
 var upptackt := false
 var smyg_upptackt := false
+var _upptack_t := 0.0
 
 var _t := 0.0
 var _slag_t := 0.0
@@ -90,7 +91,10 @@ func _uppdatera_slagsmal(delta: float) -> void:
 	if not upptackt and brakare_lage in AKTIVA:
 		var avst: int = main.varld.avstand(main.varld.spelare.cell, b.cell)
 		if avst <= int(h.get("upptacks_avstand", 18)):
-			_upptack_slagsmal()
+			# Det tar en stund innan man uppfattar vad som händer.
+			_upptack_t += delta
+			if _upptack_t >= float(h.get("upptacks_fordrojning_s", 2.0)):
+				_upptack_slagsmal()
 	if brakare_lage == "brak":
 		_replik_t -= delta
 		if _replik_t <= 0.0 and main.hud.visible:
