@@ -1258,9 +1258,33 @@ func _dolj_npc(id: String) -> void:
 
 # ----------------------------------------------------------- Kontakt --
 
+## Vi klickar på en person som är del av en händelse som inte upptäckts än:
+## då har vi själva sett den – upptäckt direkt. Sant om klicket "förbrukades".
+func _upptack_vid_klick(id: String) -> bool:
+	if not _horde.is_empty() and (_horde["zombies"] as Dictionary).has(id) and not bool(_horde["upptackt"]):
+		_horde_upptackt()
+		return true
+	if _slagsmal and not _slagsmal.upptackt and id in [str(_slagsmal.h.get("brakare", "brakaren")), str(_slagsmal.h.get("offer", "offret"))]:
+		_slagsmal._upptack_slagsmal()
+		return true
+	if not _angripare.is_empty() and str(_angripare["id"]) == id and not bool(_angripare.get("upptackt", false)):
+		_angripare_upptackt()
+		return true
+	if not _upptackt.is_empty() and str(_upptackt.get("npc", "")) == id:
+		_kamrat_reagerar()
+		# Personer utan samtal (t.ex. smygaren) – klicket var bara upptäckten.
+		return not (_scenario.get("npc", {}).get(id, {}) as Dictionary).has("dialog_start")
+	return false
+
+
 func _pa_npc_klickad(id: String) -> void:
+	if _upptack_vid_klick(id):
+		return
 	if not _horde.is_empty() and (_horde["zombies"] as Dictionary).has(id):
 		_kamrat_sager("Jag tror inte han vill prata.")
+		return
+	# Personer i händelser utan samtal (bråkarna, smygaren) går inte att prata med.
+	if not (_scenario.get("npc", {}).get(id, {}) as Dictionary).has("dialog_start") and _slagsmal:
 		return
 	if _sittande.has(id):
 		_sittande[id]["t"] = 0.0
