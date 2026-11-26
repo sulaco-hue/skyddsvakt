@@ -211,6 +211,23 @@ func _radio_ersattningar() -> Dictionary:
 	for nyckel: String in standard:
 		if not byt.has(nyckel):
 			byt[nyckel] = standard[nyckel]
+	# Frihetsberövanden och beslag ska polisen ta hand om efter oss (17 §, RB 24:7):
+	# det måste med i polisbegäran (och lägesrapporten), om texten inte redan säger det.
+	var overlamna: Array = []
+	for par: Array in [["gripande_genomfort", "en person gripen", "grip"],
+			["envarsgripande_genomfort", "en person envarsgripen", "envarsgrip"],
+			["omhandertagande_genomfort", "en person tillfälligt omhändertagen", "omhänderta"],
+			["beslag_genomfort", "beslag gjort", "beslag"]]:
+		if bool(Spel.fakta.get(par[0], false)):
+			overlamna.append(par)
+	for nyckel in ["polis", "lage"]:
+		var t := str(byt.get(nyckel, ""))
+		var nya: PackedStringArray = []
+		for par: Array in overlamna:
+			if not t.contains(str(par[2])):
+				nya.append(str(par[1]))
+		if not nya.is_empty() and (t != "" or nyckel == "polis"):
+			byt[nyckel] = (t + ", " if t != "" else "") + ", ".join(nya)
 	# Har vi gett första hjälpen ska det med i rapporten, till polis och till sjukvården.
 	# Erbjöds den men avböjdes säger vi det i stället (inte till polisen).
 	if bool(Spel.fakta.get("forsta_hjalp_given", false)):

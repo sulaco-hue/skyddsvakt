@@ -468,7 +468,10 @@
           "lagrum": "Skyddslagen 16 §",
           "text": "Protokoll ska föras över beslag."
         }
-      ]
+      ],
+      "satter_fakta": {
+        "beslag_genomfort": true
+      }
     },
     "neka_tilltrade": {
       "namn": "Nekade tillträde",
