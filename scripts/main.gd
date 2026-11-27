@@ -1962,9 +1962,10 @@ func _visa_debriefing() -> void:
 			continue
 		var h: Dictionary = hs["h"]
 		var slut := float(hs["slut_s"]) if float(hs["slut_s"]) >= 0.0 else Spel.klocka_s
-		var speltid := int((slut - float(hs["start_s"])) / 60.0)
-		var narmast := int(hs["narmast"])
-		var var_text := ("Som närmast var ni %d rutor bort." % narmast) if narmast < 999 else ""
+		var minuter := maxi(int(round((slut - float(hs["start_s"])) / 60.0)), 1)
+		const ORD := ["", "en minut", "två minuter", "tre minuter", "fyra minuter", "fem minuter",
+			"sex minuter", "sju minuter", "åtta minuter", "nio minuter", "tio minuter"]
+		var tid_text: String = ORD[minuter] if minuter < ORD.size() else "%d minuter" % minuter
 		Spel.lagg_till_missad({
 			"tid": str(hs["start"]),
 			"handling": "missad_" + hid,
@@ -1972,7 +1973,7 @@ func _visa_debriefing() -> void:
 			"beskrivning": "Missad händelse: " + str(h.get("namn", hid)) + (" (%s)" % Spel.variant.replace("_", " ") if Spel.variant != "" else ""),
 			"utfall": "bad",
 			"lagrum": "Bevakningsinstruktion – uppmärksamhet",
-			"kommentar": "Händelsen pågick i cirka %d minuter speltid utan att stridsparet upptäckte den. %s" % [maxi(speltid, 1), var_text],
+			"kommentar": "Händelsen pågick i ca %s utan att ni upptäckte den." % tid_text,
 			"diskutera": str(h.get("missad_diskutera", "Var borde stridsparet ha befunnit sig? Hur fördelar ni uppmärksamheten under en rond?")),
 			"saknade_krav": [],
 		})
