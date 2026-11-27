@@ -153,6 +153,19 @@ func _framme_nerfor() -> void:
 		return
 	var b := _brakare()
 	var o := _offret()
+	# Offret är framme; bråkaren ska hinna ikapp innan slagsmålet fortsätter.
+	if main.varld.avstand(b.cell, o.cell) > 1 and b.ar_i_rorelse():
+		o.vand_mot(b.global_position)
+		b.framme.connect(_brakare_ikapp, CONNECT_ONE_SHOT)
+		return
+	_brakare_ikapp()
+
+
+func _brakare_ikapp() -> void:
+	if brakare_lage != "jagar":
+		return
+	var b := _brakare()
+	var o := _offret()
 	b.stanna()
 	o.vand_mot(b.global_position)
 	b.vand_mot(o.global_position)

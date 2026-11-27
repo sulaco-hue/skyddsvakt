@@ -649,6 +649,12 @@ func _spela_slagsmal(fall: String) -> void:
 			await _avsluta_yxmannen(main, {"halt_order": "ok", "varningsskott": "bad"})
 		"lamnar":
 			main.varld.ga_till(main.varld.punkt("slagsmal_mal") + Vector2i(-1, 0))
+			if await _vanta_tills(func() -> bool: return sm.brakare_lage == "slass", 40.0):
+				var d: int = main.varld.avstand(sm._brakare().cell, sm._offret().cell)
+				if d > 1:
+					_fel("slagskämparna står %d rutor isär när de slåss" % d)
+				else:
+					_ok("slagskämparna står intill varandra nere vid vägen")
 			if not await _vanta_tills(func() -> bool: return Spel.logg.any(func(p: Dictionary) -> bool:
 					return p.get("handling", "") == "lamnade_posten"), 40.0):
 				_fel("att båda lämnade posten registrerades inte")
