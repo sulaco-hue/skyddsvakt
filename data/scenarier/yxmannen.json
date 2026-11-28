@@ -90,6 +90,10 @@
       "vid_brist": "warn",
       "text_brist": "Han hade nyss hotat att döda er med en yxa – olaga hot på bar gärning. Att bara låta honom gå, utan att gripa eller i varje fall larma polis, lämnar en farlig och förvirrad person fri i skogen. [Bedömning]",
       "diskutera": "Vad är skillnaden mellan att ni får gripa och att ni måste? Vem tar hand om honom om ni låter honom gå?"
+    },
+    "forsta_hjalpen": {
+      "text_ok": "Rätt när läget är säkert: yxan undanlagd, kamraten skyddar. Stoppa blödning, fria luftvägar.",
+      "diskutera": "Hur säkrar ni platsen innan ni går fram till en person som nyss anföll?"
     }
   },
   "varianter": {

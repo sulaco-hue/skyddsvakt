@@ -630,9 +630,9 @@
       "satter_fakta": {
         "forsta_hjalp_given": true
       },
-      "text_ok": "Rätt när läget är säkert: yxan undanlagd, kamraten skyddar. Stoppa blödning, fria luftvägar.",
+      "text_ok": "Rätt när läget är säkert: hotet är över och kamraten håller uppsikt. Stoppa blödning, fria luftvägar.",
       "text_brist": "Läget var inte säkrat när ni gick fram.",
-      "diskutera": "Hur säkrar ni platsen innan ni går fram till en person som nyss anföll?"
+      "diskutera": "Hur säkrar ni platsen innan ni går fram till någon som är skadad – särskilt om det är den som nyss anföll?"
     },
     "envarsgripande": {
       "namn": "Grep honom (envarsgripande)",

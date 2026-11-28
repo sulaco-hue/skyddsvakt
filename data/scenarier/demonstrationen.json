@@ -438,6 +438,11 @@
     }
   },
   "bedomning": {
+    "forsta_hjalpen": {
+      "krav": [],
+      "text_ok": "Rätt. Den som skadats – demonstrant eller kollega – ska få första hjälpen, även om ni själva orsakat skadan. Stoppa blödning, fria luftvägar och se till att någon håller uppsikt över gruppen medan ni hjälper.",
+      "diskutera": "Vem höll grinden medan ni gav första hjälpen? Hur påverkar en skadad demonstrant stämningen i gruppen – och vad behöver CQ och polisen veta?"
+    },
     "halt_order": {
       "krav": [
         "hot_svarare_vald"
