@@ -300,12 +300,48 @@ func _nasta_steg(d: Dictionary) -> void:
 		vag = fri
 	var nasta: Vector2i = vag[1]
 	if _upptagen(nasta, d):
+		# Trängsel: nära vakterna trycker man på bakifrån, annars försöker man
+		# ta sig runt de andra.
+		d["tryck"] = _nara_vakt(n.cell, 2)
 		d["t"] = 0.35
+		if not d["tryck"]:
+			var sido := _sidosteg(n.cell, mal, d)
+			if sido.x >= 0:
+				d["reserv"] = sido
+				var steg2: Array[Vector2i] = [n.cell, sido]
+				n.ga_langs(steg2)
 		return
 	d["reserv"] = nasta
 	var steg: Array[Vector2i] = [n.cell, nasta]
 	n.ga_langs(steg)
 	d["t"] = 0.0
+
+
+func _nara_vakt(c: Vector2i, r: int) -> bool:
+	for v in _vakter():
+		if main.varld.avstand(c, v) <= r:
+			return true
+	return false
+
+
+## Ett steg åt sidan som för närmare målet, förbi andra demonstranter.
+func _sidosteg(fran: Vector2i, mal: Vector2i, jag: Dictionary) -> Vector2i:
+	var v: Varld = main.varld
+	var basta := Vector2i(-1, -1)
+	var nu := Vector2(mal - fran).length()
+	var minst := nu
+	for dy in range(-1, 2):
+		for dx in range(-1, 2):
+			var c := fran + Vector2i(dx, dy)
+			if c == fran or not v.ar_fri(c) or c in _vakter() or _upptagen(c, jag):
+				continue
+			if dx != 0 and dy != 0 and (not v.ar_fri(fran + Vector2i(dx, 0)) or not v.ar_fri(fran + Vector2i(0, dy))):
+				continue
+			var l := Vector2(mal - c).length()
+			if l < minst - 0.2:
+				minst = l
+				basta = c
+	return basta
 
 
 func _vag_utan(fran: Vector2i, till: Vector2i, hinder: Array[Vector2i]) -> Array[Vector2i]:
@@ -363,16 +399,20 @@ func _uppdatera_tryck(delta: float) -> void:
 		_knuff(d["n"])
 		if main.hud.visible and randf() < 0.5:
 			main.hud.visa_ljud(d["n"], str((h.get("ljud_tryck", ["*tryck*"]) as Array).pick_random()), 0.8, 30.0)
+		elif main.hud.visible and randf() < 0.3:
+			_sag(d["n"], str((h.get("repliker_tryck", ["Släpp in oss!"]) as Array).pick_random()), 1.8)
 	_uppdatera_kamrat_knuff(delta, tryckande)
 	_tryck_t -= delta
 	if _tryck_t > 0.0:
 		return
 	_tryck_t = float(h.get("tryck_intervall_s", 2.0))
-	var chans := float(h.get("chans_slinka", 0.05)) * (1.0 + 0.5 * stress) * clampf(tryckande.size() / 4.0, 0.5, 2.0)
+	# Trycket växer ju längre de håller på.
+	var tid_faktor := 1.0 + _fas_t / float(h.get("tryck_okar_per_s", 60))
+	var chans := float(h.get("chans_slinka", 0.05)) * (1.0 + 0.5 * stress) * clampf(tryckande.size() / 4.0, 0.5, 2.0) * tid_faktor
 	if _lugnt():
 		chans *= 0.5
 	for d in tryckande:
-		if randf() < chans:
+		if _nara_vakt((d["n"] as Aktor).cell, 1) and randf() < chans:
 			_slinker_forbi(d)
 			return
 
@@ -448,7 +488,7 @@ func _slinker_forbi(d: Dictionary) -> void:
 
 ## Tvåan ställer sig i den andra grindrutan när ettan står i grinden.
 func _uppdatera_kamrat() -> void:
-	if fas == "kommer" or _avslutad:
+	if not upptackt or _avslutad:
 		return
 	var v: Varld = main.varld
 	var grind: Array[Vector2i] = v.grindceller()

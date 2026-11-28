@@ -209,7 +209,11 @@
         "Vapen dödar – fred föder!",
         "Hej hej, militär – vi vill inte ha er här!",
         "Ner med vapnen!",
-        "Våtmark, inte vapenmark!"
+        "Våtmark, inte vapenmark!",
+        "Militären sprider covid via RA180!",
+        "Stäng av 5G-strålningen!",
+        "Vi vet vad ni sänder i era radioapparater!",
+        "5G-masten är er! Den sprider covid!"
       ],
       "repliker_arga": [
         "Ni kan inte stoppa oss alla!",
@@ -217,7 +221,9 @@
         "Vi har rätt att vara här!",
         "Släpp in oss!",
         "Det här är vår skog!",
-        "Skäms!"
+        "Skäms!",
+        "Sluta stråla oss med RA180!",
+        "Vi vet om 5G-masterna!"
       ],
       "replik_sjung": "Nu tycker jag att vi gemensamt sjunger We Shall Overcome!",
       "repliker_sitter": [
@@ -228,6 +234,14 @@
         "♪ Vi ska aldrig ge oss ♪",
         "*klappar i takt*"
       ],
+      "repliker_tryck": [
+        "Släpp in oss!",
+        "Flytta på er!",
+        "Vi går in nu!",
+        "Ni kan inte stoppa oss!",
+        "Tryck på, allihop!"
+      ],
+      "tryck_okar_per_s": 60,
       "repliker_slinker": [
         "Ursäkta – förbi!",
         "Hoppsan!",
