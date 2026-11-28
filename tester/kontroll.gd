@@ -43,6 +43,8 @@ func _ready() -> void:
 	await _spela_slagsmal("lamnar")
 	await _spela_slagsmal("smygare")
 	await _spela_slagsmal("smygare_flykt")
+	await _spela_demonstration("dialog")
+	await _spela_demonstration("vald")
 	await _spela_lamna_posten()
 	await _spela_yxmannen_for_tidigt()
 	await _spela_yxmannen_nar_fram()
@@ -701,6 +703,79 @@ func _spela_slagsmal(fall: String) -> void:
 			else:
 				_ok("smygaren tappade skylten; lägesrapport: " + str(main.call("_lagestext")))
 			await _avsluta_yxmannen(main, {"varningsskott": "bad"})
+
+
+# ------------------------------------------------------- Demonstrationen --
+
+## dialog: grinden hålls, talespersonen går med på att sitta utanför, polis begärs.
+## vald: halt, handgemäng mot en som trycker på, varningsskott; den som kommit in bärs ut.
+func _spela_demonstration(fall: String) -> void:
+	print("--- Scenario: Demokratiska rättigheter? (%s) ---" % fall)
+	Spel.nollstall("res://data/scenarier/demonstrationen.json")
+	var main = load("res://scenes/main.tscn").instantiate()
+	add_child(main)
+	await _vanta(5)
+	main.call("_starta_pass")
+	await _vanta(3)
+	main.varld.ga_till(main.varld.punkt("grind"))
+	main.call("_forcera_handelse", "1")
+	if not await _vanta_tills(func() -> bool: return main._demo != null and main._demo.upptackt, 60.0):
+		_fel("demonstrationen upptäcktes aldrig")
+		main.queue_free()
+		return
+	var dm: Demonstration = main._demo
+	_ok("demonstrationen upptäckt, knappar: %s" % ", ".join(PackedStringArray(main.hud.situationer())))
+	match fall:
+		"dialog":
+			await _vanta_tills(func() -> bool: return dm.fas != "kommer", 60.0)
+			main.call("_oppna_kontakt", "talespersonen")
+			await _vanta(3)
+			var kontakt: Kontakt = main.kontakt
+			kontakt.call("_valj", 0)
+			await _vanta(2)
+			kontakt.call("_valj", 0)
+			await _vanta(2)
+			kontakt.call("_stang")
+			await _vanta(3)
+			if not bool(Spel.fakta.get("demo_sitter_utanfor", false)):
+				_fel("gruppen gick inte med på att sitta utanför")
+			main.hud.radio_anropa()
+			main.hud.radio_valj("lagesrapport")
+			main.hud.radio_valj("polis")
+			main.hud.radio_avsluta()
+			if not await _vanta_tills(func() -> bool: return dm._avslutad, 200.0):
+				var lagen: Array = dm.demonstranter.map(func(d: Dictionary) -> String: return str(d["lage"]))
+				_fel("demonstrationen tog aldrig slut efter polis (fas %s, lägen %s)" % [dm.fas, str(lagen)])
+			else:
+				_ok("polisen kom, demonstranterna gick; lägesrapport: " + str(main.call("_lagestext")))
+			await _avsluta_yxmannen(main, {"neka_tilltrade": "ok", "anmala_polis": "ok", "rapportera_vaktchef": "ok"})
+		"vald":
+			main.call("_pa_situation", "halt")
+			if not await _vanta_tills(func() -> bool: return not dm._tryckande().is_empty(), 90.0):
+				_fel("ingen demonstrant tryckte på i grinden (spelaren %s, kamraten %s)" % [main.varld.spelare.cell, main.varld.kollega.cell])
+			else:
+				_ok("demonstranter trycker på mot stridsparet i grinden")
+				# Handgemäng mot den som trycker – han står intill.
+				var d: Dictionary = dm._tryckande()[0]
+				main.varld.spelare.stanna()
+				if main.varld.avstand(main.varld.spelare.cell, (d["n"] as Aktor).cell) <= 2:
+					main.call("_pa_situation", "handgemang")
+			await _vanta(2)
+			main.call("_pa_situation", "varningsskott")
+			# Någon tar sig in (vi kliver ur grinden) och bärs ut.
+			main.varld.ga_till(main.varld.punkt("objekt_mitt") + Vector2i(2, 3))
+			if not await _vanta_tills(func() -> bool: return not dm._inne().is_empty(), 90.0):
+				_fel("ingen demonstrant kom in trots öppen grind")
+			else:
+				main.call("_pa_situation", "avlagsna")
+				if not await _vanta_tills(func() -> bool: return Spel.handling_utford("avlagsna") and dm._bar_ut.is_empty(), 60.0):
+					_fel("demonstranten bars aldrig ut")
+				else:
+					_ok("en demonstrant bars ut")
+			var forv := {"halt_order": "warn", "varningsskott": "bad", "avlagsna": "ok"}
+			if Spel.handling_utford("handgemang"):
+				forv["handgemang"] = "ok"
+			await _avsluta_yxmannen(main, forv)
 
 
 # ------------------------------------------------------------ Yxmannen --

@@ -440,6 +440,11 @@ func vag_mot(fran: Vector2i, mal: Vector2i, npc := false) -> Array[Vector2i]:
 	return []
 
 
+## Grindens rutor (där bommen står).
+func grindceller() -> Array[Vector2i]:
+	return _grindceller
+
+
 func avstand(a: Vector2i, b: Vector2i) -> int:
 	return maxi(absi(a.x - b.x), absi(a.y - b.y))
 

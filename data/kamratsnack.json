@@ -329,6 +329,14 @@
       "svar": [
         "Den heter ju Ak 24, så troligen år 2124."
       ]
+    },
+    {
+      "amne": "jobbet",
+      "kamrat": "Hur går det på jobbet då, Olsson?",
+      "alltid_svar": true,
+      "svar": [
+        "Jodå, eldsvådor och bilkrockar om vartannat, så det är ingen risk för arbetslöshet här inte."
+      ]
     }
   ],
   "allmanna_svar": [

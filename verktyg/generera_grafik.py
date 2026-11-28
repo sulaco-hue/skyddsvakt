@@ -1621,6 +1621,117 @@ portrait_yxman().save(os.path.join(OUT, "portratt_yxman.png"))
 # I dialogen har yxan redan hamnat i gruset.
 portrait_yxman(yxa=False).save(os.path.join(OUT, "portratt_yxman_utan.png"))
 
+
+# ============================================================ Demonstranter ==
+# Scenario 7: demonstranter med plakat på pinne. Siffror = variantfärger:
+# 1/2 jacka (ljus/mörk), 3 mössa, 4 text på plakatet, 5 plakat.
+DEMO_TOP = [
+    "..555555555.",
+    "..545445455.",
+    "..555555555.",
+    ".........J..",
+    "....3333.J..",
+    "...333333J..",
+    "...sesses.s.",
+    "...ssssss.1.",
+    "....SSSS..1.",
+    "..11111111..",
+    ".1121111211.",
+    "1112111121..",
+    "1112111121..",
+    ".112111121..",
+    ".2111111122.",
+]
+DEMO_TOP_VIFT = list(DEMO_TOP)
+DEMO_TOP_VIFT[0], DEMO_TOP_VIFT[1], DEMO_TOP_VIFT[2] = ".555555555..", ".545445455..", ".555555555.."
+DEMO_TOP_VIFT[3] = "........J..."
+DEMO_FARGER = {
+    "a": {"1": (72, 140, 84), "2": (50, 104, 60), "3": (190, 60, 50), "4": (40, 40, 48)},
+    "b": {"1": (124, 82, 156), "2": (92, 60, 118), "3": (232, 196, 60), "4": (170, 40, 40)},
+    "c": {"1": (226, 190, 52), "2": (180, 148, 36), "3": (60, 96, 170), "4": (40, 40, 48)},
+    "d": {"1": (64, 112, 182), "2": (46, 84, 142), "3": (80, 150, 80), "4": (170, 40, 40)},
+}
+for v, farger in DEMO_FARGER.items():
+    PAL.update(farger)
+    PAL["5"] = (238, 234, 222)
+    for i in range(2):
+        figure(f"demonstrant_{v}_{i}", DEMO_TOP if i == 0 else DEMO_TOP_VIFT, CIV_LEGS[i])
+    figure(f"demonstrant_{v}_sitter_0", DEMO_TOP, CIV_SITTER_LEGS)
+    figure(f"demonstrant_{v}_sitter_1", DEMO_TOP_VIFT, CIV_SITTER_LEGS)
+    # Skadad (sitter med händerna för ansiktet, plakatet på marken)
+    skadad = [r.replace("5", ".").replace("4", ".").replace("J", ".") for r in DEMO_TOP]
+    skadad[6], skadad[7] = "...s1sse1...", "...s1ss1s..."
+    figure(f"demonstrant_{v}_skadad_0", skadad, CIV_SITTER_LEGS)
+    figure(f"demonstrant_{v}_skadad_1", skadad, CIV_SITTER_LEGS)
+
+# Polis: mörkblå uniform med gul reflexväst, mössa.
+PAL.update({"6": (30, 40, 72), "7": (22, 28, 52), "8": (220, 214, 40), "9": (236, 240, 236)})
+POLIS_TOP = [
+    "....6666....",
+    "...666666...",
+    "..77777777..",
+    "...ssssss...",
+    "...sesses...",
+    "...ssssss...",
+    "....SSSS....",
+    "..88888888..",
+    ".8889999888.",
+    ".8888888888.",
+    ".8899999988.",
+    ".s88888888s.",
+    ".s.666666.s.",
+    "...666666...",
+]
+POLIS_LEGS = [[r.replace("n", "6").replace("N", "7") for r in ben] for ben in CIV_LEGS]
+for i in range(2):
+    figure(f"polis_{i}", POLIS_TOP, POLIS_LEGS[i])
+
+
+def polisbil(d, im):
+    """Vit polisbuss med blå-gul rand och blåljus; fronten mot -x."""
+    x0, x1, y0, y1 = 0.1, 1.9, 0.2, 0.8
+    vit, vit_m, bla, gul = (230, 232, 228), (188, 192, 190), (36, 70, 150), (230, 200, 40)
+    for gx in (0.45, 1.5):
+        x, y = iso(gx, y1, 0)
+        d.ellipse([x - 4, y - 6, x + 3, y + 1], fill=(28, 28, 28))
+        d.ellipse([x - 2, y - 4, x + 1, y - 1], fill=(120, 120, 120))
+    d.polygon(face_quad(x0, y1, x1, y1, 3, 18), fill=vit)
+    d.polygon(face_quad(x1, y0, x1, y1, 3, 18), fill=vit_m)
+    d.polygon([iso(x0, y0, 18), iso(x1, y0, 18), iso(x1, y1, 18), iso(x0, y1, 18)], fill=(242, 244, 242))
+    # rutmönster: blå och gul
+    steg = (x1 - x0) / 8
+    for k in range(8):
+        d.polygon(face_quad(x0 + k * steg, y1, x0 + (k + 1) * steg, y1, 7, 10), fill=bla if k % 2 == 0 else gul)
+    d.polygon(face_quad(x1, y0, x1, y1, 7, 10), fill=shade(bla, 0.8))
+    q = face_quad(x0 + 0.05, y1, x0 + 0.45, y1, 11, 16)
+    d.polygon(q, fill=(52, 64, 74))
+    d.line([q[3], q[2]], fill=(140, 160, 170))
+    # blåljus
+    for gx in (0.35, 0.6):
+        x, y = iso(gx, 0.5, 18)
+        d.rectangle([x - 1, y - 3, x + 1, y], fill=(60, 120, 255))
+        d.point((x, y - 3), fill=(190, 220, 255))
+
+save_obj("polisbil", polisbil, (0.5, 0.5))
+
+
+def portrait_talesperson():
+    """Lila jacka och gul mössa (talespersonen för demonstrationen)."""
+    im = portrait("civil")
+    px = im.load()
+    for y in range(im.height):
+        for x in range(im.width):
+            r, g, b = px[x, y][:3]
+            if r > 120 and g < 80 and b < 80:          # röd mössa -> gul
+                px[x, y] = (232, 196, 60)
+            elif r > 100 and r > g + 25 and g > b + 15 and y > 50:  # brun jacka -> lila
+                v = (r + g + b) // 3
+                px[x, y] = (v // 2 + 40, v // 3 + 20, v // 2 + 60)
+    return im
+
+
+portrait_talesperson().save(os.path.join(OUT, "portratt_talesperson.png"))
+
 # ============================================================ Ikoner ==
 def hogtalare(namn, extra):
     T, R = (230, 235, 224, 255), (240, 124, 140, 255)

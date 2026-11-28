@@ -1,0 +1,604 @@
+{
+  "id": "demonstrationen",
+  "namn": "Demokratiska rättigheter?",
+  "namn_efterat": "Demokratiska rättigheter? – demonstrationen vid grinden",
+  "ingress": "Grå lördagsförmiddag. Lite trafik på vägen, några hundägare ute på promenad.",
+  "objekt": "Förråd Granåsen",
+  "passtid": "08:00–12:00",
+  "starttid": "10:02",
+  "tidsfaktor": 6,
+  "vader": "Mulet · 6°C",
+  "vaderlag": [
+    "mulet"
+  ],
+  "dagsljus": true,
+  "beredskap": "NORMAL",
+  "karta": "res://data/kartor/granasen.json",
+  "omvarldslage": [
+    {
+      "tid": "07:30",
+      "kalla": "Lokal nyhet",
+      "text": "Fredsrörelser och miljögrupper samlar till manifestationer runt om i länet i helgen."
+    },
+    {
+      "tid": "07:55",
+      "kalla": "Vaktchef",
+      "text": "Inga avvikelser. Bevaka grinden enligt instruktion."
+    }
+  ],
+  "briefing": {
+    "uppdrag": "Bevaka grinden och staketet. Endast behöriga släpps in. Rapportera avvikelser till CQ.",
+    "objektinfo": "Skyddsobjektet omfattar området innanför staketet. Skyltat: tillträdesförbud och avbildningsförbud.",
+    "samband": "Vi: Grindposten. Vaktchef: CQ (Caesar Qvintus).",
+    "mal": []
+  },
+  "anropssignaler": {
+    "vaktchef": "CQ",
+    "du": "Grindposten"
+  },
+  "fakta": {
+    "skyltat_avbildningsforbud": true,
+    "motpart_inom": false,
+    "motpart_invid": false,
+    "vill_ha_tilltrade": false,
+    "flyr_fran_objekt": false,
+    "overtratt_forbud": false,
+    "vagrat_id": false,
+    "oriktiga_uppgifter": false,
+    "vagrat_visitation": false,
+    "vagrat_fordon": false,
+    "behov_avvisa": false,
+    "behov_avlagsna": false,
+    "behov_omhanderta": false,
+    "visitation_behovs": false,
+    "misstanke_13": false,
+    "beslag_betydelse": false,
+    "anmalan_polis": false,
+    "protokoll_upprattat": false,
+    "behorig": false,
+    "hot_svarare_vald": false,
+    "angrepp_pagar": false,
+    "angrepp_overhangande": false,
+    "angrepp_pagar_ej": false,
+    "varning_given": false,
+    "varningsskott_avlossat": false,
+    "varningsskott_foregick": false,
+    "verkanseld_avlossad": false,
+    "sjukvard_larmad": false,
+    "forsta_hjalp_given": false,
+    "brott_pa_bar_garning": false,
+    "skjutning_rapporterad": false,
+    "motpart_skjuten": false,
+    "motpart_gett_upp": false,
+    "motpart_overmannad": false,
+    "handlade_i_tid": false,
+    "envarsgripande_genomfort": false,
+    "aldrig": false,
+    "skott_utan_risk": false,
+    "mal_inom_skyddsobjekt": false,
+    "skadad_person": false,
+    "demo_upptackt": false,
+    "demo_inne": false,
+    "demo_inne_nu": false,
+    "demo_sitter_inne": false,
+    "demo_sitter_utanfor": false,
+    "demo_filmas": false,
+    "demonstrant_skadad": false,
+    "demonstrant_skjuten": false,
+    "skyddsvakt_skadad": false,
+    "polis_pa_plats": false,
+    "vald_behovs": false,
+    "vald_proportionerligt": false,
+    "forsta_hjalp_avbojd": false,
+    "talesperson_vagrar": false
+  },
+  "npc": {
+    "talespersonen": {
+      "namn": "Man, ca 45 år",
+      "benamning": "mannen",
+      "beskrivning": "Lila jacka, gul mössa, megafon",
+      "sprite": "demonstrant_b",
+      "portratt": "portratt_talesperson",
+      "start": "demo_start",
+      "synlig_fran_start": false,
+      "stamning": 4,
+      "dialog_start": "start",
+      "frihetsberovad": {
+        "kommentar": "Efter omhändertagande: sitter vid bommen och leder sången därifrån.",
+        "plats": "grind_ute",
+        "sprite": "demonstrant_b_sitter",
+        "intervall_s": [
+          6,
+          10
+        ],
+        "repliker": [
+          "Det här är ett övergrepp!",
+          "Vi ger oss aldrig!",
+          "Ni kan inte gripa en hel rörelse!",
+          "♪ La la laa ♪",
+          "Jag vill prata med en jurist.",
+          "Filma det här, Kalle!"
+        ]
+      }
+    }
+  },
+  "handelser": [
+    {
+      "id": "1",
+      "namn": "Demonstrationen",
+      "typ": "demonstration",
+      "tid": "10:07",
+      "antal": 12,
+      "ledare": "talespersonen",
+      "envisa": 2,
+      "start": "demo_start",
+      "hem": "demo_start",
+      "samling": "grind_ute",
+      "tillbaka_till": "demo_tillbaka",
+      "polisbil": "demo_polisbil",
+      "sitt_inne": [
+        22,
+        23,
+        29,
+        26
+      ],
+      "sitt_ute": [
+        32,
+        22,
+        37,
+        27
+      ],
+      "upptacks_avstand": 20,
+      "upptacks_fordrojning_s": 2,
+      "max_kommer_s": 40,
+      "samlas_s": 10,
+      "trottnar_efter_s": 240,
+      "polis_efter_s": 45,
+      "tryck_intervall_s": 2,
+      "chans_slinka": 0.05,
+      "chans_halt_fungerar": 0.5,
+      "chans_handgemang_lyckas": 0.6,
+      "chans_skada": 0.12,
+      "chans_kamrat_knuffar": 0.4,
+      "handgemang_max_rimligt": 3,
+      "tillbaka_s": 8,
+      "fryst_s": 6,
+      "andel_flyr_varningsskott": 0.25,
+      "andel_flyr_verkanseld": 0.4,
+      "kamrat": "Vad är det där…? Folk med plakat – ett helt gäng, och de kommer hitåt!",
+      "slagord": [
+        "Sverige ut ur Nato!",
+        "Återställ våtmarkerna!",
+        "Svenska Freds!",
+        "Putin är vår vän!",
+        "Fred nu! Fred nu!",
+        "Inga baser i vår skog!",
+        "Vapen dödar – fred föder!",
+        "Hej hej, militär – vi vill inte ha er här!",
+        "Ner med vapnen!",
+        "Våtmark, inte vapenmark!"
+      ],
+      "repliker_arga": [
+        "Ni kan inte stoppa oss alla!",
+        "Fascister!",
+        "Vi har rätt att vara här!",
+        "Släpp in oss!",
+        "Det här är vår skog!",
+        "Skäms!"
+      ],
+      "repliker_sitter": [
+        "*sjunger*",
+        "♪ La la laa, fred på jord ♪",
+        "Vi sitter kvar!",
+        "Vi rör oss inte!",
+        "♪ Vi ska aldrig ge oss ♪",
+        "*klappar i takt*"
+      ],
+      "repliker_slinker": [
+        "Ursäkta – förbi!",
+        "Hoppsan!",
+        "Nu går vi in!",
+        "Ha!"
+      ],
+      "repliker_halt": [
+        "Buuu!",
+        "Skjut oss då!",
+        "Vi är fredliga!",
+        "Skäms!",
+        "Va? Skjuta? Oss?",
+        "Filma det här!"
+      ],
+      "repliker_ger_upp": [
+        "Okej, okej… jag vill inte bli skjuten.",
+        "Det här var inte värt det. Jag går.",
+        "Nej tack, jag drar hem."
+      ],
+      "repliker_knuffad": [
+        "Aj! Rör mig inte!",
+        "Ni får inte knuffas!",
+        "Våld! Han knuffade mig!",
+        "Hallå!"
+      ],
+      "repliker_sliter": [
+        "Släpp mig!",
+        "Rör mig inte!",
+        "Du har inget med mig att göra!"
+      ],
+      "repliker_flyr": [
+        "AAAH!",
+        "DE SKJUTER!",
+        "SPRING!",
+        "Herregud!"
+      ],
+      "repliker_skrak": [
+        "Skjut inte!",
+        "Vi är obeväpnade!",
+        "Är ni galna?!",
+        "*skriker*"
+      ],
+      "ljud_tryck": [
+        "*tryck*",
+        "*knuff*",
+        "*trängsel*"
+      ],
+      "ljud_handgemang": [
+        "*KNUFF*",
+        "*SMACK*",
+        "*DUNS*"
+      ],
+      "rop_halt": [
+        "HALT! MILITÄR SKYDDSVAKT! HALT ELLER JAG SKJUTER SKARPT!",
+        "HALT, SA JAG! STANNA! HALT ELLER JAG SKJUTER SKARPT!",
+        "HAAALT! FÖR HELVETE – HALT!! JAG SKJUTER!"
+      ],
+      "rop_handgemang": [
+        "Backa!",
+        "Tillbaka!",
+        "Ut härifrån!",
+        "Nej – du kommer inte in!"
+      ],
+      "kamrat_halt": [
+        "Lugn nu…",
+        "Sluta skrika – de är ju obeväpnade!"
+      ],
+      "kamrat_knuffar": [
+        "Backa!",
+        "Tillbaka, sa jag!",
+        "Inte här!"
+      ],
+      "kamrat_slinker": "En kom förbi! Han är inne!",
+      "kamrat_skadad": "Han blöder näsblod. Det där kommer att synas på film.",
+      "kamrat_vi_skadade": "Du blöder! Är du okej?",
+      "kamrat_fh_du": "Luta huvudet framåt. Tryck här. Det ser inte brutet ut.",
+      "kamrat_varningsskott": [
+        "Va fan gör du?! De är ju obeväpnade!",
+        "Sluta skjuta! Det är demonstranter!"
+      ],
+      "kamrat_verkanseld": [
+        "Nej… nej, nej, nej. Du sköt en demonstrant.",
+        "Sluta! SLUTA SKJUTA!"
+      ],
+      "replik_filmar": "Polisvåld! Det här hamnar på nätet!",
+      "replik_skadad": "AAH! Min näsa! Han slog mig!",
+      "replik_vi_skadade": "Aj! Fan – armbågen i ansiktet!",
+      "replik_bars_ut": "Jag gör passivt motstånd!",
+      "forsta_hjalpen_replik": "Sitt still. Luta dig framåt, jag hjälper dig.",
+      "ledare_samlas": "Okej allihop! Vi samlas här – sen går vi in och sätter oss!",
+      "ledare_in": "Nu går vi in! In och sätt er vid {objekt_bestamd}!",
+      "ledare_trott": "Vi har gjort vår röst hörd! Vi kommer tillbaka!",
+      "ledare_polis": "Okej, polisen är här. Vi har sagt vårt – vi går!",
+      "polis_replik": "Polisen. Demonstrationen är upplöst – gå härifrån nu.",
+      "missad_diskutera": "Ett dussin personer med plakat och slagord vid grinden. Hur kunde det gå obemärkt förbi?"
+    }
+  ],
+  "samband": [],
+  "lagestext": {
+    "skarv": ", ",
+    "sista_skarv": " och ",
+    "delar": [
+      {
+        "om": [
+          "demo_upptackt"
+        ],
+        "inte": [
+          "demo_sitter_utanfor",
+          "polis_pa_plats"
+        ],
+        "text": "ett tiotal demonstranter vid grinden som försöker ta sig in på skyddsobjektet"
+      },
+      {
+        "om": [
+          "demo_sitter_utanfor"
+        ],
+        "inte": [
+          "polis_pa_plats"
+        ],
+        "text": "ett tiotal demonstranter sitter på vägen utanför grinden"
+      },
+      {
+        "om": [
+          "demo_inne_nu"
+        ],
+        "text": "några har tagit sig in och sitter innanför staketet"
+      },
+      {
+        "om": [
+          "polis_pa_plats"
+        ],
+        "text": "polis på plats, demonstranterna lämnar"
+      },
+      {
+        "om": [
+          "varningsskott_avlossat"
+        ],
+        "inte": [
+          "demonstrant_skjuten"
+        ],
+        "text": "varningsskott avlossat"
+      },
+      {
+        "om": [
+          "demonstrant_skjuten"
+        ],
+        "text": "verkanseld avgiven, en demonstrant skadad av skott"
+      },
+      {
+        "om": [
+          "demonstrant_skadad"
+        ],
+        "text": "en demonstrant skadad i handgemäng"
+      },
+      {
+        "om": [
+          "skyddsvakt_skadad"
+        ],
+        "text": "en skyddsvakt lindrigt skadad"
+      }
+    ],
+    "fore": "inga avvikelser vid grinden"
+  },
+  "radio": {
+    "kommentar": "Trafik mellan andra enheter. CQ ropar inte själv upp Grindposten."
+  },
+  "sambandstexter": {
+    "svar": {
+      "fakta:demonstrant_skjuten": "Uppfattat. Säkra platsen och rapportera förändring",
+      "efter": "Uppfattat. Håll grinden och rapportera förändring",
+      "fore": "Uppfattat"
+    },
+    "polis": {
+      "skarv": ", ",
+      "sista_skarv": " och ",
+      "delar": [
+        {
+          "om": [
+            "demo_upptackt"
+          ],
+          "text": "demonstration vid grinden, ett tiotal personer som försöker ta sig in på skyddsobjektet"
+        },
+        {
+          "om": [
+            "demo_inne"
+          ],
+          "text": "obehörigt tillträde, personer har tagit sig in"
+        },
+        {
+          "om": [
+            "demonstrant_skjuten"
+          ],
+          "text": "verkanseld avgiven mot demonstrant"
+        }
+      ],
+      "efter": "demonstration vid grinden",
+      "fore": "händelse vid grinden"
+    },
+    "skadade": {
+      "prefix": ", ",
+      "skarv": ", ",
+      "sista_skarv": " och ",
+      "delar": [
+        {
+          "om": [
+            "demonstrant_skjuten"
+          ],
+          "text": "en demonstrant med skottskada"
+        },
+        {
+          "om": [
+            "demonstrant_skadad"
+          ],
+          "text": "en demonstrant med näsblod efter handgemäng"
+        },
+        {
+          "om": [
+            "skyddsvakt_skadad"
+          ],
+          "text": "en skyddsvakt lindrigt skadad i ansiktet"
+        }
+      ],
+      "fore": ""
+    },
+    "svar_forstarkning": {
+      "fore": "Uppfattat, rondpatrullen skickas till grinden"
+    }
+  },
+  "bedomning": {
+    "halt_order": {
+      "krav": [
+        "hot_svarare_vald"
+      ],
+      "krav_utfall": {
+        "hot_svarare_vald": "warn"
+      },
+      "text_krav": {
+        "hot_svarare_vald": "Halt-ordern är tillropet före skjutvapen (förordning 1992:98 5 §): ”halt eller jag skjuter skarpt”. Mot fredliga demonstranter finns ingen grund för skjutvapen – hotet blir tomt eller farligt, och läget trappas upp. Tala i stället: ni kommer inte in, men ni får demonstrera här ute."
+      },
+      "diskutera": "Vad händer med trovärdigheten om ni hotar med något ni inte får göra? Vilka ord hade fungerat bättre?"
+    },
+    "varningsskott": {
+      "text_krav": {
+        "angrepp_pagar": "Fredliga demonstranter – högljudda, men utan vapen och utan våld – är inget angrepp. Varningsskott förutsätter att det finns grund för verkanseld (förordning 1992:98 2 och 5 §§)."
+      },
+      "diskutera": "Ett skott bland ett dussin människor med plakat. Vad kunde ha hänt?"
+    },
+    "verkanseld": {
+      "text_krav": {
+        "angrepp_pagar": "Det fanns inget angrepp. Att skjuta en fredlig demonstrant saknar helt lagstöd – det är ett allvarligt brott."
+      },
+      "diskutera": "Vad borde ni ha gjort när de trängde på i grinden?"
+    },
+    "avvisa": {
+      "diskutera": "Demonstrationsfriheten (RF 2 kap. 1 §) skyddar demonstrationen på vägen – men inte tillträde till skyddsobjektet. Behövde ni avvisa dem från vägen, eller räckte det att hålla grinden och låta polisen sköta resten?"
+    },
+    "avlagsna": {
+      "text_ok": "Den som tagit sig in har överträtt tillträdesförbudet (12 § p. 1) och får avlägsnas. Den som gör passivt motstånd får bäras ut – med det våld som behövs (polislagen 10 § första stycket 4 jämte 29 §).",
+      "diskutera": "Medan ni bar ut en stod grinden halvöppen. Vad hade CQ kunnat göra om ni begärt förstärkning?"
+    }
+  },
+  "slutkrav": [
+    {
+      "handling": "rapportera_vaktchef",
+      "lagrum": "Bevakningsinstruktion – rapportering",
+      "text": "Demonstrationen rapporterades aldrig till CQ.",
+      "diskutera": "När ska CQ få veta att en grupp är på väg mot grinden?"
+    },
+    {
+      "handling": "anmala_polis",
+      "lagrum": "Ordningslagen 2 kap. · Skyddslagen 30 §",
+      "text": "Polis begärdes aldrig till platsen.",
+      "diskutera": "Det är polisen som upprätthåller ordningen vid allmänna sammankomster och kan upplösa en demonstration. Varför är det inte stridsparets uppgift?"
+    }
+  ],
+  "dialog": {
+    "start": {
+      "du": "Hej. Vi är militära skyddsvakter. Vad gäller det?",
+      "replik": "– Vi protesterar mot militariseringen av vår skog! Vi tänker gå in och sätta oss vid {objekt_bestamd} och sjunga tills någon lyssnar.",
+      "alternativ": [
+        {
+          "text": "Säg att de får demonstrera här ute, men att området innanför staketet är skyddsobjekt och att de inte släpps in.",
+          "du": "Ni får demonstrera här ute på vägen. Men innanför staketet är ett skyddsobjekt – dit kommer ni inte in.",
+          "handling": "neka_tilltrade",
+          "nasta": "forhandla"
+        },
+        {
+          "text": "Fråga vem som är ansvarig och om de har tillstånd för demonstrationen.",
+          "du": "Vem är ansvarig här? Har ni tillstånd för demonstrationen?",
+          "nasta": "tillstand"
+        },
+        {
+          "text": "Säg åt dem att gå hem.",
+          "du": "Det här är ingen plats för er. Gå hem.",
+          "nasta": "hem"
+        }
+      ]
+    },
+    "tillstand": {
+      "replik": "– Jag heter ingenting. Och tillstånd? För att använda grundlagen? Vi har demonstrationsfrihet!",
+      "alternativ": [
+        {
+          "text": "Säg att de får demonstrera här ute, men inte gå in.",
+          "du": "Ni får demonstrera här ute. Men in på området kommer ni inte.",
+          "handling": "neka_tilltrade",
+          "nasta": "forhandla"
+        },
+        {
+          "text": "Säg åt dem att gå hem.",
+          "du": "Gå hem nu.",
+          "nasta": "hem"
+        }
+      ]
+    },
+    "hem": {
+      "replik": "– Hem?! Vi har lika stor rätt att vara här som ni. Mer, faktiskt – det är vår skog!",
+      "stamning": 6,
+      "alternativ": [
+        {
+          "text": "Säg att de får stå kvar här ute, men att de inte kommer in.",
+          "du": "Okej. Ni får stå här ute. Men in kommer ni inte.",
+          "handling": "neka_tilltrade",
+          "nasta": "forhandla"
+        }
+      ]
+    },
+    "forhandla": {
+      "replik": "– Och om vi sätter oss här ute på vägen, utanför grinden? Det är allmän väg.",
+      "alternativ": [
+        {
+          "text": "Säg ja – de får sitta på vägen, men grinden ska hållas fri.",
+          "du": "Det går bra. Sitt här ute, men håll grinden fri.",
+          "nasta": "ute"
+        },
+        {
+          "text": "Säg nej – de ska härifrån helt.",
+          "du": "Nej. Ni ska härifrån.",
+          "nasta": "tvar"
+        }
+      ]
+    },
+    "ute": {
+      "replik": "– Okej. Vi tar det här ute. Men vi sjunger högt, så att ni vet!\n\nHan vänder sig mot gruppen och ropar i megafonen: – Vi sätter oss här! Utanför grinden!",
+      "satt_fakta": {
+        "demo_sitter_utanfor": true
+      },
+      "stamning": 3,
+      "slut": true
+    },
+    "tvar": {
+      "replik": "– Då får ni bära bort oss en och en!",
+      "stamning": 7,
+      "slut": true
+    }
+  },
+  "atgarder": {
+    "kommentar": "Svar på åtgärdsraden för talespersonen.",
+    "begara_identitet": {
+      "text": "Begär namn, födelsetid och hemvist.",
+      "du": "Jag behöver ditt namn, födelsetid och var du bor.",
+      "replik": "– Det har ni inte med att göra. Jag säger ingenting till militären.",
+      "satt_fakta": {
+        "vagrat_id": true,
+        "talesperson_vagrar": true
+      },
+      "stamning": 6
+    },
+    "be_om_legitimation": {
+      "text": "Ber att få se legitimation.",
+      "du": "Har du legitimation?",
+      "replik": "– Nej. Och om jag hade det skulle jag inte visa den."
+    },
+    "kroppsvisitera": {
+      "text": "Beslutar om kroppsvisitation.",
+      "du": "Vi kommer att kroppsvisitera dig.",
+      "stamning": 7,
+      "replik": "– Rör mig inte! Kalle, filma!"
+    },
+    "skyddsvisitera": {
+      "text": "Skyddsvisiterar honom efter vapen och farliga föremål.",
+      "du": "Stå still med armarna ut.",
+      "replik": "– En megafon och en termos med kaffe. Farligt värre."
+    },
+    "avvisa": {
+      "text": "Avvisar honom.",
+      "du": "Du avvisas härifrån. Lämna platsen.",
+      "replik": "– Vi går ingenstans! Vi har demonstrationsfrihet!",
+      "stamning": 7
+    },
+    "avlagsna": {
+      "text": "Avlägsnar honom.",
+      "du": "Du ska härifrån – nu.",
+      "replik": "– Rör mig inte! Det här är en fredlig demonstration!",
+      "stamning": 7
+    },
+    "tillfalligt_omhanderta": {
+      "text": "Omhändertar honom tillfälligt.",
+      "du": "Du är tillfälligt omhändertagen. Följ med till bommen.",
+      "stamning": 8,
+      "replik": "– Det här är ett övergrepp! Filma det här!"
+    },
+    "lata_ga": {
+      "text": "Säger att han får gå.",
+      "du": "Du kan gå.",
+      "replik": "– Jag går när jag vill."
+    }
+  }
+}

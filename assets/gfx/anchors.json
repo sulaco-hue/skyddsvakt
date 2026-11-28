@@ -83,6 +83,102 @@
   8,
   18
  ],
+ "demonstrant_a_0": [
+  8,
+  23
+ ],
+ "demonstrant_a_1": [
+  8,
+  23
+ ],
+ "demonstrant_a_sitter_0": [
+  8,
+  19
+ ],
+ "demonstrant_a_sitter_1": [
+  8,
+  19
+ ],
+ "demonstrant_a_skadad_0": [
+  8,
+  19
+ ],
+ "demonstrant_a_skadad_1": [
+  8,
+  19
+ ],
+ "demonstrant_b_0": [
+  8,
+  23
+ ],
+ "demonstrant_b_1": [
+  8,
+  23
+ ],
+ "demonstrant_b_sitter_0": [
+  8,
+  19
+ ],
+ "demonstrant_b_sitter_1": [
+  8,
+  19
+ ],
+ "demonstrant_b_skadad_0": [
+  8,
+  19
+ ],
+ "demonstrant_b_skadad_1": [
+  8,
+  19
+ ],
+ "demonstrant_c_0": [
+  8,
+  23
+ ],
+ "demonstrant_c_1": [
+  8,
+  23
+ ],
+ "demonstrant_c_sitter_0": [
+  8,
+  19
+ ],
+ "demonstrant_c_sitter_1": [
+  8,
+  19
+ ],
+ "demonstrant_c_skadad_0": [
+  8,
+  19
+ ],
+ "demonstrant_c_skadad_1": [
+  8,
+  19
+ ],
+ "demonstrant_d_0": [
+  8,
+  23
+ ],
+ "demonstrant_d_1": [
+  8,
+  23
+ ],
+ "demonstrant_d_sitter_0": [
+  8,
+  19
+ ],
+ "demonstrant_d_sitter_1": [
+  8,
+  19
+ ],
+ "demonstrant_d_skadad_0": [
+  8,
+  19
+ ],
+ "demonstrant_d_skadad_1": [
+  8,
+  19
+ ],
  "dronare_0": [
   7,
   4
@@ -190,6 +286,18 @@
  "pappa_1": [
   8,
   22
+ ],
+ "polis_0": [
+  8,
+  22
+ ],
+ "polis_1": [
+  8,
+  22
+ ],
+ "polisbil": [
+  11,
+  24
  ],
  "radiomast": [
   35,

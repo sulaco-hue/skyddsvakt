@@ -48,7 +48,9 @@
       "envarsgripande_genomfort": "personen var envarsgripen",
       "avlagsnande_genomfort": "personen avlägsnades",
       "posten_fick_lamnas": "det fanns order eller skäl att lämna posten",
-      "skott_utan_risk": "skottet kunde avlossas utan risk för utomstående"
+      "skott_utan_risk": "skottet kunde avlossas utan risk för utomstående",
+      "vald_behovs": "personen försökte tränga in på skyddsobjektet eller var redan inne (våld behövdes för att hindra eller avlägsna)",
+      "vald_proportionerligt": "våldet stod i rimlig proportion till syftet (inte mer än som behövdes)"
     }
   },
   "handlingar": {
@@ -697,6 +699,26 @@
       "text_ok": "Posten fick lämnas.",
       "text_brist": "Stridsparet lämnade skyddsobjektet, som då stod obevakat. Ni är alltid två och lämnar aldrig varandra – men inte heller objektet utan order. Rapportera till CQ, som beslutar om någon ska skickas. Något som drar uppmärksamheten bort från objektet kan också vara en avledning.",
       "diskutera": "Varför lämnade ni objektet? Vad hade CQ kunnat göra om ni rapporterat först? Vad säger bevakningsinstruktionen om att lämna posten?"
+    },
+    "handgemang": {
+      "namn": "Handgemäng – knuffade tillbaka en demonstrant",
+      "lagrum": "Polislagen 10 § första stycket 4 jämte 29 § (vaktpost i Försvarsmakten) · Brottsbalken 24 kap. 1 § p. 3 (nödvärn mot den som försöker tränga in)",
+      "krav": [
+        "vald_behovs",
+        "vald_proportionerligt"
+      ],
+      "krav_utfall": {
+        "vald_behovs": "bad",
+        "vald_proportionerligt": "warn"
+      },
+      "vid_brist": "bad",
+      "text_ok": "Den som tränger sig in på skyddsobjektet får hindras, och den som redan är inne får avlägsnas – med våld om det behövs. En vaktpost i Försvarsmakten har samma rätt som en polisman att använda våld för att avvisa eller avlägsna någon från ett område (polislagen 10 § första stycket 4 jämte 29 §), och mot den som försöker tränga in i ett inhägnat område finns nödvärnsrätt (BrB 24:1 p. 3). Våldet måste vara försvarligt: knuffa tillbaka, inte slå.",
+      "text_brist": "Våld får bara användas när det behövs – mot den som tränger sig in eller ska avlägsnas, och inte mer än nödvändigt.",
+      "text_krav": {
+        "vald_behovs": "Personen trängde sig inte in och skulle inte avlägsnas. Den som står utanför och skriker, eller håller ett plakat, utövar sin demonstrationsfrihet (RF 2 kap. 1 §) – där finns ingen grund för våld.",
+        "vald_proportionerligt": "Upprepade handgemäng trappar upp läget. Våld ska vara försvarligt och inte mer än vad som behövs – fanns det andra sätt, som att stå kvar i grinden, prata med talespersonen eller begära polis?"
+      },
+      "diskutera": "Var går gränsen mellan att stå kvar och blockera och att knuffa? Hur påverkar det att någon filmar? Vem ska upplösa en demonstration – ni eller polisen?"
     }
   }
 }

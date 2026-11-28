@@ -148,6 +148,18 @@
   "dronpilot_landa": [
    25,
    14
+  ],
+  "demo_start": [
+   51,
+   24
+  ],
+  "demo_polisbil": [
+   40,
+   25
+  ],
+  "demo_tillbaka": [
+   34,
+   24
   ]
  },
  "mark": [

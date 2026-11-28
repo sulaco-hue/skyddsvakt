@@ -13,6 +13,7 @@ var _larm_npc := ""
 var _samtal_klara: Dictionary = {}
 ## Scenario Slagsmålet (null i andra scenarier).
 var _slagsmal: Slagsmal = null
+var _demo: Demonstration = null
 ## Smygaren som väntar på att slagsmålet ska dra igång (scenario Slagsmålet).
 var _vantande_smygare: Dictionary = {}
 ## Startpunkten yxmannen kom från (för lägestexten).
@@ -615,6 +616,10 @@ func _utlos_handelse(h: Dictionary) -> void:
 					_handelser_kvar.erase(h2)
 					# Smygaren kommer en stund efter att slagsmålet är slut (Slagsmal säger till).
 					_vantande_smygare = h2
+		"demonstration":
+			_demo = Demonstration.new()
+			add_child(_demo)
+			_demo.setup(self, h)
 		"smygare":
 			if _slagsmal:
 				_slagsmal.starta_smygare(h)
@@ -861,6 +866,9 @@ func _dronarpilot_gar() -> void:
 func _pa_situation(id: String) -> void:
 	if _slagsmal and _slagsmal.hanterar():
 		_slagsmal.situation(id)
+		return
+	if _demo and _demo.hanterar():
+		_demo.situation(id)
 		return
 	match id:
 		"dronare":
@@ -1304,6 +1312,9 @@ func _upptack_vid_klick(id: String) -> bool:
 	if not _angripare.is_empty() and str(_angripare["id"]) == id and not bool(_angripare.get("upptackt", false)):
 		_angripare_upptackt()
 		return true
+	if _demo and not _demo.upptackt and _demo.ar_demonstrant(id):
+		_demo.upptack()
+		return true
 	if not _upptackt.is_empty() and str(_upptackt.get("npc", "")) == id:
 		_kamrat_reagerar()
 		# Personer utan samtal (t.ex. smygaren) – klicket var bara upptäckten.
@@ -1318,7 +1329,7 @@ func _pa_npc_klickad(id: String) -> void:
 		_kamrat_sager("Jag tror inte han vill prata.")
 		return
 	# Personer i händelser utan samtal (bråkarna, smygaren) går inte att prata med.
-	if not (_scenario.get("npc", {}).get(id, {}) as Dictionary).has("dialog_start") and _slagsmal:
+	if not (_scenario.get("npc", {}).get(id, {}) as Dictionary).has("dialog_start") and (_slagsmal or _demo):
 		return
 	if _sittande.has(id):
 		_sittande[id]["t"] = 0.0
