@@ -60,6 +60,10 @@ func _ready() -> void:
 	varld = Varld.new()
 	add_child(varld)
 	varld.bygg(Spel.karta)
+	# Scenariot kan ge ettan ett eget utseende (t.ex. Olsson med skägg) och storlek.
+	if str(_scenario.get("spelare_sprite", "")) != "":
+		varld.byt_bilder(varld.spelare, str(_scenario["spelare_sprite"]))
+	varld.spelare.scale = Vector2.ONE * float(_scenario.get("spelare_skala", 1.0))
 	var npcer: Dictionary = _scenario.get("npc", {})
 	for id: String in npcer:
 		varld.skapa_npc(id, npcer[id])
@@ -1397,6 +1401,9 @@ func _pa_spelare_framme() -> void:
 
 
 func _oppna_kontakt(id: String) -> void:
+	# Demonstrationen: samtalet förs alltid med talespersonen.
+	if _demo and _demo.ar_demonstrant(id):
+		id = str(_demo.h.get("ledare", "talespersonen"))
 	var n: Aktor = varld.npcer[id]
 	varld.spelare.stanna()
 	varld.spelare.vand_mot(n.position)

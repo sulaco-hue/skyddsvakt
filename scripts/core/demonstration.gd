@@ -54,6 +54,9 @@ var rapport_s := -1.0
 var forstarkning_s := -1.0
 var _rond: Array[Aktor] = []
 var _rond_t := -1.0
+## Ser de en fri väg in genom grinden? (kontrolleras två gånger i sekunden)
+var vag_oppen := false
+var _oppen_t := 0.0
 var _fh_given: Dictionary = {}
 
 
@@ -114,6 +117,7 @@ func _process(delta: float) -> void:
 	_t += delta
 	_kamrat_slank_t -= delta
 	_uppdatera_upptackt(delta)
+	_uppdatera_oppen(delta)
 	_uppdatera_fas(delta)
 	for d in demonstranter:
 		_uppdatera_demonstrant(d, delta)
@@ -218,8 +222,13 @@ func _uppdatera_demonstrant(d: Dictionary, delta: float) -> void:
 				d["t"] = float(d["t"]) - delta
 				if float(d["t"]) <= 0.0:
 					_nasta_steg(d)
+		"samlas":
+			# Står grinden öppen kan någon inte låta bli att gå in redan nu.
+			if vag_oppen and upptackt and not d["ledare"] and fas != "slut" \
+					and randf() < delta * float(h.get("chans_oppen_per_s", 0.15)):
+				_borja_trycka(d)
 		"tillbaka", "fryst":
-			d["t"] = float(d["t"]) - delta
+			d["t"] = float(d["t"]) - delta * (2.0 if vag_oppen else 1.0)
 			if float(d["t"]) <= 0.0 and not n.ar_i_rorelse():
 				if lage == "fryst":
 					main.varld.byt_bilder(n, "demonstrant_" + str(d["variant"]))
@@ -227,7 +236,7 @@ func _uppdatera_demonstrant(d: Dictionary, delta: float) -> void:
 				_borja_trycka(d)
 		"sitter_ute", "sitter_inne":
 			if lage == "sitter_ute" and fas == "trycker" and not d["ledare"] and bool(d.get("sitter", false)):
-				d["ute_t"] = float(d.get("ute_t", 30.0)) - delta
+				d["ute_t"] = float(d.get("ute_t", 30.0)) - delta * (float(h.get("oppen_faktor", 4.0)) if vag_oppen else 1.0)
 				if float(d["ute_t"]) <= 0.0:
 					_reser_sig(d)
 					return
@@ -518,6 +527,20 @@ func _vakter() -> Array[Vector2i]:
 	for r in _rond:
 		ut.append(r.cell)
 	return ut
+
+
+func _uppdatera_oppen(delta: float) -> void:
+	_oppen_t -= delta
+	if _oppen_t > 0.0:
+		return
+	_oppen_t = 0.5
+	var v: Varld = main.varld
+	var fran: Vector2i = v.punkt(h.get("samling", "grind_ute"))
+	var vag := _vag_utan(fran, v.punkt("objekt_mitt") + Vector2i(0, 4), _vakter())
+	var oppen := vag.size() >= 2
+	if oppen and not vag_oppen and upptackt and fas in ["samlas", "trycker"]:
+		_sag(_ledaren(), str((h.get("repliker_oppet", ["Grinden är öppen – in nu!"]) as Array).pick_random()), 2.5)
+	vag_oppen = oppen
 
 
 func _borjar_brakas() -> void:

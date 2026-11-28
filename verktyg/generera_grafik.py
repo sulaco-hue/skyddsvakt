@@ -1732,6 +1732,53 @@ def portrait_talesperson():
 
 portrait_talesperson().save(os.path.join(OUT, "portratt_talesperson.png"))
 
+
+# Olsson (ettan i scenario 7): stor, svart, yvigt skägg.
+def med_skagg(top):
+    t = list(top)
+    for i in (5, 6):
+        t[i] = "".join("K" if ch in "sS" else ch for ch in t[i])
+    r5 = list(t[5])
+    for c in (2, 9):
+        if r5[c] == ".":
+            r5[c] = "K"
+    t[5] = "".join(r5)
+    r7 = list(t[7])
+    for c in (4, 5, 6, 7):
+        if r7[c] == "U":
+            r7[c] = "K"
+    t[7] = "".join(r7)
+    return t
+
+
+for i in range(2):
+    figure(f"vakt_olsson_{i}", med_skagg(GUARD_TOP), GUARD_LEGS[i])
+for namn, byten in VILA.items():
+    topp = list(GUARD_TOP)
+    for rad, text in byten.items():
+        topp[rad] = text
+    figure(f"vakt_olsson_vila_{namn}", med_skagg(topp), GUARD_LEGS[0])
+
+
+def portrait_olsson():
+    im = portrait("vakt")
+    p = ImageDraw.Draw(im)
+    svart, svart_l = (26, 24, 26), (52, 48, 50)
+    p.polygon([(23, 38), (27, 50), (31, 57), (40, 61), (49, 57), (53, 50), (57, 38), (52, 44), (46, 44),
+               (40, 43), (34, 44), (28, 44)], fill=svart)
+    # mustasch och munnen som en springa
+    p.polygon([(33, 43), (40, 41), (47, 43), (46, 46), (34, 46)], fill=svart)
+    p.line([(36, 48), (44, 48)], fill=(110, 60, 52))
+    for (x, y) in [(30, 50), (35, 54), (44, 54), (49, 50), (40, 57), (27, 45), (53, 45)]:
+        p.point((x, y), fill=svart_l)
+    # mikrofonen ovanpå skägget
+    p.line([(22, 40), (32, 47)], fill=(60, 62, 60), width=2)
+    p.rectangle([32, 46, 34, 48], fill=(60, 62, 60))
+    return im
+
+
+portrait_olsson().save(os.path.join(OUT, "portratt_vakt_olsson.png"))
+
 # ============================================================ Ikoner ==
 def hogtalare(namn, extra):
     T, R = (230, 235, 224, 255), (240, 124, 140, 255)

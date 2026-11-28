@@ -191,7 +191,7 @@ func bygg(scenario: Dictionary) -> void:
 	var botten := UiKit.hbox(16)
 	var pr := UiKit.panel(UiKit.KANT2, UiKit.BG, 0, 0)
 	var pt := TextureRect.new()
-	pt.texture = load("res://assets/gfx/portratt_vakt.png")
+	pt.texture = load("res://assets/gfx/%s.png" % str(Spel.scenario.get("spelare_portratt", "portratt_vakt")))
 	pt.custom_minimum_size = Vector2(80, 80)
 	pt.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	pt.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST

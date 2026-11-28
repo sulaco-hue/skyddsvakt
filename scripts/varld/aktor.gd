@@ -54,6 +54,10 @@ func setup(p_varld: Varld, bas: String, start: Vector2i, anchor: Array) -> void:
 	_bas = bas
 	_rng.randomize()
 	_vila_vant = _rng.randf_range(2.0, 7.0)
+	_las_vila(bas)
+
+
+func _las_vila(bas: String) -> void:
 	for namn: String in VILA:
 		for steg in VILA[namn]:
 			var bild := str(steg[0])
@@ -69,6 +73,7 @@ func byt_bilder(bas: String, anchor: Array) -> void:
 	_sprite.offset = -Vector2(float(anchor[0]), float(anchor[1]))
 	_bas = bas
 	_vila_bilder.clear()
+	_las_vila(bas)
 
 
 ## Växlar mellan bild 0 och 1 även när figuren står still (darrande händer, andning).
