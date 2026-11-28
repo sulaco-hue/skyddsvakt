@@ -44,7 +44,7 @@
     {
       "kamrat": "Hur går det på jobbet då, Olsson?",
       "alltid_svar": true,
-      "nasta_efter_s": 6,
+      "nasta_efter_s": 7.5,
       "svar": [
         "Jodå, eldsvådor och bilkrockar om vartannat, så det är ingen risk för arbetslöshet här inte."
       ]
@@ -52,7 +52,7 @@
     {
       "kamrat": "Jag läser om Det. Stephen King. Clownen i kloakerna, du vet. Nu kollar jag ner i varenda brunn jag går förbi.",
       "alltid_svar": true,
-      "nasta_efter_s": 6,
+      "nasta_efter_s": 7.5,
       "svar": [
         "Läs något trevligare, då."
       ]
@@ -159,7 +159,7 @@
       "id": "1",
       "namn": "Demonstrationen",
       "typ": "demonstration",
-      "tid": "10:03:30",
+      "tid": "10:04:30",
       "antal": 12,
       "ledare": "talespersonen",
       "envisa": 2,
@@ -198,7 +198,7 @@
       "fryst_s": 6,
       "andel_flyr_varningsskott": 0.25,
       "andel_flyr_verkanseld": 0.4,
-      "kamrat": "Vad är det där…? Folk med plakat – ett helt gäng, och de kommer hitåt!",
+      "kamrat": "Vad är det där för muppar med plakat och grejer?",
       "slagord": [
         "Sverige ut ur Nato!",
         "Återställ våtmarkerna!",
@@ -219,6 +219,7 @@
         "Det här är vår skog!",
         "Skäms!"
       ],
+      "replik_sjung": "Nu tycker jag att vi gemensamt sjunger We Shall Overcome!",
       "repliker_sitter": [
         "*sjunger*",
         "♪ La la laa, fred på jord ♪",
@@ -326,7 +327,7 @@
       "forstarkning_marginal_s": 60,
       "forstarkning_efter_s": 25,
       "forstarkning_start": "stig_nord",
-      "rond_framme": "Rondpatrullen på plats – vi tar grinden bakom er!",
+      "rond_framme": "QRF'en på plats – vi tar grinden bakom er!",
       "text_sen_rapport": "Ett dussin personer på väg mot grinden ska CQ få veta om direkt – innan något hunnit hända. Då kan CQ larma polis, skicka förstärkning och varna andra poster i tid. Er rapport kom först när läget redan hade börjat glida er ur händerna.",
       "diskutera_sen_rapport": "Vad hade CQ kunnat göra om ni rapporterat när ni först såg gruppen? Vad vinner man på att vänta?",
       "text_ingen_forstarkning": "När det börjar tryckas och knuffas i grinden är stridsparet bundet – och ni är två mot ett dussin. Senast då ska förstärkning begäras, så att grinden kan hållas även medan ni bär ut någon eller tar hand om en skadad.",
@@ -389,7 +390,7 @@
         "inte": [
           "polis_pa_plats"
         ],
-        "text": "rondpatrullen på plats vid grinden"
+        "text": "QRF'en på plats vid grinden"
       },
       {
         "om": [
@@ -489,7 +490,7 @@
       "fore": ""
     },
     "svar_forstarkning": {
-      "fore": "Uppfattat, rondpatrullen skickas till grinden"
+      "fore": "Uppfattat, QRF'en skickas till grinden"
     }
   },
   "bedomning": {

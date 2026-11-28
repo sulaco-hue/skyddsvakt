@@ -767,9 +767,9 @@ func _spela_demonstration(fall: String) -> void:
 			main.hud.radio_valj("polis")
 			main.hud.radio_avsluta()
 			if not await _vanta_tills(func() -> bool: return bool(Spel.fakta.get("forstarkning_pa_plats", false)), 90.0):
-				_fel("rondpatrullen kom aldrig fram till grinden")
+				_fel("QRF:en kom aldrig fram till grinden")
 			else:
-				_ok("rondpatrullen på plats bakom grinden")
+				_ok("QRF:en på plats bakom grinden")
 			if not await _vanta_tills(func() -> bool: return dm._avslutad, 200.0):
 				var lagen: Array = dm.demonstranter.map(func(d: Dictionary) -> String: return str(d["lage"]))
 				_fel("demonstrationen tog aldrig slut efter polis (fas %s, lägen %s)" % [dm.fas, str(lagen)])

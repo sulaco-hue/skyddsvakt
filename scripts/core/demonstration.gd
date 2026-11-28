@@ -54,6 +54,7 @@ var rapport_s := -1.0
 var forstarkning_s := -1.0
 var _rond: Array[Aktor] = []
 var _rond_t := -1.0
+var _sjung_sagt := false
 ## Ser de en fri väg in genom grinden? (kontrolleras två gånger i sekunden)
 var vag_oppen := false
 var _oppen_t := 0.0
@@ -248,6 +249,10 @@ func _uppdatera_demonstrant(d: Dictionary, delta: float) -> void:
 				n.vand_mot(main.varld.cell_pos(main.varld.punkt("objekt_mitt")))
 				if lage == "sitter_inne":
 					Spel.satt_fakta({"demo_sitter_inne": true})
+				# Den första som sätter sig föreslår allsång.
+				if not _sjung_sagt:
+					_sjung_sagt = true
+					_sag(n, str(h.get("replik_sjung", "")), 3.5)
 
 
 ## Tröttnar på att sitta utanför: reser sig och trycker på igen.
@@ -522,7 +527,7 @@ func hanterar() -> bool:
 
 # ------------------------------------------------------- Samband --
 
-## Rutor där en vakt står (stridsparet och en eventuell rondpatrull).
+## Rutor där en vakt står (stridsparet och en eventuell QRF).
 func _vakter() -> Array[Vector2i]:
 	var ut: Array[Vector2i] = [main.varld.spelare.cell, main.varld.kollega.cell]
 	for r in _rond:
@@ -549,7 +554,7 @@ func _borjar_brakas() -> void:
 		brak_s = Spel.klocka_s
 
 
-## Rapport till CQ och förstärkning: tider för bedömningen, och rondpatrullen
+## Rapport till CQ och förstärkning: tider för bedömningen, och QRFen
 ## kommer en stund efter att förstärkning begärts.
 func _uppdatera_samband(delta: float) -> void:
 	if rapport_s < 0.0 and Spel.handling_utford("rapportera_vaktchef"):
@@ -560,21 +565,23 @@ func _uppdatera_samband(delta: float) -> void:
 	if _rond_t > 0.0:
 		_rond_t -= delta
 		if _rond_t <= 0.0:
-			_rondpatrullen_kommer()
+			_QRFen_kommer()
 
 
-func _rondpatrullen_kommer() -> void:
+func _QRFen_kommer() -> void:
 	var v: Varld = main.varld
 	var start: Vector2i = v.punkt(h.get("forstarkning_start", "stig_nord"))
 	var platser: Array[Vector2i] = []
 	for c in v.grindceller():
 		platser.append(c + Vector2i(-1, 0))
 	for i in 2:
-		var n: Aktor = v.skapa_npc("rond_%d" % (i + 1), {"sprite": "vakt", "start": [start.x + i, start.y], "synlig_fran_start": true})
+		# Startrutan kan vara ett träd: närmaste fria ruta.
+		var c := v.narmaste_fria(start + Vector2i(i, 0), start)
+		var n: Aktor = v.skapa_npc("rond_%d" % (i + 1), {"sprite": "vakt", "start": [c.x, c.y], "synlig_fran_start": true})
 		n.hastighet = 60.0
 		_rond.append(n)
 		var mal: Vector2i = platser[i] if i < platser.size() else v.punkt("grind")
-		n.ga_langs(v.vag(n.cell, mal))
+		n.ga_langs(v.vag_mot(n.cell, mal))
 		if i == 0:
 			n.framme.connect(func() -> void:
 				Spel.satt_fakta({"forstarkning_pa_plats": true})
