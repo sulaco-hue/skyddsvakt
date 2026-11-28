@@ -76,9 +76,13 @@ func bygg(p_scenario: Dictionary, p_varld: Varld) -> void:
 	_bygg_sambandsmeny()
 	_bygg_instruktion()
 	_meddelande = UiKit.etikett("", 24, UiKit.BARNSTEN)
-	_meddelande.set_anchors_preset(Control.PRESET_CENTER_TOP)
-	_meddelande.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	_meddelande.set_anchors_preset(Control.PRESET_TOP_WIDE)
+	# Kompakt: till höger om positionsrutan uppe till vänster.
+	_meddelande.offset_left = 232 if UiKit.kompakt else 40
+	_meddelande.offset_right = -24 if UiKit.kompakt else -40
 	_meddelande.offset_top = 84
+	_meddelande.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_meddelande.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_meddelande.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_meddelande.add_theme_color_override("font_outline_color", UiKit.MORK)
 	_meddelande.add_theme_constant_override("outline_size", 6)

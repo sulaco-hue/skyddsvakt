@@ -553,6 +553,7 @@ func _brakare_stannar() -> void:
 	var b := _brakare()
 	var o := _offret()
 	brakare_lage = "stannat"
+	main._avsluta_handelse(h)
 	if offret_lage != "nere":
 		Spel.satt_fakta({"offret_lindrigt_skadat": true})
 	b.stanna()
@@ -612,11 +613,13 @@ func _verkanseld(mal: String) -> void:
 	Spel.satt_fakta({"brakare_skjuten" if mal == "brakare" else "smygare_skjuten": true})
 	if mal == "brakare":
 		brakare_lage = "skjuten"
+		main._avsluta_handelse(h)
 		_slagsmal_slut()
 	else:
 		if smyg_lage == "jobbar" and _jobb_t > 0.0:
 			Spel.satt_fakta({"skylt_raddad": true})
 		smyg_lage = "skjuten"
+		main._avsluta_handelse(smyg_h)
 	n.stanna()
 	n.vaxla_still = true
 	main.varld.byt_bilder(n, "yxman_ligger" if mal == "brakare" else "smygare_ligger")

@@ -444,6 +444,7 @@ func _process(delta: float) -> void:
 	_uppdatera_sittande(delta)
 	_uppdatera_kalas(delta)
 	_bevaka_posten()
+	_uppdatera_sluthint(delta)
 	radio.vanta = kontakt.visible
 	_uppdatera_brus(delta)
 	if hud.debug_info_synlig():
@@ -514,6 +515,39 @@ func _uppdatera_brus(delta: float) -> void:
 	var vaxlingar: Array = _brus.get("vaxlingar", [])
 	if not vaxlingar.is_empty():
 		Spel.spela_samband(vaxlingar[_rng.randi_range(0, vaxlingar.size() - 1)], {}, true)
+
+
+## När inga fler händelser återstår och alla startade har spelats ut visas,
+## efter "sluthint_efter_s" (60), en påminnelse om att anmäla klar.
+var _sluthint_t := 0.0
+var _sluthint_visad := false
+
+
+func _uppdatera_sluthint(delta: float) -> void:
+	if _sluthint_visad or not _alla_handelser_klara():
+		return
+	_sluthint_t += delta
+	if _sluthint_t < float(_scenario.get("sluthint_efter_s", 60)):
+		return
+	if not hud.visible or kontakt.visible:
+		return
+	_sluthint_visad = true
+	hud.visa_meddelande(str(_scenario.get("sluthint", "Passet går mot sitt slut. Gör färdigt eventuella åtgärder och anmäl sedan klar för utvärdering.")), 12.0)
+
+
+func _alla_handelser_klara() -> bool:
+	if not _handelser_kvar.is_empty() or not _vantande_smygare.is_empty() or _handelse_status.is_empty():
+		return false
+	for hid: String in _handelse_status:
+		var hs: Dictionary = _handelse_status[hid]
+		if float(hs["slut_s"]) >= 0.0:
+			continue
+		# Personhändelser är utspelade när samtalet med personen har avslutats.
+		var npc := str((hs["h"] as Dictionary).get("npc", ""))
+		if npc != "" and _samtal_klara.has(npc):
+			continue
+		return false
+	return true
 
 
 func _forcera_handelse(id: String) -> void:
