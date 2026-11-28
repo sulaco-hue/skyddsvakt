@@ -101,7 +101,6 @@ func _ready() -> void:
 	add_child(snack)
 	snack.setup(hud, varld, _scenario)
 	hud.tysta_kamrat.connect(snack.tysta)
-	varld.kamrat_klickad.connect(snack.tysta)
 
 	kontakt = Kontakt.new()
 	rot.add_child(kontakt)
