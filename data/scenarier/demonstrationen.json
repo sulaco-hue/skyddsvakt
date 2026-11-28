@@ -97,7 +97,9 @@
     "vald_behovs": false,
     "vald_proportionerligt": false,
     "forsta_hjalp_avbojd": false,
-    "talesperson_vagrar": false
+    "talesperson_vagrar": false,
+    "behov_forstarkning": false,
+    "forstarkning_pa_plats": false
   },
   "npc": {
     "talespersonen": {
@@ -293,6 +295,17 @@
       "ledare_samlas": "Okej allihop! Vi samlas här – sen går vi in och sätter oss!",
       "ledare_in": "Nu går vi in! In och sätt er vid {objekt_bestamd}!",
       "ledare_trott": "Vi har gjort vår röst hörd! Vi kommer tillbaka!",
+      "rapport_senast_s": 120,
+      "rapport_marginal_s": 30,
+      "forstarkning_marginal_s": 60,
+      "forstarkning_efter_s": 25,
+      "forstarkning_start": "stig_nord",
+      "rond_framme": "Rondpatrullen på plats – vi tar grinden bakom er!",
+      "text_sen_rapport": "Ett dussin personer på väg mot grinden ska CQ få veta om direkt – innan något hunnit hända. Då kan CQ larma polis, skicka förstärkning och varna andra poster i tid. Er rapport kom först när läget redan hade börjat glida er ur händerna.",
+      "diskutera_sen_rapport": "Vad hade CQ kunnat göra om ni rapporterat när ni först såg gruppen? Vad vinner man på att vänta?",
+      "text_ingen_forstarkning": "När det börjar tryckas och knuffas i grinden är stridsparet bundet – och ni är två mot ett dussin. Senast då ska förstärkning begäras, så att grinden kan hållas även medan ni bär ut någon eller tar hand om en skadad.",
+      "text_sen_forstarkning": "Förstärkning begärdes, men först en bra stund efter att det började tryckas och knuffas i grinden. Senast när det börjar bråkas ska den begäras – helst redan när gruppen syns.",
+      "diskutera_forstarkning": "Två vakter mot tolv demonstranter. När insåg ni att ni inte skulle klara att hålla grinden själva? Vem bevakar resten av staketet under tiden?",
       "sitter_ute_min_s": 20,
       "sitter_ute_max_s": 40,
       "ledare_otalig": "Det här räcker inte! Ingen lyssnar på oss här ute – in igen!",
@@ -335,6 +348,15 @@
           "demo_inne_nu"
         ],
         "text": "några har tagit sig in och sitter innanför staketet"
+      },
+      {
+        "om": [
+          "forstarkning_pa_plats"
+        ],
+        "inte": [
+          "polis_pa_plats"
+        ],
+        "text": "rondpatrullen på plats vid grinden"
       },
       {
         "om": [

@@ -47,6 +47,13 @@ var _bar_ut: Dictionary = {}
 var _ledig_inne: Array[Vector2i] = []
 var _ledig_ute: Array[Vector2i] = []
 var _skyddsvakt_skadad := false
+## Speltid (s) för upptäckten, första bråket och stridsparets rapport/förstärkning.
+var upptackt_s := -1.0
+var brak_s := -1.0
+var rapport_s := -1.0
+var forstarkning_s := -1.0
+var _rond: Array[Aktor] = []
+var _rond_t := -1.0
 var _fh_given: Dictionary = {}
 
 
@@ -113,6 +120,7 @@ func _process(delta: float) -> void:
 	_uppdatera_tryck(delta)
 	_uppdatera_slagord(delta)
 	_uppdatera_polis(delta)
+	_uppdatera_samband(delta)
 	_uppdatera_kamrat()
 	_uppdatera_fakta()
 
@@ -262,7 +270,7 @@ func _nasta_steg(d: Dictionary) -> void:
 		_framme_inne(d)
 		return
 	var v: Varld = main.varld
-	var vakter: Array[Vector2i] = [v.spelare.cell, v.kollega.cell]
+	var vakter := _vakter()
 	var vag := _vag_utan(n.cell, mal, vakter)
 	d["tryck"] = false
 	if vag.size() < 2:
@@ -332,6 +340,7 @@ func _uppdatera_tryck(delta: float) -> void:
 	var tryckande := _tryckande()
 	if tryckande.is_empty():
 		return
+	_borjar_brakas()
 	_knuff_t -= delta
 	if _knuff_t <= 0.0:
 		_knuff_t = randf_range(0.9, 1.6)
@@ -402,7 +411,7 @@ func _slinker_forbi(d: Dictionary) -> void:
 	for dy in range(-1, 2):
 		for dx in range(-1, 2):
 			var c := vakt.cell + Vector2i(dx, dy)
-			if c == vakt.cell or c == v.spelare.cell or c == v.kollega.cell or not v.ar_fri(c):
+			if c in _vakter() or not v.ar_fri(c):
 				continue
 			if not v.ar_inom_skyddsomrade(c) or _upptagen(c, d):
 				continue
@@ -480,6 +489,7 @@ func upptack() -> void:
 	if upptackt:
 		return
 	upptackt = true
+	upptackt_s = Spel.klocka_s
 	Spel.satt_fakta({"demo_upptackt": true, "motpart_invid": true})
 	main._markera_upptackt(h)
 	main._larm_har_skett = true
@@ -498,6 +508,80 @@ func ar_demonstrant(id: String) -> bool:
 
 func hanterar() -> bool:
 	return upptackt
+
+
+# ------------------------------------------------------- Samband --
+
+## Rutor där en vakt står (stridsparet och en eventuell rondpatrull).
+func _vakter() -> Array[Vector2i]:
+	var ut: Array[Vector2i] = [main.varld.spelare.cell, main.varld.kollega.cell]
+	for r in _rond:
+		ut.append(r.cell)
+	return ut
+
+
+func _borjar_brakas() -> void:
+	if brak_s < 0.0:
+		brak_s = Spel.klocka_s
+
+
+## Rapport till CQ och förstärkning: tider för bedömningen, och rondpatrullen
+## kommer en stund efter att förstärkning begärts.
+func _uppdatera_samband(delta: float) -> void:
+	if rapport_s < 0.0 and Spel.handling_utford("rapportera_vaktchef"):
+		rapport_s = Spel.klocka_s
+	if forstarkning_s < 0.0 and Spel.handling_utford("begar_forstarkning"):
+		forstarkning_s = Spel.klocka_s
+		_rond_t = float(h.get("forstarkning_efter_s", 25))
+	if _rond_t > 0.0:
+		_rond_t -= delta
+		if _rond_t <= 0.0:
+			_rondpatrullen_kommer()
+
+
+func _rondpatrullen_kommer() -> void:
+	var v: Varld = main.varld
+	var start: Vector2i = v.punkt(h.get("forstarkning_start", "stig_nord"))
+	var platser: Array[Vector2i] = []
+	for c in v.grindceller():
+		platser.append(c + Vector2i(-1, 0))
+	for i in 2:
+		var n: Aktor = v.skapa_npc("rond_%d" % (i + 1), {"sprite": "vakt", "start": [start.x + i, start.y], "synlig_fran_start": true})
+		n.hastighet = 60.0
+		_rond.append(n)
+		var mal: Vector2i = platser[i] if i < platser.size() else v.punkt("grind")
+		n.ga_langs(v.vag(n.cell, mal))
+		if i == 0:
+			n.framme.connect(func() -> void:
+				Spel.satt_fakta({"forstarkning_pa_plats": true})
+				_sag(n, str(h.get("rond_framme", "Rondpatrullen på plats – vi tar grinden bakom er!")), 3.0), CONNECT_ONE_SHOT)
+
+
+## Läggs till debriefingen: kom rapporten till CQ tidigt, och begärdes
+## förstärkning senast när det började bråkas?
+func bedom_efterat() -> void:
+	if upptackt_s < 0.0:
+		return
+	var rapport_grans := upptackt_s + float(h.get("rapport_senast_s", 120))
+	if brak_s >= 0.0:
+		rapport_grans = minf(rapport_grans, brak_s + float(h.get("rapport_marginal_s", 30)))
+	if rapport_s >= 0.0 and rapport_s > rapport_grans:
+		Spel.lagg_till_missad(_post("sen_rapport", "warn", "Rapporten till CQ kom sent",
+			str(h.get("text_sen_rapport", "")), str(h.get("diskutera_sen_rapport", ""))))
+	if brak_s >= 0.0:
+		var grans := brak_s + float(h.get("forstarkning_marginal_s", 60))
+		if forstarkning_s < 0.0:
+			Spel.lagg_till_missad(_post("ingen_forstarkning", "bad", "Förstärkning begärdes aldrig",
+				str(h.get("text_ingen_forstarkning", "")), str(h.get("diskutera_forstarkning", ""))))
+		elif forstarkning_s > grans:
+			Spel.lagg_till_missad(_post("sen_forstarkning", "warn", "Förstärkning begärdes sent",
+				str(h.get("text_sen_forstarkning", "")), str(h.get("diskutera_forstarkning", ""))))
+
+
+func _post(handling: String, utfall: String, beskrivning: String, kommentar: String, diskutera: String) -> Dictionary:
+	return {"tid": "Efter", "handling": handling, "namn": beskrivning, "beskrivning": beskrivning,
+		"utfall": utfall, "lagrum": "Bevakningsinstruktionen – rapportering, larm och förstärkning",
+		"kommentar": kommentar, "diskutera": diskutera, "saknade_krav": []}
 
 
 # ------------------------------------------------------- Polisen --
@@ -709,6 +793,7 @@ func _handgemang() -> void:
 		main.hud.visa_meddelande("Ingen inom räckhåll.", 2.0)
 		return
 	antal_handgemang += 1
+	_borjar_brakas()
 	var n: Aktor = d["n"]
 	var v: Varld = main.varld
 	_fakta_ingen_fara()

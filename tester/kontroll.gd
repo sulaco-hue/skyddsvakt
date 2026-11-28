@@ -727,6 +727,11 @@ func _spela_demonstration(fall: String) -> void:
 	_ok("demonstrationen upptäckt, knappar: %s" % ", ".join(PackedStringArray(main.hud.situationer())))
 	match fall:
 		"dialog":
+			# Rapport till CQ och förstärkning direkt när gruppen syns.
+			main.hud.radio_anropa()
+			main.hud.radio_valj("lagesrapport")
+			main.hud.radio_valj("forstarkning")
+			main.hud.radio_avsluta()
 			await _vanta_tills(func() -> bool: return dm.fas != "kommer", 60.0)
 			# Klick på vilken demonstrant som helst: talespersonen kliver fram.
 			main.call("_pa_npc_klickad", "demo_5")
@@ -750,16 +755,24 @@ func _spela_demonstration(fall: String) -> void:
 				_fel("ingen demonstrant tröttnade på att sitta utanför")
 			else:
 				_ok("en demonstrant reste sig och tryckte på igen")
+			await _vanta(30)
 			main.hud.radio_anropa()
-			main.hud.radio_valj("lagesrapport")
 			main.hud.radio_valj("polis")
 			main.hud.radio_avsluta()
+			if not await _vanta_tills(func() -> bool: return bool(Spel.fakta.get("forstarkning_pa_plats", false)), 90.0):
+				_fel("rondpatrullen kom aldrig fram till grinden")
+			else:
+				_ok("rondpatrullen på plats bakom grinden")
 			if not await _vanta_tills(func() -> bool: return dm._avslutad, 200.0):
 				var lagen: Array = dm.demonstranter.map(func(d: Dictionary) -> String: return str(d["lage"]))
 				_fel("demonstrationen tog aldrig slut efter polis (fas %s, lägen %s)" % [dm.fas, str(lagen)])
 			else:
 				_ok("polisen kom, demonstranterna gick; lägesrapport: " + str(main.call("_lagestext")))
-			await _avsluta_yxmannen(main, {"neka_tilltrade": "ok", "anmala_polis": "ok", "rapportera_vaktchef": "ok"})
+			await _avsluta_yxmannen(main, {"neka_tilltrade": "ok", "anmala_polis": "ok", "rapportera_vaktchef": "ok",
+				"begar_forstarkning": "ok"})
+			if Spel.slutlogg().any(func(p: Dictionary) -> bool: return str(p.get("handling", "")) in ["sen_rapport", "ingen_forstarkning", "sen_forstarkning"]):
+				_fel("tidig rapport och förstärkning fick ändå kritik: rapport %.0f s, förstärkning %.0f s, bråk %.0f s efter upptäckt" % [
+					dm.rapport_s - dm.upptackt_s, dm.forstarkning_s - dm.upptackt_s, dm.brak_s - dm.upptackt_s])
 		"vald":
 			main.call("_pa_situation", "halt")
 			if not await _vanta_tills(func() -> bool: return not dm._tryckande().is_empty(), 90.0):
@@ -783,7 +796,7 @@ func _spela_demonstration(fall: String) -> void:
 					_fel("demonstranten bars aldrig ut")
 				else:
 					_ok("en demonstrant bars ut")
-			var forv := {"halt_order": "warn", "varningsskott": "bad", "avlagsna": "ok"}
+			var forv := {"halt_order": "warn", "varningsskott": "bad", "avlagsna": "ok", "ingen_forstarkning": "bad"}
 			if Spel.handling_utford("handgemang"):
 				forv["handgemang"] = "ok"
 			await _avsluta_yxmannen(main, forv)

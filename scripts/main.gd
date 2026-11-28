@@ -268,7 +268,7 @@ func _uppdatera_rimlighet() -> void:
 	# stridsparet är (eller har varit) bundet av ett hot, skottlossning eller en
 	# frihetsberövad/skadad person – även om hotet inte längre är aktivt.
 	if not bool(f.get("behov_forstarkning", false)):
-		var bundet := (_slagsmal != null and _slagsmal.upptackt) \
+		var bundet := (_slagsmal != null and _slagsmal.upptackt) or (_demo != null and _demo.upptackt) \
 			or (not _angripare.is_empty() and bool(_angripare.get("upptackt", false))) \
 			or (not _horde.is_empty() and bool(_horde.get("upptackt", false))) \
 			or bool(f.get("skadad_person", false))
@@ -2047,6 +2047,8 @@ func _visa_debriefing() -> void:
 			"diskutera": str(h.get("missad_diskutera", "Var borde stridsparet ha befunnit sig? Hur fördelar ni uppmärksamheten under en rond?")),
 			"saknade_krav": [],
 		})
+	if _demo:
+		_demo.bedom_efterat()
 	# Följder som visade sig efteråt läggs till bedömningen (fortfarande samma utfall).
 	if bool(Spel.fakta.get("skylt_stulen", false)):
 		for post: Dictionary in Spel.logg:
