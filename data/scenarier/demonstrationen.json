@@ -36,6 +36,13 @@
     "vaktchef": "CQ",
     "du": "Grindposten"
   },
+  "kamratsnack_forst": {
+    "kamrat": "Hur går det på jobbet då, Olsson?",
+    "alltid_svar": true,
+    "svar": [
+      "Jodå, eldsvådor och bilkrockar om vartannat, så det är ingen risk för arbetslöshet här inte."
+    ]
+  },
   "fakta": {
     "skyltat_avbildningsforbud": true,
     "motpart_inom": false,
@@ -127,7 +134,7 @@
       "id": "1",
       "namn": "Demonstrationen",
       "typ": "demonstration",
-      "tid": "10:07",
+      "tid": "10:06",
       "antal": 12,
       "ledare": "talespersonen",
       "envisa": 2,
@@ -286,6 +293,14 @@
       "ledare_samlas": "Okej allihop! Vi samlas här – sen går vi in och sätter oss!",
       "ledare_in": "Nu går vi in! In och sätt er vid {objekt_bestamd}!",
       "ledare_trott": "Vi har gjort vår röst hörd! Vi kommer tillbaka!",
+      "sitter_ute_min_s": 20,
+      "sitter_ute_max_s": 40,
+      "ledare_otalig": "Det här räcker inte! Ingen lyssnar på oss här ute – in igen!",
+      "repliker_reser_sig": [
+        "Nej, nu räcker det!",
+        "Vi sitter inte här i onödan!",
+        "In igen!"
+      ],
       "ledare_polis": "Okej, polisen är här. Vi har sagt vårt – vi går!",
       "polis_replik": "Polisen. Demonstrationen är upplöst – gå härifrån nu.",
       "missad_diskutera": "Ett dussin personer med plakat och slagord vid grinden. Hur kunde det gå obemärkt förbi?"

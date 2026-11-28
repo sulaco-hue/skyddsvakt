@@ -21,6 +21,8 @@ var _angripare_start := ""
 ## Dialogsteget där samtalet med varje person senast avslutades.
 var _senaste_nod: Dictionary = {}
 var _vantar_samtal := ""
+## Personen vi går fram till när samtalet förs med någon annan (demonstrationen).
+var _vantar_vid := ""
 var _npc_efter_samtal := {}  # npc_id -> beteende
 var _scenario: Dictionary
 var _larm_har_skett := false
@@ -1328,6 +1330,10 @@ func _pa_npc_klickad(id: String) -> void:
 	if not _horde.is_empty() and (_horde["zombies"] as Dictionary).has(id):
 		_kamrat_sager("Jag tror inte han vill prata.")
 		return
+	# Demonstrationen: vem man än vänder sig till kliver talespersonen fram.
+	if _demo and _demo.ar_demonstrant(id):
+		_demo_samtal(id)
+		return
 	# Personer i händelser utan samtal (bråkarna, smygaren) går inte att prata med.
 	if not (_scenario.get("npc", {}).get(id, {}) as Dictionary).has("dialog_start") and (_slagsmal or _demo):
 		return
@@ -1344,6 +1350,24 @@ func _pa_npc_klickad(id: String) -> void:
 		hud.visa_meddelande("Personen är på väg därifrån.")
 		return
 	_ga_till_samtal(id)
+
+
+func _demo_samtal(klickad: String) -> void:
+	var ledare := str(_demo.h.get("ledare", "talespersonen"))
+	var n: Aktor = varld.npcer.get(klickad)
+	var l: Aktor = varld.npcer.get(ledare)
+	if n == null or not n.visible or l == null or not l.visible:
+		return
+	if _sittande.has(ledare):
+		_sittande[ledare]["t"] = 0.0
+	if varld.avstand(varld.spelare.cell, n.cell) <= 3:
+		_oppna_kontakt(ledare)
+		return
+	if varld.ga_till(n.cell):
+		_vantar_samtal = ledare
+		_vantar_vid = klickad
+	else:
+		hud.visa_meddelande("Du kan inte ta dig närmare härifrån.")
 
 
 func _ga_till_samtal(id: String) -> void:
@@ -1364,7 +1388,8 @@ func _pa_spelare_framme() -> void:
 		return
 	var id := _vantar_samtal
 	_vantar_samtal = ""
-	var n: Aktor = varld.npcer.get(id)
+	var n: Aktor = varld.npcer.get(_vantar_vid if _vantar_vid != "" else id)
+	_vantar_vid = ""
 	if n and varld.avstand(varld.spelare.cell, n.cell) <= 3:
 		_oppna_kontakt(id)
 	else:

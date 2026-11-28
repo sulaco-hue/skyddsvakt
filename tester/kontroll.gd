@@ -728,7 +728,12 @@ func _spela_demonstration(fall: String) -> void:
 	match fall:
 		"dialog":
 			await _vanta_tills(func() -> bool: return dm.fas != "kommer", 60.0)
-			main.call("_oppna_kontakt", "talespersonen")
+			# Klick på vilken demonstrant som helst: talespersonen kliver fram.
+			main.call("_pa_npc_klickad", "demo_5")
+			await _vanta_tills(func() -> bool: return main.kontakt.visible, 30.0)
+			if not main.kontakt.visible or str(main.kontakt.get_meta("npc", "")) != "talespersonen":
+				_fel("klick på en demonstrant öppnade inte samtalet med talespersonen")
+				main.call("_oppna_kontakt", "talespersonen")
 			await _vanta(3)
 			var kontakt: Kontakt = main.kontakt
 			kontakt.call("_valj", 0)
@@ -739,6 +744,12 @@ func _spela_demonstration(fall: String) -> void:
 			await _vanta(3)
 			if not bool(Spel.fakta.get("demo_sitter_utanfor", false)):
 				_fel("gruppen gick inte med på att sitta utanför")
+			# De nöjer sig inte länge: någon reser sig och trycker på igen.
+			if not await _vanta_tills(func() -> bool: return dm.demonstranter.any(func(d: Dictionary) -> bool:
+					return bool(d.get("otalig", false))), 120.0):
+				_fel("ingen demonstrant tröttnade på att sitta utanför")
+			else:
+				_ok("en demonstrant reste sig och tryckte på igen")
 			main.hud.radio_anropa()
 			main.hud.radio_valj("lagesrapport")
 			main.hud.radio_valj("polis")

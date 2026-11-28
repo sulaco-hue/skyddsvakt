@@ -161,7 +161,7 @@ func _lugnt() -> bool:
 
 
 func _borja_trycka(d: Dictionary) -> void:
-	if _lugnt() and not d["envis"]:
+	if _lugnt() and not d["envis"] and not bool(d.get("otalig", false)):
 		_satt_utanfor(d)
 		return
 	d["lage"] = "trycker"
@@ -171,6 +171,9 @@ func _borja_trycka(d: Dictionary) -> void:
 
 func _satt_utanfor(d: Dictionary) -> void:
 	d["lage"] = "sitter_ute"
+	d["sitter"] = false
+	# De nöjer sig inte länge med att sitta utanför.
+	d["ute_t"] = randf_range(float(h.get("sitter_ute_min_s", 20)), float(h.get("sitter_ute_max_s", 40)))
 	d["mal"] = _ledig_ute.pop_front() if not _ledig_ute.is_empty() else main.varld.punkt("grind_ute")
 	var n: Aktor = d["n"]
 	n.stanna()
@@ -199,7 +202,7 @@ func _uppdatera_demonstrant(d: Dictionary, delta: float) -> void:
 				if fas == "trycker" and not d["ledare"]:
 					_borja_trycka(d)
 		"trycker":
-			if _lugnt() and not d["envis"] and not main.varld.ar_inom_skyddsomrade(n.cell):
+			if _lugnt() and not d["envis"] and not bool(d.get("otalig", false)) and not main.varld.ar_inom_skyddsomrade(n.cell):
 				_ledig_inne.append(d["mal"])
 				_satt_utanfor(d)
 				return
@@ -215,6 +218,11 @@ func _uppdatera_demonstrant(d: Dictionary, delta: float) -> void:
 					n.vaxla_still = false
 				_borja_trycka(d)
 		"sitter_ute", "sitter_inne":
+			if lage == "sitter_ute" and fas == "trycker" and not d["ledare"] and bool(d.get("sitter", false)):
+				d["ute_t"] = float(d.get("ute_t", 30.0)) - delta
+				if float(d["ute_t"]) <= 0.0:
+					_reser_sig(d)
+					return
 			if not n.ar_i_rorelse() and not bool(d.get("sitter", false)):
 				d["sitter"] = true
 				main.varld.byt_bilder(n, "demonstrant_%s_sitter" % d["variant"])
@@ -222,6 +230,27 @@ func _uppdatera_demonstrant(d: Dictionary, delta: float) -> void:
 				n.vand_mot(main.varld.cell_pos(main.varld.punkt("objekt_mitt")))
 				if lage == "sitter_inne":
 					Spel.satt_fakta({"demo_sitter_inne": true})
+
+
+## Tröttnar på att sitta utanför: reser sig och trycker på igen.
+var _otalig_sagt := false
+
+
+func _reser_sig(d: Dictionary) -> void:
+	var n: Aktor = d["n"]
+	d["otalig"] = true
+	d["sitter"] = false
+	_ledig_ute.append(d["mal"])
+	n.vaxla_still = false
+	main.varld.byt_bilder(n, "demonstrant_" + str(d["variant"]))
+	d["mal"] = Vector2i(-1, -1)
+	_borja_trycka(d)
+	d["t"] = 0.0
+	if not _otalig_sagt:
+		_otalig_sagt = true
+		_sag(_ledaren(), str(h.get("ledare_otalig", "")), 3.5)
+	else:
+		_sag(n, str((h.get("repliker_reser_sig", ["In igen!"]) as Array).pick_random()), 2.0)
 
 
 ## Ett steg i taget mot målet. Rutor där ettan eller tvåan står går inte att
@@ -885,6 +914,7 @@ func _borja_bara() -> void:
 		if d["lage"] == "bars_ut":
 			d["lage"] = "sitter_ute"
 			d["sitter"] = false
+			d["ute_t"] = randf_range(float(h.get("sitter_ute_min_s", 20)), float(h.get("sitter_ute_max_s", 40)))
 		_bar_ut = {}
 		visa_knappar(), CONNECT_ONE_SHOT)
 	visa_knappar()

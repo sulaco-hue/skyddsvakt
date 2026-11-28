@@ -25,10 +25,13 @@ var _senaste: Array[int] = []
 ## Scenariots väderläge, t.ex. ["regn", "kallt"]. Repliker med "nar" kräver att
 ## alla deras villkor finns här.
 var _vader: Array = []
+## Scenariots egen första replik ("kamratsnack_forst"), som alltid sägs först.
+var _forst: Dictionary = {}
 
 
 func setup(p_hud: Hud, p_varld: Varld, scenario: Dictionary = {}) -> void:
 	_vader = scenario.get("vaderlag", [])
+	_forst = scenario.get("kamratsnack_forst", {})
 	hud = p_hud
 	varld = p_varld
 	_rng.randomize()
@@ -88,6 +91,12 @@ func _kamrat_tystnar() -> void:
 
 
 func _prata() -> void:
+	if not _forst.is_empty():
+		var rad := _forst
+		_forst = {}
+		hud.visa_bubbla(varld.kollega, str(rad.get("kamrat", "")), 5.5)
+		get_tree().create_timer(float(_inst.get("reaktion_efter_s", 3.5))).timeout.connect(_reagera.bind(rad))
+		return
 	var lista: Array = _data.get("snack", [])
 	if lista.is_empty():
 		return
