@@ -834,8 +834,9 @@ func _halt() -> void:
 	main.hud.visa_bubbla(main.varld.spelare, text, 3.0)
 	stress += 1
 	var aktiva := _aktiva()
-	# Någon enstaka blir rädd och går – men efter tredje ropet biter det inte längre.
-	if antal_halt <= int(h.get("halt_verkar_ggr", 3)) and randf() < float(h.get("chans_halt_fungerar", 0.5)):
+	# Någon enstaka blir rädd och går – men bara av hotet om skott (inte det första,
+	# lugna ropet), och efter tredje ropet biter det inte längre.
+	if not utan_hot and antal_halt <= int(h.get("halt_verkar_ggr", 3)) and randf() < float(h.get("chans_halt_fungerar", 0.5)):
 		var kandidater: Array[Dictionary] = []
 		for d in aktiva:
 			if not d["envis"] and not d["ledare"] and d["lage"] != "sitter_inne":
@@ -849,8 +850,9 @@ func _halt() -> void:
 	# Resten buar.
 	for i in mini(2, aktiva.size()):
 		var d: Dictionary = aktiva.pick_random()
+		var nyckel := "repliker_halt_forsta" if utan_hot else "repliker_halt"
 		main.get_tree().create_timer(0.8 + 0.6 * i).timeout.connect(func() -> void:
-			_sag(d["n"], str((h.get("repliker_halt", ["Buuu!"]) as Array).pick_random()), 2.0))
+			_sag(d["n"], str((h.get(nyckel, ["Buuu!"]) as Array).pick_random()), 2.0))
 	var kamrat: Array = h.get("kamrat_halt", [])
 	if not kamrat.is_empty() and antal_halt >= 2:
 		main.get_tree().create_timer(2.6).timeout.connect(main._kamrat_sager.bind(
@@ -860,10 +862,14 @@ func _halt() -> void:
 ## Handgemäng med den närmaste: knuffar tillbaka – ibland går det inte,
 ## ibland skadas någon, och stämningen trappas upp för varje gång.
 func _handgemang() -> void:
+	# I första hand den som trycker på eller redan är inne, annars den närmaste.
 	var lista: Array[Dictionary] = []
 	for d in _aktiva():
-		lista.append(d)
+		if bool(d.get("tryck", false)) or d["lage"] == "sitter_inne" or main.varld.ar_inom_skyddsomrade((d["n"] as Aktor).cell):
+			lista.append(d)
 	var d := _narmast(lista, 2)
+	if d.is_empty():
+		d = _narmast(_aktiva(), 2)
 	if d.is_empty():
 		main.hud.visa_meddelande("Ingen inom räckhåll.", 2.0)
 		return

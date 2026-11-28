@@ -256,6 +256,13 @@
         "Va? Skjuta? Oss?",
         "Filma det här!"
       ],
+      "repliker_halt_forsta": [
+        "Buuu!",
+        "Vi stannar inte!",
+        "Vi är fredliga!",
+        "Vi har rätt att vara här!",
+        "Säger vem då?"
+      ],
       "repliker_ger_upp": [
         "Okej, okej… jag vill inte bli skjuten.",
         "Det här var inte värt det. Jag går.",
