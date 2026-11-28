@@ -749,6 +749,13 @@ func _spela_demonstration(fall: String) -> void:
 			await _vanta(3)
 			if not bool(Spel.fakta.get("demo_sitter_utanfor", false)):
 				_fel("gruppen gick inte med på att sitta utanför")
+			main.call("_pa_npc_klickad", "demo_2")
+			await _vanta(3)
+			if main.kontakt.visible:
+				_fel("dialogen öppnades igen fast samtalet var avslutat")
+				main.kontakt.call("_stang")
+			else:
+				_ok("avslutat samtal: personen lyssnar inte längre")
 			# De nöjer sig inte länge: någon reser sig och trycker på igen.
 			if not await _vanta_tills(func() -> bool: return dm.demonstranter.any(func(d: Dictionary) -> bool:
 					return bool(d.get("otalig", false))), 120.0):

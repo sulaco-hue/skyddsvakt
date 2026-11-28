@@ -121,6 +121,7 @@ func _process(delta: float) -> void:
 	_uppdatera_fas(delta)
 	for d in demonstranter:
 		_uppdatera_demonstrant(d, delta)
+	_uppdatera_bar_ut()
 	_uppdatera_tryck(delta)
 	_uppdatera_slagord(delta)
 	_uppdatera_polis(delta)
@@ -1017,18 +1018,40 @@ func _borja_bara() -> void:
 	_sag(n, str(h.get("replik_bars_ut", "Jag gör passivt motstånd!")), 2.5)
 	var ut: Vector2i = _ledig_ute.pop_front() if not _ledig_ute.is_empty() else v.punkt("grind_ute")
 	d["mal"] = ut
-	var vag := v.vag(n.cell, ut)
 	n.stanna()
-	n.hastighet = 22.0
-	n.ga_langs(vag)
-	v.ga_till(ut + Vector2i(-1, 0))
-	n.framme.connect(func() -> void:
-		if d["lage"] == "bars_ut":
-			d["lage"] = "sitter_ute"
-			d["sitter"] = false
-			d["ute_t"] = randf_range(float(h.get("sitter_ute_min_s", 20)), float(h.get("sitter_ute_max_s", 40)))
-		_bar_ut = {}
-		visa_knappar(), CONNECT_ONE_SHOT)
+	n.vaxla_still = true
+	main.varld.byt_bilder(n, "demonstrant_%s_sitter" % d["variant"])
+	if not v.ga_till(ut + Vector2i(-1, 0)):
+		_bart_ut_klart()
+		return
+	v.spelare.framme.connect(_bart_ut_klart, CONNECT_ONE_SHOT)
+	visa_knappar()
+
+
+## Den som bärs ut sitter fast vid vår gubbe hela vägen.
+func _uppdatera_bar_ut() -> void:
+	if _bar_ut.is_empty() or _bar_ut["lage"] != "bars_ut":
+		return
+	var v: Varld = main.varld
+	var n: Aktor = _bar_ut["n"]
+	n.cell = v.spelare.cell
+	n.position = v.spelare.position + Vector2(7, 3)
+
+
+func _bart_ut_klart() -> void:
+	if _bar_ut.is_empty():
+		return
+	var d := _bar_ut
+	_bar_ut = {}
+	var v: Varld = main.varld
+	var n: Aktor = d["n"]
+	if d["lage"] == "bars_ut":
+		var ut: Vector2i = d["mal"]
+		n.cell = ut if v.ar_fri(ut) else v.spelare.cell
+		n.position = v.cell_pos(n.cell)
+		d["lage"] = "sitter_ute"
+		d["sitter"] = false
+		d["ute_t"] = randf_range(float(h.get("sitter_ute_min_s", 20)), float(h.get("sitter_ute_max_s", 40)))
 	visa_knappar()
 
 

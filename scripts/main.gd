@@ -1362,6 +1362,11 @@ func _demo_samtal(klickad: String) -> void:
 	var l: Aktor = varld.npcer.get(ledare)
 	if n == null or not n.visible or l == null or not l.visible:
 		return
+	# Samtalet har nått sitt slut (de sätter sig ute, eller "bär bort oss"): ingen ny dialog.
+	var nod: Dictionary = _scenario.get("dialog", {}).get(str(_senaste_nod.get(ledare, "")), {})
+	if _samtal_klara.has(ledare) and bool(nod.get("slut", false)):
+		hud.visa_meddelande("Personen lyssnar inte längre.", 2.5)
+		return
 	if _sittande.has(ledare):
 		_sittande[ledare]["t"] = 0.0
 	if varld.avstand(varld.spelare.cell, n.cell) <= 3:

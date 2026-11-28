@@ -302,10 +302,17 @@ func _visa_bubbla_nu(mal: Node2D, text: String, sek: float) -> void:
 		UiKit.kyrillisk_etikett(l)
 		l.add_theme_font_size_override("font_size", 15)
 	p.add_child(l)
+	# Talstreck från bubblan till den som pratar (syns när bubblan flyttats åt sidan).
+	var streck := Line2D.new()
+	streck.width = 2.0
+	streck.default_color = UiKit.TEXT
+	streck.show_behind_parent = true
+	streck.visible = false
+	p.add_child(streck)
 	p.modulate.a = 0.0  # visas först när den har storlek och plats (annars blinkar den i hörnet)
 	_bubbellager.add_child(p)
 	_bubblor.append({"nod": p, "mal": mal, "t": maxf(sek, 0.5), "hojd": 34.0, "stig": false, "typ": "prat",
-		"text": text, "visad": 0.0, "las_t": minf(lastid(text), sek)})
+		"text": text, "visad": 0.0, "las_t": minf(lastid(text), sek), "streck": streck})
 
 
 ## Ljud som text ovanför en figur, t.ex. "klick klick", "klipp klipp", "brak".
@@ -363,6 +370,7 @@ func _uppdatera_bubblor(delta: float) -> void:
 		if not bool(b["utanfor"]):
 			b.erase("fast_pos")
 		var pos := kamera * (mal.global_position + Vector2(0, -float(b["hojd"])))
+		b["huvud"] = kamera * (mal.global_position + Vector2(0, -26.0))
 		if b["stig"]:
 			pos.y -= (float(b["start"]) - float(b["t"])) * 18.0
 		nod.position = (pos - Vector2(nod.size.x / 2.0, nod.size.y)).round()
@@ -394,31 +402,96 @@ func _undvik_overlapp() -> void:
 			continue
 		var naturlig_y := nod.position.y
 		var r := Rect2(nod.position + Vector2(0.0, float(b.get("dy", 0.0))), nod.size).grow(3.0)
-		var varv := 0
-		var krock := true
-		while krock and varv < 8:
-			krock = false
-			for p in egna:
-				if r.intersects(p):
-					r.position.y = p.position.y - r.size.y - 1.0
-					krock = true
-			varv += 1
-		if r.position.y < 70.0:
-			r.position.y = 70.0
-			for p in egna:
-				if r.intersects(p):
-					r.position.y = p.end.y + 1.0
-		r.position.x = clampf(r.position.x, 4.0, skarm.x - r.size.x - 4.0)
-		r.position.y = minf(r.position.y, skarm.y - r.size.y - 4.0)
-		b["dy"] = r.position.y + 3.0 - naturlig_y
+		# Pratbubblor: hellre åt sidan (med talstreck) än ovanpå någon annan.
+		var sida := -1
+		if b["typ"] == "prat" and b.has("huvud"):
+			var kandidater := _sidplatser(nod, b["huvud"], skarm)
+			var ordning: Array = range(kandidater.size())
+			var forra := int(b.get("sida", -1))
+			if forra >= 0:
+				ordning.erase(forra)
+				ordning.push_front(forra)
+			for i: int in ordning:
+				var k: Rect2 = kandidater[i]
+				if k.position.x < -9999.0:
+					continue
+				var fri := true
+				for p in egna:
+					if k.intersects(p):
+						fri = false
+						break
+				if fri:
+					sida = i
+					r = k
+					break
+			b["sida"] = sida
+		if sida < 0:
+			if b["typ"] == "prat" and b.has("huvud"):
+				r = Rect2(Vector2(nod.position.x, naturlig_y), nod.size).grow(3.0)
+			var varv := 0
+			var krock := true
+			while krock and varv < 8:
+				krock = false
+				for p in egna:
+					if r.intersects(p):
+						r.position.y = p.position.y - r.size.y - 1.0
+						krock = true
+				varv += 1
+			if r.position.y < 70.0:
+				r.position.y = 70.0
+				for p in egna:
+					if r.intersects(p):
+						r.position.y = p.end.y + 1.0
+			r.position.x = clampf(r.position.x, 4.0, skarm.x - r.size.x - 4.0)
+			r.position.y = minf(r.position.y, skarm.y - r.size.y - 4.0)
+			b["dy"] = r.position.y + 3.0 - naturlig_y
 		placerade.append(r)
 		nod.position = (r.position + Vector2(3.0, 3.0)).round()
 		nod.modulate.a = 1.0
+		_rita_streck(b, nod)
 		if bool(b.get("utanfor", false)):
 			b["fast_pos"] = nod.position
 
 
-## Skärmrutor för synliga figurer som inte är stridsparet: [nod, Rect2].
+## Platser för en pratbubbla: rakt ovanför huvudet (0), till höger (1),
+## till vänster (2), snett upp åt höger (3) och vänster (4). Utom skärmen räknas inte.
+func _sidplatser(nod: Control, huvud: Vector2, skarm: Vector2) -> Array:
+	var st := nod.size
+	var lista: Array = [
+		Rect2(Vector2(huvud.x - st.x / 2.0, huvud.y - 8.0 - st.y), st),
+		Rect2(Vector2(huvud.x + 28.0, huvud.y - st.y * 0.6), st),
+		Rect2(Vector2(huvud.x - 28.0 - st.x, huvud.y - st.y * 0.6), st),
+		Rect2(Vector2(huvud.x + 26.0, huvud.y - 40.0 - st.y), st),
+		Rect2(Vector2(huvud.x - 26.0 - st.x, huvud.y - 40.0 - st.y), st),
+	]
+	var ut: Array = []
+	for k: Rect2 in lista:
+		var g := k.grow(3.0)
+		if g.position.x < 4.0 or g.end.x > skarm.x - 4.0 or g.position.y < 70.0 or g.end.y > skarm.y - 4.0:
+			g.position = Vector2(-99999, -99999)  # utom skärmen: kan aldrig väljas
+		ut.append(g)
+	return ut
+
+
+## Talstrecket går från bubblans närmaste kant till huvudet, när bubblan inte
+## sitter rakt ovanför.
+func _rita_streck(b: Dictionary, nod: Control) -> void:
+	var streck: Line2D = b.get("streck")
+	if streck == null or not b.has("huvud"):
+		return
+	var huvud: Vector2 = b["huvud"]
+	var rekt := Rect2(nod.position, nod.size)
+	var narmast := Vector2(clampf(huvud.x, rekt.position.x, rekt.end.x), clampf(huvud.y, rekt.position.y, rekt.end.y))
+	var avst := narmast.distance_to(huvud)
+	streck.visible = avst > 14.0
+	if not streck.visible:
+		return
+	# Strecket slutar en bit från huvudet så att det inte går in i figuren.
+	var slut := huvud + (narmast - huvud).normalized() * 6.0
+	streck.points = PackedVector2Array([narmast - nod.position, slut - nod.position])
+
+
+## Skärmrutor för synliga figurer (även stridsparet): [nod, Rect2].
 func _handelsefigurer() -> Array:
 	var ut: Array = []
 	if varld == null:
@@ -426,8 +499,11 @@ func _handelsefigurer() -> Array:
 	var kamera := get_viewport().get_canvas_transform()
 	var skala := kamera.get_scale().x
 	var skarm := get_viewport_rect()
-	for n: Node2D in varld.npcer.values():
-		if not n.visible:
+	var figurer: Array = varld.npcer.values()
+	figurer.append(varld.spelare)
+	figurer.append(varld.kollega)
+	for n: Node2D in figurer:
+		if n == null or not n.visible:
 			continue
 		var fot := kamera * n.global_position
 		if not skarm.has_point(fot):

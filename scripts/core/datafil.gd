@@ -119,7 +119,7 @@ static func tid_till_s(tid: String) -> float:
 	var delar := tid.split(":")
 	if delar.size() < 2:
 		return 0.0
-	return float(int(delar[0]) * 3600 + int(delar[1]) * 60)
+	return float(int(delar[0]) * 3600 + int(delar[1]) * 60 + (int(delar[2]) if delar.size() > 2 else 0))
 
 
 static func s_till_tid(sekunder: float) -> String:
