@@ -50,7 +50,8 @@
       "posten_fick_lamnas": "det fanns order eller skäl att lämna posten",
       "skott_utan_risk": "skottet kunde avlossas utan risk för utomstående",
       "vald_behovs": "personen försökte tränga in på skyddsobjektet eller var redan inne (våld behövdes för att hindra eller avlägsna)",
-      "vald_proportionerligt": "våldet stod i rimlig proportion till syftet (inte mer än som behövdes)"
+      "vald_proportionerligt": "våldet stod i rimlig proportion till syftet (inte mer än som behövdes)",
+      "halt_utan_skotthot": "uppmaningen att stanna gavs utan hot om skjutvapen"
     }
   },
   "handlingar": {

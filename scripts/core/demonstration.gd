@@ -778,12 +778,16 @@ func _halt() -> void:
 	_fakta_ingen_fara()
 	var rop: Array = h.get("rop_halt", ["HALT! MILITÄR SKYDDSVAKT! HALT ELLER JAG SKJUTER SKARPT!"])
 	var text := str(rop[mini(antal_halt - 1, rop.size() - 1)])
-	Spel.utfor("halt_order", "Ropade halt-order mot demonstranterna" + (" igen" if antal_halt > 1 else ""))
+	# Första ropet utan hot om skarp eld: bara en tydlig uppmaning att stanna.
+	var utan_hot := antal_halt == 1
+	Spel.satt_fakta({"halt_utan_skotthot": utan_hot})
+	Spel.utfor("halt_order", ("Ropade åt demonstranterna att stanna (utan hot om skott)" if utan_hot
+		else "Ropade halt-order med hot om skarp eld mot demonstranterna"))
 	main.hud.visa_bubbla(main.varld.spelare, text, 3.0)
 	stress += 1
 	var aktiva := _aktiva()
-	# Någon enstaka blir rädd och går.
-	if randf() < float(h.get("chans_halt_fungerar", 0.5)):
+	# Någon enstaka blir rädd och går – men efter tredje ropet biter det inte längre.
+	if antal_halt <= int(h.get("halt_verkar_ggr", 3)) and randf() < float(h.get("chans_halt_fungerar", 0.5)):
 		var kandidater: Array[Dictionary] = []
 		for d in aktiva:
 			if not d["envis"] and not d["ledare"] and d["lage"] != "sitter_inne":

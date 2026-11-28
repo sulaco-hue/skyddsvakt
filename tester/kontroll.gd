@@ -796,7 +796,7 @@ func _spela_demonstration(fall: String) -> void:
 					_fel("demonstranten bars aldrig ut")
 				else:
 					_ok("en demonstrant bars ut")
-			var forv := {"halt_order": "warn", "varningsskott": "bad", "avlagsna": "ok", "ingen_forstarkning": "bad"}
+			var forv := {"halt_order": "ok", "varningsskott": "bad", "avlagsna": "ok", "ingen_forstarkning": "bad"}
 			if Spel.handling_utford("handgemang"):
 				forv["handgemang"] = "ok"
 			await _avsluta_yxmannen(main, forv)

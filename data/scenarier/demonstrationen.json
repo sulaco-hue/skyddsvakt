@@ -102,7 +102,8 @@
     "forsta_hjalp_avbojd": false,
     "talesperson_vagrar": false,
     "behov_forstarkning": false,
-    "forstarkning_pa_plats": false
+    "forstarkning_pa_plats": false,
+    "halt_utan_skotthot": false
   },
   "npc": {
     "talespersonen": {
@@ -169,6 +170,7 @@
       "tryck_intervall_s": 2,
       "chans_slinka": 0.05,
       "chans_halt_fungerar": 0.5,
+      "halt_verkar_ggr": 3,
       "chans_handgemang_lyckas": 0.6,
       "chans_skada": 0.12,
       "chans_kamrat_knuffar": 0.4,
@@ -259,6 +261,7 @@
         "*DUNS*"
       ],
       "rop_halt": [
+        "HALT! MILITÄR SKYDDSVAKT! STANNA!",
         "HALT! MILITÄR SKYDDSVAKT! HALT ELLER JAG SKJUTER SKARPT!",
         "HALT, SA JAG! STANNA! HALT ELLER JAG SKJUTER SKARPT!",
         "HAAALT! FÖR HELVETE – HALT!! JAG SKJUTER!"
@@ -271,7 +274,8 @@
       ],
       "kamrat_halt": [
         "Lugn nu…",
-        "Sluta skrika – de är ju obeväpnade!"
+        "Sluta skrika – de är ju obeväpnade!",
+        "De lyssnar inte längre. Det där funkar inte."
       ],
       "kamrat_knuffar": [
         "Backa!",
@@ -477,13 +481,14 @@
     },
     "halt_order": {
       "krav": [
-        "hot_svarare_vald"
+        "halt_utan_skotthot"
       ],
       "krav_utfall": {
-        "hot_svarare_vald": "warn"
+        "halt_utan_skotthot": "warn"
       },
+      "text_ok": "Rätt. En tydlig uppmaning att stanna, där ni säger vem ni är, kräver inget särskilt lagstöd – och ni hotar inte med något ni inte får göra.",
       "text_krav": {
-        "hot_svarare_vald": "Halt-ordern är tillropet före skjutvapen (förordning 1992:98 5 §): ”halt eller jag skjuter skarpt”. Mot fredliga demonstranter finns ingen grund för skjutvapen – hotet blir tomt eller farligt, och läget trappas upp. Tala i stället: ni kommer inte in, men ni får demonstrera här ute."
+        "halt_utan_skotthot": "Halt-ordern är tillropet före skjutvapen (förordning 1992:98 5 §): ”halt eller jag skjuter skarpt”. Mot fredliga demonstranter finns ingen grund för skjutvapen – hotet blir tomt eller farligt, och läget trappas upp. Tala i stället: ni kommer inte in, men ni får demonstrera här ute."
       },
       "diskutera": "Vad händer med trovärdigheten om ni hotar med något ni inte får göra? Vilka ord hade fungerat bättre?"
     },
