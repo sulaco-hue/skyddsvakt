@@ -461,8 +461,8 @@ func visa_knappar() -> void:
 	var val: Array = []
 	var mal := _aktuellt_mal()
 	if mal != "":
-		if not _halt_givet.has(mal):
-			val.append({"id": "halt", "text": "Halt-order", "tangent": "H", "farg": "barnsten"})
+		if int(_halt_givet.get(mal, 0)) < 2:
+			val.append(main.haltknapp(int(_halt_givet.get(mal, 0)) == 1))
 		if not _varn_givet.has(mal):
 			val.append({"id": "varningsskott", "text": "Varningsskott", "tangent": "V", "farg": "barnsten"})
 		val.append({"id": "verkanseld", "text": "Verkanseld", "tangent": "F", "farg": "rosa"})
@@ -477,9 +477,9 @@ func situation(id: String) -> void:
 	var mal := _aktuellt_mal()
 	match id:
 		"halt":
-			if mal == "" or _halt_givet.has(mal):
+			if mal == "" or int(_halt_givet.get(mal, 0)) >= 2:
 				return
-			_halt_givet[mal] = true
+			_halt_givet[mal] = int(_halt_givet.get(mal, 0)) + 1
 			_halt(mal)
 			visa_knappar()
 		"varningsskott":
@@ -496,7 +496,7 @@ func situation(id: String) -> void:
 ## Fakta för det mål vi agerar mot, innan beslutet bedöms.
 func _fakta_for(mal: String) -> void:
 	# Varning och varningsskott räknas per person.
-	Spel.satt_fakta({"varning_given": _halt_givet.has(mal), "varningsskott_foregick": _varn_givet.has(mal)})
+	Spel.satt_fakta({"varning_given": int(_halt_givet.get(mal, 0)) >= 2, "varningsskott_foregick": _varn_givet.has(mal)})
 	if mal == "brakare":
 		_uppdatera_fakta()
 		var avst: int = main.varld.avstand(main.varld.spelare.cell, _brakare().cell)
@@ -509,9 +509,16 @@ func _fakta_for(mal: String) -> void:
 
 func _halt(mal: String) -> void:
 	_fakta_for(mal)
-	Spel.utfor("halt_order", "Ropade: ”Halt! Militär skyddsvakt! Halt eller jag skjuter skarpt!”" +
-		(" (mot mannen vid skylten)" if mal == "smygare" else " (mot slagsmålet)" if mal == "brakare" else ""))
-	main.hud.visa_bubbla(main.varld.spelare, "HALT! MILITÄR SKYDDSVAKT! HALT ELLER JAG SKJUTER SKARPT!", 3.5)
+	var mot := " (mot mannen vid skylten)" if mal == "smygare" else " (mot slagsmålet)" if mal == "brakare" else ""
+	# Första gången en tillsägelse utan hot (verkar ibland), sedan hot om verkanseld.
+	if int(_halt_givet.get(mal, 0)) == 1:
+		Spel.utfor("halt_rop", "Ropade: ”Halt! Militär skyddsvakt! Stanna!”" + mot)
+		main.hud.visa_bubbla(main.varld.spelare, "HALT! MILITÄR SKYDDSVAKT! STANNA!", 3.0)
+		if randf() >= float(h.get("chans_halt_rop_verkar", 0.5)):
+			return
+	else:
+		Spel.utfor("halt_order", "Ropade: ”Halt! Militär skyddsvakt! Halt eller jag skjuter skarpt!”" + mot)
+		main.hud.visa_bubbla(main.varld.spelare, "HALT! MILITÄR SKYDDSVAKT! HALT ELLER JAG SKJUTER SKARPT!", 3.5)
 	if mal == "brakare" and brakare_lage in AKTIVA:
 		main.get_tree().create_timer(1.2).timeout.connect(_flyr.bind("halt"))
 	elif mal == "smygare" and smyg_lage in ["gar_dit", "jobbar"]:

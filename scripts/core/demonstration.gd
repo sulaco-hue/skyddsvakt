@@ -787,7 +787,7 @@ func _skadade() -> Array[Dictionary]:
 func visa_knappar() -> void:
 	var val: Array = []
 	if upptackt and not _aktiva().is_empty():
-		val.append({"id": "halt", "text": "Halt-order", "tangent": "H", "farg": "barnsten"})
+		val.append(main.haltknapp(antal_halt >= 1))
 		val.append({"id": "handgemang", "text": "Handgemäng", "tangent": "G", "farg": "barnsten"})
 		val.append({"id": "varningsskott", "text": "Varningsskott", "tangent": "V", "farg": "barnsten"})
 		val.append({"id": "verkanseld", "text": "Verkanseld", "tangent": "F", "farg": "rosa"})
@@ -828,9 +828,10 @@ func _halt() -> void:
 	var text := str(rop[mini(antal_halt - 1, rop.size() - 1)])
 	# Första ropet utan hot om skarp eld: bara en tydlig uppmaning att stanna.
 	var utan_hot := antal_halt == 1
-	Spel.satt_fakta({"halt_utan_skotthot": utan_hot})
-	Spel.utfor("halt_order", ("Ropade åt demonstranterna att stanna (utan hot om skott)" if utan_hot
-		else "Ropade halt-order med hot om skarp eld mot demonstranterna"))
+	if utan_hot:
+		Spel.utfor("halt_rop", "Ropade åt demonstranterna att stanna (utan hot om eld)")
+	else:
+		Spel.utfor("halt_order", "Hotade demonstranterna med verkanseld" + (" igen" if antal_halt > 2 else ""))
 	main.hud.visa_bubbla(main.varld.spelare, text, 3.0)
 	stress += 1
 	var aktiva := _aktiva()

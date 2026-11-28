@@ -637,6 +637,7 @@ func _spela_slagsmal(fall: String) -> void:
 	match fall:
 		"stannar":
 			main.call("_pa_situation", "halt")
+			main.call("_pa_situation", "halt")
 			await _vanta(0.5)
 			main.call("_pa_situation", "varningsskott")
 			if not await _vanta_tills(func() -> bool: return sm.brakare_lage in ["flyr", "borta", "stannat"], 10.0):
@@ -803,7 +804,7 @@ func _spela_demonstration(fall: String) -> void:
 					_fel("demonstranten bars aldrig ut")
 				else:
 					_ok("en demonstrant bars ut")
-			var forv := {"halt_order": "ok", "varningsskott": "bad", "avlagsna": "ok", "ingen_forstarkning": "bad"}
+			var forv := {"halt_rop": "ok", "varningsskott": "bad", "avlagsna": "ok", "ingen_forstarkning": "bad"}
 			if Spel.handling_utford("handgemang"):
 				forv["handgemang"] = "ok"
 			await _avsluta_yxmannen(main, forv)
@@ -854,6 +855,7 @@ func _spela_yxmannen_ger_upp() -> void:
 	var main = await _starta_yxmannen("ger_upp")
 	await _vanta_tills(func() -> bool: return main.call("_avstand_angripare") <= 12, 150.0)
 	main.call("_halt_order")
+	main.call("_halt_order")
 	if not await _vanta_tills(func() -> bool: return str(main._angripare.get("lage", "")) == "gett_upp", 10.0):
 		_fel("yxmannen gav inte upp efter halt-order")
 		main.queue_free()
@@ -881,6 +883,7 @@ func _spela_yxmannen_ger_upp() -> void:
 
 func _spela_yxmannen_skarp() -> void:
 	var main = await _starta_yxmannen("skarp")
+	main.call("_halt_order")
 	main.call("_halt_order")
 	await _vanta_tills(func() -> bool: return main.call("_avstand_angripare") <= 5, 150.0)
 	main.call("_varningsskott")
@@ -940,6 +943,7 @@ func _spela_zombies(skjuter: bool) -> void:
 		return
 	_ok("zombierna upptäckta, knappar: " + ", ".join(PackedStringArray(main.hud.situationer())))
 	if skjuter:
+		main.call("_halt_order")
 		main.call("_halt_order")
 		main._horde["patroner"] = 2  # så att omladdningen provas tidigt
 	var varnat := false

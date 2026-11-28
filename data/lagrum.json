@@ -50,8 +50,7 @@
       "posten_fick_lamnas": "det fanns order eller skäl att lämna posten",
       "skott_utan_risk": "skottet kunde avlossas utan risk för utomstående",
       "vald_behovs": "personen försökte tränga in på skyddsobjektet eller var redan inne (våld behövdes för att hindra eller avlägsna)",
-      "vald_proportionerligt": "våldet stod i rimlig proportion till syftet (inte mer än som behövdes)",
-      "halt_utan_skotthot": "uppmaningen att stanna gavs utan hot om skjutvapen"
+      "vald_proportionerligt": "våldet stod i rimlig proportion till syftet (inte mer än som behövdes)"
     }
   },
   "handlingar": {
@@ -495,6 +494,18 @@
       "text_ok": "Personen var behörig och föranmäld.",
       "text_brist": "Personen var inte föranmäld eller kontrollerad. Att släppa in en obehörig bryter mot tillträdesförbudet och bevakningsinstruktionen.",
       "diskutera": "Vilka kontroller ska göras innan bommen öppnas?"
+    },
+    "halt_rop": {
+      "namn": "Ropade: ”Halt! Militär skyddsvakt! Stanna!”",
+      "lagrum": "Tillsägelse · Förordning (1992:98) 5 § (jfr)",
+      "krav": [],
+      "vid_brist": "ok",
+      "satter_fakta": {
+        "halt_ropat": true
+      },
+      "text_ok": "Rätt att tydligt säga åt personen att stanna och tala om vem ni är. Det är ännu ingen varning inför skjutvapen – en sådan kräver att ni hotar med eld (förordning 1992:98 5 §).",
+      "text_brist": "",
+      "diskutera": "Räckte tillsägelsen? När behöver den följas av ett hot om eldgivning – och när blir ett sådant hot för mycket?"
     },
     "halt_order": {
       "namn": "Ropade: ”Halt! Militär skyddsvakt! Halt eller jag skjuter skarpt!”",

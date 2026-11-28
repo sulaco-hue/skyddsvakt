@@ -121,8 +121,7 @@
     "forsta_hjalp_avbojd": false,
     "talesperson_vagrar": false,
     "behov_forstarkning": false,
-    "forstarkning_pa_plats": false,
-    "halt_utan_skotthot": false
+    "forstarkning_pa_plats": false
   },
   "npc": {
     "talespersonen": {
@@ -522,14 +521,13 @@
     },
     "halt_order": {
       "krav": [
-        "halt_utan_skotthot"
+        "hot_svarare_vald"
       ],
       "krav_utfall": {
-        "halt_utan_skotthot": "warn"
+        "hot_svarare_vald": "warn"
       },
-      "text_ok": "Rätt. En tydlig uppmaning att stanna, där ni säger vem ni är, kräver inget särskilt lagstöd – och ni hotar inte med något ni inte får göra.",
       "text_krav": {
-        "halt_utan_skotthot": "Halt-ordern är tillropet före skjutvapen (förordning 1992:98 5 §): ”halt eller jag skjuter skarpt”. Mot fredliga demonstranter finns ingen grund för skjutvapen – hotet blir tomt eller farligt, och läget trappas upp. Tala i stället: ni kommer inte in, men ni får demonstrera här ute."
+        "hot_svarare_vald": "Hot om verkanseld – ”halt eller jag skjuter skarpt” – är varningen före skjutvapen (förordning 1992:98 5 §). Mot fredliga demonstranter finns ingen grund för skjutvapen – hotet blir tomt eller farligt, och läget trappas upp. Tala i stället: ni kommer inte in, men ni får demonstrera här ute."
       },
       "diskutera": "Vad händer med trovärdigheten om ni hotar med något ni inte får göra? Vilka ord hade fungerat bättre?"
     },

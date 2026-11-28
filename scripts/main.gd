@@ -1010,7 +1010,7 @@ func _visa_angripar_knappar() -> void:
 	match str(_angripare["lage"]):
 		"anfaller", "gett_upp":
 			if not bool(Spel.fakta.get("varning_given", false)):
-				val.append({"id": "halt", "text": "Halt-order", "tangent": "H", "farg": "barnsten"})
+				val.append(haltknapp(bool(Spel.fakta.get("halt_ropat", false))))
 			if not bool(Spel.fakta.get("varningsskott_avlossat", false)):
 				val.append({"id": "varningsskott", "text": "Varningsskott", "tangent": "V", "farg": "barnsten"})
 			val.append({"id": "verkanseld", "text": "Verkanseld", "tangent": "F", "farg": "rosa"})
@@ -1034,6 +1034,14 @@ func _halt_order() -> void:
 	if _angripare.is_empty():
 		return
 	var h: Dictionary = _angripare["h"]
+	# Först en tillsägelse (ibland räcker den), sedan hot om verkanseld.
+	if halt_rop():
+		if str(_angripare["lage"]) == "anfaller" and Spel.variant == "ger_upp" \
+				and _avstand_angripare() <= int(h.get("ger_upp_inom", 14)) \
+				and randf() < float(h.get("chans_ger_upp_halt", 0.5)):
+			get_tree().create_timer(1.6).timeout.connect(_angripare_ger_upp)
+		_visa_angripar_knappar()
+		return
 	Spel.utfor("halt_order", "Ropade: ”Halt! Militär skyddsvakt! Halt eller jag skjuter skarpt!”")
 	hud.visa_bubbla(varld.spelare, "HALT! MILITÄR SKYDDSVAKT! HALT ELLER JAG SKJUTER SKARPT!", 3.5)
 	if str(_angripare["lage"]) == "anfaller":
@@ -1046,6 +1054,22 @@ func _halt_order() -> void:
 		if Spel.variant == "ger_upp" and _avstand_angripare() <= int(h.get("ger_upp_inom", 14)):
 			get_tree().create_timer(1.6).timeout.connect(_angripare_ger_upp)
 	_visa_angripar_knappar()
+
+
+## Första trycket på Halt: tillsägelse utan hot om eld. Sant om det var den
+## (då är nästa tryck "Hot om verkanseld").
+func halt_rop() -> bool:
+	if bool(Spel.fakta.get("halt_ropat", false)):
+		return false
+	Spel.utfor("halt_rop", "Ropade: ”Halt! Militär skyddsvakt! Stanna!”")
+	Spel.satt_fakta({"halt_ropat": true})
+	hud.visa_bubbla(varld.spelare, "HALT! MILITÄR SKYDDSVAKT! STANNA!", 3.0)
+	return true
+
+
+## Haltknappen: "Halt" först, sedan "Hot om verkanseld".
+static func haltknapp(ropat: bool) -> Dictionary:
+	return {"id": "halt", "text": "Hot om verkanseld" if ropat else "Halt", "tangent": "H", "farg": "barnsten"}
 
 
 func _angripare_sager(text: String) -> void:
@@ -1641,7 +1665,7 @@ func _visa_horde_knappar() -> void:
 		return
 	var val: Array = []
 	if not bool(Spel.fakta.get("varning_given", false)):
-		val.append({"id": "halt", "text": "Halt-order", "tangent": "H", "farg": "barnsten"})
+		val.append(haltknapp(bool(Spel.fakta.get("halt_ropat", false))))
 	if not bool(Spel.fakta.get("varningsskott_avlossat", false)):
 		val.append({"id": "varningsskott", "text": "Varningsskott", "tangent": "V", "farg": "barnsten"})
 	val.append({"id": "verkanseld", "text": "Omladdning…" if bool(_horde.get("laddar_om", false)) else "Verkanseld",
@@ -1681,6 +1705,10 @@ func _horde_narmast_fakta() -> void:
 
 
 func _horde_halt() -> void:
+	if halt_rop():
+		_horde_kommentar("kamrat_efter_halt_rop", 2.0)
+		_visa_horde_knappar()
+		return
 	Spel.utfor("halt_order", "Ropade: ”Halt! Militär skyddsvakt! Halt eller jag skjuter skarpt!”")
 	hud.visa_bubbla(varld.spelare, "HALT! MILITÄR SKYDDSVAKT! HALT ELLER JAG SKJUTER SKARPT!", 3.5)
 	_horde_kommentar("kamrat_efter_halt", 2.4)
