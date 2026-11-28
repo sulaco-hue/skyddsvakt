@@ -1779,6 +1779,29 @@ def portrait_olsson():
 
 portrait_olsson().save(os.path.join(OUT, "portratt_vakt_olsson.png"))
 
+
+# Tvåan i scenario 7: kulspruta 58 över bröstet och rött helskägg.
+# M/q = skägg, J/j = kolven i trä, A/a/k = vapnet.
+PAL.update({"M": (178, 78, 38), "q": (136, 54, 26)})
+KSP_TOP = [
+    "...HHHHHH.....",
+    "..HHHHHHHH....",
+    ".HHHHHHHHHH...",
+    "..EssssssE....",
+    "..EsesseSE...A",
+    "..MqMMMMqM..Aa",
+    "...MMMMMM..Aa.",
+    "..UUMqMMUUAa..",
+    ".UUpPMMUAAaU..",
+    ".UUppUUAAAkUU.",
+    ".UUUUUAaAAs...",
+    ".UUUsAAAkUUU..",
+    ".UUJjAkUUUUU..",
+    "JJjJ.BBkBBB...",
+]
+for i in range(2):
+    figure(f"vakt_ksp_{i}", KSP_TOP, GUARD_LEGS[i])
+
 # ============================================================ Ikoner ==
 def hogtalare(namn, extra):
     T, R = (230, 235, 224, 255), (240, 124, 140, 255)

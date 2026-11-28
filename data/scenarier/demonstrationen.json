@@ -39,13 +39,32 @@
   "spelare_sprite": "vakt_olsson",
   "spelare_skala": 1.15,
   "spelare_portratt": "portratt_vakt_olsson",
-  "kamratsnack_forst": {
-    "kamrat": "Hur går det på jobbet då, Olsson?",
-    "alltid_svar": true,
-    "svar": [
-      "Jodå, eldsvådor och bilkrockar om vartannat, så det är ingen risk för arbetslöshet här inte."
-    ]
-  },
+  "kamrat_sprite": "vakt_ksp",
+  "kamratsnack_forst": [
+    {
+      "kamrat": "Hur går det på jobbet då, Olsson?",
+      "alltid_svar": true,
+      "nasta_efter_s": 6,
+      "svar": [
+        "Jodå, eldsvådor och bilkrockar om vartannat, så det är ingen risk för arbetslöshet här inte."
+      ]
+    },
+    {
+      "kamrat": "Jag läser om Det. Stephen King. Clownen i kloakerna, du vet. Nu kollar jag ner i varenda brunn jag går förbi.",
+      "alltid_svar": true,
+      "nasta_efter_s": 6,
+      "svar": [
+        "Läs något trevligare, då."
+      ]
+    },
+    {
+      "kamrat": "Sen blir det Pestens tid. Tusen sidor om en influensa som utplånar nästan alla. Perfekt pausläsning på vakten.",
+      "alltid_svar": true,
+      "svar": [
+        "Du är inte riktigt klok, du."
+      ]
+    }
+  ],
   "fakta": {
     "skyltat_avbildningsforbud": true,
     "motpart_inom": false,

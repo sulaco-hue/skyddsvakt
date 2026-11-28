@@ -25,13 +25,16 @@ var _senaste: Array[int] = []
 ## Scenariots väderläge, t.ex. ["regn", "kallt"]. Repliker med "nar" kräver att
 ## alla deras villkor finns här.
 var _vader: Array = []
-## Scenariots egen första replik ("kamratsnack_forst"), som alltid sägs först.
-var _forst: Dictionary = {}
+## Scenariots egna första repliker ("kamratsnack_forst": en eller en lista),
+## som alltid sägs först och i ordning. "nasta_efter_s" = paus till nästa.
+var _forst: Array = []
+var _ny_timer := true
 
 
 func setup(p_hud: Hud, p_varld: Varld, scenario: Dictionary = {}) -> void:
 	_vader = scenario.get("vaderlag", [])
-	_forst = scenario.get("kamratsnack_forst", {})
+	var forst: Variant = scenario.get("kamratsnack_forst", [])
+	_forst = forst if forst is Array else [forst]
 	hud = p_hud
 	varld = p_varld
 	_rng.randomize()
@@ -58,8 +61,10 @@ func _process(delta: float) -> void:
 		return
 	_timer -= delta
 	if _timer <= 0.0:
+		_ny_timer = true
 		_prata()
-		_timer = _rng.randf_range(float(_inst.get("intervall_min_s", 25)), float(_inst.get("intervall_max_s", 60)))
+		if _ny_timer:
+			_timer = _rng.randf_range(float(_inst.get("intervall_min_s", 25)), float(_inst.get("intervall_max_s", 60)))
 
 
 ## Pausa pratet i sek sekunder (t.ex. efter att en händelse upptäckts).
@@ -92,10 +97,12 @@ func _kamrat_tystnar() -> void:
 
 func _prata() -> void:
 	if not _forst.is_empty():
-		var rad := _forst
-		_forst = {}
+		var rad: Dictionary = _forst.pop_front()
 		hud.visa_bubbla(varld.kollega, str(rad.get("kamrat", "")), 5.5)
 		get_tree().create_timer(float(_inst.get("reaktion_efter_s", 3.5))).timeout.connect(_reagera.bind(rad))
+		if rad.has("nasta_efter_s"):
+			_timer = float(rad["nasta_efter_s"])
+			_ny_timer = false
 		return
 	var lista: Array = _data.get("snack", [])
 	if lista.is_empty():

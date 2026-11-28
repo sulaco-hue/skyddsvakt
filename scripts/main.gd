@@ -64,6 +64,8 @@ func _ready() -> void:
 	if str(_scenario.get("spelare_sprite", "")) != "":
 		varld.byt_bilder(varld.spelare, str(_scenario["spelare_sprite"]))
 	varld.spelare.scale = Vector2.ONE * float(_scenario.get("spelare_skala", 1.0))
+	if str(_scenario.get("kamrat_sprite", "")) != "":
+		varld.byt_bilder(varld.kollega, str(_scenario["kamrat_sprite"]))
 	var npcer: Dictionary = _scenario.get("npc", {})
 	for id: String in npcer:
 		varld.skapa_npc(id, npcer[id])
