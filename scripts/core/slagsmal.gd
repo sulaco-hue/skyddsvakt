@@ -375,6 +375,11 @@ func _uppdatera_smygare(delta: float) -> void:
 			_skylt_saknad_sagd = true
 			Spel.satt_fakta({"skylt_saknas_upptackt": true, "skylt_stold_kand": true})
 			main._kamrat_sager(str(smyg_h.get("kamrat_skylt_borta", "")))
+			var svar := str(smyg_h.get("svar_skylt_borta", ""))
+			if svar != "":
+				main.get_tree().create_timer(3.0).timeout.connect(func() -> void:
+					if main.hud.visible:
+						main.hud.visa_bubbla(main.varld.spelare, svar, 3.5))
 
 
 func _smygare_flyr(orsak: String) -> void:
